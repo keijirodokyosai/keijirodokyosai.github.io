@@ -347,3 +347,92 @@ text-decoration:underline;
 .notice-list li {
   margin-bottom: 8px;
 }
+/* =========================
+   共通ヘッダー
+========================= */
+
+.site-header{
+background:#ffffff;
+border-bottom:1px solid #d9e2ec;
+position:sticky;
+top:0;
+z-index:1000;
+box-shadow:0 2px 10px rgba(0,0,0,0.04);
+}
+
+.header-inner{
+width:90%;
+max-width:1100px;
+margin:0 auto;
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:24px;
+padding:14px 0;
+}
+
+.site-logo{
+font-size:1.1rem;
+font-weight:bold;
+color:#0b4a8b;
+text-decoration:none;
+white-space:nowrap;
+}
+
+.global-nav ul{
+list-style:none;
+display:flex;
+align-items:center;
+gap:10px;
+margin:0;
+padding:0;
+flex-wrap:wrap;
+justify-content:flex-end;
+}
+
+.global-nav a{
+display:block;
+padding:10px 14px;
+border-radius:10px;
+text-decoration:none;
+color:#234;
+font-weight:600;
+line-height:1.4;
+transition:background 0.2s ease, color 0.2s ease;
+}
+
+.global-nav a:hover{
+background:#eaf2fb;
+color:#0b4a8b;
+}
+
+.global-nav a.current{
+background:#0b4a8b;
+color:#fff;
+}
+
+@media (max-width: 768px){
+
+.header-inner{
+flex-direction:column;
+align-items:flex-start;
+gap:12px;
+padding:12px 0;
+}
+
+.global-nav{
+width:100%;
+}
+
+.global-nav ul{
+width:100%;
+justify-content:flex-start;
+gap:8px;
+}
+
+.global-nav a{
+padding:9px 12px;
+font-size:0.95rem;
+}
+
+}
