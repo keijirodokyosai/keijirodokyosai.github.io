@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>火災共済パンフレット｜京滋労働組合共済会</title>
+  <meta name="description" content="京滋労働組合共済会の火災共済パンフレット閲覧ページです。">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .pdf-wrap {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+    }
+
+    .pdf-viewer {
+      width: 100%;
+      height: 900px;
+      border: none;
+      border-radius: 12px;
+      background: #f3f4f6;
+    }
+
+    .pdf-note {
+      margin-top: 16px;
+      color: #4b5563;
+    }
+
+    @media (max-width: 800px) {
+      .pdf-viewer {
+        height: 70vh;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="site-title-area">
+        <p class="site-subtitle">京滋労働組合共済会</p>
+        <h1 class="site-title">京滋労働共済</h1>
+      </div>
+
+      <nav class="site-nav">
+        <ul>
+          <li><a href="index.html">ホーム</a></li>
+          <li><a href="index.html#kyosai-list">共済一覧</a></li>
+          <li><a href="kasai.html">火災共済</a></li>
+          <li><a href="index.html#downloads">書類ダウンロード</a></li>
+          <li><a href="index.html#contact">お問い合わせ</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-inner">
+        <div class="hero-text">
+          <p class="hero-label">Fire Mutual Aid PDF</p>
+          <h2>火災共済パンフレット</h2>
+          <p class="hero-description">
+            火災共済の詳しい内容は、下のパンフレットでご確認いただけます。
+          </p>
+
+          <div class="hero-buttons">
+            <a class="button primary" href="pdf/kasai.pdf" target="_blank">別タブで開く</a>
+            <a class="button secondary" href="kasai.html">火災共済ページへ戻る</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section about">
+      <div class="container">
+        <div class="section-heading">
+          <p class="section-label">Pamphlet</p>
+          <h2>パンフレット閲覧</h2>
+        </div>
+
+        <div class="pdf-wrap">
+          <iframe class="pdf-viewer" src="pdf/kasai.pdf"></iframe>
+          <p class="pdf-note">
+            PDFが表示されない場合は、
+            <a href="pdf/kasai.pdf" target="_blank">こちらから直接ご覧ください</a>。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="card single-card">
+          <p>
+            火災共済についてご不明な点がある場合は、トップページのお問い合わせ欄からご確認ください。
+          </p>
+          <a class="button primary" href="index.html#contact">お問い合わせはこちら</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-title">京滋労働組合共済会（京滋労働共済）</p>
+      <p>〒606-8397　京都府京都市左京区聖護院川原町4-13　京都教育文化センター４F</p>
+      <p>TEL：075-771-2200　FAX：075-771-8606</p>
+      <p>メール：kjkyosaikai@msn.com</p>
+      <p>© 京滋労働組合共済会 All Rights Reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>
