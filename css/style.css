@@ -615,3 +615,26 @@ grid-template-columns:1fr;
 }
 
 }
+/* =====================
+パンくずリスト
+===================== */
+
+.breadcrumb{
+font-size:0.9rem;
+margin-bottom:12px;
+color:#666;
+}
+
+.breadcrumb a{
+color:#0b4a8b;
+text-decoration:none;
+}
+
+.breadcrumb a:hover{
+text-decoration:underline;
+}
+
+.breadcrumb span{
+margin:0 6px;
+color:#999;
+}
