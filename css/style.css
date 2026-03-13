@@ -1,439 +1,36 @@
-* {
-  box-sizing: border-box;
+*{
+box-sizing:border-box;
 }
 
-body {
-  margin: 0;
-  font-family: "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
-  line-height: 1.8;
-  color: #333;
-  background: #f7f7f7;
+html{
+scroll-behavior:smooth;
 }
 
-.container {
-  width: 90%;
-  max-width: 1100px;
-  margin: auto;
+body{
+margin:0;
+font-family:"Hiragino Sans","Yu Gothic","Meiryo",sans-serif;
+line-height:1.8;
+color:#333;
+background:#f7f7f7;
 }
 
-.site-header {
-  background: #ffffff;
-  border-bottom: 1px solid #ddd;
-}
-
-.header-inner {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 0;
-}
-
-.site-title {
-  margin: 0;
-  font-size: 26px;
-  line-height: 1.3;
-}
-
-.site-subtitle {
-  margin: 0;
-  font-size: 12px;
-  color: #666;
-}
-
-.site-nav ul {
-  display: flex;
-  gap: 20px;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  flex-wrap: wrap;
-}
-
-.site-nav a {
-  text-decoration: none;
-  color: #333;
-  font-size: 14px;
-}
-
-.site-nav a:hover {
-  color: #0f766e;
-}
-
-.hero {
-  background: #0f766e;
-  color: white;
-  padding: 80px 0;
-}
-
-.hero h2 {
-  font-size: 40px;
-  margin-bottom: 20px;
-  line-height: 1.35;
-}
-
-.hero-description {
-  font-size: 16px;
-  line-height: 1.8;
-}
-
-.hero-buttons {
-  margin-top: 25px;
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.button {
-  display: inline-block;
-  padding: 12px 20px;
-  border-radius: 8px;
-  font-weight: bold;
-  text-decoration: none;
-  text-align: center;
-  transition: 0.2s ease;
-}
-
-.button:hover {
-  opacity: 0.92;
-  transform: translateY(-1px);
-}
-
-.button.primary {
-  background: white;
-  color: #0f766e;
-}
-
-.button.secondary {
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-}
-
-.section {
-  padding: 90px 0;
-}
-
-.section-heading {
-  margin-bottom: 40px;
-}
-
-.section-label {
-  font-size: 12px;
-  color: #0f766e;
-  font-weight: bold;
-}
-
-.card-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-}
-
-.card {
-  background: white;
-  padding: 25px;
-  border-radius: 14px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
-}
-
-.card h3 {
-  margin-top: 0;
-  margin-bottom: 12px;
-  line-height: 1.5;
-}
-
-.card p {
-  margin-top: 0;
-}
-
-.card h3 a {
-  color: inherit;
-  text-decoration: none;
-}
-
-.card h3 a:hover {
-  color: #0f766e;
-}
-
-.single-card {
-  max-width: 820px;
-}
-
-.flow-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-}
-
-.flow-grid-3 {
-  grid-template-columns: repeat(3, 1fr);
-}
-
-.flow-item {
-  background: white;
-  padding: 25px;
-  border-radius: 14px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
-}
-
-.flow-item h3 {
-  margin-top: 0;
-  margin-bottom: 10px;
-}
-
-.flow-number {
-  width: 35px;
-  height: 35px;
-  background: #0f766e;
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 10px;
-  font-weight: bold;
-}
-
-.faq-item {
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  margin-bottom: 12px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
-}
-
-.faq-item summary {
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.contact-info {
-  margin: 20px 0;
-}
-
-.contact-info p {
-  margin: 6px 0;
-}
-
-.site-footer {
-  background: #222;
-  color: white;
-  padding: 30px 0;
-  text-align: center;
-  margin-top: 40px;
-}
-
-@media (max-width: 800px) {
-  .header-inner {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-
-  .card-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .flow-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .flow-grid-3 {
-    grid-template-columns: 1fr;
-  }
-
-  .hero h2 {
-    font-size: 28px;
-  }
-
-  .single-card {
-    max-width: 100%;
-  }
-
-  .section {
-    padding: 72px 0;
-  }
-
-  .section-heading {
-    margin-bottom: 32px;
-  }
-}
-
-@media (max-width: 640px) {
-  .site-title {
-    font-size: 22px;
-    line-height: 1.3;
-  }
-
-  .site-subtitle {
-    font-size: 11px;
-  }
-
-  .site-nav ul {
-    gap: 10px;
-  }
-
-  .site-nav a {
-    font-size: 13px;
-  }
-
-  .hero {
-    padding: 56px 0 44px;
-  }
-
-  .hero h2 {
-    font-size: 30px;
-    line-height: 1.35;
-  }
-
-  .hero-description {
-    font-size: 15px;
-    line-height: 1.8;
-  }
-
-  .hero-description br {
-    display: none;
-  }
-
-  .card {
-    padding: 20px;
-  }
-
-  .flow-item {
-    padding: 20px;
-  }
-
-  .section {
-    padding: 60px 0;
-  }
-
-  .section-heading {
-    margin-bottom: 28px;
-  }
-
-  .button {
-    width: 100%;
-  }
-}
-.card {
+img{
+max-width:100%;
+height:auto;
 display:block;
-color:inherit;
-text-decoration:none;
 }
 
-.card:hover{
-transform:translateY(-3px);
-box-shadow:0 10px 30px rgba(0,0,0,0.08);
-}
-.breadcrumb{
-font-size:14px;
-margin:20px 0 10px;
-color:#666;
+a{
+transition:0.2s ease;
 }
 
-.breadcrumb a{
-text-decoration:none;
-color:#0f766e;
-}
-
-.breadcrumb a:hover{
-text-decoration:underline;
-}
-.notice-list {
-  margin: 0;
-  padding-left: 1.2em;
-}
-
-.notice-list li {
-  margin-bottom: 8px;
-}
-/* =========================
-   共通ヘッダー
-========================= */
-
-.site-header{
-background:#ffffff;
-border-bottom:1px solid #d9e2ec;
-position:sticky;
-top:0;
-z-index:1000;
-box-shadow:0 2px 10px rgba(0,0,0,0.04);
-}
-
-.header-inner{
+.container{
 width:90%;
 max-width:1100px;
-margin:0 auto;
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:24px;
-padding:14px 0;
+margin:auto;
 }
 
-.site-logo{
-font-size:1.1rem;
-font-weight:bold;
-color:#0b4a8b;
-text-decoration:none;
-white-space:nowrap;
-}
 
-.global-nav ul{
-list-style:none;
-display:flex;
-align-items:center;
-gap:10px;
-margin:0;
-padding:0;
-flex-wrap:wrap;
-justify-content:flex-end;
-}
-
-.global-nav a{
-display:block;
-padding:10px 14px;
-border-radius:10px;
-text-decoration:none;
-color:#234;
-font-weight:600;
-line-height:1.4;
-transition:background 0.2s ease, color 0.2s ease;
-}
-
-.global-nav a:hover{
-background:#eaf2fb;
-color:#0b4a8b;
-}
-
-.global-nav a.current{
-background:#0b4a8b;
-color:#fff;
-}
-
-@media (max-width: 768px){
-
-.header-inner{
-flex-direction:column;
-align-items:flex-start;
-gap:12px;
-padding:12px 0;
-}
-
-.global-nav{
-width:100%;
-}
-
-.global-nav ul{
-width:100%;
-justify-content:flex-start;
-gap:8px;
-}
-
-.global-nav a{
-padding:9px 12px;
-font-size:0.95rem;
-}
 /* =========================
 共通ヘッダー
 ========================= */
@@ -477,6 +74,11 @@ flex-wrap:wrap;
 justify-content:flex-end;
 }
 
+.global-nav li{
+margin:0;
+padding:0;
+}
+
 .global-nav a{
 display:block;
 padding:10px 14px;
@@ -484,7 +86,7 @@ border-radius:10px;
 text-decoration:none;
 color:#234;
 font-weight:600;
-transition:0.2s;
+line-height:1.4;
 }
 
 .global-nav a:hover{
@@ -497,40 +99,207 @@ background:#0b4a8b;
 color:#ffffff;
 }
 
+
 /* =========================
-スマホ
+ハンバーガーメニュー
 ========================= */
 
-@media (max-width:768px){
-
-.header-inner{
-flex-direction:column;
-align-items:flex-start;
-gap:12px;
-padding:12px 0;
+.menu-toggle{
+display:none;
+font-size:26px;
+line-height:1;
+background:none;
+border:none;
+cursor:pointer;
+color:#0b4a8b;
+padding:6px 8px;
+border-radius:8px;
 }
 
-.global-nav{
-width:100%;
+.menu-toggle:hover{
+background:#eef6ff;
 }
 
-.global-nav ul{
-width:100%;
-justify-content:flex-start;
-gap:6px;
+
+/* =========================
+ヒーロー・ページ上部
+========================= */
+
+.hero{
+background:linear-gradient(135deg,#0b4a8b,#1d6bc1);
+color:#fff;
+padding:70px 0;
+text-align:center;
 }
 
-.global-nav a{
-padding:8px 10px;
+.hero h1{
+margin:0 0 15px;
+font-size:2rem;
+line-height:1.4;
+}
+
+.hero p{
+margin:0;
+opacity:0.95;
+}
+
+.page-hero{
+background:linear-gradient(135deg,#0b4a8b,#1d6bc1);
+color:#fff;
+padding:56px 0 42px;
+}
+
+.page-hero h1{
+margin:0 0 12px;
+font-size:2rem;
+line-height:1.4;
+}
+
+.page-hero p{
+margin:0;
+opacity:0.95;
+}
+
+
+/* =========================
+パンくず
+========================= */
+
+.breadcrumb{
 font-size:0.9rem;
+margin-bottom:12px;
+color:#dcecff;
 }
 
+.breadcrumb a{
+color:#ffffff;
+text-decoration:none;
 }
+
+.breadcrumb a:hover{
+text-decoration:underline;
 }
+
+.breadcrumb span{
+margin:0 6px;
+color:#dcecff;
+}
+
+
+/* =========================
+セクション共通
+========================= */
+
+.section{
+padding:60px 0;
+}
+
+.bg-light{
+background:#f7f7f7;
+}
+
+.section-title{
+font-size:1.7rem;
+margin:0 0 18px;
+color:#0b4a8b;
+line-height:1.5;
+}
+
+.section-lead{
+margin:0 0 32px;
+color:#555;
+}
+
+.section p{
+margin-top:0;
+}
+
+
+/* =========================
+カード共通
+========================= */
+
+.card-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:24px;
+}
+
+.card{
+background:#fff;
+border:1px solid #d9e2ec;
+border-radius:14px;
+padding:24px;
+box-shadow:0 4px 14px rgba(0,0,0,0.05);
+display:flex;
+flex-direction:column;
+justify-content:space-between;
+transition:transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.card:hover{
+transform:translateY(-6px);
+box-shadow:0 10px 28px rgba(0,0,0,0.12);
+border-color:#bfd3e6;
+}
+
+.card h3{
+margin:0 0 12px;
+color:#0b4a8b;
+line-height:1.5;
+}
+
+.card p{
+margin:0 0 16px;
+flex-grow:1;
+}
+
+
+/* =========================
+共通ボタン
+========================= */
+
+.btn{
+display:inline-block;
+padding:12px 18px;
+border-radius:10px;
+background:#0b4a8b;
+color:#fff;
+text-decoration:none;
+font-weight:bold;
+line-height:1.4;
+border:none;
+cursor:pointer;
+box-shadow:0 2px 8px rgba(11,74,139,0.12);
+}
+
+.btn:hover{
+transform:translateY(-1px);
+box-shadow:0 6px 16px rgba(11,74,139,0.18);
+}
+
+.btn-secondary{
+background:#eaf2fb;
+color:#0b4a8b;
+box-shadow:none;
+}
+
+.btn-secondary:hover{
+background:#d9e9fb;
+box-shadow:none;
+}
+
+
+/* =========================
+共済アイコン
+========================= */
+
 .kyosai-title{
 display:flex;
 align-items:center;
 gap:10px;
+font-size:1.2rem;
+color:#0b4a8b;
 }
 
 .kyosai-icon{
@@ -539,21 +308,254 @@ height:26px;
 flex-shrink:0;
 object-fit:contain;
 }
-/* =====================
-共済カードアニメーション
-===================== */
 
-.card{
-transition: all 0.25s ease;
+
+/* =========================
+案内ボックス
+========================= */
+
+.notice-box{
+margin-top:40px;
+background:#eef6ff;
+border-left:6px solid #1d6bc1;
+border-radius:10px;
+padding:20px;
 }
 
-.card:hover{
-transform: translateY(-6px);
-box-shadow:0 10px 28px rgba(0,0,0,0.12);
+.notice-box h2,
+.notice-box h3{
+margin:0 0 12px;
+color:#0b4a8b;
+font-size:1.15rem;
 }
-/* =====================
+
+.notice-box p,
+.notice-box li{
+color:#444;
+}
+
+.notice-box ul{
+margin:0;
+padding-left:18px;
+}
+
+
+/* =========================
+documents.html
+========================= */
+
+.documents-section{
+padding:60px 0;
+}
+
+.documents-list{
+display:grid;
+gap:18px;
+}
+
+.document-card{
+background:#fff;
+border:1px solid #d9e2ec;
+border-radius:14px;
+padding:22px;
+box-shadow:0 4px 14px rgba(0,0,0,0.05);
+transition:transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.document-card:hover{
+transform:translateY(-4px);
+box-shadow:0 10px 28px rgba(0,0,0,0.10);
+border-color:#bfd3e6;
+}
+
+.document-card h3{
+margin:0 0 10px;
+font-size:1.15rem;
+color:#0b4a8b;
+line-height:1.5;
+}
+
+.document-card p{
+margin:0 0 16px;
+color:#555;
+}
+
+.document-meta{
+display:flex;
+flex-wrap:wrap;
+gap:10px;
+margin-bottom:16px;
+}
+
+.meta-badge{
+display:inline-block;
+background:#f1f5f9;
+color:#334155;
+font-size:0.9rem;
+padding:6px 10px;
+border-radius:999px;
+}
+
+.document-actions{
+display:flex;
+flex-wrap:wrap;
+gap:12px;
+}
+
+
+/* =========================
+faq.html
+========================= */
+
+.faq-section{
+padding:60px 0;
+}
+
+.faq-group{
+margin-bottom:40px;
+}
+
+.faq-group-title{
+margin:0 0 18px;
+font-size:1.25rem;
+color:#0b4a8b;
+padding-left:12px;
+border-left:5px solid #1d6bc1;
+line-height:1.5;
+}
+
+.faq-list{
+display:grid;
+gap:16px;
+}
+
+.faq-item{
+background:#fff;
+border:1px solid #d9e2ec;
+border-radius:14px;
+padding:22px;
+box-shadow:0 4px 14px rgba(0,0,0,0.05);
+}
+
+.faq-question{
+margin:0 0 10px;
+font-size:1.08rem;
+color:#222;
+line-height:1.6;
+font-weight:bold;
+}
+
+.faq-question span,
+.faq-answer span{
+color:#0b4a8b;
+font-weight:bold;
+margin-right:8px;
+}
+
+.faq-answer{
+margin:0;
+color:#555;
+line-height:1.9;
+}
+
+
+/* =========================
+contact.html
+========================= */
+
+.contact-section{
+padding:60px 0;
+}
+
+.contact-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:24px;
+}
+
+.contact-card{
+background:#fff;
+border:1px solid #d9e2ec;
+border-radius:14px;
+padding:24px;
+box-shadow:0 4px 14px rgba(0,0,0,0.05);
+}
+
+.contact-card h3{
+margin-top:0;
+font-size:1.2rem;
+color:#0b4a8b;
+}
+
+.contact-item{
+margin-bottom:14px;
+line-height:1.8;
+}
+
+.contact-label{
+font-weight:bold;
+color:#333;
+}
+
+.mail-button{
+display:inline-block;
+margin-top:15px;
+padding:14px 20px;
+background:#0b4a8b;
+color:#fff;
+font-weight:bold;
+text-decoration:none;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(11,74,139,0.12);
+}
+
+.mail-button:hover{
+transform:translateY(-1px);
+box-shadow:0 6px 16px rgba(11,74,139,0.18);
+}
+
+.mail-note{
+margin-top:10px;
+font-size:0.9rem;
+color:#444;
+}
+
+
+/* =========================
+リンクボックス共通
+========================= */
+
+.link-box{
+margin-top:40px;
+background:#f8fafc;
+border:1px solid #d9e2ec;
+border-radius:14px;
+padding:24px;
+}
+
+.link-box h2,
+.link-box h3{
+margin:0 0 12px;
+font-size:1.2rem;
+color:#0b4a8b;
+}
+
+.link-box p{
+margin:0 0 14px;
+color:#555;
+}
+
+.link-actions{
+display:flex;
+flex-wrap:wrap;
+gap:12px;
+margin-top:14px;
+}
+
+
+/* =========================
 フッター
-===================== */
+========================= */
 
 .site-footer{
 background:#0f172a;
@@ -574,6 +576,7 @@ gap:30px;
 .footer-title{
 font-size:1.1rem;
 margin-bottom:12px;
+font-weight:bold;
 }
 
 .footer-text{
@@ -608,136 +611,119 @@ padding:14px 0;
 font-size:0.9rem;
 }
 
-@media(max-width:768px){
+
+/* =========================
+スマホ対応
+========================= */
+
+@media (max-width:900px){
+
+.card-grid{
+grid-template-columns:repeat(2,1fr);
+}
 
 .footer-inner{
+grid-template-columns:1fr 1fr;
+}
+
+}
+
+@media (max-width:768px){
+
+.header-inner{
+flex-wrap:wrap;
+align-items:center;
+gap:12px;
+padding:12px 0;
+}
+
+.menu-toggle{
+display:block;
+margin-left:auto;
+}
+
+.global-nav{
+display:none;
+width:100%;
+}
+
+.global-nav.open{
+display:block;
+}
+
+.global-nav ul{
+flex-direction:column;
+align-items:flex-start;
+width:100%;
+gap:0;
+}
+
+.global-nav li{
+width:100%;
+}
+
+.global-nav a{
+display:block;
+width:100%;
+padding:12px 0;
+border-radius:0;
+border-top:1px solid #eee;
+}
+
+.hero{
+padding:54px 0;
+}
+
+.hero h1{
+font-size:1.7rem;
+}
+
+.page-hero{
+padding:42px 0 30px;
+}
+
+.page-hero h1{
+font-size:1.7rem;
+}
+
+.card-grid{
 grid-template-columns:1fr;
 }
 
-}
-/* =====================
-パンくずリスト
-===================== */
-
-.breadcrumb{
-font-size:0.9rem;
-margin-bottom:12px;
-color:#666;
+.section,
+.documents-section,
+.faq-section,
+.contact-section{
+padding:42px 0;
 }
 
-.breadcrumb a{
-color:#0b4a8b;
-text-decoration:none;
+.section-title{
+font-size:1.5rem;
 }
 
-.breadcrumb a:hover{
-text-decoration:underline;
+.document-card,
+.faq-item,
+.contact-card{
+padding:18px;
 }
 
-.breadcrumb span{
-margin:0 6px;
-color:#999;
-}
-/* =====================
-コンテナ（サイト幅）
-===================== */
-
-.container{
-width:90%;
-max-width:1100px;
-margin:auto;
-}
-/* =====================
-ハンバーガーメニュー
-===================== */
-
-.menu-toggle{
-display:none;
-font-size:26px;
-background:none;
-border:none;
-cursor:pointer;
-}
-
-/* スマホ */
-
-@media (max-width:768px){
-
-.menu-toggle{
-display:block;
-}
-
-.global-nav{
-display:none;
-width:100%;
-}
-
-.global-nav.open{
-display:block;
-}
-
-.global-nav ul{
+.document-actions,
+.link-actions{
 flex-direction:column;
-align-items:flex-start;
-width:100%;
 }
 
-.global-nav li{
-width:100%;
+.document-actions .btn,
+.link-actions .btn{
+text-align:center;
 }
 
-.global-nav a{
-display:block;
-width:100%;
-padding:12px 0;
-border-top:1px solid #eee;
+.contact-grid{
+grid-template-columns:1fr;
 }
 
-}
-/* =====================
-ハンバーガーメニュー
-===================== */
-
-.menu-toggle{
-display:none;
-font-size:26px;
-background:none;
-border:none;
-cursor:pointer;
-}
-
-/* スマホ */
-
-@media (max-width:768px){
-
-.menu-toggle{
-display:block;
-}
-
-.global-nav{
-display:none;
-width:100%;
-}
-
-.global-nav.open{
-display:block;
-}
-
-.global-nav ul{
-flex-direction:column;
-align-items:flex-start;
-width:100%;
-}
-
-.global-nav li{
-width:100%;
-}
-
-.global-nav a{
-display:block;
-width:100%;
-padding:12px 0;
-border-top:1px solid #eee;
+.footer-inner{
+grid-template-columns:1fr;
+padding:32px 0;
 }
 
 }
