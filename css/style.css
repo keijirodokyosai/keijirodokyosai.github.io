@@ -527,3 +527,15 @@ font-size:0.9rem;
 
 }
 }
+.kyosai-title{
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.kyosai-icon{
+width:26px;
+height:26px;
+flex-shrink:0;
+object-fit:contain;
+}
