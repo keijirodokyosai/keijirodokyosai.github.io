@@ -214,3 +214,29 @@ font-size:28px;
     max-width: 100%;
   }
 }
+@media (max-width: 640px) {
+  .site-title {
+    font-size: 22px;
+  }
+
+  .site-subtitle {
+    font-size: 11px;
+  }
+
+  .site-nav ul {
+    gap: 10px;
+  }
+
+  .site-nav a {
+    font-size: 13px;
+  }
+
+  .hero h2 {
+    font-size: 30px;
+    line-height: 1.35;
+  }
+
+  .hero-description br {
+    display: none;
+  }
+}
