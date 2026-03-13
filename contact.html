@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>お問い合わせ | 京滋労働組合共済会</title>
-
 <meta name="description" content="京滋労働組合共済会へのお問い合わせページです。共済制度、加入方法、書類手続きなどについてご相談いただけます。">
 
 <link rel="stylesheet" href="style.css">
@@ -21,26 +20,16 @@ padding:56px 0 42px;
 .page-hero h1{
 margin:0 0 12px;
 font-size:2rem;
+line-height:1.4;
 }
 
-.breadcrumbs{
-font-size:0.9rem;
-margin-top:20px;
-}
-
-.breadcrumbs a{
-color:#e0efff;
-text-decoration:none;
+.page-hero p{
+margin:0;
+opacity:0.95;
 }
 
 .contact-section{
 padding:60px 0;
-}
-
-.section-title{
-font-size:1.6rem;
-color:#0b4a8b;
-margin-bottom:10px;
 }
 
 .section-lead{
@@ -87,34 +76,18 @@ color:#fff;
 font-weight:bold;
 text-decoration:none;
 border-radius:10px;
+box-shadow:0 2px 8px rgba(11,74,139,0.12);
 }
 
 .mail-button:hover{
-background:#083867;
+transform:translateY(-1px);
+box-shadow:0 6px 16px rgba(11,74,139,0.18);
 }
 
 .mail-note{
 margin-top:10px;
 font-size:0.9rem;
 color:#444;
-}
-
-.notice-box{
-margin-top:30px;
-background:#eef6ff;
-border-left:6px solid #1d6bc1;
-border-radius:10px;
-padding:20px;
-}
-
-.notice-box h3{
-margin-top:0;
-color:#0b4a8b;
-}
-
-.notice-box ul{
-margin:0;
-padding-left:18px;
 }
 
 .link-box{
@@ -125,6 +98,12 @@ border-radius:14px;
 padding:24px;
 }
 
+.link-box h2{
+margin:0 0 12px;
+font-size:1.2rem;
+color:#0b4a8b;
+}
+
 .link-actions{
 display:flex;
 flex-wrap:wrap;
@@ -132,228 +111,206 @@ gap:12px;
 margin-top:15px;
 }
 
-.btn{
-display:inline-block;
-padding:12px 18px;
-border-radius:10px;
-text-decoration:none;
-font-weight:bold;
-}
-
-.btn-secondary{
-background:#eaf2fb;
-color:#0b4a8b;
-}
-
-.footer-simple{
-background:#0f172a;
-color:#fff;
-padding:24px 0;
-margin-top:60px;
-text-align:center;
-}
-
 @media(max-width:768px){
+
+.page-hero{
+padding:42px 0 30px;
+}
+
+.page-hero h1{
+font-size:1.7rem;
+}
+
+.contact-section{
+padding:42px 0;
+}
 
 .contact-grid{
 grid-template-columns:1fr;
 }
 
+.link-actions{
+flex-direction:column;
 }
 
+.link-actions .btn{
+text-align:center;
+}
+
+}
 </style>
 </head>
 
-
 <body>
 
-
 <header class="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="site-logo">京滋労働組合共済会</a>
 
-<div class="header-inner">
+    <button class="menu-toggle" id="menu-toggle" aria-label="メニューを開く">☰</button>
 
-<a href="index.html" class="site-logo">
-京滋労働組合共済会
-</a>
-
-<nav class="global-nav">
-
-<ul>
-
-<li><a href="index.html">トップページ</a></li>
-
-<li><a href="kasai.html">共済種目一覧</a></li>
-
-<li><a href="documents.html">書類ダウンロード</a></li>
-
-<li><a href="faq.html">よくある質問</a></li>
-
-<li><a href="contact.html" class="current">お問い合わせ</a></li>
-
-</ul>
-
-</nav>
-
-</div>
-
+    <nav class="global-nav" id="global-nav" aria-label="グローバルナビゲーション">
+      <ul>
+        <li><a href="index.html">トップページ</a></li>
+        <li><a href="index.html#kyosai-list">共済種目一覧</a></li>
+        <li><a href="documents.html">書類ダウンロード</a></li>
+        <li><a href="faq.html">よくある質問</a></li>
+        <li><a href="contact.html" class="current">お問い合わせ</a></li>
+      </ul>
+    </nav>
+  </div>
 </header>
-
-
 
 <header class="page-hero">
-<div class="container">
+  <div class="container">
 
-<nav class="breadcrumbs">
-<a href="index.html">トップページ</a> ＞ お問い合わせ
-</nav>
+    <div class="breadcrumb">
+      <a href="index.html">トップ</a>
+      <span>›</span>
+      お問い合わせ
+    </div>
 
-<h1>お問い合わせ</h1>
-
-<p>
-共済制度、加入方法、書類手続きなどについてお気軽にご相談ください。
-</p>
-
-</div>
+    <h1>お問い合わせ</h1>
+    <p>共済制度、加入方法、書類手続きなどについてお気軽にご相談ください。</p>
+  </div>
 </header>
 
-
-
 <main>
+  <section class="contact-section">
+    <div class="container">
 
-<section class="contact-section">
-<div class="container">
+      <h2 class="section-title">お問い合わせ先</h2>
 
-<h2 class="section-title">お問い合わせ先</h2>
+      <p class="section-lead">
+        ご不明な点がある場合は、所属組合または下記窓口までお問い合わせください。
+      </p>
 
-<p class="section-lead">
-ご不明な点がある場合は、所属組合または下記窓口までお問い合わせください。
-</p>
+      <div class="contact-grid">
 
+        <div class="contact-card">
 
+          <h3>京滋労働組合共済会</h3>
 
-<div class="contact-grid">
+          <div class="contact-item">
+            <span class="contact-label">電話：</span>
+            075-771-2200
+          </div>
 
+          <div class="contact-item">
+            <span class="contact-label">FAX：</span>
+            075-771-8606
+          </div>
 
-<div class="contact-card">
+          <div class="contact-item">
+            <span class="contact-label">メール：</span>
+            kjkyosaikai@msn.com
+          </div>
 
-<h3>京滋労働組合共済会</h3>
+          <a class="mail-button"
+             href="mailto:kjkyosaikai@msn.com?subject=共済についてのお問い合わせ">
+            メールでお問い合わせ
+          </a>
 
-<div class="contact-item">
-<span class="contact-label">電話：</span>
-075-771-2200
-</div>
+          <p class="mail-note">
+            ※メールでお問い合わせの際は、必ず所属の組合名をご記入ください。
+          </p>
 
-<div class="contact-item">
-<span class="contact-label">FAX：</span>
-075-771-8606
-</div>
+        </div>
 
-<div class="contact-item">
-<span class="contact-label">メール：</span>
-kjkyosaikai@msn.com
-</div>
+        <div class="contact-card">
 
-<a class="mail-button"
-href="mailto:kjkyosaikai@msn.com?subject=共済についてのお問い合わせ">
+          <h3>所在地</h3>
 
-メールでお問い合わせ
+          <div class="contact-item">
+            <span class="contact-label">住所：</span><br>
+            〒606-8397<br>
+            京都府京都市左京区聖護院川原町4-13<br>
+            京都教育文化センター4F
+          </div>
 
-</a>
+          <div class="contact-item">
+            <span class="contact-label">受付時間：</span><br>
+            平日 9:30〜17:30
+          </div>
 
-<p class="mail-note">
-※メールでお問い合わせの際は、必ず所属の組合名をご記入ください。
-</p>
+        </div>
 
-</div>
+      </div>
 
+      <div class="notice-box">
+        <h3>お問い合わせの前に</h3>
+        <ul>
+          <li>書類の提出先は原則として所属組合です。</li>
+          <li>申込書や請求書は書類ダウンロードページから取得できます。</li>
+          <li>制度の概要は各共済ページをご確認ください。</li>
+          <li>メールでお問い合わせの際は、必ず所属の組合名をご記入ください。</li>
+        </ul>
+      </div>
 
+      <div class="link-box">
+        <h2>関連ページ</h2>
+        <div class="link-actions">
+          <a class="btn btn-secondary" href="index.html">トップページ</a>
+          <a class="btn btn-secondary" href="index.html#kyosai-list">共済種目一覧</a>
+          <a class="btn btn-secondary" href="documents.html">書類ダウンロード</a>
+          <a class="btn btn-secondary" href="faq.html">よくある質問</a>
+        </div>
+      </div>
 
-<div class="contact-card">
-
-<h3>所在地</h3>
-
-<div class="contact-item">
-<span class="contact-label">住所：</span><br>
-
-〒606-8397<br>
-京都府京都市左京区聖護院川原町4-13<br>
-京都教育文化センター4F
-
-</div>
-
-<div class="contact-item">
-<span class="contact-label">受付時間：</span><br>
-
-平日 9:30〜17:30
-
-</div>
-
-</div>
-
-</div>
-
-
-
-<div class="notice-box">
-
-<h3>お問い合わせの前に</h3>
-
-<ul>
-
-<li>書類の提出先は原則として所属組合です。</li>
-
-<li>申込書や請求書は書類ダウンロードページから取得できます。</li>
-
-<li>制度の概要は各共済ページをご確認ください。</li>
-
-<li>メールでお問い合わせの際は、必ず所属の組合名をご記入ください。</li>
-
-</ul>
-
-</div>
-
-
-
-<div class="link-box">
-
-<h3>関連ページ</h3>
-
-<div class="link-actions">
-
-<a class="btn btn-secondary" href="index.html">
-トップページ
-</a>
-
-<a class="btn btn-secondary" href="kasai.html">
-共済種目一覧
-</a>
-
-<a class="btn btn-secondary" href="documents.html">
-書類ダウンロード
-</a>
-
-<a class="btn btn-secondary" href="faq.html">
-よくある質問
-</a>
-
-</div>
-
-</div>
-
-
-</div>
-</section>
-
+    </div>
+  </section>
 </main>
 
+<footer class="site-footer">
 
+  <div class="footer-inner">
 
-<footer class="footer-simple">
+    <div>
+      <div class="footer-title">京滋労働組合共済会</div>
+      <div class="footer-text">
+        〒606-8397<br>
+        京都府京都市左京区聖護院川原町4-13<br>
+        京都教育文化センター4F<br><br>
+        TEL：075-771-2200<br>
+        FAX：075-771-8606
+      </div>
+    </div>
 
-© 京滋労働組合共済会
+    <div>
+      <div class="footer-title">共済制度</div>
+      <ul class="footer-links">
+        <li><a href="index.html#kyosai-list">共済種目一覧</a></li>
+        <li><a href="kasai.html">火災共済</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <div class="footer-title">ご案内</div>
+      <ul class="footer-links">
+        <li><a href="documents.html">書類ダウンロード</a></li>
+        <li><a href="faq.html">よくある質問</a></li>
+        <li><a href="contact.html">お問い合わせ</a></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    © 京滋労働組合共済会
+  </div>
 
 </footer>
 
+<script>
+const toggle = document.getElementById("menu-toggle");
+const nav = document.getElementById("global-nav");
+
+if (toggle && nav) {
+  toggle.addEventListener("click", function () {
+    nav.classList.toggle("open");
+  });
+}
+</script>
 
 </body>
 </html>
