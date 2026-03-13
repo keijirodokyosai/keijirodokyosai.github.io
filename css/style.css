@@ -181,3 +181,11 @@ font-size:28px;
 }
 
 }
+.card h3 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.card h3 a:hover {
+  color: #0f766e;
+}
