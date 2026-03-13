@@ -7,7 +7,7 @@
 
 <title>京滋労働組合共済会</title>
 
-<meta name="description" content="京滋労働組合共済会の共済制度をご案内しています。火災共済、生命共済、医療共済など、暮らしを守る共済制度をご紹介します。">
+<meta name="description" content="京滋労働組合共済会の共済制度をご案内しています。火災共済、生命共済、医療共済など暮らしを守る共済制度をご紹介します。">
 
 <link rel="stylesheet" href="style.css">
 
@@ -56,11 +56,6 @@ flex-direction:column;
 justify-content:space-between;
 }
 
-.card h3{
-margin-top:0;
-color:#0b4a8b;
-}
-
 .card p{
 flex-grow:1;
 }
@@ -79,6 +74,20 @@ margin-top:10px;
 .btn-secondary{
 background:#eaf2fb;
 color:#0b4a8b;
+}
+
+.kyosai-title{
+display:flex;
+align-items:center;
+gap:10px;
+font-size:1.2rem;
+color:#0b4a8b;
+}
+
+.kyosai-icon{
+width:26px;
+height:26px;
+flex-shrink:0;
 }
 
 .footer-simple{
@@ -108,7 +117,6 @@ grid-template-columns:1fr;
 </style>
 
 </head>
-
 
 <body>
 
@@ -174,7 +182,7 @@ grid-template-columns:1fr;
 </h1>
 
 <p>
-京滋労働組合共済会では、働く仲間とその家族の暮らしを守るための共済制度を提供しています。
+京滋労働組合共済会では、働く仲間とその家族の暮らしを守る共済制度を提供しています。
 </p>
 
 </div>
@@ -198,7 +206,10 @@ grid-template-columns:1fr;
 
 <div class="card">
 
-<h3>火災共済</h3>
+<h3 class="kyosai-title">
+<img src="icons/kasai.svg" class="kyosai-icon">
+火災共済
+</h3>
 
 <p>
 火災や自然災害などによる住宅や家財の被害に備える共済です。
@@ -214,7 +225,10 @@ grid-template-columns:1fr;
 
 <div class="card">
 
-<h3>生命共済</h3>
+<h3 class="kyosai-title">
+<img src="icons/seimei.svg" class="kyosai-icon">
+生命共済
+</h3>
 
 <p>
 万一のときにご本人やご家族の生活を支える共済です。
@@ -230,7 +244,10 @@ grid-template-columns:1fr;
 
 <div class="card">
 
-<h3>医療共済</h3>
+<h3 class="kyosai-title">
+<img src="icons/iryo.svg" class="kyosai-icon">
+医療共済
+</h3>
 
 <p>
 入院や手術など医療費の負担に備える共済です。
@@ -246,7 +263,10 @@ grid-template-columns:1fr;
 
 <div class="card">
 
-<h3>高齢生命共済</h3>
+<h3 class="kyosai-title">
+<img src="icons/korei-seimei.svg" class="kyosai-icon">
+高齢生命共済
+</h3>
 
 <p>
 高齢期の生活保障を支える生命共済です。
@@ -262,7 +282,10 @@ grid-template-columns:1fr;
 
 <div class="card">
 
-<h3>高齢医療共済</h3>
+<h3 class="kyosai-title">
+<img src="icons/korei-iryo.svg" class="kyosai-icon">
+高齢医療共済
+</h3>
 
 <p>
 高齢期の医療保障を支える共済です。
@@ -278,7 +301,10 @@ grid-template-columns:1fr;
 
 <div class="card">
 
-<h3>交通災害共済</h3>
+<h3 class="kyosai-title">
+<img src="icons/koutsu.svg" class="kyosai-icon">
+交通災害共済
+</h3>
 
 <p>
 交通事故によるけがや万一の事態に備える共済です。
@@ -294,7 +320,10 @@ grid-template-columns:1fr;
 
 <div class="card">
 
-<h3>自動車共済</h3>
+<h3 class="kyosai-title">
+<img src="icons/jidosha.svg" class="kyosai-icon">
+自動車共済
+</h3>
 
 <p>
 自動車事故や損害賠償などに備える共済です。
@@ -310,7 +339,10 @@ grid-template-columns:1fr;
 
 <div class="card">
 
-<h3>自転車共済</h3>
+<h3 class="kyosai-title">
+<img src="icons/jitensha.svg" class="kyosai-icon">
+自転車共済
+</h3>
 
 <p>
 自転車利用中の事故や賠償責任に備える共済です。
@@ -326,7 +358,10 @@ grid-template-columns:1fr;
 
 <div class="card">
 
-<h3>組織共済</h3>
+<h3 class="kyosai-title">
+<img src="icons/soshiki.svg" class="kyosai-icon">
+組織共済
+</h3>
 
 <p>
 組合や団体の活動を支えるための共済制度です。
