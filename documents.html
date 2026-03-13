@@ -1,354 +1,340 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>書類ダウンロード | 京滋労働組合共済会</title>
-  <meta name="description" content="京滋労働組合共済会の各種書類ダウンロードページです。パンフレット、申込書、申請書類などを掲載しています。">
-  <link rel="stylesheet" href="style.css">
-  <style>
-    .page-hero{
-      background: linear-gradient(135deg, #0b4a8b, #1d6bc1);
-      color:#fff;
-      padding:56px 0 42px;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    .page-hero h1{
-      margin:0 0 12px;
-      font-size:2rem;
-      line-height:1.4;
-    }
+<title>書類ダウンロード | 京滋労働組合共済会</title>
+<meta name="description" content="京滋労働組合共済会の各種書類ダウンロードページです。パンフレット、申込書、請求書類などを掲載しています。">
 
-    .page-hero p{
-      margin:0;
-      opacity:0.95;
-    }
+<link rel="stylesheet" href="style.css">
 
-    .breadcrumbs{
-      font-size:0.95rem;
-      margin:20px 0 0;
-    }
+<style>
 
-    .breadcrumbs a{
-      color:#dcecff;
-      text-decoration:none;
-    }
+.page-hero{
+background: linear-gradient(135deg,#0b4a8b,#1d6bc1);
+color:#fff;
+padding:56px 0 42px;
+}
 
-    .breadcrumbs a:hover{
-      text-decoration:underline;
-    }
+.page-hero h1{
+margin:0 0 12px;
+font-size:2rem;
+line-height:1.4;
+}
 
-    .documents-section{
-      padding:56px 0;
-    }
+.page-hero p{
+margin:0;
+opacity:0.95;
+}
 
-    .section-title{
-      margin:0 0 14px;
-      font-size:1.6rem;
-      color:#0b4a8b;
-      line-height:1.5;
-    }
+.documents-section{
+padding:60px 0;
+}
 
-    .section-lead{
-      margin:0 0 32px;
-      color:#555;
-    }
+.section-lead{
+margin:0 0 32px;
+color:#555;
+}
 
-    .notice-box{
-      background:#eef6ff;
-      border-left:6px solid #1d6bc1;
-      padding:20px;
-      border-radius:10px;
-      margin-bottom:32px;
-    }
+.documents-list{
+display:grid;
+gap:18px;
+}
 
-    .notice-box h2{
-      margin:0 0 12px;
-      font-size:1.15rem;
-      color:#0b4a8b;
-    }
+.document-card{
+background:#fff;
+border:1px solid #d9e2ec;
+border-radius:14px;
+padding:22px;
+box-shadow:0 4px 14px rgba(0,0,0,0.05);
+transition:transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
 
-    .notice-box ul{
-      margin:0;
-      padding-left:1.2em;
-    }
+.document-card:hover{
+transform:translateY(-4px);
+box-shadow:0 10px 28px rgba(0,0,0,0.10);
+border-color:#bfd3e6;
+}
 
-    .notice-box li + li{
-      margin-top:8px;
-    }
+.document-card h3{
+margin:0 0 10px;
+font-size:1.15rem;
+color:#0b4a8b;
+line-height:1.5;
+}
 
-    .documents-list{
-      display:grid;
-      gap:18px;
-    }
+.document-card p{
+margin:0 0 16px;
+color:#555;
+}
 
-    .document-card{
-      background:#fff;
-      border:1px solid #d9e2ec;
-      border-radius:14px;
-      padding:22px;
-      box-shadow:0 4px 14px rgba(0,0,0,0.05);
-    }
+.document-meta{
+display:flex;
+flex-wrap:wrap;
+gap:10px;
+margin-bottom:16px;
+}
 
-    .document-card h3{
-      margin:0 0 10px;
-      font-size:1.15rem;
-      color:#222;
-      line-height:1.5;
-    }
+.meta-badge{
+display:inline-block;
+background:#f1f5f9;
+color:#334155;
+font-size:0.9rem;
+padding:6px 10px;
+border-radius:999px;
+}
 
-    .document-card p{
-      margin:0 0 16px;
-      color:#555;
-    }
+.document-actions{
+display:flex;
+flex-wrap:wrap;
+gap:12px;
+}
 
-    .document-meta{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      margin-bottom:16px;
-    }
+.link-box{
+margin-top:40px;
+background:#f8fafc;
+border:1px solid #d9e2ec;
+border-radius:14px;
+padding:24px;
+}
 
-    .meta-badge{
-      display:inline-block;
-      background:#f1f5f9;
-      color:#334155;
-      font-size:0.9rem;
-      padding:6px 10px;
-      border-radius:999px;
-    }
+.link-box h2{
+margin:0 0 12px;
+font-size:1.2rem;
+color:#0b4a8b;
+}
 
-    .document-actions{
-      display:flex;
-      flex-wrap:wrap;
-      gap:12px;
-    }
+.link-box p{
+margin:0 0 14px;
+color:#555;
+}
 
-    .btn{
-      display:inline-block;
-      padding:12px 18px;
-      border-radius:10px;
-      text-decoration:none;
-      font-weight:bold;
-      line-height:1.4;
-      transition:0.2s ease;
-    }
+@media (max-width:768px){
 
-    .btn-primary{
-      background:#0b4a8b;
-      color:#fff;
-    }
+.page-hero{
+padding:42px 0 30px;
+}
 
-    .btn-primary:hover{
-      background:#083867;
-    }
+.page-hero h1{
+font-size:1.7rem;
+}
 
-    .btn-secondary{
-      background:#eaf2fb;
-      color:#0b4a8b;
-    }
+.documents-section{
+padding:42px 0;
+}
 
-    .btn-secondary:hover{
-      background:#d9e9fb;
-    }
+.document-card{
+padding:18px;
+}
 
-    .contact-box{
-      margin-top:40px;
-      background:#f8fafc;
-      border:1px solid #d9e2ec;
-      border-radius:14px;
-      padding:24px;
-    }
+.document-actions{
+flex-direction:column;
+}
 
-    .contact-box h2{
-      margin:0 0 12px;
-      font-size:1.2rem;
-      color:#0b4a8b;
-    }
+.document-actions .btn{
+text-align:center;
+}
 
-    .contact-box p{
-      margin:0 0 10px;
-    }
-
-    .back-links{
-      margin-top:32px;
-      display:flex;
-      flex-wrap:wrap;
-      gap:12px;
-    }
-
-    .footer-simple{
-      background:#0f172a;
-      color:#fff;
-      padding:24px 0;
-      margin-top:56px;
-    }
-
-    .footer-simple p{
-      margin:0;
-      text-align:center;
-      font-size:0.95rem;
-    }
-
-    @media (max-width: 768px){
-      .page-hero{
-        padding:42px 0 30px;
-      }
-
-      .page-hero h1{
-        font-size:1.7rem;
-      }
-
-      .documents-section{
-        padding:42px 0;
-      }
-
-      .document-card{
-        padding:18px;
-      }
-
-      .document-actions{
-        flex-direction:column;
-      }
-
-      .document-actions .btn{
-        text-align:center;
-      }
-    }
-  </style>
+}
+</style>
 </head>
+
 <body>
 
-  <header class="page-hero">
-    <div class="container">
-      <nav class="breadcrumbs" aria-label="パンくずリスト">
-        <a href="index.html">トップページ</a> ＞ 書類ダウンロード
-      </nav>
-      <h1>書類ダウンロード</h1>
-      <p>パンフレット・申込書・各種申請書類を掲載しています。必要な書類を選んでご利用ください。</p>
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="site-logo">京滋労働組合共済会</a>
+
+    <button class="menu-toggle" id="menu-toggle" aria-label="メニューを開く">☰</button>
+
+    <nav class="global-nav" id="global-nav" aria-label="グローバルナビゲーション">
+      <ul>
+        <li><a href="index.html">トップページ</a></li>
+        <li><a href="index.html#kyosai-list">共済種目一覧</a></li>
+        <li><a href="documents.html" class="current">書類ダウンロード</a></li>
+        <li><a href="faq.html">よくある質問</a></li>
+        <li><a href="contact.html">お問い合わせ</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<header class="page-hero">
+  <div class="container">
+
+    <div class="breadcrumb">
+      <a href="index.html">トップ</a>
+      <span>›</span>
+      書類ダウンロード
     </div>
-  </header>
 
-  <main>
-    <section class="documents-section">
-      <div class="container">
+    <h1>書類ダウンロード</h1>
+    <p>パンフレット・申込書・各種申請書類を掲載しています。必要な書類を選んでご利用ください。</p>
+  </div>
+</header>
 
-        <h2 class="section-title">掲載書類一覧</h2>
-        <p class="section-lead">
-          現在は書類をまとめて掲載しています。今後、共済の種類ごとなどに分けて整理できるようにしやすい構成にしています。
-        </p>
+<main>
+  <section class="documents-section">
+    <div class="container">
 
-        <div class="notice-box">
-          <h2>ご利用前にご確認ください</h2>
-          <ul>
-            <li>書類の提出先は、原則として所属組合です。</li>
-            <li>記入前にパンフレットや案内文を必ずご確認ください。</li>
-            <li>記入方法や必要書類がわからない場合は、お問い合わせください。</li>
-            <li>リンク先のPDFや書類ファイルは、後から実際のURLに差し替えてご利用ください。</li>
-          </ul>
-        </div>
+      <h2 class="section-title">掲載書類一覧</h2>
+      <p class="section-lead">
+        現在は書類をまとめて掲載しています。今後、共済の種類ごとや手続きごとに整理しやすい構成にしています。
+      </p>
 
-        <div class="documents-list">
+      <div class="notice-box">
+        <h2>ご利用前にご確認ください</h2>
+        <ul>
+          <li>書類の提出先は、原則として所属組合です。</li>
+          <li>記入前にパンフレットや案内文を必ずご確認ください。</li>
+          <li>記入方法や必要書類がわからない場合は、お問い合わせください。</li>
+          <li>リンク先のPDFやファイルは、後から実際のURLに差し替えてご利用ください。</li>
+        </ul>
+      </div>
 
-          <article class="document-card">
-            <h3>火災共済パンフレット</h3>
-            <div class="document-meta">
-              <span class="meta-badge">PDF</span>
-              <span class="meta-badge">案内資料</span>
-            </div>
-            <p>火災共済の概要、補償内容、加入条件などをまとめたパンフレットです。</p>
-            <div class="document-actions">
-              <a class="btn btn-primary" href="#" target="_blank" rel="noopener noreferrer">ダウンロードする</a>
-              <a class="btn btn-secondary" href="kasai.html">火災共済ページを見る</a>
-            </div>
-          </article>
+      <div class="documents-list">
 
-          <article class="document-card">
-            <h3>火災共済申込書</h3>
-            <div class="document-meta">
-              <span class="meta-badge">PDF</span>
-              <span class="meta-badge">申込書</span>
-            </div>
-            <p>火災共済への加入申込みに必要な書類です。記入例がある場合はあわせてご確認ください。</p>
-            <div class="document-actions">
-              <a class="btn btn-primary" href="#" target="_blank" rel="noopener noreferrer">ダウンロードする</a>
-              <a class="btn btn-secondary" href="kasai-detail.html">火災共済の詳細を見る</a>
-            </div>
-          </article>
-
-          <article class="document-card">
-            <h3>共済金請求書</h3>
-            <div class="document-meta">
-              <span class="meta-badge">PDF</span>
-              <span class="meta-badge">請求書類</span>
-            </div>
-            <p>共済金の請求時に必要となる書類です。事故や被害の内容に応じて添付書類が必要になる場合があります。</p>
-            <div class="document-actions">
-              <a class="btn btn-primary" href="#" target="_blank" rel="noopener noreferrer">ダウンロードする</a>
-            </div>
-          </article>
-
-          <article class="document-card">
-            <h3>変更届</h3>
-            <div class="document-meta">
-              <span class="meta-badge">PDF</span>
-              <span class="meta-badge">変更手続き</span>
-            </div>
-            <p>住所変更、氏名変更、連絡先変更など、登録内容に変更があった際にご利用ください。</p>
-            <div class="document-actions">
-              <a class="btn btn-primary" href="#" target="_blank" rel="noopener noreferrer">ダウンロードする</a>
-            </div>
-          </article>
-
-          <article class="document-card">
-            <h3>口座振替依頼書</h3>
-            <div class="document-meta">
-              <span class="meta-badge">PDF</span>
-              <span class="meta-badge">支払手続き</span>
-            </div>
-            <p>掛金の口座振替手続きに必要な書類です。記入漏れや押印漏れにご注意ください。</p>
-            <div class="document-actions">
-              <a class="btn btn-primary" href="#" target="_blank" rel="noopener noreferrer">ダウンロードする</a>
-            </div>
-          </article>
-
-          <article class="document-card">
-            <h3>その他の申請書類</h3>
-            <div class="document-meta">
-              <span class="meta-badge">PDF</span>
-              <span class="meta-badge">各種手続き</span>
-            </div>
-            <p>今後追加予定の各種申請書類の掲載欄です。必要に応じて書類を追加しやすいようにしています。</p>
-            <div class="document-actions">
-              <a class="btn btn-primary" href="#" target="_blank" rel="noopener noreferrer">ダウンロードする</a>
-            </div>
-          </article>
-
-        </div>
-
-        <div class="contact-box">
-          <h2>書類についてご不明な点がある場合</h2>
-          <p>必要書類や記入方法、提出先がわからない場合は、お問い合わせページをご確認ください。</p>
-          <div class="document-actions">
-            <a class="btn btn-primary" href="contact.html">お問い合わせページへ</a>
-            <a class="btn btn-secondary" href="faq.html">よくある質問を見る</a>
+        <article class="document-card">
+          <h3>火災共済パンフレット</h3>
+          <div class="document-meta">
+            <span class="meta-badge">PDF</span>
+            <span class="meta-badge">案内資料</span>
           </div>
-        </div>
+          <p>火災共済の概要、補償内容、加入条件などをまとめたパンフレットです。</p>
+          <div class="document-actions">
+            <a class="btn" href="#">ダウンロードする</a>
+            <a class="btn btn-secondary" href="kasai.html">火災共済ページを見る</a>
+          </div>
+        </article>
 
-        <div class="back-links">
-          <a class="btn btn-secondary" href="index.html">トップページへ戻る</a>
-          <a class="btn btn-secondary" href="kasai.html">火災共済ページへ</a>
-        </div>
+        <article class="document-card">
+          <h3>火災共済申込書</h3>
+          <div class="document-meta">
+            <span class="meta-badge">PDF</span>
+            <span class="meta-badge">申込書</span>
+          </div>
+          <p>火災共済への加入申込みに必要な書類です。記入前に制度内容もご確認ください。</p>
+          <div class="document-actions">
+            <a class="btn" href="#">ダウンロードする</a>
+            <a class="btn btn-secondary" href="kasai-detail.html">制度の詳細を見る</a>
+          </div>
+        </article>
+
+        <article class="document-card">
+          <h3>共済金請求書</h3>
+          <div class="document-meta">
+            <span class="meta-badge">PDF</span>
+            <span class="meta-badge">請求書類</span>
+          </div>
+          <p>共済金の請求時に必要となる書類です。被害内容に応じて添付書類が必要となる場合があります。</p>
+          <div class="document-actions">
+            <a class="btn" href="#">ダウンロードする</a>
+          </div>
+        </article>
+
+        <article class="document-card">
+          <h3>変更届</h3>
+          <div class="document-meta">
+            <span class="meta-badge">PDF</span>
+            <span class="meta-badge">変更手続き</span>
+          </div>
+          <p>住所変更、氏名変更、連絡先変更など、登録内容に変更があった際にご利用ください。</p>
+          <div class="document-actions">
+            <a class="btn" href="#">ダウンロードする</a>
+          </div>
+        </article>
+
+        <article class="document-card">
+          <h3>口座振替依頼書</h3>
+          <div class="document-meta">
+            <span class="meta-badge">PDF</span>
+            <span class="meta-badge">支払手続き</span>
+          </div>
+          <p>掛金の口座振替手続きに必要な書類です。記入漏れや押印漏れにご注意ください。</p>
+          <div class="document-actions">
+            <a class="btn" href="#">ダウンロードする</a>
+          </div>
+        </article>
+
+        <article class="document-card">
+          <h3>その他の申請書類</h3>
+          <div class="document-meta">
+            <span class="meta-badge">PDF</span>
+            <span class="meta-badge">各種手続き</span>
+          </div>
+          <p>今後追加予定の各種申請書類の掲載欄です。必要に応じて追加しやすいようにしています。</p>
+          <div class="document-actions">
+            <a class="btn" href="#">ダウンロードする</a>
+          </div>
+        </article>
 
       </div>
-    </section>
-  </main>
 
-  <footer class="footer-simple">
-    <div class="container">
-      <p>© 京滋労働組合共済会</p>
+      <div class="link-box">
+        <h2>関連ページ</h2>
+        <p>加入や手続きに関する詳しい情報は、各ページもあわせてご覧ください。</p>
+        <div class="document-actions">
+          <a class="btn btn-secondary" href="index.html#kyosai-list">共済種目一覧を見る</a>
+          <a class="btn btn-secondary" href="faq.html">よくある質問を見る</a>
+          <a class="btn btn-secondary" href="contact.html">お問い合わせページへ</a>
+        </div>
+      </div>
+
     </div>
-  </footer>
+  </section>
+</main>
+
+<footer class="site-footer">
+
+  <div class="footer-inner">
+
+    <div>
+      <div class="footer-title">京滋労働組合共済会</div>
+      <div class="footer-text">
+        〒606-8397<br>
+        京都府京都市左京区聖護院川原町4-13<br>
+        京都教育文化センター4F<br><br>
+        TEL：075-771-2200<br>
+        FAX：075-771-8606
+      </div>
+    </div>
+
+    <div>
+      <div class="footer-title">共済制度</div>
+      <ul class="footer-links">
+        <li><a href="index.html#kyosai-list">共済種目一覧</a></li>
+        <li><a href="kasai.html">火災共済</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <div class="footer-title">ご案内</div>
+      <ul class="footer-links">
+        <li><a href="documents.html">書類ダウンロード</a></li>
+        <li><a href="faq.html">よくある質問</a></li>
+        <li><a href="contact.html">お問い合わせ</a></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    © 京滋労働組合共済会
+  </div>
+
+</footer>
+
+<script>
+const toggle = document.getElementById("menu-toggle");
+const nav = document.getElementById("global-nav");
+
+if (toggle && nav) {
+  toggle.addEventListener("click", function () {
+    nav.classList.toggle("open");
+  });
+}
+</script>
 
 </body>
 </html>
