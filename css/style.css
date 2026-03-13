@@ -189,3 +189,28 @@ font-size:28px;
 .card h3 a:hover {
   color: #0f766e;
 }
+.single-card {
+  max-width: 820px;
+}
+
+.flow-grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.contact-info {
+  margin: 20px 0;
+}
+
+.contact-info p {
+  margin: 6px 0;
+}
+
+@media (max-width: 800px) {
+  .flow-grid-3 {
+    grid-template-columns: 1fr;
+  }
+
+  .single-card {
+    max-width: 100%;
+  }
+}
