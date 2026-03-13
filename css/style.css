@@ -55,6 +55,10 @@ body {
   font-size: 14px;
 }
 
+.site-nav a:hover {
+  color: #0f766e;
+}
+
 .hero {
   background: #0f766e;
   color: white;
@@ -75,17 +79,23 @@ body {
 .hero-buttons {
   margin-top: 25px;
   display: flex;
-  gap: 10px;
+  gap: 12px;
   flex-wrap: wrap;
 }
 
 .button {
   display: inline-block;
   padding: 12px 20px;
-  border-radius: 6px;
+  border-radius: 8px;
   font-weight: bold;
   text-decoration: none;
   text-align: center;
+  transition: 0.2s ease;
+}
+
+.button:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
 }
 
 .button.primary {
@@ -100,11 +110,11 @@ body {
 }
 
 .section {
-  padding: 70px 0;
+  padding: 90px 0;
 }
 
 .section-heading {
-  margin-bottom: 30px;
+  margin-bottom: 40px;
 }
 
 .section-label {
@@ -122,8 +132,18 @@ body {
 .card {
   background: white;
   padding: 25px;
-  border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.card h3 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+.card p {
+  margin-top: 0;
 }
 
 .card h3 a {
@@ -152,7 +172,13 @@ body {
 .flow-item {
   background: white;
   padding: 25px;
-  border-radius: 10px;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+}
+
+.flow-item h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
 }
 
 .flow-number {
@@ -165,13 +191,20 @@ body {
   align-items: center;
   justify-content: center;
   margin-bottom: 10px;
+  font-weight: bold;
 }
 
 .faq-item {
   background: white;
   padding: 20px;
-  border-radius: 8px;
-  margin-bottom: 10px;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+}
+
+.faq-item summary {
+  cursor: pointer;
+  font-weight: bold;
 }
 
 .contact-info {
@@ -216,6 +249,14 @@ body {
   .single-card {
     max-width: 100%;
   }
+
+  .section {
+    padding: 72px 0;
+  }
+
+  .section-heading {
+    margin-bottom: 32px;
+  }
 }
 
 @media (max-width: 640px) {
@@ -258,8 +299,16 @@ body {
     padding: 20px;
   }
 
+  .flow-item {
+    padding: 20px;
+  }
+
   .section {
-    padding: 48px 0;
+    padding: 60px 0;
+  }
+
+  .section-heading {
+    margin-bottom: 28px;
   }
 
   .button {
