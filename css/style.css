@@ -67,20 +67,6 @@ h4 {
   background: #eef4fb;
 }
 
-.section-heading {
-  margin-bottom: 32px;
-}
-
-.section-heading h2 {
-  font-size: clamp(1.8rem, 2.5vw, 2.2rem);
-  margin-bottom: 12px;
-}
-
-.section-heading p {
-  margin: 0;
-  color: #4b5563;
-}
-
 .skip-link {
   position: absolute;
   left: -9999px;
@@ -180,19 +166,6 @@ h4 {
   margin: 0 auto;
   background: #12385f;
   border-radius: 999px;
-  transition: transform 0.25s ease, opacity 0.25s ease;
-}
-
-.nav-toggle.is-open span:nth-child(1) {
-  transform: translateY(8px) rotate(45deg);
-}
-
-.nav-toggle.is-open span:nth-child(2) {
-  opacity: 0;
-}
-
-.nav-toggle.is-open span:nth-child(3) {
-  transform: translateY(-8px) rotate(-45deg);
 }
 
 /* ========================================
@@ -234,7 +207,8 @@ h4 {
   gap: 12px;
 }
 
-.btn {
+.btn-primary,
+.btn-secondary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -245,8 +219,10 @@ h4 {
   transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
 }
 
-.btn:hover,
-.btn:focus {
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-secondary:hover,
+.btn-secondary:focus {
   transform: translateY(-2px);
 }
 
@@ -273,90 +249,60 @@ h4 {
 }
 
 /* ========================================
-   Breadcrumb
+   Section headings
 ======================================== */
-.breadcrumb {
-  padding: 20px 0 0;
+.section-heading,
+.section-title {
+  margin-bottom: 32px;
 }
 
-.breadcrumb ol {
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  padding: 0;
+.section-heading h2,
+.section-title {
+  font-size: clamp(1.8rem, 2.5vw, 2.2rem);
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+.section-heading p {
   margin: 0;
-}
-
-.breadcrumb li {
-  color: #6b7280;
-  font-size: 0.95rem;
-}
-
-.breadcrumb li + li::before {
-  content: "›";
-  margin-right: 8px;
-  color: #9ca3af;
-}
-
-.breadcrumb a {
-  color: #0b63c9;
+  color: #4b5563;
 }
 
 /* ========================================
-   Cards
+   Card grid
 ======================================== */
 .card-grid {
   display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 24px;
 }
 
-.card-grid-3 {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.card-grid-2 {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.card-link {
-  color: inherit;
-}
-
 .kyosai-card,
-.info-panel,
-.doc-card,
-.faq-card,
-.contact-card,
-.page-panel {
+.guide-card,
+.info-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   background: #ffffff;
   border: 1px solid #dce6f2;
   border-radius: 20px;
   box-shadow: 0 10px 28px rgba(17, 40, 70, 0.06);
   transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  color: inherit;
 }
 
 .kyosai-card:hover,
-.kyosai-card:focus-within,
+.kyosai-card:focus,
+.guide-card:hover,
+.guide-card:focus,
 .info-panel:hover,
-.info-panel:focus-within,
-.doc-card:hover,
-.doc-card:focus-within,
-.faq-card:hover,
-.faq-card:focus-within,
-.contact-card:hover,
-.contact-card:focus-within,
-.page-panel:hover,
-.page-panel:focus-within {
+.info-panel:focus {
   transform: translateY(-4px);
   box-shadow: 0 16px 36px rgba(17, 40, 70, 0.10);
   border-color: #bfd4ec;
 }
 
 .kyosai-card {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
   padding: 24px;
 }
 
@@ -387,35 +333,25 @@ h4 {
 }
 
 .kyosai-card h3,
-.info-panel h3,
-.doc-card h3,
-.faq-card h3,
-.contact-card h3,
-.page-panel h3 {
+.guide-card h3,
+.info-panel h3 {
   font-size: 1.2rem;
   margin-bottom: 10px;
 }
 
 .kyosai-card p,
-.info-panel p,
-.doc-card p,
-.faq-card p,
-.contact-card p,
-.page-panel p {
+.guide-card p,
+.info-panel p {
   margin: 0;
   color: #4b5563;
 }
 
-.card-more,
-.card-status {
+.card-more {
   display: inline-flex;
   align-items: center;
   margin-top: 18px;
   font-weight: 700;
   font-size: 0.95rem;
-}
-
-.card-more {
   color: #0b63c9;
 }
 
@@ -424,45 +360,75 @@ h4 {
   margin-left: 8px;
 }
 
-.card-status {
-  color: #6b7280;
+.card-link {
+  color: inherit;
 }
 
-.is-disabled {
-  opacity: 1;
-  background: #fcfdff;
+/* index.html の簡易カード用互換 */
+.kyosai-card > img {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+  margin-bottom: 18px;
 }
 
-.is-disabled:hover,
-.is-disabled:focus-within {
-  transform: none;
-  box-shadow: 0 10px 28px rgba(17, 40, 70, 0.06);
-  border-color: #dce6f2;
+.kyosai-card > h3 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
 }
 
-/* ========================================
-   Info panels / lower navigation
-======================================== */
-.info-panel-grid,
-.panel-grid {
+.kyosai-card > p {
+  margin: 0;
+  color: #4b5563;
+}
+
+.guide {
+  background: #eef4fb;
+}
+
+.guide-grid,
+.info-panel-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 24px;
 }
 
-.info-panel,
-.page-panel,
-.doc-card,
-.faq-card,
-.contact-card {
-  display: block;
+.guide-card,
+.info-panel {
   padding: 24px;
-  height: 100%;
 }
 
 /* ========================================
-   Page header / content
+   Breadcrumb / page layout
 ======================================== */
+.breadcrumb {
+  padding: 20px 0 0;
+}
+
+.breadcrumb ol {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+}
+
+.breadcrumb li {
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+
+.breadcrumb li + li::before {
+  content: "›";
+  margin-right: 8px;
+  color: #9ca3af;
+}
+
+.breadcrumb a {
+  color: #0b63c9;
+}
+
 .page-header {
   background: linear-gradient(135deg, #edf5fd 0%, #f8fbff 100%);
   padding: 48px 0;
@@ -490,11 +456,18 @@ h4 {
   min-width: 0;
 }
 
-.content-block {
+.content-block,
+.side-nav,
+.doc-card,
+.faq-item,
+.contact-card {
   background: #ffffff;
   border: 1px solid #dce6f2;
   border-radius: 20px;
   box-shadow: 0 10px 28px rgba(17, 40, 70, 0.06);
+}
+
+.content-block {
   padding: 28px;
   margin-bottom: 24px;
 }
@@ -516,10 +489,6 @@ h4 {
 }
 
 .side-nav {
-  background: #ffffff;
-  border: 1px solid #dce6f2;
-  border-radius: 20px;
-  box-shadow: 0 10px 28px rgba(17, 40, 70, 0.06);
   padding: 22px;
 }
 
@@ -549,19 +518,22 @@ h4 {
 }
 
 .side-nav a:hover,
-.side-nav a:focus {
+.side-nav a:focus,
+.side-nav a[aria-current="page"] {
   background: #e8f1fb;
   color: #0b63c9;
 }
 
-/* ========================================
-   Documents
-======================================== */
 .doc-list,
 .faq-list,
 .contact-list {
   display: grid;
   gap: 20px;
+}
+
+.doc-card,
+.contact-card {
+  padding: 24px;
 }
 
 .doc-card .doc-meta {
@@ -577,15 +549,8 @@ h4 {
   margin-top: 18px;
 }
 
-/* ========================================
-   FAQ
-======================================== */
 .faq-item {
-  background: #ffffff;
-  border: 1px solid #dce6f2;
-  border-radius: 18px;
   padding: 22px;
-  box-shadow: 0 10px 28px rgba(17, 40, 70, 0.05);
 }
 
 .faq-item + .faq-item {
@@ -603,9 +568,6 @@ h4 {
   color: #4b5563;
 }
 
-/* ========================================
-   Contact
-======================================== */
 .contact-table {
   width: 100%;
   border-collapse: collapse;
@@ -642,6 +604,7 @@ h4 {
   padding: 40px 0 28px;
 }
 
+.footer-left,
 .footer-brand {
   max-width: 520px;
 }
@@ -688,26 +651,11 @@ h4 {
 }
 
 /* ========================================
-   Utility
-======================================== */
-.text-center {
-  text-align: center;
-}
-
-.mt-0 {
-  margin-top: 0;
-}
-
-.mb-0 {
-  margin-bottom: 0;
-}
-
-/* ========================================
    Responsive
 ======================================== */
 @media (max-width: 1024px) {
-  .card-grid-3,
-  .panel-grid,
+  .card-grid,
+  .guide-grid,
   .info-panel-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -746,6 +694,7 @@ h4 {
     box-shadow: 0 12px 28px rgba(17, 40, 70, 0.08);
   }
 
+  .global-nav.open,
   .global-nav.is-open {
     display: block;
   }
@@ -767,9 +716,8 @@ h4 {
     padding: 12px 14px;
   }
 
-  .card-grid-3,
-  .card-grid-2,
-  .panel-grid,
+  .card-grid,
+  .guide-grid,
   .info-panel-grid {
     grid-template-columns: 1fr;
   }
@@ -807,18 +755,19 @@ h4 {
     flex-direction: column;
   }
 
-  .btn {
+  .btn-primary,
+  .btn-secondary {
     width: 100%;
   }
 
   .kyosai-card,
+  .guide-card,
   .info-panel,
-  .doc-card,
-  .faq-card,
-  .contact-card,
-  .page-panel,
   .content-block,
-  .side-nav {
+  .side-nav,
+  .doc-card,
+  .faq-item,
+  .contact-card {
     border-radius: 16px;
   }
 
