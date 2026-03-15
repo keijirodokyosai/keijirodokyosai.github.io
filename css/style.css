@@ -49,6 +49,12 @@ p:last-child {
   margin-bottom: 0;
 }
 
+h1,
+h2,
+h3 {
+  color: #0f172a;
+}
+
 /* =========================================
    Layout
 ========================================= */
@@ -68,12 +74,19 @@ p:last-child {
 
 .section-lead {
   margin-top: 12px;
-  color: #555;
+  color: #475569;
   line-height: 1.9;
 }
 
 .section-button {
   margin-top: 24px;
+}
+
+/* 下層ページ本文を少し読みやすく */
+.kyosai-detail .container,
+.contact-section .container,
+.faq-section .container {
+  max-width: 960px;
 }
 
 /* =========================================
@@ -83,9 +96,10 @@ p:last-child {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: rgba(255, 255, 255, 0.96);
-  border-bottom: 1px solid #dbe5f0;
-  backdrop-filter: blur(8px);
+  background: rgba(255, 255, 255, 0.94);
+  border-bottom: 1px solid rgba(203, 213, 225, 0.9);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
 }
 
 .header-inner {
@@ -103,7 +117,7 @@ p:last-child {
   align-items: center;
   gap: 14px;
   flex-shrink: 0;
-  color: #111827;
+  color: #0f172a;
   text-decoration: none;
 }
 
@@ -120,9 +134,9 @@ p:last-child {
 .site-logo-text {
   font-size: 1.5rem;
   font-weight: 800;
-  line-height: 1.2;
-  letter-spacing: 0.02em;
-  color: #111827;
+  line-height: 1.15;
+  letter-spacing: 0.03em;
+  color: #0f172a;
   white-space: nowrap;
 }
 
@@ -136,10 +150,12 @@ p:last-child {
 }
 
 .global-nav a {
-  color: #222;
+  color: #334155;
   text-decoration: none;
-  font-weight: 600;
-  font-size: 0.98rem;
+  font-weight: 700;
+  font-size: 0.96rem;
+  letter-spacing: 0.01em;
+  transition: color 0.2s ease;
 }
 
 .global-nav a:hover,
@@ -165,7 +181,7 @@ p:last-child {
   width: 24px;
   height: 2px;
   margin: 0 auto;
-  background: #222;
+  background: #1f2937;
   border-radius: 999px;
 }
 
@@ -186,8 +202,8 @@ p:last-child {
   list-style: none;
   margin: 0;
   padding: 0;
-  font-size: 0.95rem;
-  color: #666;
+  font-size: 0.92rem;
+  color: #64748b;
 }
 
 .breadcrumb-list li {
@@ -198,7 +214,7 @@ p:last-child {
 .breadcrumb-list li:not(:last-child)::after {
   content: ">";
   margin-left: 8px;
-  color: #999;
+  color: #94a3b8;
 }
 
 .breadcrumb a {
@@ -211,7 +227,7 @@ p:last-child {
 }
 
 .breadcrumb [aria-current="page"] {
-  color: #333;
+  color: #334155;
   font-weight: 600;
 }
 
@@ -236,7 +252,7 @@ p:last-child {
 
 .hero p {
   margin: 0;
-  color: #555;
+  color: #475569;
   font-size: 1.05rem;
   line-height: 1.9;
 }
@@ -260,7 +276,7 @@ p:last-child {
 
 .page-hero p {
   margin: 0;
-  color: #555;
+  color: #475569;
   line-height: 1.8;
 }
 
@@ -356,7 +372,7 @@ p:last-child {
 
 .kyosai-card p {
   margin: 0;
-  color: #555;
+  color: #475569;
   line-height: 1.8;
 }
 
@@ -419,7 +435,7 @@ p:last-child {
 .simple-link-box p,
 .faq-preview-item p {
   margin: 0;
-  color: #555;
+  color: #475569;
   line-height: 1.8;
 }
 
@@ -456,6 +472,7 @@ p:last-child {
 .notice-box p {
   margin: 0;
   line-height: 1.8;
+  color: #475569;
 }
 
 /* =========================================
@@ -483,7 +500,7 @@ p:last-child {
 
 .faq-answer p {
   margin: 0;
-  color: #555;
+  color: #475569;
   line-height: 1.9;
 }
 
@@ -511,7 +528,7 @@ p:last-child {
 
 .contact-card p {
   margin: 0 0 12px;
-  color: #555;
+  color: #475569;
   line-height: 1.9;
 }
 
@@ -536,7 +553,7 @@ p:last-child {
 
 .contact-list {
   padding-left: 1.2em;
-  color: #555;
+  color: #475569;
   line-height: 1.9;
 }
 
@@ -565,13 +582,13 @@ p:last-child {
    Detail Pages
 ========================================= */
 .kyosai-detail p {
-  color: #555;
+  color: #475569;
   line-height: 1.95;
 }
 
 .content-list {
   padding-left: 1.2em;
-  color: #555;
+  color: #475569;
   line-height: 1.95;
 }
 
@@ -584,7 +601,7 @@ p:last-child {
 ========================================= */
 .site-footer {
   margin-top: 0;
-  background: #111c2d;
+  background: linear-gradient(180deg, #111c2d 0%, #0f172a 100%);
   color: #e5e7eb;
 }
 
