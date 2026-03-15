@@ -365,3 +365,44 @@ a {
     width: 100%;
   }
 }
+/* 共済詳細ページ */
+
+.detail-container{
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.detail-images{
+  margin-top: 20px;
+}
+
+.detail-images img{
+  width: 100%;
+  height: auto;
+  display: block;
+  margin-bottom: 24px;
+  border-radius: 6px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}
+
+/* PDFボタン */
+
+.detail-pdf{
+  text-align: center;
+  margin: 30px 0;
+}
+
+.detail-pdf a{
+  display: inline-block;
+  padding: 12px 24px;
+  background: #1c7c54;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: bold;
+}
+
+.detail-pdf a:hover{
+  opacity: 0.85;
+}
