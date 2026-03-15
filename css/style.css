@@ -1,779 +1,445 @@
-/* =========================================
-   Base
-========================================= */
+/* =====================================
+Base
+===================================== */
+
 *,
 *::before,
-*::after {
-  box-sizing: border-box;
+*::after{
+box-sizing:border-box;
 }
 
-html {
-  font-size: 16px;
-  scroll-behavior: smooth;
+html{
+font-size:16px;
+scroll-behavior:smooth;
 }
 
-body {
-  margin: 0;
-  color: #1f2937;
-  background: #fbfdff;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans",
-    "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
-  line-height: 1.7;
+body{
+margin:0;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans","Yu Gothic",Meiryo,sans-serif;
+line-height:1.7;
+color:#1f2937;
+background:#fbfdff;
 }
 
-img {
-  max-width: 100%;
-  height: auto;
-  vertical-align: middle;
+img{
+max-width:100%;
+height:auto;
+vertical-align:middle;
 }
 
-a {
-  color: #0b57a4;
-  text-decoration: none;
+a{
+color:#0b57a4;
+text-decoration:none;
 }
 
-a:hover {
-  text-decoration: underline;
+a:hover{
+text-decoration:underline;
 }
 
-ul,
-ol {
-  margin: 0;
+h1,h2,h3{
+margin:0;
+color:#0f172a;
 }
 
-p {
-  margin: 0 0 1em;
+p{
+margin:0 0 1em;
 }
 
-p:last-child {
-  margin-bottom: 0;
+ul{
+margin:0;
+padding:0;
+list-style:none;
 }
 
-h1,
-h2,
-h3 {
-  color: #0f172a;
+
+/* =====================================
+Layout
+===================================== */
+
+.container{
+max-width:1100px;
+margin:0 auto;
+padding:0 20px;
 }
 
-/* =========================================
-   Layout
-========================================= */
-.container {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 20px;
+.section{
+padding:64px 0;
 }
 
-.section {
-  padding: 64px 0;
+.section-alt{
+background:#f5f9ff;
 }
 
-.section-alt {
-  background: #f5f9ff;
+.section-lead{
+margin-top:12px;
+margin-bottom:18px;
+font-size:1rem;
+color:#475569;
+line-height:1.8;
+max-width:720px;
 }
 
-.section-lead {
-  margin-top: 12px;
-  color: #475569;
-  line-height: 1.9;
+
+/* =====================================
+Header
+===================================== */
+
+.site-header{
+position:sticky;
+top:0;
+z-index:1000;
+background:rgba(255,255,255,0.94);
+border-bottom:1px solid rgba(203,213,225,0.9);
+backdrop-filter:blur(10px);
+box-shadow:0 2px 10px rgba(15,23,42,0.04);
 }
 
-.section-button {
-  margin-top: 24px;
+.header-inner{
+max-width:1100px;
+margin:0 auto;
+padding:14px 20px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:20px;
 }
 
-/* 下層ページ本文を少し読みやすく */
-.kyosai-detail .container,
-.contact-section .container,
-.faq-section .container {
-  max-width: 960px;
+.site-logo{
+display:inline-flex;
+align-items:center;
+gap:14px;
+color:#0f172a;
+text-decoration:none;
 }
 
-/* =========================================
-   Header
-========================================= */
-.site-header {
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  background: rgba(255, 255, 255, 0.94);
-  border-bottom: 1px solid rgba(203, 213, 225, 0.9);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+.site-logo img{
+height:44px;
 }
 
-.header-inner {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 14px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
+.site-logo-text{
+font-size:1.5rem;
+font-weight:800;
+letter-spacing:0.03em;
+white-space:nowrap;
 }
 
-.site-logo {
-  display: inline-flex;
-  align-items: center;
-  gap: 14px;
-  flex-shrink: 0;
-  color: #0f172a;
-  text-decoration: none;
+.global-nav ul{
+display:flex;
+gap:24px;
+align-items:center;
 }
 
-.site-logo:hover {
-  text-decoration: none;
-}
-
-.site-logo img {
-  display: block;
-  height: 44px;
-  width: auto;
-}
-
-.site-logo-text {
-  font-size: 1.5rem;
-  font-weight: 800;
-  line-height: 1.15;
-  letter-spacing: 0.03em;
-  color: #0f172a;
-  white-space: nowrap;
-}
-
-.global-nav ul {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.global-nav a {
-  color: #334155;
-  text-decoration: none;
-  font-weight: 700;
-  font-size: 0.96rem;
-  letter-spacing: 0.01em;
-  transition: color 0.2s ease;
+.global-nav a{
+font-weight:700;
+font-size:0.96rem;
+color:#334155;
 }
 
 .global-nav a:hover,
-.global-nav a[aria-current="page"] {
-  color: #0b57a4;
+.global-nav a[aria-current="page"]{
+color:#0b57a4;
 }
 
-.menu-toggle {
-  display: none;
-  width: 44px;
-  height: 44px;
-  padding: 0;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  flex-direction: column;
-  justify-content: center;
-  gap: 5px;
+.menu-toggle{
+display:none;
+width:44px;
+height:44px;
+background:transparent;
+border:none;
+cursor:pointer;
+flex-direction:column;
+justify-content:center;
+gap:5px;
 }
 
-.menu-toggle span {
-  display: block;
-  width: 24px;
-  height: 2px;
-  margin: 0 auto;
-  background: #1f2937;
-  border-radius: 999px;
+.menu-toggle span{
+display:block;
+width:24px;
+height:2px;
+background:#1f2937;
+margin:0 auto;
 }
 
-/* =========================================
-   Breadcrumb
-========================================= */
-.breadcrumb {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 16px 20px 0;
-}
-
-.breadcrumb-list {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  font-size: 0.92rem;
-  color: #64748b;
-}
-
-.breadcrumb-list li {
-  display: flex;
-  align-items: center;
-}
-
-.breadcrumb-list li:not(:last-child)::after {
-  content: ">";
-  margin-left: 8px;
-  color: #94a3b8;
-}
-
-.breadcrumb a {
-  color: #0b57a4;
-  text-decoration: none;
-}
-
-.breadcrumb a:hover {
-  text-decoration: underline;
-}
-
-.breadcrumb [aria-current="page"] {
-  color: #334155;
-  font-weight: 600;
-}
-
-/* =========================================
-   Hero
-========================================= */
-.hero {
-  padding: 80px 0 72px;
-  background: linear-gradient(180deg, #f3f8fe 0%, #ffffff 100%);
-}
 
-.hero-content {
-  max-width: 760px;
-}
-
-.hero h1 {
-  margin: 0 0 18px;
-  font-size: 2.5rem;
-  line-height: 1.35;
-  letter-spacing: 0.02em;
-}
-
-.hero p {
-  margin: 0;
-  color: #475569;
-  font-size: 1.05rem;
-  line-height: 1.9;
-}
-
-.hero-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
-  margin-top: 28px;
-}
-
-.page-hero {
-  padding: 56px 0 32px;
-}
-
-.page-hero h1 {
-  margin: 0 0 12px;
-  font-size: 2rem;
-  line-height: 1.3;
-}
-
-.page-hero p {
-  margin: 0;
-  color: #475569;
-  line-height: 1.8;
-}
-
-/* =========================================
-   Buttons
-========================================= */
-.btn {
-  display: inline-block;
-  padding: 12px 20px;
-  border-radius: 10px;
-  text-decoration: none;
-  font-weight: 700;
-  transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
-}
+/* =====================================
+Hero
+===================================== */
 
-.btn:hover {
-  text-decoration: none;
-  transform: translateY(-2px);
-}
+.hero{
+padding:88px 0 76px;
 
-.btn-primary {
-  background: #0b57a4;
-  color: #ffffff;
-  box-shadow: 0 8px 18px rgba(11, 87, 164, 0.18);
+background:
+linear-gradient(
+180deg,
+#eef5ff 0%,
+#f8fbff 38%,
+#ffffff 100%
+);
 }
 
-.btn-primary:hover {
-  opacity: 0.95;
+.hero-content{
+max-width:760px;
 }
 
-.btn-secondary {
-  background: #eef5ff;
-  color: #0b57a4;
-  border: 1px solid #d8e7f8;
+.hero-eyebrow{
+display:inline-block;
+margin:0 0 14px;
+padding:6px 12px;
+background:#eaf3ff;
+border:1px solid #d7e6fa;
+border-radius:999px;
+color:#0b57a4;
+font-size:0.88rem;
+font-weight:700;
 }
 
-.btn-secondary:hover {
-  opacity: 0.95;
+.hero h1{
+margin-bottom:18px;
+font-size:2.5rem;
+line-height:1.35;
+letter-spacing:0.02em;
 }
 
-/* =========================================
-   Top Cards
-========================================= */
-.kyosai-cards h2,
-.top-downloads h2,
-.top-faq h2,
-.top-contact h2,
-.documents-section h2,
-.faq-links h2,
-.contact-links-section h2,
-.kyosai-detail h2 {
-  margin: 0 0 24px;
-  font-size: 1.6rem;
-  line-height: 1.4;
+.hero-note{
+margin-top:16px;
+font-size:0.98rem;
+color:#64748b;
+line-height:1.8;
+max-width:720px;
 }
 
-.card-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 24px;
+.hero-info-box{
+margin-top:20px;
+max-width:720px;
+padding:16px 18px;
+background:rgba(255,255,255,0.82);
+border:1px solid #dbe7f5;
+border-radius:14px;
+box-shadow:0 8px 20px rgba(15,23,42,0.04);
 }
 
-.kyosai-card {
-  display: block;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 18px;
-  padding: 24px;
-  color: inherit;
-  text-decoration: none;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+.hero-info-box p{
+margin:0;
+color:#475569;
 }
 
-.kyosai-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.08);
-  text-decoration: none;
+.hero-buttons{
+display:flex;
+flex-wrap:wrap;
+gap:14px;
+margin-top:28px;
 }
 
-.kyosai-card img {
-  width: 56px;
-  height: 56px;
-  object-fit: contain;
-  margin-bottom: 16px;
+.hero-sub-links{
+margin-top:16px;
+font-size:0.92rem;
+color:#64748b;
 }
 
-.kyosai-card h3 {
-  margin: 0 0 12px;
-  font-size: 1.15rem;
-  line-height: 1.5;
-}
 
-.kyosai-card p {
-  margin: 0;
-  color: #475569;
-  line-height: 1.8;
-}
+/* =====================================
+Buttons
+===================================== */
 
-/* =========================================
-   Link Cards / Simple Links
-========================================= */
-.documents-grid,
-.link-cards,
-.simple-links {
-  display: grid;
-  gap: 24px;
+.btn{
+display:inline-block;
+padding:12px 20px;
+border-radius:10px;
+font-weight:700;
+transition:transform .2s ease,opacity .2s ease;
 }
 
-.documents-grid,
-.link-cards {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+.btn:hover{
+transform:translateY(-2px);
+text-decoration:none;
 }
 
-.simple-links {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+.btn-primary{
+background:#0b57a4;
+color:#ffffff;
+box-shadow:0 8px 18px rgba(11,87,164,0.18);
 }
 
-.document-card,
-.link-card,
-.simple-link-box,
-.faq-preview-item {
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 16px;
-  padding: 24px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+.btn-secondary{
+background:#eef5ff;
+color:#0b57a4;
+border:1px solid #d8e7f8;
 }
 
-.link-card,
-.simple-link-box {
-  display: block;
-  color: inherit;
-  text-decoration: none;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
 
-.link-card:hover,
-.simple-link-box:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.08);
-  text-decoration: none;
-}
+/* =====================================
+Cards
+===================================== */
 
-.document-card h3,
-.link-card h3,
-.simple-link-box h3,
-.faq-preview-item h3 {
-  margin: 0 0 12px;
-  font-size: 1.15rem;
-  line-height: 1.5;
+.card-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:28px;
 }
 
-.document-card p,
-.link-card p,
-.simple-link-box p,
-.faq-preview-item p {
-  margin: 0;
-  color: #475569;
-  line-height: 1.8;
-}
+.kyosai-card{
+display:block;
+background:#f8fbff;
+border:1px solid #e5e7eb;
+border-radius:18px;
+padding:24px;
+color:inherit;
+text-decoration:none;
 
-.document-link {
-  display: inline-block;
-  margin-top: 16px;
-  padding: 10px 16px;
-  background: #0b57a4;
-  color: #ffffff;
-  border-radius: 10px;
-  text-decoration: none;
-  font-weight: 700;
+box-shadow:0 8px 20px rgba(0,0,0,0.04);
+transition:all .25s ease;
 }
 
-.document-link:hover {
-  text-decoration: none;
-  opacity: 0.92;
+.kyosai-card:hover{
+transform:translateY(-6px);
+box-shadow:0 14px 28px rgba(0,0,0,0.08);
+background:#ffffff;
 }
 
-.text-link {
-  font-weight: 700;
+.kyosai-card img{
+width:56px;
+height:56px;
+background:#eef5ff;
+padding:10px;
+border-radius:12px;
+margin-bottom:16px;
 }
 
-/* =========================================
-   Notice
-========================================= */
-.notice-box {
-  background: #f5f9ff;
-  border: 1px solid #d8e7f8;
-  border-radius: 12px;
-  padding: 18px 20px;
+.kyosai-card h3{
+font-size:1.15rem;
+font-weight:700;
+margin-bottom:10px;
 }
 
-.notice-box p {
-  margin: 0;
-  line-height: 1.8;
-  color: #475569;
+.kyosai-card p{
+font-size:0.95rem;
+color:#475569;
 }
 
-/* =========================================
-   FAQ
-========================================= */
-.faq-list,
-.faq-preview {
-  display: grid;
-  gap: 20px;
-}
 
-.faq-item {
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 16px;
-  padding: 24px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
-}
+/* =====================================
+Footer
+===================================== */
 
-.faq-item h2 {
-  margin: 0 0 12px;
-  font-size: 1.15rem;
-  line-height: 1.6;
+.site-footer{
+margin-top:40px;
+background:linear-gradient(180deg,#111c2d 0%,#0f172a 100%);
+color:#e5e7eb;
 }
 
-.faq-answer p {
-  margin: 0;
-  color: #475569;
-  line-height: 1.9;
+.footer-inner{
+max-width:1100px;
+margin:0 auto;
+padding:24px 20px;
 }
 
-/* =========================================
-   Contact
-========================================= */
-.contact-section .container {
-  display: grid;
-  gap: 24px;
+.footer-site-name{
+font-size:1.05rem;
+font-weight:700;
+margin-bottom:10px;
 }
 
-.contact-card {
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 16px;
-  padding: 24px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+.footer-nav ul{
+display:flex;
+flex-wrap:wrap;
+gap:10px 22px;
+margin-bottom:10px;
 }
 
-.contact-card h2 {
-  margin: 0 0 14px;
-  font-size: 1.25rem;
-  line-height: 1.5;
+.footer-nav a{
+color:#e5e7eb;
 }
 
-.contact-card p {
-  margin: 0 0 12px;
-  color: #475569;
-  line-height: 1.9;
+.footer-nav a:hover{
+color:#ffffff;
 }
 
-.contact-card p:last-child {
-  margin-bottom: 0;
+.copyright{
+font-size:0.9rem;
+color:#cbd5e1;
 }
 
-.contact-note {
-  background: #f5f9ff;
-  border: 1px solid #d8e7f8;
-  border-radius: 12px;
-  padding: 18px 20px;
-}
 
-.contact-note p {
-  margin: 0 0 10px;
-}
+/* =====================================
+Responsive
+===================================== */
 
-.contact-note p:last-child {
-  margin-bottom: 0;
-}
+@media (max-width:900px){
 
-.contact-list {
-  padding-left: 1.2em;
-  color: #475569;
-  line-height: 1.9;
+.card-grid{
+grid-template-columns:repeat(2,1fr);
 }
 
-.contact-links {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-.mail-link {
-  display: inline-block;
-  padding: 10px 16px;
-  background: #0b57a4;
-  color: #ffffff;
-  border-radius: 10px;
-  font-weight: 700;
-  text-decoration: none;
-  transition: opacity 0.2s ease, transform 0.2s ease;
-}
+@media (max-width:768px){
 
-.mail-link:hover {
-  opacity: 0.92;
-  transform: translateY(-1px);
-  text-decoration: none;
+.hero{
+padding:60px 0 52px;
 }
 
-/* =========================================
-   Detail Pages
-========================================= */
-.kyosai-detail p {
-  color: #475569;
-  line-height: 1.95;
+.hero h1{
+font-size:2rem;
 }
 
-.content-list {
-  padding-left: 1.2em;
-  color: #475569;
-  line-height: 1.95;
+.site-logo-text{
+font-size:1.15rem;
 }
 
-.content-list li + li {
-  margin-top: 8px;
+.menu-toggle{
+display:flex;
 }
 
-/* =========================================
-   Footer
-========================================= */
-.site-footer {
-  margin-top: 0;
-  background: linear-gradient(180deg, #111c2d 0%, #0f172a 100%);
-  color: #e5e7eb;
+.global-nav{
+display:none;
+width:100%;
+padding-top:8px;
 }
 
-.footer-inner {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 24px 20px;
+.global-nav.open{
+display:block;
 }
 
-.footer-brand {
-  margin-bottom: 10px;
+.global-nav ul{
+flex-direction:column;
+align-items:flex-start;
+gap:0;
+border-top:1px solid #e5e7eb;
+padding-top:10px;
 }
 
-.footer-site-name {
-  margin: 0;
-  font-size: 1.05rem;
-  font-weight: 700;
-  line-height: 1.35;
-  color: #ffffff;
+.global-nav a{
+display:block;
+padding:12px 0;
 }
 
-.footer-nav ul {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px 22px;
-  list-style: none;
-  padding: 0;
-  margin: 0 0 10px;
+.card-grid{
+grid-template-columns:1fr;
 }
 
-.footer-nav a {
-  color: #e5e7eb;
-  text-decoration: none;
-  line-height: 1.4;
+.hero-buttons{
+flex-direction:column;
+align-items:flex-start;
 }
 
-.footer-nav a:hover {
-  color: #ffffff;
-  text-decoration: underline;
+.btn{
+width:100%;
+text-align:center;
 }
 
-.copyright {
-  margin: 0;
-  font-size: 0.9rem;
-  line-height: 1.35;
-  color: #cbd5e1;
 }
 
-/* =========================================
-   Responsive
-========================================= */
-@media (max-width: 900px) {
-  .card-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+@media (max-width:480px){
 
-  .contact-links,
-  .documents-grid,
-  .link-cards,
-  .simple-links {
-    grid-template-columns: 1fr;
-  }
+.container,
+.header-inner,
+.footer-inner{
+padding-left:16px;
+padding-right:16px;
 }
-
-@media (max-width: 768px) {
-  .header-inner {
-    position: relative;
-    flex-wrap: wrap;
-  }
-
-  .site-logo img {
-    height: 40px;
-  }
-
-  .site-logo-text {
-    font-size: 1.15rem;
-  }
-
-  .menu-toggle {
-    display: inline-flex;
-  }
 
-  .global-nav {
-    display: none;
-    width: 100%;
-    padding-top: 8px;
-  }
-
-  .global-nav.open {
-    display: block;
-  }
-
-  .global-nav ul {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0;
-    border-top: 1px solid #e5e7eb;
-    padding-top: 10px;
-  }
-
-  .global-nav li {
-    width: 100%;
-  }
-
-  .global-nav a {
-    display: block;
-    padding: 12px 0;
-  }
-
-  .hero {
-    padding: 56px 0 48px;
-  }
-
-  .hero h1 {
-    font-size: 2rem;
-  }
-
-  .page-hero {
-    padding: 40px 0 24px;
-  }
-
-  .page-hero h1 {
-    font-size: 1.7rem;
-  }
-
-  .section {
-    padding: 48px 0;
-  }
-
-  .card-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .hero-buttons {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .btn {
-    width: 100%;
-    text-align: center;
-  }
-
-  .breadcrumb {
-    padding-top: 12px;
-  }
+.hero h1{
+font-size:1.7rem;
 }
-
-@media (max-width: 480px) {
-  .header-inner,
-  .container,
-  .footer-inner,
-  .breadcrumb {
-    padding-left: 16px;
-    padding-right: 16px;
-  }
-
-  .hero h1 {
-    font-size: 1.75rem;
-  }
-
-  .page-hero h1 {
-    font-size: 1.5rem;
-  }
 
-  .kyosai-card,
-  .document-card,
-  .link-card,
-  .simple-link-box,
-  .faq-item,
-  .faq-preview-item,
-  .contact-card {
-    padding: 20px;
-  }
 }
