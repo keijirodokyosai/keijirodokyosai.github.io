@@ -1,7 +1,3 @@
-/* =====================================
-Base
-===================================== */
-
 *,
 *::before,
 *::after {
@@ -9,775 +5,363 @@ Base
 }
 
 html {
-  font-size: 16px;
   scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans",
-    "Yu Gothic", Meiryo, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
   line-height: 1.7;
-  color: #1f2937;
-  background: #fbfdff;
+  color: #1f2d3d;
+  background: #f7f9fc;
 }
 
 img {
   max-width: 100%;
   height: auto;
-  vertical-align: middle;
+  display: block;
 }
 
 a {
-  color: #0b57a4;
+  color: inherit;
   text-decoration: none;
 }
 
-a:hover {
-  text-decoration: underline;
-}
-
-h1,
-h2,
-h3 {
-  margin: 0;
-  color: #0f172a;
-}
-
-p {
-  margin: 0 0 1em;
-}
-
-ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-/* =====================================
-Layout
-===================================== */
-
 .container {
-  max-width: 1100px;
+  width: min(1120px, calc(100% - 32px));
   margin: 0 auto;
-  padding: 0 20px;
 }
 
 .section {
   padding: 64px 0;
 }
 
-.section-alt {
-  background: #f5f9ff;
-}
-
-.section-lead {
-  margin-top: 12px;
-  margin-bottom: 18px;
-  font-size: 1rem;
-  color: #475569;
-  line-height: 1.8;
-  max-width: 720px;
-}
-
-/* =====================================
-Header
-===================================== */
-
+/* header */
 .site-header {
+  background: #ffffff;
+  border-bottom: 1px solid #e3e8ef;
   position: sticky;
   top: 0;
-  z-index: 1000;
-  background: rgba(255, 255, 255, 0.94);
-  border-bottom: 1px solid rgba(203, 213, 225, 0.9);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+  z-index: 100;
 }
 
 .header-inner {
-  max-width: 1100px;
+  width: min(1120px, calc(100% - 32px));
   margin: 0 auto;
-  padding: 14px 20px;
+  min-height: 78px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
+  gap: 24px;
 }
 
 .site-logo {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 14px;
-  color: #0f172a;
-  text-decoration: none;
+  gap: 12px;
+  min-width: 0;
 }
 
 .site-logo img {
-  height: 44px;
+  width: 42px;
+  height: 42px;
 }
 
 .site-logo-text {
-  font-size: 1.5rem;
-  font-weight: 800;
-  letter-spacing: 0.03em;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #0b4a8b;
   white-space: nowrap;
 }
 
-.global-nav ul {
-  display: flex;
-  gap: 24px;
-  align-items: center;
-}
-
-.global-nav a {
-  font-weight: 700;
-  font-size: 0.96rem;
-  color: #334155;
-}
-
-.global-nav a:hover,
-.global-nav a[aria-current="page"] {
-  color: #0b57a4;
-}
-
-.menu-toggle {
-  display: none;
-  width: 44px;
-  height: 44px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  flex-direction: column;
-  justify-content: center;
-  gap: 5px;
-}
-
-.menu-toggle span {
-  display: block;
-  width: 24px;
-  height: 2px;
-  background: #1f2937;
-  margin: 0 auto;
-}
-
-/* =====================================
-Breadcrumb
-===================================== */
-
-.breadcrumb {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 16px 20px 0;
-}
-
-.breadcrumb-list {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
+.global-nav ul,
+.footer-nav ul {
   list-style: none;
   margin: 0;
   padding: 0;
-  font-size: 0.92rem;
-  color: #64748b;
-}
-
-.breadcrumb-list li {
   display: flex;
-  align-items: center;
 }
 
-.breadcrumb-list li:not(:last-child)::after {
-  content: ">";
-  margin-left: 8px;
-  color: #94a3b8;
+.global-nav ul {
+  gap: 20px;
+  flex-wrap: wrap;
 }
 
-.breadcrumb a {
-  color: #0b57a4;
-}
-
-.breadcrumb [aria-current="page"] {
-  color: #334155;
+.global-nav a {
+  color: #24415f;
   font-weight: 600;
+  padding: 8px 0;
+  position: relative;
 }
 
-/* =====================================
-Hero
-===================================== */
+.global-nav a[aria-current="page"] {
+  color: #0b4a8b;
+}
 
+.global-nav a:hover {
+  color: #0b4a8b;
+}
+
+/* hero */
 .hero {
-  padding: 88px 0 76px;
-  background: linear-gradient(
-    180deg,
-    #eef5ff 0%,
-    #f8fbff 38%,
-    #ffffff 100%
-  );
+  background:
+    linear-gradient(180deg, #eef5fb 0%, #f7f9fc 100%);
+  padding: 72px 0 64px;
 }
 
 .hero-content {
-  max-width: 760px;
+  max-width: 900px;
 }
 
 .hero-eyebrow {
   display: inline-block;
-  margin: 0 0 14px;
+  margin: 0 0 16px;
   padding: 6px 12px;
-  background: #eaf3ff;
-  border: 1px solid #d7e6fa;
   border-radius: 999px;
-  color: #0b57a4;
-  font-size: 0.88rem;
+  background: #e6f0fa;
+  color: #0b4a8b;
+  font-size: 0.95rem;
   font-weight: 700;
 }
 
 .hero h1 {
-  margin-bottom: 18px;
-  font-size: 2.5rem;
+  margin: 0 0 20px;
+  font-size: clamp(2rem, 4vw, 2.8rem);
   line-height: 1.35;
-  letter-spacing: 0.02em;
+  color: #12385f;
 }
 
 .hero-note {
-  margin-top: 16px;
-  font-size: 0.98rem;
-  color: #64748b;
-  line-height: 1.8;
-  max-width: 720px;
+  margin: 0 0 24px;
+  font-size: 1.05rem;
+  color: #30465c;
 }
 
 .hero-info-box {
-  margin-top: 20px;
-  max-width: 720px;
-  padding: 16px 18px;
-  background: rgba(255, 255, 255, 0.82);
-  border: 1px solid #dbe7f5;
-  border-radius: 14px;
-  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+  margin: 0 0 28px;
+  padding: 18px 20px;
+  background: #ffffff;
+  border: 1px solid #d9e3ef;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(10, 42, 84, 0.04);
 }
 
 .hero-info-box p {
   margin: 0;
-  color: #475569;
 }
 
 .hero-buttons {
   display: flex;
   flex-wrap: wrap;
   gap: 14px;
-  margin-top: 28px;
+  margin-bottom: 20px;
 }
-
-.hero-sub-links {
-  margin-top: 16px;
-  font-size: 0.92rem;
-  color: #64748b;
-}
-
-/* =====================================
-Buttons
-===================================== */
 
 .btn {
-  display: inline-block;
-  padding: 12px 20px;
-  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0 20px;
+  border-radius: 999px;
   font-weight: 700;
-  transition: transform 0.2s ease, opacity 0.2s ease;
-}
-
-.btn:hover {
-  transform: translateY(-2px);
-  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
 .btn-primary {
-  background: #0b57a4;
+  background: #0b4a8b;
   color: #ffffff;
-  box-shadow: 0 8px 18px rgba(11, 87, 164, 0.18);
+  box-shadow: 0 8px 20px rgba(11, 74, 139, 0.18);
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(11, 74, 139, 0.22);
 }
 
 .btn-secondary {
-  background: #eef5ff;
-  color: #0b57a4;
-  border: 1px solid #d8e7f8;
+  background: #ffffff;
+  color: #0b4a8b;
+  border: 1px solid #bfd0e3;
 }
 
-/* =====================================
-Section Headings
-===================================== */
-
-.section h2,
-.page-hero h1,
-.documents-section h2,
-.kyosai-cards h2,
-.top-downloads h2,
-.top-faq h2,
-.top-contact h2,
-.contact-card h2,
-.faq-item h2,
-.kyosai-detail h2 {
-  position: relative;
+.btn-secondary:hover {
+  background: #f2f7fc;
+  transform: translateY(-1px);
 }
 
-.section h2:not(.hero h2),
-.documents-section h2,
-.kyosai-cards h2,
-.top-downloads h2,
-.top-faq h2,
-.top-contact h2,
-.kyosai-detail h2 {
-  padding-left: 16px;
+.hero-sub-links {
+  margin: 0;
+  color: #526273;
 }
 
-.section h2:not(.hero h2)::before,
-.documents-section h2::before,
-.kyosai-cards h2::before,
-.top-downloads h2::before,
-.top-faq h2::before,
-.top-contact h2::before,
-.kyosai-detail h2::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 6px;
-  width: 4px;
-  height: 22px;
-  background: #0b57a4;
-  border-radius: 2px;
+/* section title */
+.kyosai-cards h2 {
+  margin: 0 0 12px;
+  font-size: clamp(1.7rem, 3vw, 2.2rem);
+  color: #12385f;
 }
 
-/* =====================================
-Cards
-===================================== */
+.section-lead {
+  margin: 0 0 32px;
+  color: #4e5f71;
+  font-size: 1rem;
+}
 
+/* cards */
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 28px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
 }
 
 .kyosai-card {
   display: block;
-  background: #f8fbff;
-  border: 1px solid #e5e7eb;
-  border-radius: 18px;
-  padding: 24px;
-  color: inherit;
-  text-decoration: none;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
-  transition: all 0.25s ease;
+  background: #ffffff;
+  border: 1px solid #e0e6ee;
+  border-radius: 20px;
+  padding: 22px 22px 20px;
+  box-shadow: 0 6px 18px rgba(15, 35, 60, 0.05);
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    border-color 0.22s ease,
+    background-color 0.22s ease;
 }
 
 .kyosai-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.08);
-  background: #ffffff;
+  transform: translateY(-4px);
+  border-color: #c3d4e6;
+  background: #fcfdff;
+  box-shadow: 0 14px 32px rgba(15, 35, 60, 0.10);
 }
 
-.kyosai-card img {
-  width: 56px;
-  height: 56px;
-  background: #eef5ff;
-  padding: 10px;
-  border-radius: 12px;
-  margin-bottom: 16px;
+.kyosai-card:focus-visible {
+  outline: 3px solid #8eb6dd;
+  outline-offset: 3px;
+}
+
+.kyosai-card-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+.kyosai-card-header img {
+  width: 54px;
+  height: 54px;
+  flex-shrink: 0;
 }
 
 .kyosai-card h3 {
-  font-size: 1.15rem;
+  margin: 0;
+  font-size: 1.38rem;
+  line-height: 1.35;
+  color: #12385f;
   font-weight: 700;
-  margin-bottom: 10px;
+  letter-spacing: 0.01em;
 }
 
 .kyosai-card p {
-  font-size: 0.95rem;
-  color: #475569;
-}
-
-/* =====================================
-Common Card Blocks
-===================================== */
-
-.link-cards,
-.simple-links,
-.documents-grid {
-  display: grid;
-  gap: 24px;
-}
-
-.link-cards,
-.documents-grid {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.simple-links {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.link-card,
-.simple-link-box,
-.document-card,
-.faq-item,
-.contact-card,
-.faq-preview-item {
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 16px;
-  padding: 24px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
-}
-
-.link-card,
-.simple-link-box {
-  display: block;
-  color: inherit;
-  text-decoration: none;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-
-.link-card:hover,
-.simple-link-box:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.08);
-  text-decoration: none;
-}
-
-.document-card h3,
-.link-card h3,
-.simple-link-box h3,
-.faq-preview-item h3 {
-  margin: 0 0 12px;
-  font-size: 1.15rem;
-  line-height: 1.5;
-}
-
-.document-card p,
-.link-card p,
-.simple-link-box p,
-.faq-preview-item p {
   margin: 0;
-  color: #475569;
-  line-height: 1.8;
+  color: #4f6173;
+  font-size: 0.98rem;
+  line-height: 1.75;
 }
 
-.document-link,
-.mail-link {
-  display: inline-block;
-  margin-top: 16px;
-  padding: 10px 16px;
-  background: #0b57a4;
-  color: #ffffff;
-  border-radius: 10px;
-  font-weight: 700;
-  text-decoration: none;
-  transition: opacity 0.2s ease, transform 0.2s ease;
-}
-
-.document-link:hover,
-.mail-link:hover {
-  opacity: 0.92;
-  transform: translateY(-1px);
-  text-decoration: none;
-}
-
-/* =====================================
-Notice / Info
-===================================== */
-
-.notice-box,
-.contact-note {
-  background: #f5f9ff;
-  border: 1px solid #d8e7f8;
-  border-radius: 12px;
-  padding: 18px 20px;
-}
-
-.notice-box p,
-.contact-note p {
-  margin: 0 0 10px;
-  line-height: 1.8;
-  color: #475569;
-}
-
-.notice-box p:last-child,
-.contact-note p:last-child {
-  margin-bottom: 0;
-}
-
-/* =====================================
-FAQ / Contact / Detail
-===================================== */
-
-.faq-list,
-.faq-preview {
-  display: grid;
-  gap: 20px;
-}
-
-.faq-item h2 {
-  margin: 0 0 12px;
-  font-size: 1.15rem;
-  line-height: 1.6;
-}
-
-.faq-answer p,
-.contact-card p,
-.kyosai-detail p {
-  color: #475569;
-  line-height: 1.9;
-}
-
-.contact-section .container {
-  display: grid;
-  gap: 24px;
-  max-width: 960px;
-}
-
-.contact-card h2 {
-  margin: 0 0 14px;
-  font-size: 1.25rem;
-  line-height: 1.5;
-}
-
-.contact-card p {
-  margin: 0 0 12px;
-}
-
-.contact-card p:last-child {
-  margin-bottom: 0;
-}
-
-.contact-list,
-.content-list {
-  padding-left: 1.2em;
-  color: #475569;
-  line-height: 1.95;
-  list-style: disc;
-}
-
-.content-list li + li {
-  margin-top: 8px;
-}
-
-.contact-links {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.faq-section .container,
-.kyosai-detail .container {
-  max-width: 960px;
-}
-
-/* =====================================
-Page Hero
-===================================== */
-
-.page-hero {
-  padding: 56px 0 32px;
-}
-
-.page-hero h1 {
-  margin: 0 0 12px;
-  font-size: 2rem;
-  line-height: 1.3;
-}
-
-.page-hero p {
-  margin: 0;
-  color: #475569;
-  line-height: 1.8;
-}
-
-/* =====================================
-Footer
-===================================== */
-
+/* footer */
 .site-footer {
-  margin-top: 40px;
-  background: linear-gradient(180deg, #111c2d 0%, #0f172a 100%);
-  color: #e5e7eb;
+  margin-top: 72px;
+  background: #12385f;
+  color: #ffffff;
 }
 
 .footer-inner {
-  max-width: 1100px;
+  width: min(1120px, calc(100% - 32px));
   margin: 0 auto;
-  padding: 24px 20px;
-}
-
-.footer-brand {
-  margin-bottom: 10px;
+  padding: 28px 0 36px;
 }
 
 .footer-site-name {
+  margin: 0 0 16px;
   font-size: 1.05rem;
   font-weight: 700;
-  margin: 0;
-  line-height: 1.35;
 }
 
 .footer-nav ul {
-  display: flex;
+  gap: 18px;
   flex-wrap: wrap;
-  gap: 10px 22px;
-  margin-bottom: 10px;
+  margin-bottom: 16px;
 }
 
 .footer-nav a {
-  color: #e5e7eb;
-  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.92);
 }
 
 .footer-nav a:hover {
   color: #ffffff;
+  text-decoration: underline;
 }
 
 .copyright {
   margin: 0;
-  font-size: 0.9rem;
-  line-height: 1.35;
-  color: #cbd5e1;
+  font-size: 0.92rem;
+  color: rgba(255, 255, 255, 0.82);
 }
 
-/* =====================================
-Responsive
-===================================== */
-
-@media (max-width: 900px) {
-  .card-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .contact-links,
-  .documents-grid,
-  .link-cards,
-  .simple-links {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 768px) {
-  .hero {
-    padding: 60px 0 52px;
-  }
-
-  .hero h1 {
-    font-size: 2rem;
-  }
-
-  .hero-note {
-    font-size: 0.94rem;
-  }
-
-  .hero-eyebrow {
-    font-size: 0.82rem;
-  }
-
-  .site-logo-text {
-    font-size: 1.15rem;
-  }
-
-  .menu-toggle {
-    display: flex;
-  }
-
-  .global-nav {
-    display: none;
-    width: 100%;
-    padding-top: 8px;
-  }
-
-  .global-nav.open {
-    display: block;
-  }
-
-  .global-nav ul {
+/* responsive */
+@media (max-width: 960px) {
+  .header-inner {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0;
-    border-top: 1px solid #e5e7eb;
-    padding-top: 10px;
+    justify-content: center;
+    padding: 14px 0;
   }
 
-  .global-nav a {
-    display: block;
-    padding: 12px 0;
+  .card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .hero {
+    padding: 56px 0 52px;
+  }
+
+  .section {
+    padding: 52px 0;
   }
 
   .card-grid {
     grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .kyosai-card {
+    padding: 18px 18px 16px;
+  }
+
+  .kyosai-card-header {
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+
+  .kyosai-card-header img {
+    width: 48px;
+    height: 48px;
+  }
+
+  .kyosai-card h3 {
+    font-size: 1.2rem;
   }
 
   .hero-buttons {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
   }
 
   .btn {
     width: 100%;
-    text-align: center;
-  }
-
-  .page-hero {
-    padding: 40px 0 24px;
-  }
-
-  .page-hero h1 {
-    font-size: 1.7rem;
-  }
-
-  .section {
-    padding: 48px 0;
-  }
-
-  .section h2:not(.hero h2),
-  .documents-section h2,
-  .kyosai-cards h2,
-  .top-downloads h2,
-  .top-faq h2,
-  .top-contact h2,
-  .kyosai-detail h2 {
-    padding-left: 14px;
-  }
-
-  .section h2:not(.hero h2)::before,
-  .documents-section h2::before,
-  .kyosai-cards h2::before,
-  .top-downloads h2::before,
-  .top-faq h2::before,
-  .top-contact h2::before,
-  .kyosai-detail h2::before {
-    top: 5px;
-    height: 20px;
-  }
-}
-
-@media (max-width: 480px) {
-  .container,
-  .header-inner,
-  .footer-inner,
-  .breadcrumb {
-    padding-left: 16px;
-    padding-right: 16px;
-  }
-
-  .hero h1 {
-    font-size: 1.7rem;
-  }
-
-  .page-hero h1 {
-    font-size: 1.5rem;
-  }
-
-  .kyosai-card,
-  .document-card,
-  .link-card,
-  .simple-link-box,
-  .faq-item,
-  .faq-preview-item,
-  .contact-card {
-    padding: 20px;
   }
 }
