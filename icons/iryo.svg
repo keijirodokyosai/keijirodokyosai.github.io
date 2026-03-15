@@ -7,17 +7,17 @@ style="color:#E88AAE">
 <rect x="4" y="4" width="56" height="56" rx="18" fill="currentColor"/>
 
 <path fill="#ffffff" d="
-M32 18
-L46 30
-V44
-C46 45.7 44.7 47 43 47
+M32 17
+L46 29
+V45
+C46 46.7 44.7 48 43 48
 H21
-C19.3 47 18 45.7 18 44
-V30
-L32 18
+C19.3 48 18 46.7 18 45
+V29
+L32 17
 Z"/>
 
-<rect x="30.5" y="28" width="3" height="16" rx="1.5" fill="#E88AAE"/>
-<rect x="24" y="34.5" width="16" height="3" rx="1.5" fill="#E88AAE"/>
+<rect x="30.5" y="27" width="3" height="16" rx="1.5" fill="#E88AAE"/>
+<rect x="24" y="33.5" width="16" height="3" rx="1.5" fill="#E88AAE"/>
 
 </svg>
