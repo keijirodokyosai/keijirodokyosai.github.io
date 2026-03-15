@@ -1,6 +1,33 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
-  <rect x="12" y="26" width="40" height="16" rx="4" fill="#0b4a8b"/>
-  <path d="M20 26L26 18H38L44 26H20Z" fill="#0b4a8b"/>
-  <circle cx="22" cy="44" r="5" fill="#0b4a8b"/>
-  <circle cx="42" cy="44" r="5" fill="#0b4a8b"/>
+<svg xmlns="http://www.w3.org/2000/svg"
+viewBox="0 0 64 64"
+width="64"
+height="64"
+style="color:#A67C5B">
+
+<rect x="4" y="4" width="56" height="56" rx="18" fill="currentColor"/>
+
+<path fill="#ffffff" d="
+M23 23
+C23.6 21.8 24.8 21 26.2 21
+H37.8
+C39.2 21 40.4 21.8 41 23
+L44 29
+C45.9 29 47.5 30.6 47.5 32.5
+V40
+C47.5 41.7 46.2 43 44.5 43
+H19.5
+C17.8 43 16.5 41.7 16.5 40
+V32.5
+C16.5 30.6 18.1 29 20 29
+L23 23
+Z"/>
+
+<rect x="24.5" y="25" width="15" height="7" rx="2.2" fill="#A67C5B"/>
+
+<circle cx="24" cy="43" r="3.2" fill="#ffffff"/>
+<circle cx="40" cy="43" r="3.2" fill="#ffffff"/>
+
+<circle cx="24" cy="34" r="1.6" fill="#A67C5B"/>
+<circle cx="40" cy="34" r="1.6" fill="#A67C5B"/>
+
 </svg>
