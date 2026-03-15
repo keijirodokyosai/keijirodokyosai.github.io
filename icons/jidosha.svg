@@ -1,33 +1,33 @@
 <svg xmlns="http://www.w3.org/2000/svg"
-viewBox="0 0 64 64"
-width="64"
-height="64"
+viewBox="0 0 72 72"
+width="72"
+height="72"
 style="color:#A67C5B">
 
-<rect x="4" y="4" width="56" height="56" rx="18" fill="currentColor"/>
+<rect x="6" y="6" width="60" height="60" rx="18" fill="currentColor"/>
 
 <path fill="#ffffff" d="
-M23 23
-C23.6 21.8 24.8 21 26.2 21
-H37.8
-C39.2 21 40.4 21.8 41 23
-L44 29
-C45.9 29 47.5 30.6 47.5 32.5
-V40
-C47.5 41.7 46.2 43 44.5 43
-H19.5
-C17.8 43 16.5 41.7 16.5 40
-V32.5
-C16.5 30.6 18.1 29 20 29
-L23 23
+M27 25
+C27.6 23.8 28.8 23 30.2 23
+H41.8
+C43.2 23 44.4 23.8 45 25
+L48 31
+C49.9 31 51.5 32.6 51.5 34.5
+V42
+C51.5 43.7 50.2 45 48.5 45
+H23.5
+C21.8 45 20.5 43.7 20.5 42
+V34.5
+C20.5 32.6 22.1 31 24 31
+L27 25
 Z"/>
 
-<rect x="24.5" y="25" width="15" height="7" rx="2.2" fill="#A67C5B"/>
+<rect x="28.5" y="27" width="15" height="7" rx="2.2" fill="#A67C5B"/>
 
-<circle cx="24" cy="43" r="3.2" fill="#ffffff"/>
-<circle cx="40" cy="43" r="3.2" fill="#ffffff"/>
+<circle cx="28" cy="45" r="3.2" fill="#ffffff"/>
+<circle cx="44" cy="45" r="3.2" fill="#ffffff"/>
 
-<circle cx="24" cy="34" r="1.6" fill="#A67C5B"/>
-<circle cx="40" cy="34" r="1.6" fill="#A67C5B"/>
+<circle cx="28" cy="36" r="1.6" fill="#A67C5B"/>
+<circle cx="44" cy="36" r="1.6" fill="#A67C5B"/>
 
 </svg>
