@@ -1,4 +1,30 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
-  <path d="M32 6C36 15 47 21 47 34C47 44 40 52 32 52C24 52 17 44 17 34C17 25 22 19 27 14C27 20 30 24 34 27C34 21 36 14 32 6Z" fill="#0b4a8b"/>
-  <path d="M32 26C35 30 39 34 39 40C39 45 35 49 32 49C29 49 25 45 25 40C25 35 28 31 32 26Z" fill="#ffffff"/>
+<svg xmlns="http://www.w3.org/2000/svg"
+viewBox="0 0 64 64"
+width="64"
+height="64"
+style="color:#5FAF86">
+
+<rect x="4" y="4" width="56" height="56" rx="18" fill="currentColor"/>
+
+<path fill="#ffffff" d="
+M32 18
+L48 31
+C48.6 31.5 48.2 32.5 47.4 32.5
+H44
+V44
+C44 45.7 42.7 47 41 47
+H36
+V38
+C36 36.9 35.1 36 34 36
+H30
+C28.9 36 28 36.9 28 38
+V47
+H23
+C21.3 47 20 45.7 20 44
+V32.5
+H16.6
+C15.8 32.5 15.4 31.5 16 31
+L32 18
+Z"/>
+
 </svg>
