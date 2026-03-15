@@ -1,3 +1,22 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
-  <path d="M32 54S10 41 10 24C10 16 16 10 24 10C29 10 32 13 32 13S35 10 40 10C48 10 54 16 54 24C54 41 32 54 32 54Z" fill="#0b4a8b"/>
+<svg xmlns="http://www.w3.org/2000/svg"
+viewBox="0 0 64 64"
+width="64"
+height="64"
+style="color:#5F8FD9">
+
+<rect x="4" y="4" width="56" height="56" rx="18" fill="currentColor"/>
+
+<path fill="#ffffff" d="
+M32 49
+L19 36
+C15.5 32 16.5 25.5 22 24
+C26 23 29.5 25 31.5 28
+L32 29
+L32.5 28
+C34.5 25 38 23 42 24
+C47.5 25.5 48.5 32 45 36
+L32 49
+Z"
+/>
+
 </svg>
