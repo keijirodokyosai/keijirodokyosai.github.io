@@ -253,6 +253,12 @@ a {
   color: #526273;
 }
 
+.site-alias {
+  margin: 14px 0 0;
+  font-size: 0.95rem;
+  color: #5a6b7b;
+}
+
 /* buttons */
 .btn {
   display: inline-flex;
@@ -499,6 +505,45 @@ a {
   text-decoration: underline;
 }
 
+/* contact */
+.contact-card {
+  padding: 20px 26px;
+}
+
+.contact-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.contact-table th,
+.contact-table td {
+  padding: 6px 0;
+  vertical-align: top;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.contact-table th {
+  width: 8em;
+  white-space: nowrap;
+  text-align: left;
+  padding-right: 2.4em;
+  letter-spacing: 0.05em;
+}
+
+.contact-table td {
+  text-align: left;
+}
+
+.contact-table td a {
+  font-weight: 700;
+}
+
+.contact-mail-btn {
+  min-width: 280px;
+  font-size: 1.05rem;
+}
+
 /* footer */
 .site-footer {
   margin-top: 24px;
@@ -614,10 +659,6 @@ a {
   .kyosai-card h3 {
     font-size: 1.2rem;
     color: #243660;
-  }
-
-  .kyosai-card p {
-    color: #4f6173;
   }
 
   .hero-buttons {
