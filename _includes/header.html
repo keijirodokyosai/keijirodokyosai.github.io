@@ -1,0 +1,29 @@
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="{{ '/' | relative_url }}" class="site-logo" aria-label="京滋労働組合共済会 ホーム">
+      <img src="{{ '/images/logo.svg' | relative_url }}" alt="京滋労働組合共済会">
+    </a>
+
+    <button
+      class="menu-toggle"
+      type="button"
+      aria-label="メニューを開閉"
+      aria-expanded="false"
+      aria-controls="global-nav"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <nav class="global-nav" id="global-nav" aria-label="グローバルナビゲーション">
+      <ul>
+        <li><a href="{{ '/index.html' | relative_url }}">ホーム</a></li>
+        <li><a href="{{ '/downloads.html' | relative_url }}">書類ダウンロード</a></li>
+        <li><a href="{{ '/faq.html' | relative_url }}">FAQ</a></li>
+        <li><a href="{{ '/news.html' | relative_url }}">ニュース</a></li>
+        <li><a href="{{ '/contact.html' | relative_url }}">お問い合わせ</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
