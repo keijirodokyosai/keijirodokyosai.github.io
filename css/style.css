@@ -12,8 +12,8 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
   line-height: 1.7;
-  color: #122436;
-  background: #f0fff0;
+  color: #1f2d3d;
+  background: #f7f9fc;
 }
 
 body.menu-open {
@@ -90,7 +90,7 @@ a {
 }
 
 .site-logo-text {
-  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-size: 1.6rem;
   font-weight: 700;
   color: #ef1b22;
   white-space: nowrap;
@@ -196,8 +196,8 @@ a {
 
 /* hero */
 .hero {
-  background: #f0fff0;
-  padding: 36px 0 60px;
+  background: linear-gradient(180deg, #eef5fb 0%, #f7f9fc 100%);
+  padding: 72px 0 64px;
 }
 
 .hero-content {
@@ -225,7 +225,7 @@ a {
 .hero-note {
   margin: 0 0 24px;
   font-size: 1.05rem;
-  color: #243648;
+  color: #30465c;
 }
 
 .hero-info-box {
@@ -250,13 +250,7 @@ a {
 
 .hero-sub-links {
   margin: 0;
-  color: #486072;
-}
-
-.site-alias {
-  margin: 14px 0 0;
-  font-size: 0.95rem;
-  color: #5a6b7b;
+  color: #526273;
 }
 
 /* buttons */
@@ -324,7 +318,7 @@ a {
 
 .kyosai-card {
   display: block;
-  background: #faf6f3;
+  background: #ffffff;
   border: 1px solid #e0e6ee;
   border-radius: 20px;
   padding: 22px 22px 20px;
@@ -580,7 +574,7 @@ a {
   }
 
   .site-logo-text {
-    font-size: clamp(2rem, 4vw, 2.8rem);
+    font-size: 1.2rem;
     font-weight: 700;
     color: #ef1b22;
   }
@@ -643,7 +637,7 @@ a {
   .kyosai-card {
     padding: 24px;
     margin-bottom: 24px;
-    background: #faf6f3;
+    background: #f6efe7;
   }
 
   .kyosai-card-header {
@@ -720,7 +714,7 @@ a {
   }
 
   body {
-    background: #f0fff0;
+    background: #eeffee;
   }
 
   h1,
@@ -773,7 +767,12 @@ a {
   }
 
   .hero {
-    background: #f0fff0;
+    background: radial-gradient(
+      circle at 50% 28%,
+      rgba(255, 255, 255, 0.78) 0%,
+      rgba(255, 255, 255, 0.32) 34%,
+      rgba(255, 255, 255, 0) 58%
+    ), linear-gradient(180deg, #f3faf3 0%, #eef7ee 100%);
     border-bottom: 1px solid rgba(36, 54, 96, 0.06);
   }
 }
