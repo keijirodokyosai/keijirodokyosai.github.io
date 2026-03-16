@@ -13,7 +13,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
   line-height: 1.7;
   color: #1f2d3d;
-  background: #f7f9fc;
+  background: #f0fff0;
 }
 
 body.menu-open {
@@ -324,7 +324,7 @@ a {
 
 .kyosai-card {
   display: block;
-  background: #ffffff;
+  background: #faf6f3;
   border: 1px solid #e0e6ee;
   border-radius: 20px;
   padding: 22px 22px 20px;
@@ -643,7 +643,7 @@ a {
   .kyosai-card {
     padding: 24px;
     margin-bottom: 24px;
-    background: #f6efe7;
+    background: #faf6f3;
   }
 
   .kyosai-card-header {
@@ -720,12 +720,13 @@ a {
   }
 
   body {
-    background: #eeffee;
+    background: #f0fff0;
   }
 
   h1,
   h2,
-  h3 {
+  h3,
+  a {
     color: #243660;
   }
 }
