@@ -3,6 +3,25 @@ layout: default
 title: 高齢生命共済 | 京滋労働組合共済会
 description: 京滋労働組合共済会の高齢生命共済についてご案内します。制度概要や必要書類をご確認いただけます。
 permalink: /korei-seimei.html
+breadcrumb_json_ld: >
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "ホーム",
+        "item": "{{ '/index.html' | absolute_url }}"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "高齢生命共済",
+        "item": "{{ '/korei-seimei.html' | absolute_url }}"
+      }
+    ]
+  }
 ---
 
 <nav class="breadcrumb" aria-label="パンくずリスト">
@@ -18,8 +37,7 @@ permalink: /korei-seimei.html
     <h1>高齢生命共済</h1>
     <div class="detail-lead">
       <p>
-        高齢生命共済は、一定の年齢以上の方を対象とした生命共済制度です。
-        万が一のときの備えとしてご利用いただける制度概要をご案内しています。
+        高齢生命共済は、65歳以上の方を対象とした生命共済制度です。85歳の年末まで継続加入できます。
       </p>
       <p>
         詳しい制度内容につきましては、事業規約・規定集もあわせてご確認ください。
@@ -53,9 +71,12 @@ permalink: /korei-seimei.html
     <p>
       加入、変更、解約、給付の申請などに必要な書類は、書類ダウンロードページに掲載しています。
     </p>
-    <p>
-      <a href="{{ '/downloads.html' | relative_url }}" class="text-link">書類ダウンロードページへ</a>
-    </p>
+
+    <div class="pdf-download">
+      <a href="{{ '/downloads.html' | relative_url }}" class="btn btn-primary">
+        書類ダウンロードページ
+      </a>
+    </div>
   </section>
 
 </section>
