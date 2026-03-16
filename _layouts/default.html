@@ -4,16 +4,33 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>{{ page.title }}</title>
-  <meta name="description" content="{{ page.description }}">
+  <title>{{ page.title | default: "京滋労働組合共済会" }}</title>
+  <meta name="description" content="{{ page.description | default: '京滋労働組合共済会の共済制度をご案内しています。' }}">
+  <meta name="format-detection" content="telephone=no">
 
+  <link rel="canonical" href="{{ page.url | absolute_url }}">
   <link rel="stylesheet" href="{{ '/css/style.css' | relative_url }}">
+
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ja_JP">
+  <meta property="og:site_name" content="京滋労働組合共済会">
+  <meta property="og:title" content="{{ page.title | default: '京滋労働組合共済会' }}">
+  <meta property="og:description" content="{{ page.description | default: '京滋労働組合共済会の共済制度をご案内しています。' }}">
+  <meta property="og:url" content="{{ page.url | absolute_url }}">
+  <meta property="og:image" content="{{ '/images/ogp-logo-1200x630.jpg' | absolute_url }}">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ page.title | default: '京滋労働組合共済会' }}">
+  <meta name="twitter:description" content="{{ page.description | default: '京滋労働組合共済会の共済制度をご案内しています。' }}">
+  <meta name="twitter:image" content="{{ '/images/ogp-logo-1200x630.jpg' | absolute_url }}">
 </head>
-<body>
+<body class="{% if page.body_class %}{{ page.body_class }}{% endif %}">
+
+  <a href="#main-content" class="skip-link">本文へ移動</a>
 
   {% include header.html %}
 
-  <main>
+  <main id="main-content">
     {{ content }}
   </main>
 
