@@ -1,6 +1,6 @@
 <header class="site-header">
   <div class="container header-inner">
-    <a href="{{ '/' | relative_url }}" class="site-logo" aria-label="京滋労働組合共済会 ホーム">
+    <a href="{{ '/index.html' | relative_url }}" class="site-logo" aria-label="京滋労働組合共済会 ホーム">
       <img src="{{ '/images/logo.svg' | relative_url }}" alt="京滋労働組合共済会">
     </a>
 
@@ -18,11 +18,36 @@
 
     <nav class="global-nav" id="global-nav" aria-label="グローバルナビゲーション">
       <ul>
-        <li><a href="{{ '/index.html' | relative_url }}">ホーム</a></li>
-        <li><a href="{{ '/downloads.html' | relative_url }}">書類ダウンロード</a></li>
-        <li><a href="{{ '/faq.html' | relative_url }}">FAQ</a></li>
-        <li><a href="{{ '/news.html' | relative_url }}">ニュース</a></li>
-        <li><a href="{{ '/contact.html' | relative_url }}">お問い合わせ</a></li>
+        <li>
+          <a href="{{ '/index.html' | relative_url }}"
+             {% if page.url == '/' or page.url == '/index.html' %}aria-current="page"{% endif %}>
+            ホーム
+          </a>
+        </li>
+        <li>
+          <a href="{{ '/downloads.html' | relative_url }}"
+             {% if page.url == '/downloads.html' %}aria-current="page"{% endif %}>
+            書類ダウンロード
+          </a>
+        </li>
+        <li>
+          <a href="{{ '/faq.html' | relative_url }}"
+             {% if page.url == '/faq.html' %}aria-current="page"{% endif %}>
+            FAQ
+          </a>
+        </li>
+        <li>
+          <a href="{{ '/news.html' | relative_url }}"
+             {% if page.url == '/news.html' %}aria-current="page"{% endif %}>
+            ニュース
+          </a>
+        </li>
+        <li>
+          <a href="{{ '/contact.html' | relative_url }}"
+             {% if page.url == '/contact.html' %}aria-current="page"{% endif %}>
+            お問い合わせ
+          </a>
+        </li>
       </ul>
     </nav>
   </div>
