@@ -1,101 +1,170 @@
 ---
 layout: default
 title: 京滋労働組合共済会
-description: 京滋労働組合共済会の共済制度をご案内しています。火災共済、生命共済、医療共済など各制度の概要、書類ダウンロード、よくある質問をご確認いただけます。
+description: 京滋労働組合共済会の共済制度をご案内しています。火災共済、生命共済、医療共済、交通災害共済など各制度の概要、書類ダウンロード、よくある質問をご確認いただけます。
+permalink: /index.html
 ---
 
 <section class="hero">
   <div class="container">
-    <h1>京滋労働組合共済会</h1>
-    <p>
-      京滋労働組合共済会では、組合員の皆さまの暮らしを支える
-      各種共済制度をご案内しています。
-    </p>
+    <div class="hero-content">
+      <p class="hero-eyebrow">組合員の皆さまの暮らしを支える共済制度</p>
+      <h1>京滋労働組合共済会</h1>
+      <p class="hero-note">
+        京滋労働組合共済会では、組合員の皆さまの暮らしを支える
+        各種共済制度をご案内しています。
+      </p>
+
+      <div class="hero-info-box">
+        <p>
+          火災共済、生命共済、医療共済、交通災害共済など、
+          目的に応じた制度をご確認いただけます。
+        </p>
+      </div>
+
+      <div class="hero-buttons">
+        <a href="{{ '/downloads.html' | relative_url }}" class="btn btn-primary">書類ダウンロード</a>
+        <a href="{{ '/faq.html' | relative_url }}" class="btn btn-secondary">よくある質問を見る</a>
+      </div>
+
+      <p class="hero-sub-links">
+        制度の詳細は、各共済ページからパンフレットや必要書類をご確認ください。
+      </p>
+    </div>
   </div>
 </section>
 
-<section class="kyosai-list">
+<section class="section kyosai-cards">
   <div class="container">
-
     <h2>共済制度のご案内</h2>
+    <p class="section-lead">
+      各制度の概要、パンフレット、必要書類をご案内しています。
+    </p>
 
-    <div class="grid">
+    <div class="card-grid">
 
-      <a href="kasai.html" class="kyosai-card">
-        <img src="images/kasai.png" alt="火災共済">
-        <h3>火災共済</h3>
+      <a href="{{ '/kasai.html' | relative_url }}" class="kyosai-card">
+        <div class="kyosai-card-header">
+          <img src="{{ '/images/kasai.png' | relative_url }}" alt="火災共済">
+          <h3>火災共済</h3>
+        </div>
+        <p>
+          火災や自然災害など、住まいに関わるリスクに備えるための共済制度です。
+        </p>
       </a>
 
-      <a href="seimei.html" class="kyosai-card">
-        <img src="images/seimei.png" alt="生命共済">
-        <h3>生命共済</h3>
+      <a href="{{ '/seimei.html' | relative_url }}" class="kyosai-card">
+        <div class="kyosai-card-header">
+          <img src="{{ '/images/seimei.png' | relative_url }}" alt="生命共済">
+          <h3>生命共済</h3>
+        </div>
+        <p>
+          万が一のときに備え、ご本人やご家族の生活を支えるための共済制度です。
+        </p>
       </a>
 
-      <a href="iryo.html" class="kyosai-card">
-        <img src="images/iryo.png" alt="医療共済">
-        <h3>医療共済</h3>
+      <a href="{{ '/iryo.html' | relative_url }}" class="kyosai-card">
+        <div class="kyosai-card-header">
+          <img src="{{ '/images/iryo.png' | relative_url }}" alt="医療共済">
+          <h3>医療共済</h3>
+        </div>
+        <p>
+          入院や手術など、医療に関する備えを考えるための共済制度です。
+        </p>
       </a>
 
-      <a href="korei-seimei.html" class="kyosai-card">
-        <img src="images/korei-seimei.png" alt="高齢生命共済">
-        <h3>高齢生命共済</h3>
+      <a href="{{ '/korei-seimei.html' | relative_url }}" class="kyosai-card">
+        <div class="kyosai-card-header">
+          <img src="{{ '/images/korei-seimei.png' | relative_url }}" alt="高齢生命共済">
+          <h3>高齢生命共済</h3>
+        </div>
+        <p>
+          年齢に応じた保障の考え方に対応した生命共済制度をご案内します。
+        </p>
       </a>
 
-      <a href="korei-iryo.html" class="kyosai-card">
-        <img src="images/korei-iryo.png" alt="高齢医療共済">
-        <h3>高齢医療共済</h3>
+      <a href="{{ '/korei-iryo.html' | relative_url }}" class="kyosai-card">
+        <div class="kyosai-card-header">
+          <img src="{{ '/images/korei-iryo.png' | relative_url }}" alt="高齢医療共済">
+          <h3>高齢医療共済</h3>
+        </div>
+        <p>
+          高齢期の医療保障に備えるための医療共済制度をご案内します。
+        </p>
       </a>
 
-      <a href="koutsu.html" class="kyosai-card">
-        <img src="images/koutsu.png" alt="交通災害共済">
-        <h3>交通災害共済</h3>
+      <a href="{{ '/koutsu.html' | relative_url }}" class="kyosai-card">
+        <div class="kyosai-card-header">
+          <img src="{{ '/images/koutsu.png' | relative_url }}" alt="交通災害共済">
+          <h3>交通災害共済</h3>
+        </div>
+        <p>
+          交通事故によるけがや災害に備えるための共済制度です。
+        </p>
       </a>
 
-      <a href="jidosha.html" class="kyosai-card">
-        <img src="images/jidosha.png" alt="自動車共済">
-        <h3>自動車共済</h3>
+      <a href="{{ '/jidosha.html' | relative_url }}" class="kyosai-card">
+        <div class="kyosai-card-header">
+          <img src="{{ '/images/jidosha.png' | relative_url }}" alt="自動車共済">
+          <h3>自動車共済</h3>
+        </div>
+        <p>
+          自動車に関する補償や備えについてご確認いただける共済制度です。
+        </p>
       </a>
 
-      <a href="jitensha.html" class="kyosai-card">
-        <img src="images/jitensha.png" alt="自転車共済">
-        <h3>自転車共済</h3>
+      <a href="{{ '/jitensha.html' | relative_url }}" class="kyosai-card">
+        <div class="kyosai-card-header">
+          <img src="{{ '/images/jitensha.png' | relative_url }}" alt="自転車共済">
+          <h3>自転車共済</h3>
+        </div>
+        <p>
+          自転車利用中の事故や賠償への備えとして活用いただける共済制度です。
+        </p>
       </a>
 
     </div>
-
   </div>
 </section>
 
-<section class="info-links">
+<section class="section">
   <div class="container">
-
     <h2>各種ご案内</h2>
+    <p class="section-lead">
+      書類の確認やお問い合わせなど、各種ご案内はこちらからご覧いただけます。
+    </p>
 
-    <ul class="info-list">
-      <li>
-        <a href="downloads.html">
-          書類ダウンロード
-        </a>
-      </li>
+    <div class="card-grid">
+      <a href="{{ '/downloads.html' | relative_url }}" class="kyosai-card">
+        <div class="kyosai-card-header">
+          <h3>書類ダウンロード</h3>
+        </div>
+        <p>
+          加入、変更、解約、給付申請などに必要な各種書類をご案内しています。
+        </p>
+      </a>
 
-      <li>
-        <a href="faq.html">
-          よくある質問（FAQ）
-        </a>
-      </li>
+      <a href="{{ '/faq.html' | relative_url }}" class="kyosai-card">
+        <div class="kyosai-card-header">
+          <h3>FAQ</h3>
+        </div>
+        <p>
+          よくある質問をまとめています。制度や手続きの確認にご利用ください。
+        </p>
+      </a>
 
-      <li>
-        <a href="news.html">
-          ニュース
-        </a>
-      </li>
+      <a href="{{ '/news.html' | relative_url }}" class="kyosai-card">
+        <div class="kyosai-card-header">
+          <h3>ニュース</h3>
+        </div>
+        <p>
+          共済会からのお知らせや更新情報をご確認いただけます。
+        </p>
+      </a>
+    </div>
 
-      <li>
-        <a href="contact.html">
-          お問い合わせ
-        </a>
-      </li>
-    </ul>
-
+    <div class="hero-buttons" style="margin-top: 24px;">
+      <a href="{{ '/contact.html' | relative_url }}" class="btn btn-secondary">お問い合わせはこちら</a>
+    </div>
   </div>
 </section>
