@@ -27,18 +27,30 @@
 
 <body>
 
-<header class="site-header" role="banner">
-  <div class="header-inner">
-    <a href="index.html" class="site-logo">
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="index.html" class="site-logo" aria-label="京滋労働組合共済会 ホーム">
       <img src="images/logo.svg" alt="京滋労働組合共済会">
-      <span class="site-logo-text">京滋労働組合共済会</span>
     </a>
 
-    <nav class="global-nav" aria-label="グローバルナビゲーション">
+    <button
+      class="menu-toggle"
+      type="button"
+      aria-label="メニューを開閉"
+      aria-expanded="false"
+      aria-controls="global-nav"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <nav class="global-nav" id="global-nav" aria-label="グローバルナビゲーション">
       <ul>
-        <li><a href="index.html" aria-current="page">ホーム</a></li>
+        <li><a href="index.html">ホーム</a></li>
         <li><a href="downloads.html">書類ダウンロード</a></li>
         <li><a href="faq.html">FAQ</a></li>
+        <li><a href="news.html">ニュース</a></li>
         <li><a href="contact.html">お問い合わせ</a></li>
       </ul>
     </nav>
