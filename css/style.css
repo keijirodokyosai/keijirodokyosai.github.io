@@ -596,7 +596,9 @@ a {
   }
 
   .kyosai-card {
-    padding: 18px 18px 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+    background: #f6efe7;
   }
 
   .kyosai-card-header {
@@ -611,6 +613,11 @@ a {
 
   .kyosai-card h3 {
     font-size: 1.2rem;
+    color: #243660;
+  }
+
+  .kyosai-card p {
+    color: #4f6173;
   }
 
   .hero-buttons {
@@ -632,18 +639,30 @@ a {
 
   .detail-section {
     margin-bottom: 24px;
+    background: #f6efe7;
+    padding: 24px;
+    border-radius: 12px;
   }
 
   .detail-section h1 {
     font-size: 1.6rem;
+    color: #243660;
   }
 
   .detail-section h2 {
     font-size: 1.2rem;
+    color: #243660;
+    border-left-color: #243660;
   }
 
   .detail-lead {
     font-size: 0.98rem;
+    margin-bottom: 24px;
+  }
+
+  .image-card {
+    background: #f6efe7;
+    padding: 24px;
     margin-bottom: 24px;
   }
 
@@ -657,6 +676,30 @@ a {
 
   .footer-simple {
     padding: 10px 12px;
+  }
+
+  body {
+    background: #eeffee;
+  }
+
+  h1,
+  h2,
+  h3,
+  a {
+    color: #243660;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .container,
+  .header-inner,
+  .breadcrumb {
+    width: min(1120px, calc(100% - 48px));
+  }
+
+  .kyosai-page {
+    padding-left: 24px;
+    padding-right: 24px;
   }
 }
 
@@ -673,5 +716,30 @@ a {
     box-shadow: none;
     overflow: visible;
     background: transparent;
+  }
+}
+
+@media (min-width: 1025px) {
+  .container,
+  .header-inner,
+  .breadcrumb {
+    width: min(1120px, calc(100% - 72px));
+  }
+
+  .kyosai-page {
+    padding-left: 36px;
+    padding-right: 36px;
+  }
+
+  .hero {
+    background:
+      radial-gradient(
+        circle at 50% 28%,
+        rgba(255, 255, 255, 0.78) 0%,
+        rgba(255, 255, 255, 0.32) 34%,
+        rgba(255, 255, 255, 0) 58%
+      ),
+      linear-gradient(180deg, #f3faf3 0%, #eef7ee 100%);
+    border-bottom: 1px solid rgba(36, 54, 96, 0.06);
   }
 }
