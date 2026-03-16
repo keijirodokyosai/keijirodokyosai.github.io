@@ -1,45 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
   <url>
     <loc>https://keijirodokyosai.github.io/</loc>
   </url>
+
   <url>
     <loc>https://keijirodokyosai.github.io/kasai.html</loc>
   </url>
-  <url>
-    <loc>https://keijirodokyosai.github.io/kasai-detail.html</loc>
-  </url>
+
   <url>
     <loc>https://keijirodokyosai.github.io/seimei.html</loc>
   </url>
+
   <url>
     <loc>https://keijirodokyosai.github.io/iryo.html</loc>
   </url>
+
   <url>
     <loc>https://keijirodokyosai.github.io/korei-seimei.html</loc>
   </url>
+
   <url>
     <loc>https://keijirodokyosai.github.io/korei-iryo.html</loc>
   </url>
+
   <url>
-    <loc>https://keijirodokyosai.github.io/koutsu.html</loc>
+    <loc>https://keijirodokyosai.github.io/kotsu.html</loc>
   </url>
+
   <url>
     <loc>https://keijirodokyosai.github.io/jidosha.html</loc>
   </url>
+
   <url>
     <loc>https://keijirodokyosai.github.io/jitensha.html</loc>
   </url>
-  <url>
-    <loc>https://keijirodokyosai.github.io/soshiki.html</loc>
-  </url>
+
   <url>
     <loc>https://keijirodokyosai.github.io/downloads.html</loc>
   </url>
+
   <url>
     <loc>https://keijirodokyosai.github.io/faq.html</loc>
   </url>
+
+  <url>
+    <loc>https://keijirodokyosai.github.io/news.html</loc>
+  </url>
+
   <url>
     <loc>https://keijirodokyosai.github.io/contact.html</loc>
   </url>
+
 </urlset>
