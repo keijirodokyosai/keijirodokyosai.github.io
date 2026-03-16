@@ -16,6 +16,10 @@ body {
   background: #f7f9fc;
 }
 
+body.menu-open {
+  overflow: hidden;
+}
+
 img {
   max-width: 100%;
   height: auto;
@@ -107,6 +111,7 @@ a {
   font-weight: 600;
   padding: 8px 0;
   position: relative;
+  transition: color 0.2s ease;
 }
 
 .global-nav a[aria-current="page"] {
@@ -114,7 +119,7 @@ a {
 }
 
 .global-nav a:hover,
-.global-nav a:focus {
+.global-nav a:focus-visible {
   color: #0b4a8b;
 }
 
@@ -169,6 +174,12 @@ a {
 .menu-toggle.is-open span:nth-child(3) {
   top: 21px;
   transform: rotate(-45deg);
+}
+
+.menu-toggle:focus-visible {
+  outline: 3px solid #8eb6dd;
+  outline-offset: 3px;
+  border-radius: 8px;
 }
 
 .menu-overlay {
@@ -242,6 +253,12 @@ a {
   margin-bottom: 20px;
 }
 
+.hero-sub-links {
+  margin: 0;
+  color: #526273;
+}
+
+/* buttons */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -250,7 +267,12 @@ a {
   padding: 0 20px;
   border-radius: 999px;
   font-weight: 700;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  text-align: center;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .btn-primary {
@@ -259,7 +281,8 @@ a {
   box-shadow: 0 8px 20px rgba(11, 74, 139, 0.18);
 }
 
-.btn-primary:hover {
+.btn-primary:hover,
+.btn-primary:focus-visible {
   transform: translateY(-1px);
   box-shadow: 0 12px 24px rgba(11, 74, 139, 0.22);
 }
@@ -270,18 +293,20 @@ a {
   border: 1px solid #bfd0e3;
 }
 
-.btn-secondary:hover {
+.btn-secondary:hover,
+.btn-secondary:focus-visible {
   background: #f2f7fc;
   transform: translateY(-1px);
 }
 
-.hero-sub-links {
-  margin: 0;
-  color: #526273;
+.btn:focus-visible {
+  outline: 3px solid #8eb6dd;
+  outline-offset: 3px;
 }
 
 /* section title */
-.kyosai-cards h2 {
+.kyosai-cards h2,
+.section h2 {
   margin: 0 0 12px;
   font-size: clamp(1.7rem, 3vw, 2.2rem);
   color: #12385f;
@@ -337,6 +362,7 @@ a {
   width: 54px;
   height: 54px;
   flex-shrink: 0;
+  object-fit: contain;
 }
 
 .kyosai-card h3 {
@@ -388,7 +414,8 @@ a {
   color: #0b63b6;
 }
 
-.breadcrumb-list a:hover {
+.breadcrumb-list a:hover,
+.breadcrumb-list a:focus-visible {
   text-decoration: underline;
 }
 
@@ -428,6 +455,14 @@ a {
   line-height: 1.9;
   font-size: 1rem;
   color: #222;
+}
+
+.detail-lead p {
+  margin: 0 0 1em;
+}
+
+.detail-lead p:last-child {
+  margin-bottom: 0;
 }
 
 .image-card {
@@ -472,7 +507,8 @@ a {
   font-weight: 600;
 }
 
-.text-link:hover {
+.text-link:hover,
+.text-link:focus-visible {
   text-decoration: underline;
 }
 
