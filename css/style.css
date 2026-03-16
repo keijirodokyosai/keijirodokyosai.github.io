@@ -94,6 +94,7 @@ a {
   font-weight: 700;
   color: #ef1b22;
   white-space: nowrap;
+  line-height: 1.2;
 }
 
 /* nav */
@@ -144,10 +145,7 @@ a {
   height: 2px;
   background: #24415f;
   border-radius: 999px;
-  transition:
-    transform 0.3s ease,
-    opacity 0.25s ease,
-    top 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.25s ease, top 0.3s ease;
 }
 
 .menu-toggle span:nth-child(1) {
@@ -188,9 +186,7 @@ a {
   background: rgba(0, 0, 0, 0.35);
   opacity: 0;
   visibility: hidden;
-  transition:
-    opacity 0.3s ease,
-    visibility 0.3s ease;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
   z-index: 900;
 }
 
@@ -268,11 +264,7 @@ a {
   border-radius: 999px;
   font-weight: 700;
   text-align: center;
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
-    background-color 0.2s ease,
-    border-color 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
 }
 
 .btn-primary {
@@ -332,11 +324,7 @@ a {
   border-radius: 20px;
   padding: 22px 22px 20px;
   box-shadow: 0 6px 18px rgba(15, 35, 60, 0.05);
-  transition:
-    transform 0.22s ease,
-    box-shadow 0.22s ease,
-    border-color 0.22s ease,
-    background-color 0.22s ease;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease, background-color 0.22s ease;
 }
 
 .kyosai-card:hover {
@@ -540,6 +528,12 @@ a {
 @media (max-width: 768px) {
   .header-inner {
     min-height: 72px;
+    gap: 12px;
+  }
+
+  .site-logo {
+    min-width: 0;
+    flex: 1 1 auto;
   }
 
   .site-logo img {
@@ -552,6 +546,9 @@ a {
     font-weight: 700;
     color: #ef1b22;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.2;
   }
 
   .menu-toggle {
@@ -570,10 +567,7 @@ a {
     transform: translateX(100%);
     opacity: 0;
     visibility: hidden;
-    transition:
-      transform 0.3s ease,
-      opacity 0.3s ease,
-      visibility 0.3s ease;
+    transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
     z-index: 1001;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
