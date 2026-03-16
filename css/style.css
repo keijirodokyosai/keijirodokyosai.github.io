@@ -351,6 +351,15 @@ a {
   border-radius: 6px;
 }
 
+.pdf-download {
+  text-align: center;
+  margin-top: 24px;
+}
+
+.pdf-download .btn {
+  min-width: 260px;
+}
+
 .notice-box {
   margin-top: 32px;
   padding: 20px;
@@ -459,6 +468,10 @@ a {
 
   .btn {
     width: 100%;
+  }
+
+  .pdf-download .btn {
+    min-width: 100%;
   }
 
   .kyosai-page {
