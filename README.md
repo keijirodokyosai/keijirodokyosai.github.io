@@ -1,258 +1,284 @@
-# 京滋労働組合共済会サイト
+京滋労働組合共済会サイト
 
-京滋労働組合共済会の共済制度を案内する公式サイトです。  
-組合員向けに制度概要、パンフレット、各種書類を提供します。
+京滋労働組合共済会の共済制度を案内する公式サイトです。
+組合員向けに制度概要、パンフレット、各種書類、お問い合わせ先を提供します。
 
----
-
-## 公開URL
+公開URL
 
 https://keijirodokyosai.github.io/
 
 最終更新日：2026-03-17
 
----
-
-## サイトの目的
+サイトの目的
 
 本サイトは組合員向けに以下の情報を提供します。
 
-* 共済制度の概要
-* 共済パンフレット
-* 各種申請書
-* お知らせ
-* お問い合わせ
+共済制度の概要
 
-長期運用を前提とした静的サイトとして構築しています。
+共済パンフレット
 
----
+各種申請書
 
-## サイト構造
+お知らせ
 
-トップ  
-├ 共済制度  
-│　├ 火災共済  
-│　├ 生命共済  
-│　├ 医療共済  
-│　├ 高齢生命共済  
-│　├ 高齢医療共済  
-│　├ 交通共済  
-│　├ 自動車共済  
-│　└ 自転車共済  
-├ 書類ダウンロード  
-├ よくある質問  
-├ お知らせ  
-└ お問い合わせ  
+お問い合わせ
 
----
+長期運用を前提とした、軽量で可読性の高い静的サイトとして構築しています。
 
-## 使用技術
+サイト構造
 
-* HTML
-* CSS
-* JavaScript（最小限）
-* Jekyll（layout / include / FrontMatter のみ使用）
+トップ
+├ 共済制度
+│　├ 火災共済
+│　├ 生命共済
+│　├ 医療共済
+│　├ 高齢生命共済
+│　├ 高齢医療共済
+│　├ 交通共済
+│　├ 自動車共済
+│　└ 自転車共済
+├ 書類ダウンロード
+├ よくある質問
+├ お知らせ
+└ お問い合わせ
 
----
+使用技術
 
-## ホスティング
+HTML
+
+CSS
+
+JavaScript（最小限）
+
+Jekyll（layout / include / FrontMatter のみ使用）
+
+ホスティング
 
 GitHub Pages
 
-* リポジトリ：keijirodokyosai.github.io
-* ブランチ：main
-* 自動反映（約1〜2分）
+リポジトリ：keijirodokyosai.github.io
 
----
+ブランチ：main
 
-## ディレクトリ構造
+自動反映（約1〜2分）
+
+ディレクトリ構造
 
 /
-  _layouts/
-    default.html
+_layouts/
+default.html
+_includes/
+header.html
+footer.html
+index.html
+kasai.html
+seimei.html
+iryo.html
+korei-seimei.html
+korei-iryo.html
+kotsu.html
+jidosha.html
+jitensha.html
+downloads.html
+faq.html
+news.html
+contact.html
+sitemap.xml
+robots.txt
+/css
+style.css
+/js
+script.js
+/images
+/icons
+/pdf
 
-  _includes/
-    header.html
-    footer.html
+共済ページ一覧
+ページ	内容	画像	PDF
+kasai.html	火災共済	kasai.png	kasai.pdf
+seimei.html	生命共済	seimei.png	seimei.pdf
+iryo.html	医療共済	iryo.png	iryo.pdf
+korei-seimei.html	高齢生命共済	korei-seimei.png	korei-seimei.pdf
+korei-iryo.html	高齢医療共済	korei-iryo.png	korei-iryo.pdf
+kotsu.html	交通共済	kotsu.png	kotsu.pdf
+jidosha.html	自動車共済	-	外部リンク
+jitensha.html	自転車共済	jitensha1/2.png	jitensha1/2.pdf
+特記事項
 
-  index.html
+■ 自動車共済
+・パンフレットなし
+・外部リンク：https://nishijikyo.com/
 
-  kasai.html
-  seimei.html
-  iryo.html
-  korei-seimei.html
-  korei-iryo.html
-  kotsu.html
-  jidosha.html
-  jitensha.html
+■ 自転車共済
+・パンフレット2種（表・裏）
 
-  downloads.html
-  faq.html
-  news.html
-  contact.html
-
-  sitemap.xml
-  robots.txt
-
-  /css
-    style.css
-
-  /js
-    script.js
-
-  /images
-  /icons
-  /pdf
-
----
-
-## 共済ページ一覧
-
-| ページ | 内容 | 画像 | PDF |
-|--------|------|------|-----|
-| kasai.html | 火災共済 | kasai.png | kasai.pdf |
-| seimei.html | 生命共済 | seimei.png | seimei.pdf |
-| iryo.html | 医療共済 | iryo.png | iryo.pdf |
-| korei-seimei.html | 高齢生命共済 | korei-seimei.png | korei-seimei.pdf |
-| korei-iryo.html | 高齢医療共済 | korei-iryo.png | korei-iryo.pdf |
-| kotsu.html | 交通共済 | kotsu.png | kotsu.pdf |
-| jidosha.html | 自動車共済 | - | 外部リンク |
-| jitensha.html | 自転車共済 | jitensha1/2.png | jitensha1/2.pdf |
-
----
-
-## 特記事項
-
-### 自動車共済
-
-* パンフレットなし
-* 外部リンク：https://nishijikyo.com/
-
-### 自転車共済
-
-* パンフレット2種（表・裏）
-
----
-
-## CSS設計
+CSS設計
 
 ファイル：/css/style.css
 
-### 方針
+■ 方針
 
-* シンプル
-* 可読性重視
-* モバイル対応
-* 外部ライブラリ不使用
-* 長期運用前提
+シンプル
 
----
+可読性重視
 
-## カラーデザイン（最新版）
+モバイル対応
 
-### 背景
+外部ライブラリ不使用
 
-* 全体：#fafffa
-* ヒーロー：linear-gradient(180deg, #eaffea, #fafffa)
+長期運用前提
 
-### カード
+フォント設計（最新版）
 
-* 通常：#fffaf0
-* 角丸：18px
+■ 基本フォント
+-apple-system, BlinkMacSystemFont, "Hiragino Sans", "Meiryo", sans-serif
 
-### 文字
+■ 変更点
 
-* 本文：#123456
-* サブ：#366084
+Yu Gothic を削除
 
-### ヘッダー・フッター
+Windows環境の可読性改善
 
-* 背景：#123660
-* 文字：#f6faff
+メイリオ優先表示
 
-### ナビ
+PC版の本文最適化
 
-* 通常：#f6faff
-* hover：#eeffee
-* 現在地：#ffffff（下線あり）
+@media (min-width: 769px) {
+body {
+font-size: 18px;
+line-height: 1.6;
+font-weight: 500;
+}
+}
 
-### パンくず
+■ 効果
 
-* 通常：#123456
-* hover：#247248
+行間を少し詰めて読みやすく
 
-### リンク
+文字を少し太くして視認性向上
 
-* 通常：#36a872
-* hover：#247248
+サイズは維持して安定感を確保
 
-### ボタン（primary）
+UI調整（今回の変更）
 
-* 通常背景：#bbeebb
-* 通常文字：#123456
-* hover背景：#247248
-* hover文字：#fafffa
+■ お問い合わせ枠の余白
 
----
+.contact-card {
+padding: 18px 18px;
+}
 
-## UI仕様メモ
+■ リンク下線の調整
 
-### ヘッダー
+.text-link {
+text-decoration: underline;
+text-underline-offset: 3px;
+}
 
-* ロゴは hover / focus で変化なし
-* ナビは hover で下線表示
-* 現在地は色＋下線で強調
+■ 効果
 
-### ヒーロー
+下線と文字の干渉を解消
 
-* 上余白：36px（PC・スマホ共通）
+電話番号・メールの視認性向上
 
-### ボタン
+カラーデザイン
 
-* 最小幅：240px
-* 中央配置：
-  - 単体 → 親で制御
-  - 複数 → .button-group-center 使用
-* トップの「お問い合わせ」は primary ボタン使用
+■ 背景
 
----
+全体：#fafffa
 
-## 設計ルール
+ヒーロー：linear-gradient(180deg, #eaffea, #fafffa)
 
-* 色の分岐禁止
-* デバイス別デザイン禁止
-* シンプル維持
-* UIの過剰装飾禁止
+■ カード
 
----
+#fffaf0
 
-## 更新方法
+角丸：18px
 
-1. HTML編集
-2. CSS編集
-3. push
-4. 自動反映
+■ 文字
 
----
+本文：#123456
 
-## SEO
+サブ：#234567
 
-* sitemap.xml
-* robots.txt
-* JSON-LD対応
-* OGP対応
+■ ヘッダー・フッター
 
----
+背景：#123660
 
-## 管理
+文字：#f6faff
 
-京滋労働組合共済会  
-専務理事  
+■ リンク
+
+通常：#36a872
+
+hover：#247248
+
+■ ボタン
+
+primary：#bbeebb → #247248
+
+UI仕様メモ
+
+■ ヘッダー
+
+sticky固定
+
+ナビ hoverで下線
+
+現在地強調
+
+■ ヒーロー
+
+上余白：36px
+
+■ ボタン
+
+最小幅240px
+
+中央配置
+
+■ カード
+
+hoverで浮く
+
+情報用とナビ用を分離
+
+設計ルール
+
+色の分岐禁止
+
+デバイス別デザイン禁止
+
+シンプル維持
+
+UI過剰装飾禁止
+
+更新方法
+
+HTML編集
+
+CSS編集
+
+push
+
+自動反映
+
+SEO
+
+sitemap.xml
+
+robots.txt
+
+JSON-LD対応
+
+OGP対応
+
+管理
+
+京滋労働組合共済会
+専務理事
 横山雄介
 
----
+備考
 
-## 備考
-
-本サイトは GitHub Pages + 静的HTML により  
-長期安定運用を目的としています。
+本サイトは GitHub Pages + 静的HTML により
+長期安定運用・低コスト・高可読性を目的としています。
