@@ -12,8 +12,8 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
   line-height: 1.7;
-  color: #1f2d3d;
-  background: #f7f9fc;
+  color: #123456;
+  background: #f6fff6;
 }
 
 body.menu-open {
@@ -27,8 +27,14 @@ img {
 }
 
 a {
-  color: inherit;
+  color: #36a872;
   text-decoration: none;
+}
+
+a:hover,
+a:focus-visible {
+  color: #247248;
+  text-decoration: underline;
 }
 
 .container {
@@ -107,20 +113,22 @@ a {
 }
 
 .global-nav a {
-  color: #24415f;
+  color: #122436;
   font-weight: 600;
   padding: 8px 0;
   position: relative;
   transition: color 0.2s ease;
+  text-decoration: none;
 }
 
 .global-nav a[aria-current="page"] {
-  color: #0b4a8b;
+  color: #362412;
 }
 
 .global-nav a:hover,
 .global-nav a:focus-visible {
-  color: #0b4a8b;
+  color: #362412;
+  text-decoration: underline;
 }
 
 /* menu toggle */
@@ -196,7 +204,11 @@ a {
 
 /* hero */
 .hero {
-  background: linear-gradient(180deg, #eef5fb 0%, #f7f9fc 100%);
+  background: linear-gradient(
+    180deg,
+    #eeffee 0%,
+    #f6fff6 100%
+  );
   padding: 72px 0 64px;
 }
 
@@ -219,13 +231,13 @@ a {
   margin: 0 0 20px;
   font-size: clamp(2rem, 4vw, 2.8rem);
   line-height: 1.35;
-  color: #12385f;
+  color: #123456;
 }
 
 .hero-note {
   margin: 0 0 24px;
   font-size: 1.05rem;
-  color: #30465c;
+  color: #366084;
 }
 
 .hero-info-box {
@@ -250,7 +262,7 @@ a {
 
 .hero-sub-links {
   margin: 0;
-  color: #526273;
+  color: #366084;
 }
 
 /* buttons */
@@ -264,6 +276,7 @@ a {
   font-weight: 700;
   text-align: center;
   transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+  text-decoration: none;
 }
 
 .btn-primary {
@@ -276,6 +289,7 @@ a {
 .btn-primary:focus-visible {
   transform: translateY(-1px);
   box-shadow: 0 12px 24px rgba(11, 74, 139, 0.22);
+  text-decoration: none;
 }
 
 .btn-secondary {
@@ -288,6 +302,7 @@ a {
 .btn-secondary:focus-visible {
   background: #f2f7fc;
   transform: translateY(-1px);
+  text-decoration: none;
 }
 
 .btn:focus-visible {
@@ -300,12 +315,12 @@ a {
 .section h2 {
   margin: 0 0 12px;
   font-size: clamp(1.7rem, 3vw, 2.2rem);
-  color: #12385f;
+  color: #123456;
 }
 
 .section-lead {
   margin: 0 0 32px;
-  color: #4e5f71;
+  color: #366084;
   font-size: 1rem;
 }
 
@@ -318,19 +333,21 @@ a {
 
 .kyosai-card {
   display: block;
-  background: #ffffff;
+  background: #f6f0e6;
   border: 1px solid #e0e6ee;
   border-radius: 20px;
   padding: 22px 22px 20px;
   box-shadow: 0 6px 18px rgba(15, 35, 60, 0.05);
   transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease, background-color 0.22s ease;
+  text-decoration: none;
 }
 
 .kyosai-card:hover {
   transform: translateY(-4px);
   border-color: #c3d4e6;
-  background: #fcfdff;
+  background: #f6f0e6;
   box-shadow: 0 14px 32px rgba(15, 35, 60, 0.10);
+  text-decoration: none;
 }
 
 .kyosai-card:focus-visible {
@@ -356,14 +373,14 @@ a {
   margin: 0;
   font-size: 1.38rem;
   line-height: 1.35;
-  color: #12385f;
+  color: #123456;
   font-weight: 700;
   letter-spacing: 0.01em;
 }
 
 .kyosai-card p {
   margin: 0;
-  color: #4f6173;
+  color: #366084;
   font-size: 0.98rem;
   line-height: 1.75;
 }
@@ -398,11 +415,12 @@ a {
 }
 
 .breadcrumb-list a {
-  color: #0b63b6;
+  color: #36a872;
 }
 
 .breadcrumb-list a:hover,
 .breadcrumb-list a:focus-visible {
+  color: #247248;
   text-decoration: underline;
 }
 
@@ -415,6 +433,9 @@ a {
 
 .detail-section {
   margin-bottom: 28px;
+  background: #f6f0e6;
+  padding: 24px;
+  border-radius: 12px;
 }
 
 .detail-section-last {
@@ -425,7 +446,7 @@ a {
   margin: 0 0 16px;
   font-size: 2rem;
   line-height: 1.4;
-  color: #12385f;
+  color: #123456;
 }
 
 .detail-section h2 {
@@ -434,14 +455,14 @@ a {
   margin: 0 0 14px;
   padding-left: 12px;
   border-left: 6px solid #138a52;
-  color: #12385f;
+  color: #123456;
 }
 
 .detail-lead {
   margin: 8px 0 28px;
   line-height: 1.9;
   font-size: 1rem;
-  color: #222;
+  color: #123456;
 }
 
 .detail-lead p {
@@ -453,7 +474,7 @@ a {
 }
 
 .image-card {
-  background: #fff;
+  background: #f6f0e6;
   border: 1px solid #dcdcdc;
   border-radius: 10px;
   padding: 12px;
@@ -490,12 +511,13 @@ a {
 }
 
 .text-link {
-  color: #0b63b6;
+  color: #36a872;
   font-weight: 600;
 }
 
 .text-link:hover,
 .text-link:focus-visible {
+  color: #247248;
   text-decoration: underline;
 }
 
@@ -637,7 +659,7 @@ a {
   .kyosai-card {
     padding: 24px;
     margin-bottom: 24px;
-    background: #f6efe7;
+    background: #f6f0e6;
   }
 
   .kyosai-card-header {
@@ -652,7 +674,7 @@ a {
 
   .kyosai-card h3 {
     font-size: 1.2rem;
-    color: #243660;
+    color: #123456;
   }
 
   .hero-buttons {
@@ -674,19 +696,19 @@ a {
 
   .detail-section {
     margin-bottom: 24px;
-    background: #f6efe7;
+    background: #f6f0e6;
     padding: 24px;
     border-radius: 12px;
   }
 
   .detail-section h1 {
     font-size: 1.6rem;
-    color: #243660;
+    color: #123456;
   }
 
   .detail-section h2 {
     font-size: 1.2rem;
-    color: #243660;
+    color: #123456;
     border-left-color: #243660;
   }
 
@@ -696,7 +718,7 @@ a {
   }
 
   .image-card {
-    background: #f6efe7;
+    background: #f6f0e6;
     padding: 24px;
     margin-bottom: 24px;
   }
@@ -711,17 +733,6 @@ a {
 
   .footer-simple {
     padding: 10px 12px;
-  }
-
-  body {
-    background: #eeffee;
-  }
-
-  h1,
-  h2,
-  h3,
-  a {
-    color: #243660;
   }
 }
 
@@ -764,15 +775,5 @@ a {
   .kyosai-page {
     padding-left: 36px;
     padding-right: 36px;
-  }
-
-  .hero {
-    background: radial-gradient(
-      circle at 50% 28%,
-      rgba(255, 255, 255, 0.78) 0%,
-      rgba(255, 255, 255, 0.32) 34%,
-      rgba(255, 255, 255, 0) 58%
-    ), linear-gradient(180deg, #f3faf3 0%, #eef7ee 100%);
-    border-bottom: 1px solid rgba(36, 54, 96, 0.06);
   }
 }
