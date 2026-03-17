@@ -259,8 +259,8 @@ a:focus-visible {
 .hero-note {
   margin: 0 0 24px;
   font-size: 1.1rem;
-  font-weight: 500;
-  color: #234567;
+  font-weight: 600;
+  color: #123456;
 }
 
 .hero-info-box {
@@ -294,8 +294,8 @@ a:focus-visible {
 
 .hero-sub-links {
   margin: 0;
-  font-weight: 500;
-  color: #234567;
+  font-weight: 600;
+  color: #123456;
 }
 
 /* buttons */
@@ -411,7 +411,7 @@ a:focus-visible {
   font-size: 1.34rem;
   line-height: 1.35;
   color: #123456;
-  font-weight: 700;
+  font-weight: 720;
   letter-spacing: 0.01em;
 }
 
@@ -500,7 +500,7 @@ a:focus-visible {
   margin: 12px 0 24px;
   line-height: 1.9;
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 600;
   color: #123456;
 }
 
@@ -575,7 +575,7 @@ a:focus-visible {
 .contact-table td {
   padding: 9px 0;
   vertical-align: top;
-  font-weight: 700;
+  font-weight: 720;
   line-height: 1.45;
 }
 
@@ -592,7 +592,7 @@ a:focus-visible {
 }
 
 .contact-table td a {
-  font-weight: 700;
+  font-weight: 720;
 }
 
 .contact-mail-btn {
@@ -643,7 +643,7 @@ a:focus-visible {
 
   .site-logo-text {
     font-size: 1.2rem;
-    font-weight: 700;
+    font-weight: 720;
     color: #f6faff;
   }
 
