@@ -813,6 +813,31 @@ a:focus-visible {
 }
 
 @media (min-width: 1025px) {
+  body {
+    background:
+      radial-gradient(
+        circle at center,
+        rgba(250, 255, 250, 0.97) 0%,
+        rgba(250, 255, 250, 0.92) 30%,
+        rgba(250, 255, 250, 0.80) 50%,
+        rgba(250, 255, 250, 0.40) 70%,
+        rgba(250, 255, 250, 0.00) 85%
+      ),
+      linear-gradient(
+        90deg,
+        rgba(250, 255, 250, 0.10) 0%,
+        rgba(250, 255, 250, 0.00) 20%,
+        rgba(250, 255, 250, 0.00) 80%,
+        rgba(250, 255, 250, 0.10) 100%
+      ),
+      url('/images/bg-main.jpg') center top / cover no-repeat fixed,
+      #fafffa;
+  }
+
+  .hero {
+    background: transparent;
+  }
+
   .container,
   .header-inner,
   .breadcrumb {
