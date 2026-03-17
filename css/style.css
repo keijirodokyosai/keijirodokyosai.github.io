@@ -64,8 +64,8 @@ a:focus-visible {
 
 /* header */
 .site-header {
-  background: #ffffff;
-  border-bottom: 1px solid #e3e8ef;
+  background: #123660;
+  border-bottom: none;
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -98,7 +98,7 @@ a:focus-visible {
 .site-logo-text {
   font-size: 1.6rem;
   font-weight: 700;
-  color: #ef1b22;
+  color: #ffffff;
   white-space: nowrap;
 }
 
@@ -113,7 +113,7 @@ a:focus-visible {
 }
 
 .global-nav a {
-  color: #122436;
+  color: #ffffff;
   font-weight: 600;
   padding: 8px 0;
   position: relative;
@@ -122,12 +122,12 @@ a:focus-visible {
 }
 
 .global-nav a[aria-current="page"] {
-  color: #362412;
+  color: #36a872;
 }
 
 .global-nav a:hover,
 .global-nav a:focus-visible {
-  color: #362412;
+  color: #36a872;
   text-decoration: underline;
 }
 
@@ -150,7 +150,7 @@ a:focus-visible {
   left: 10px;
   width: 24px;
   height: 2px;
-  background: #24415f;
+  background: #ffffff;
   border-radius: 999px;
   transition: transform 0.3s ease, opacity 0.25s ease, top 0.3s ease;
 }
@@ -182,7 +182,7 @@ a:focus-visible {
 }
 
 .menu-toggle:focus-visible {
-  outline: 3px solid #8eb6dd;
+  outline: 3px solid rgba(54, 168, 114, 0.6);
   outline-offset: 3px;
   border-radius: 8px;
 }
@@ -280,33 +280,34 @@ a:focus-visible {
 }
 
 .btn-primary {
-  background: #0b4a8b;
+  background: #36a872;
   color: #ffffff;
-  box-shadow: 0 8px 20px rgba(11, 74, 139, 0.18);
+  box-shadow: 0 8px 20px rgba(54, 168, 114, 0.25);
 }
 
 .btn-primary:hover,
 .btn-primary:focus-visible {
+  background: #247248;
   transform: translateY(-1px);
-  box-shadow: 0 12px 24px rgba(11, 74, 139, 0.22);
+  box-shadow: 0 12px 24px rgba(54, 168, 114, 0.30);
   text-decoration: none;
 }
 
 .btn-secondary {
   background: #ffffff;
-  color: #0b4a8b;
-  border: 1px solid #bfd0e3;
+  color: #36a872;
+  border: 1px solid #36a872;
 }
 
 .btn-secondary:hover,
 .btn-secondary:focus-visible {
-  background: #f2f7fc;
+  background: #f2fbf7;
   transform: translateY(-1px);
   text-decoration: none;
 }
 
 .btn:focus-visible {
-  outline: 3px solid #8eb6dd;
+  outline: 3px solid rgba(54, 168, 114, 0.6);
   outline-offset: 3px;
 }
 
@@ -351,7 +352,7 @@ a:focus-visible {
 }
 
 .kyosai-card:focus-visible {
-  outline: 3px solid #8eb6dd;
+  outline: 3px solid rgba(54, 168, 114, 0.6);
   outline-offset: 3px;
 }
 
@@ -454,7 +455,7 @@ a:focus-visible {
   line-height: 1.4;
   margin: 0 0 14px;
   padding-left: 12px;
-  border-left: 6px solid #138a52;
+  border-left: 9px solid #36a872;
   color: #123456;
 }
 
@@ -563,7 +564,7 @@ a:focus-visible {
 /* footer */
 .site-footer {
   margin-top: 24px;
-  background: #12385f;
+  background: #123660;
   color: #ffffff;
 }
 
@@ -598,7 +599,7 @@ a:focus-visible {
   .site-logo-text {
     font-size: 1.2rem;
     font-weight: 700;
-    color: #ef1b22;
+    color: #ffffff;
   }
 
   .menu-toggle {
@@ -611,8 +612,8 @@ a:focus-visible {
     right: 0;
     width: min(320px, 85%);
     height: calc(100dvh - 72px);
-    background: #ffffff;
-    border-left: 1px solid #e3e8ef;
+    background: #123660;
+    border-left: 1px solid rgba(255, 255, 255, 0.15);
     box-shadow: -8px 0 24px rgba(15, 35, 60, 0.10);
     transform: translateX(100%);
     opacity: 0;
@@ -635,7 +636,7 @@ a:focus-visible {
   }
 
   .global-nav li + li {
-    border-top: 1px solid #eef2f6;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
   }
 
   .global-nav a {
@@ -709,7 +710,6 @@ a:focus-visible {
   .detail-section h2 {
     font-size: 1.2rem;
     color: #123456;
-    border-left-color: #243660;
   }
 
   .detail-lead {
