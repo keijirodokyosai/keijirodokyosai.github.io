@@ -11,6 +11,7 @@ html {
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
+  font-size: 18px;
   line-height: 1.7;
   color: #123456;
   background: #fafffa;
@@ -253,8 +254,8 @@ a:focus-visible {
 
 .hero-note {
   margin: 0 0 24px;
-  font-size: 1.05rem;
-  color: #366084;
+  font-size: 1.1rem;
+  color: #234567;
 }
 
 .hero-info-box {
@@ -273,6 +274,7 @@ a:focus-visible {
 .hero-buttons {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 14px;
   margin-bottom: 20px;
 }
@@ -291,7 +293,7 @@ a:focus-visible {
 
 .hero-sub-links {
   margin: 0;
-  color: #366084;
+  color: #234567;
 }
 
 /* buttons */
@@ -299,10 +301,11 @@ a:focus-visible {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 48px;
+  min-height: 54px;
   min-width: 240px;
-  padding: 0 20px;
+  padding: 0 24px;
   border-radius: 999px;
+  font-size: 1.1rem;
   font-weight: 700;
   text-align: center;
   transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
@@ -346,13 +349,13 @@ a:focus-visible {
 .kyosai-cards h2,
 .section h2 {
   margin: 0 0 12px;
-  font-size: clamp(1.7rem, 3vw, 2.2rem);
+  font-size: clamp(1.8rem, 3vw, 2rem);
   color: #123456;
 }
 
 .section-lead {
   margin: 0 0 32px;
-  color: #366084;
+  color: #234567;
   font-size: 1rem;
 }
 
@@ -368,7 +371,7 @@ a:focus-visible {
   background: #fffaf0;
   border: 1px solid #e0e6ee;
   border-radius: 18px;
-  padding: 22px 22px 20px;
+  padding: 24px 24px 20px;
   box-shadow: 0 6px 18px rgba(15, 35, 60, 0.05);
   transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease, background-color 0.22s ease;
   text-decoration: none;
@@ -391,7 +394,7 @@ a:focus-visible {
   display: flex;
   align-items: center;
   gap: 14px;
-  margin-bottom: 12px;
+  margin-bottom: 13px;
 }
 
 .kyosai-card-header img {
@@ -403,7 +406,7 @@ a:focus-visible {
 
 .kyosai-card h3 {
   margin: 0;
-  font-size: 1.38rem;
+  font-size: 1.34rem;
   line-height: 1.35;
   color: #123456;
   font-weight: 700;
@@ -412,8 +415,8 @@ a:focus-visible {
 
 .kyosai-card p {
   margin: 0;
-  color: #366084;
-  font-size: 0.98rem;
+  color: #234567;
+  font-size: 0.96rem;
   line-height: 1.75;
 }
 
@@ -484,9 +487,9 @@ a:focus-visible {
 .detail-section h2 {
   font-size: 1.4rem;
   line-height: 1.4;
-  margin: 0 0 14px;
+  margin: 0 0 18px;
   padding-left: 12px;
-  border-left: 9px solid #36a872;
+  border-left: 6px solid #36a872;
   color: #123456;
 }
 
@@ -543,13 +546,13 @@ a:focus-visible {
 }
 
 .text-link {
-  color: #36a872;
-  font-weight: 600;
+  color: #234567;
+  text-decoration: underline;
 }
 
 .text-link:hover,
 .text-link:focus-visible {
-  color: #247248;
+  color: #1d3f5f;
   text-decoration: underline;
 }
 
@@ -565,17 +568,17 @@ a:focus-visible {
 
 .contact-table th,
 .contact-table td {
-  padding: 6px 0;
+  padding: 9px 0;
   vertical-align: top;
   font-weight: 700;
   line-height: 1.45;
 }
 
 .contact-table th {
-  width: 8em;
+  width: auto;
   white-space: nowrap;
   text-align: left;
-  padding-right: 2.4em;
+  padding-right: 1.2em;
   letter-spacing: 0.05em;
 }
 
@@ -589,7 +592,7 @@ a:focus-visible {
 
 .contact-mail-btn {
   min-width: 280px;
-  font-size: 1.05rem;
+  font-size: 1.1rem;
 }
 
 /* footer */
