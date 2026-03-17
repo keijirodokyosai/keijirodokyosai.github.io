@@ -91,6 +91,13 @@ a:focus-visible {
   color: #f6faff;
 }
 
+.site-logo,
+.site-logo:hover,
+.site-logo:focus-visible {
+  color: #f6faff;
+  text-decoration: none;
+}
+
 .site-logo img {
   width: 60px;
   height: 60px;
@@ -129,13 +136,16 @@ a:focus-visible {
 }
 
 .global-nav a[aria-current="page"] {
-  color: #eeffee;
+  color: #ffffff;
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
 
 .global-nav a:hover,
 .global-nav a:focus-visible {
   color: #eeffee;
   text-decoration: underline;
+  text-underline-offset: 4px;
 }
 
 /* menu toggle */
@@ -216,7 +226,7 @@ a:focus-visible {
     #eaffea 0%,
     #fafffa 100%
   );
-  padding: 72px 0 64px;
+  padding: 36px 0 64px;
 }
 
 .hero-content {
@@ -267,6 +277,18 @@ a:focus-visible {
   margin-bottom: 20px;
 }
 
+.button-group-center {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.contact-center {
+  text-align: center;
+  margin-top: 24px;
+}
+
 .hero-sub-links {
   margin: 0;
   color: #366084;
@@ -278,6 +300,7 @@ a:focus-visible {
   align-items: center;
   justify-content: center;
   min-height: 48px;
+  min-width: 240px;
   padding: 0 20px;
   border-radius: 999px;
   font-weight: 700;
@@ -287,14 +310,15 @@ a:focus-visible {
 }
 
 .btn-primary {
-  background: #36a872;
-  color: #ffffff;
+  background: #bbeebb;
+  color: #123456;
   box-shadow: 0 8px 20px rgba(54, 168, 114, 0.25);
 }
 
 .btn-primary:hover,
 .btn-primary:focus-visible {
   background: #247248;
+  color: #fafffa;
   transform: translateY(-1px);
   box-shadow: 0 12px 24px rgba(54, 168, 114, 0.30);
   text-decoration: none;
@@ -408,7 +432,7 @@ a:focus-visible {
   margin: 0;
   padding: 0;
   font-size: 0.95rem;
-  color: #5b6b7b;
+  color: #123456;
 }
 
 .breadcrumb-list li {
@@ -423,7 +447,7 @@ a:focus-visible {
 }
 
 .breadcrumb-list a {
-  color: #36a872;
+  color: #123456;
 }
 
 .breadcrumb-list a:hover,
@@ -502,7 +526,7 @@ a:focus-visible {
 }
 
 .pdf-download .btn {
-  min-width: 260px;
+  min-width: 240px;
 }
 
 .notice-section {
@@ -606,6 +630,7 @@ a:focus-visible {
   .site-logo svg {
     width: 48px;
     height: 48px;
+    display: block;
   }
 
   .site-logo-text {
@@ -657,7 +682,7 @@ a:focus-visible {
   }
 
   .hero {
-    padding: 56px 0 52px;
+    padding: 36px 0 52px;
   }
 
   .section {
