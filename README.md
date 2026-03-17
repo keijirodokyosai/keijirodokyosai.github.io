@@ -54,21 +54,18 @@ https://keijirodokyosai.github.io/
 
 * HTML
 * CSS
-* JavaScript（軽微な動作のみ）
-* Jekyll（FrontMatterのみ）
-
-※ テンプレート機能は使用していません。
+* JavaScript（最小限）
+* Jekyll（layout / include のみ使用）
 
 ---
 
 ## ホスティング
 
-GitHub Pages を使用
+GitHub Pages
 
 * リポジトリ：`keijirodokyosai.github.io`
 * ブランチ：`main`
-* 公開：自動反映
-* 反映時間：1〜2分
+* 自動反映（約1〜2分）
 
 ---
 
@@ -76,6 +73,13 @@ GitHub Pages を使用
 
 ```
 /
+  _layouts/
+    default.html
+
+  _includes/
+    header.html
+    footer.html
+
   index.html
 
   kasai.html
@@ -98,8 +102,10 @@ GitHub Pages を使用
   /css
     style.css
 
+  /js
+    script.js
+
   /images
-  /icons
   /pdf
 ```
 
@@ -120,28 +126,12 @@ GitHub Pages を使用
 
 ---
 
-## 共済ページ仕様
-
-テンプレート：`kyosai.html`
-
-構造：
-
-1. パンくず
-2. タイトル
-3. 概要
-4. パンフレット
-5. 注意事項
-6. 必要書類
-
----
-
 ## 特記事項
 
 ### 自動車共済
 
 * パンフレットなし
-* 外部リンク
-  https://nishijikyo.com/
+* 外部リンク：https://nishijikyo.com/
 
 ### 自転車共済
 
@@ -149,11 +139,9 @@ GitHub Pages を使用
 
 ---
 
-## 画像ルール
+## ファイル命名ルール
 
-保存：`/images`
-
-命名：
+### 画像（/images）
 
 ```
 kasai.png
@@ -170,11 +158,7 @@ jitensha2.png
 
 ---
 
-## PDFルール
-
-保存：`/pdf`
-
-命名：
+### PDF（/pdf）
 
 ```
 kasai.pdf
@@ -205,91 +189,46 @@ jitensha2.pdf
 
 ---
 
-## カラーデザイン（統一仕様）
+## カラーデザイン（最新版）
 
 ### 背景
 
-* `#f6fff6`
-
-### ヒーロー
-
-* `linear-gradient(180deg, #eeffee, #f6fff6)`
+* 全体：`#fafffa`
+* ヒーロー：`linear-gradient(180deg, #eeffee, #fafffa)`
 
 ### カード
 
-* `#f6f0e6`
-
----
+* 通常：`#fffaf0`
+* 角丸：`18px`
 
 ### 文字
 
 * 本文：`#123456`
 * サブ：`#366084`
 
----
-
 ### ヘッダー・フッター
 
-* `#123660`
-
----
+* 背景：`#123660`
+* 文字：`#f6faff`
 
 ### ナビ
 
-* 通常：`#ffffff`
-* hover：`#36a872`
-
----
+* 通常：`#f6faff`
+* hover：`#eeffee`
 
 ### リンク
 
 * 通常：`#36a872`
 * hover：`#247248`
-* 下線：あり
-
----
-
-### ボタン
-
-* primary：`#36a872`
-* hover：`#247248`
-
----
-
-### 見出し左線
-
-* `border-left: 9px solid #36a872`
-
----
-
-### フォーカス
-
-* `rgba(54,168,114,0.6)`
 
 ---
 
 ## 設計ルール
 
-* 全デバイス同一配色
 * 色の分岐禁止
-* アクセントカラー統一
-* リンクは下線付き
-
----
-
-## 廃止仕様
-
-* スマホ専用カラー
-* デバイス別色変更
-* 見出し色の分岐
-
----
-
-## SEO
-
-* sitemap.xml
-* robots.txt
-* JSON-LD
+* デバイス別デザイン禁止
+* シンプル維持
+* UIの過剰装飾禁止
 
 ---
 
@@ -303,19 +242,18 @@ jitensha2.pdf
 
 ## 新規ページ追加
 
-1. kyosai.htmlコピー
-2. ページ作成
-3. FrontMatter編集
-4. 画像・PDF追加
-5. トップへリンク
+1. 既存ページをコピー
+2. FrontMatter編集
+3. 画像・PDF追加
+4. トップへリンク
 
 ---
 
-## 運用ルール
+## SEO
 
-* シンプル維持
-* 静的運用
-* 構造変更禁止
+* sitemap.xml
+* robots.txt
+* JSON-LD対応
 
 ---
 
