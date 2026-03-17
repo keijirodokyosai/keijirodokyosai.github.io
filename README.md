@@ -1,467 +1,333 @@
 # 京滋労働組合共済会サイト
 
-京滋労働組合共済会の共済制度を案内する公式サイトです。  
+京滋労働組合共済会の共済制度を案内する公式サイトです。
 組合員向けに制度概要、パンフレット、各種書類を提供します。
-
-公開URL  
-https://keijirodokyosai.github.io/
-
-最終更新日：2026-03-16
 
 ---
 
-# サイトの目的
+## 公開URL
+
+https://keijirodokyosai.github.io/
+
+最終更新日：2026-03-17
+
+---
+
+## サイトの目的
 
 本サイトは組合員向けに以下の情報を提供します。
 
-・共済制度の概要  
-・共済パンフレット  
-・各種申請書  
-・お知らせ  
-・お問い合わせ  
+* 共済制度の概要
+* 共済パンフレット
+* 各種申請書
+* お知らせ
+* お問い合わせ
 
-長期運用を前提とした **静的サイト** として構築されています。
-
----
-
-# サイト構造
-
-トップ  
-│  
-├ 共済制度  
-│　├ 火災共済  
-│　├ 生命共済  
-│　├ 医療共済  
-│　├ 高齢生命共済  
-│　├ 高齢医療共済  
-│　├ 交通共済  
-│　├ 自動車共済  
-│　└ 自転車共済  
-│  
-├ 書類ダウンロード  
-├ よくある質問  
-├ お知らせ  
-└ お問い合わせ  
+長期運用を前提とした静的サイトとして構築しています。
 
 ---
 
-# 使用技術
+## サイト構造
 
-HTML  
-CSS  
-JavaScript（軽微な動作のみ）  
-Jekyll（FrontMatterのみ）
-
-※Jekyllのテンプレート機能は使用していません。
-
----
-
-# ホスティング
-
-GitHub Pages を使用しています。
-
-リポジトリ
-
-keijirodokyosai.github.io
-
-公開方法
-
-mainブランチ  
-↓  
-GitHub Pages  
-↓  
-自動公開  
-
-更新は GitHub へ push するだけで反映されます。
-
-反映時間  
-通常 **1〜2分**
+```
+トップ
+│
+├ 共済制度
+│　├ 火災共済
+│　├ 生命共済
+│　├ 医療共済
+│　├ 高齢生命共済
+│　├ 高齢医療共済
+│　├ 交通共済
+│　├ 自動車共済
+│　└ 自転車共済
+│
+├ 書類ダウンロード
+├ よくある質問
+├ お知らせ
+└ お問い合わせ
+```
 
 ---
 
-# ディレクトリ構造
+## 使用技術
 
+* HTML
+* CSS
+* JavaScript（軽微な動作のみ）
+* Jekyll（FrontMatterのみ）
+
+※ テンプレート機能は使用していません。
+
+---
+
+## ホスティング
+
+GitHub Pages を使用
+
+* リポジトリ：`keijirodokyosai.github.io`
+* ブランチ：`main`
+* 公開：自動反映
+* 反映時間：1〜2分
+
+---
+
+## ディレクトリ構造
+
+```
 /
+  index.html
 
-index.html  
+  kasai.html
+  seimei.html
+  iryo.html
+  korei-seimei.html
+  korei-iryo.html
+  kotsu.html
+  jidosha.html
+  jitensha.html
 
-kasai.html  
-seimei.html  
-iryo.html  
-korei-seimei.html  
-korei-iryo.html  
-kotsu.html  
-jidosha.html  
-jitensha.html  
+  downloads.html
+  faq.html
+  news.html
+  contact.html
 
-downloads.html  
-faq.html  
-news.html  
-contact.html  
+  sitemap.xml
+  robots.txt
 
-sitemap.xml  
-robots.txt  
+  /css
+    style.css
 
-/css  
-style.css  
-
-/images  
-共済パンフレット画像  
-
-/icons  
-SVGアイコン  
-
-/pdf  
-パンフレットPDF  
+  /images
+  /icons
+  /pdf
+```
 
 ---
 
-# 共済ページ一覧
+## 共済ページ一覧
 
-kasai.html  
-火災共済  
-kasai.png  
-kasai.pdf  
-
-seimei.html  
-生命共済  
-seimei.png  
-seimei.pdf  
-
-iryo.html  
-医療共済  
-iryo.png  
-iryo.pdf  
-
-korei-seimei.html  
-高齢生命共済  
-korei-seimei.png  
-korei-seimei.pdf  
-
-korei-iryo.html  
-高齢医療共済  
-korei-iryo.png  
-korei-iryo.pdf  
-
-kotsu.html  
-交通共済  
-kotsu.png  
-kotsu.pdf  
-
-jidosha.html  
-自動車共済  
-外部サイト  
-
-jitensha.html  
-自転車共済  
-jitensha1.png / jitensha2.png  
-jitensha1.pdf / jitensha2.pdf  
+| ページ               | 内容     | 画像               | PDF              |
+| ----------------- | ------ | ---------------- | ---------------- |
+| kasai.html        | 火災共済   | kasai.png        | kasai.pdf        |
+| seimei.html       | 生命共済   | seimei.png       | seimei.pdf       |
+| iryo.html         | 医療共済   | iryo.png         | iryo.pdf         |
+| korei-seimei.html | 高齢生命共済 | korei-seimei.png | korei-seimei.pdf |
+| korei-iryo.html   | 高齢医療共済 | korei-iryo.png   | korei-iryo.pdf   |
+| kotsu.html        | 交通共済   | kotsu.png        | kotsu.pdf        |
+| jidosha.html      | 自動車共済  | -                | 外部リンク            |
+| jitensha.html     | 自転車共済  | jitensha1/2.png  | jitensha1/2.pdf  |
 
 ---
 
-# 共済ページテンプレート
+## 共済ページ仕様
 
-共済ページは
+テンプレート：`kyosai.html`
 
-kyosai.html
+構造：
 
-をテンプレートとして作成します。
-
----
-
-# 共済ページ構造
-
-パンくずリスト  
-
-↓  
-
-共済タイトル  
-
-↓  
-
-共済概要  
-
-↓  
-
-パンフレット表示  
-
-↓  
-
-制度確認の注意  
-
-↓  
-
-必要書類案内  
+1. パンくず
+2. タイトル
+3. 概要
+4. パンフレット
+5. 注意事項
+6. 必要書類
 
 ---
 
-# 例外ページ
+## 特記事項
 
-## 自動車共済
+### 自動車共済
 
-jidosha.html
+* パンフレットなし
+* 外部リンク
+  https://nishijikyo.com/
 
-特徴  
+### 自転車共済
 
-パンフレットなし  
-外部サイトへリンク  
-
-リンク先  
-
-https://nishijikyo.com/
+* パンフレット2種（表・裏）
 
 ---
 
-## 自転車共済
+## 画像ルール
 
-jitensha.html  
+保存：`/images`
 
-パンフレットが **2種類**
+命名：
 
-パンフレット（表）  
-jitensha1.png  
-jitensha1.pdf  
+```
+kasai.png
+seimei.png
+iryo.png
+```
 
-パンフレット（裏）  
-jitensha2.png  
-jitensha2.pdf  
+例外：
 
----
-
-# 画像ルール
-
-保存場所  
-
-/images  
-
-命名規則  
-
-共済名.png  
-
-例  
-
-kasai.png  
-seimei.png  
-iryo.png  
-kotsu.png  
-
-例外  
-
-jitensha1.png  
-jitensha2.png  
+```
+jitensha1.png
+jitensha2.png
+```
 
 ---
 
-# PDFルール
+## PDFルール
 
-保存場所  
+保存：`/pdf`
 
-/pdf  
+命名：
 
-命名規則  
+```
+kasai.pdf
+seimei.pdf
+iryo.pdf
+```
 
-共済名.pdf  
+例外：
 
-例  
-
-kasai.pdf  
-seimei.pdf  
-iryo.pdf  
-kotsu.pdf  
-
-例外  
-
-jitensha1.pdf  
-jitensha2.pdf  
+```
+jitensha1.pdf
+jitensha2.pdf
+```
 
 ---
 
-# CSS
+## CSS設計
 
-スタイルシート  
+ファイル：`/css/style.css`
 
-/css/style.css  
+### 方針
 
-設計方針  
-
-・シンプル  
-・可読性重視  
-・モバイル対応  
-・外部フレームワーク不使用  
-
-レスポンシブ設計
-
-スマートフォン　16px  
-タブレット　24px  
-PC　36px  
-
-スマートフォンでは背景色を  
-**#eeffee**
-
-カード背景を  
-
-**#f6efe7**
-
-として可読性を高めています。
+* シンプル
+* 可読性重視
+* モバイル対応
+* 外部ライブラリ不使用
+* 長期運用前提
 
 ---
 
-# お問い合わせページ
+## カラーデザイン（統一仕様）
 
-contact.html
+### 背景
 
-改善内容
+* `#f6fff6`
 
-郵便番号項目削除  
-住所3行表示  
+### ヒーロー
 
-表記整理
+* `linear-gradient(180deg, #eeffee, #f6fff6)`
 
-TEL  
-FAX  
-Ｅメール  
+### カード
 
-メール送信ボタン設置
+* `#f6f0e6`
 
 ---
 
-# SEO
+### 文字
 
-設置済み
-
-sitemap.xml  
-robots.txt  
-
-各ページ
-
-title  
-description  
-JSON-LDパンくず  
-
-トップページ
-
-Organization schema  
-ItemList schema  
-
-お問い合わせページ
-
-ContactPage schema  
+* 本文：`#123456`
+* サブ：`#366084`
 
 ---
 
-# 略称対応
+### ヘッダー・フッター
 
-正式名称
+* `#123660`
+
+---
+
+### ナビ
+
+* 通常：`#ffffff`
+* hover：`#36a872`
+
+---
+
+### リンク
+
+* 通常：`#36a872`
+* hover：`#247248`
+* 下線：あり
+
+---
+
+### ボタン
+
+* primary：`#36a872`
+* hover：`#247248`
+
+---
+
+### 見出し左線
+
+* `border-left: 9px solid #36a872`
+
+---
+
+### フォーカス
+
+* `rgba(54,168,114,0.6)`
+
+---
+
+## 設計ルール
+
+* 全デバイス同一配色
+* 色の分岐禁止
+* アクセントカラー統一
+* リンクは下線付き
+
+---
+
+## 廃止仕様
+
+* スマホ専用カラー
+* デバイス別色変更
+* 見出し色の分岐
+
+---
+
+## SEO
+
+* sitemap.xml
+* robots.txt
+* JSON-LD
+
+---
+
+## 更新方法
+
+1. HTML編集
+2. push
+3. 自動反映
+
+---
+
+## 新規ページ追加
+
+1. kyosai.htmlコピー
+2. ページ作成
+3. FrontMatter編集
+4. 画像・PDF追加
+5. トップへリンク
+
+---
+
+## 運用ルール
+
+* シンプル維持
+* 静的運用
+* 構造変更禁止
+
+---
+
+## 管理
 
 京滋労働組合共済会
-
-略称
-
-京滋労働共済  
-京滋共済  
-
-略称は
-
-Organization schema  
-トップページ本文  
-FAQ（予定）
-
-で検索エンジンに認識されるよう設計しています。
+専務理事
+横山雄介
 
 ---
 
-# 更新方法
+## 備考
 
-更新手順
-
-1  
-HTML編集  
-
-2  
-画像またはPDF追加  
-
-3  
-GitHubへ push  
-
-4  
-GitHub Pages自動更新  
-
----
-
-# 新しい共済ページ追加
-
-1  
-
-テンプレート  
-
-kyosai.html  
-
-をコピー  
-
-2  
-
-新しいページ作成  
-
-例  
-
-new-kyosai.html  
-
-3  
-
-FrontMatter修正  
-
-title  
-description  
-permalink  
-
-4  
-
-パンフレット設定  
-
-/images/共済名.png  
-/pdf/共済名.pdf  
-
-5  
-
-トップページへリンク追加  
-
----
-
-# 運用ルール
-
-基本方針
-
-シンプル維持  
-静的サイト運用  
-構造変更を避ける  
-
-禁止事項
-
-不要なJavaScript追加  
-CMS導入  
-外部ライブラリ大量追加  
-
----
-
-# 管理
-
-管理者  
-京滋労働組合共済会  
-専務理事  
-横山雄介  
-
-作成者  
-京滋労働組合共済会  
-専務理事  
-横山雄介  
-
----
-
-# 備考
-
-本サイトは  
-
-GitHub Pages  
-静的HTML  
-
-構成により **長期安定運用** を目的として設計されています。
+本サイトは GitHub Pages + 静的HTML により
+長期安定運用を目的としています。
