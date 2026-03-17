@@ -46,6 +46,12 @@
   }
   </script>
 
+  {% if page.structured_data_json_ld %}
+  <script type="application/ld+json">
+  {{ page.structured_data_json_ld }}
+  </script>
+  {% endif %}
+
   {% if page.breadcrumb_json_ld %}
   <script type="application/ld+json">
   {{ page.breadcrumb_json_ld }}
