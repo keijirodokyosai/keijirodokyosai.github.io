@@ -509,7 +509,7 @@ a:focus-visible {
   background: #fffaf0;
   border: 1px solid #dcdcdc;
   border-radius: 10px;
-  padding: 12px;
+  padding: 6px;
   box-shadow: none;
 }
 
@@ -556,7 +556,7 @@ a:focus-visible {
 
 /* contact */
 .contact-card {
-  padding: 18px;
+  padding: 12px;
 }
 
 .contact-table {
@@ -757,7 +757,7 @@ a:focus-visible {
 
   .image-card {
     background: #fffaf0;
-    padding: 24px;
+    padding: 6px;
     margin-bottom: 24px;
   }
 
