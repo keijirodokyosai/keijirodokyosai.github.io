@@ -10,7 +10,7 @@ html {
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Meiryo", sans-serif;
   font-size: 18px;
   line-height: 1.7;
   color: #123456;
@@ -543,6 +543,7 @@ a:focus-visible {
 .text-link {
   color: #234567;
   text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .text-link:hover,
@@ -553,7 +554,7 @@ a:focus-visible {
 
 /* contact */
 .contact-card {
-  padding: 20px 26px;
+  padding: 18px 18px;
 }
 
 .contact-table {
@@ -785,6 +786,12 @@ a:focus-visible {
 }
 
 @media (min-width: 769px) {
+  body {
+    font-size: 18px;
+    line-height: 1.6;
+    font-weight: 500;
+  }
+
   .global-nav {
     display: block !important;
     position: static;
