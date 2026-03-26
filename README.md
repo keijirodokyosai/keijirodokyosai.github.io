@@ -7,7 +7,7 @@
 
 https://keijirodokyosai.github.io/
 
-最終更新日：2026-03-17
+最終更新日：2026-03-26
 
 サイトの目的
 
@@ -22,6 +22,8 @@ https://keijirodokyosai.github.io/
 お知らせ
 
 お問い合わせ
+
+見積り依頼
 
 長期運用を前提とした、軽量で可読性の高い静的サイトとして構築しています。
 
@@ -40,7 +42,8 @@ https://keijirodokyosai.github.io/
 ├ 書類ダウンロード
 ├ よくある質問
 ├ お知らせ
-└ お問い合わせ
+├ お問い合わせ
+└ おうちの安心共済（火災共済）見積り依頼
 
 使用技術
 
@@ -87,6 +90,7 @@ downloads.html
 faq.html
 news.html
 contact.html
+estimate.html
 
 sitemap.xml
 robots.txt
@@ -111,6 +115,8 @@ korei-iryo.html	高齢医療共済	korei-iryo.png	korei-iryo.pdf
 kotsu.html	交通共済	kotsu.png	kotsu.pdf
 jidosha.html	自動車共済	-	外部リンク
 jitensha.html	自転車共済	jitensha1/2.png	jitensha1/2.pdf
+estimate.html	おうちの安心共済（火災共済）見積り依頼	-	-
+
 特記事項
 自動車共済
 
@@ -121,6 +127,30 @@ jitensha.html	自転車共済	jitensha1/2.png	jitensha1/2.pdf
 自転車共済
 
 パンフレット2種（表・裏）
+
+見積り依頼ページ
+
+ページ名：estimate.html
+
+対象：おうちの安心共済（火災共済）
+
+見積り依頼方法：Eメール
+
+メール送信先：kjkyosaikai@msn.com
+
+3日以内に見積内容をメールで返信
+
+案内ページ（kasai.html）へのリンクあり
+
+必要事項：
+・所属の組合名
+・氏名
+・住宅が木造か鉄筋か
+・居住人数
+・住宅は自家か借家か
+・他の火災保険の加入の有無
+
+メール本文には入力用ひな形を自動挿入
 
 CSS設計
 
