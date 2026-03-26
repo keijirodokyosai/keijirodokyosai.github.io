@@ -37,7 +37,7 @@ structured_data_json_ld: >
       "@type": "ItemList",
       "name": "共済制度一覧",
       "url": "{{ '/' | absolute_url }}",
-      "numberOfItems": 8,
+      "numberOfItems": 9,
       "itemListElement": [
         {
           "@type": "ListItem",
@@ -48,20 +48,20 @@ structured_data_json_ld: >
         {
           "@type": "ListItem",
           "position": 2,
-          "name": "生命共済",
-          "url": "{{ '/seimei.html' | absolute_url }}"
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
           "name": "医療共済",
           "url": "{{ '/iryo.html' | absolute_url }}"
         },
         {
           "@type": "ListItem",
+          "position": 3,
+          "name": "生命共済",
+          "url": "{{ '/seimei.html' | absolute_url }}"
+        },
+        {
+          "@type": "ListItem",
           "position": 4,
-          "name": "高齢生命共済",
-          "url": "{{ '/korei-seimei.html' | absolute_url }}"
+          "name": "交通災害共済",
+          "url": "{{ '/kotsu.html' | absolute_url }}"
         },
         {
           "@type": "ListItem",
@@ -72,20 +72,26 @@ structured_data_json_ld: >
         {
           "@type": "ListItem",
           "position": 6,
-          "name": "交通災害共済",
-          "url": "{{ '/kotsu.html' | absolute_url }}"
+          "name": "高齢生命共済",
+          "url": "{{ '/korei-seimei.html' | absolute_url }}"
         },
         {
           "@type": "ListItem",
           "position": 7,
+          "name": "自転車共済",
+          "url": "{{ '/jitensha.html' | absolute_url }}"
+        },
+        {
+          "@type": "ListItem",
+          "position": 8,
           "name": "自動車共済",
           "url": "{{ '/jidosha.html' | absolute_url }}"
         },
         {
           "@type": "ListItem",
-          "position": 8,
-          "name": "自転車共済",
-          "url": "{{ '/jitensha.html' | absolute_url }}"
+          "position": 9,
+          "name": "ONE-CO共済",
+          "url": "{{ '/one-co.html' | absolute_url }}"
         }
       ]
     }
@@ -131,16 +137,6 @@ structured_data_json_ld: >
         </p>
       </a>
 
-      <a href="{{ '/seimei.html' | relative_url }}" class="kyosai-card">
-        <div class="kyosai-card-header">
-          <img src="{{ '/icons/seimei.svg' | relative_url }}" alt="生命共済">
-          <h3>生命共済</h3>
-        </div>
-        <p>
-          万が一のときに、ご家族の生活を支えるための共済制度です。
-        </p>
-      </a>
-
       <a href="{{ '/iryo.html' | relative_url }}" class="kyosai-card">
         <div class="kyosai-card-header">
           <img src="{{ '/icons/iryo.svg' | relative_url }}" alt="医療共済">
@@ -151,23 +147,13 @@ structured_data_json_ld: >
         </p>
       </a>
 
-      <a href="{{ '/korei-seimei.html' | relative_url }}" class="kyosai-card">
+      <a href="{{ '/seimei.html' | relative_url }}" class="kyosai-card">
         <div class="kyosai-card-header">
-          <img src="{{ '/icons/korei-seimei.svg' | relative_url }}" alt="高齢生命共済">
-          <h3>高齢生命共済</h3>
+          <img src="{{ '/icons/seimei.svg' | relative_url }}" alt="生命共済">
+          <h3>生命共済</h3>
         </div>
         <p>
-          65歳以上の方を対象とした生命共済制度です。85歳の年末まで継続加入できます。
-        </p>
-      </a>
-
-      <a href="{{ '/korei-iryo.html' | relative_url }}" class="kyosai-card">
-        <div class="kyosai-card-header">
-          <img src="{{ '/icons/korei-iryo.svg' | relative_url }}" alt="高齢医療共済">
-          <h3>高齢医療共済</h3>
-        </div>
-        <p>
-          65歳以上の方を対象とした医療共済制度です。85歳の年末まで継続加入できます。
+          万が一のときに、ご家族の生活を支えるための共済制度です。
         </p>
       </a>
 
@@ -181,13 +167,23 @@ structured_data_json_ld: >
         </p>
       </a>
 
-      <a href="{{ '/jidosha.html' | relative_url }}" class="kyosai-card">
+      <a href="{{ '/korei-iryo.html' | relative_url }}" class="kyosai-card">
         <div class="kyosai-card-header">
-          <img src="{{ '/icons/jidosha.svg' | relative_url }}" alt="自動車共済">
-          <h3>自動車共済</h3>
+          <img src="{{ '/icons/korei-iryo.svg' | relative_url }}" alt="高齢医療共済">
+          <h3>高齢医療共済</h3>
         </div>
         <p>
-          自動車に関する事故や補償に備えるための共済制度です。
+          65歳以上の方を対象とした医療共済制度です。85歳の年末まで継続加入できます。
+        </p>
+      </a>
+
+      <a href="{{ '/korei-seimei.html' | relative_url }}" class="kyosai-card">
+        <div class="kyosai-card-header">
+          <img src="{{ '/icons/korei-seimei.svg' | relative_url }}" alt="高齢生命共済">
+          <h3>高齢生命共済</h3>
+        </div>
+        <p>
+          65歳以上の方を対象とした生命共済制度です。85歳の年末まで継続加入できます。
         </p>
       </a>
 
@@ -198,6 +194,26 @@ structured_data_json_ld: >
         </div>
         <p>
           自転車事故や日常の賠償責任に備えるための共済制度です。
+        </p>
+      </a>
+
+      <a href="{{ '/jidosha.html' | relative_url }}" class="kyosai-card">
+        <div class="kyosai-card-header">
+          <img src="{{ '/icons/jidosha.svg' | relative_url }}" alt="自動車共済">
+          <h3>自動車共済</h3>
+        </div>
+        <p>
+          自動車に関する事故や補償に備えるための共済制度です。
+        </p>
+      </a>
+
+      <a href="{{ '/one-co.html' | relative_url }}" class="kyosai-card">
+        <div class="kyosai-card-header">
+          <img src="{{ '/icons/one-co.svg' | relative_url }}" alt="ONE-CO共済">
+          <h3>ONE-CO共済</h3>
+        </div>
+        <p>
+          30歳未満の方なら月500円の掛金で加入できる共済制度です。
         </p>
       </a>
 
