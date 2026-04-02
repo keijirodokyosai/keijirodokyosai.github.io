@@ -1,7 +1,7 @@
 ---
 layout: default
 title: 書類ダウンロード | 京滋労働組合共済会
-description: 京滋労働組合共済会の各種申請書類をダウンロードできます。
+description: 京滋労働組合共済会の各種申請書類をダウンロードできます。加入、変更、解約、給付申請に関する書類をご案内しています。
 permalink: /downloads.html
 breadcrumb_json_ld: >
   {
@@ -34,17 +34,15 @@ breadcrumb_json_ld: >
 <section class="hero">
   <div class="container">
     <div class="hero-content">
-
       <h1>書類ダウンロード</h1>
 
       <p class="lead">
-        加入、変更、解約、給付の申請などに必要な各種書類を掲載しています。
+        加入、変更、解約、給付申請などに必要な各種書類をご案内しています。
       </p>
 
       <p class="hero-sub-links">
-        現在、書類の掲載準備を進めています。
+        必要な書類名をクリックすると、PDFをご確認いただけます。
       </p>
-
     </div>
   </div>
 </section>
@@ -55,7 +53,23 @@ breadcrumb_json_ld: >
     <h2>契約関係書類</h2>
 
     <div class="image-card">
-      <p>現在準備中です。</p>
+      <p>加入、変更、解約などに関する書類です。</p>
+
+      <h3>申込書</h3>
+      <ul class="download-list">
+        <li><a href="{{ '/pdf/kasai-form.pdf' | relative_url }}" class="text-link" target="_blank" rel="noopener">火災共済申込書</a></li>
+        <li><a href="{{ '/pdf/kojin-form.pdf' | relative_url }}" class="text-link" target="_blank" rel="noopener">個人共済申込書</a></li>
+        <li><a href="{{ '/pdf/soshiki-form.pdf' | relative_url }}" class="text-link" target="_blank" rel="noopener">組織共済申込書</a></li>
+        <li><a href="{{ '/pdf/oneco-form.pdf' | relative_url }}" class="text-link" target="_blank" rel="noopener">ONE-CO共済申込書</a></li>
+        <li><a href="{{ '/pdf/jitensha-form.pdf' | relative_url }}" class="text-link" target="_blank" rel="noopener">自転車共済申込書</a></li>
+        <li><a href="{{ '/pdf/kanwa-iryo-form.pdf' | relative_url }}" class="text-link" target="_blank" rel="noopener">緩和医療申込書</a></li>
+      </ul>
+
+      <h3>告知書等</h3>
+      <ul class="download-list">
+        <li><a href="{{ '/pdf/health-declaration.pdf' | relative_url }}" class="text-link" target="_blank" rel="noopener">健康告知書</a></li>
+        <li><a href="{{ '/pdf/health-declaration-kanwa.pdf' | relative_url }}" class="text-link" target="_blank" rel="noopener">健康告知書（緩和医療）</a></li>
+      </ul>
     </div>
   </section>
 
@@ -63,7 +77,46 @@ breadcrumb_json_ld: >
     <h2>給付関係書類</h2>
 
     <div class="image-card">
-      <p>現在準備中です。</p>
+      <p>給付申請に必要な書類です。</p>
+
+      <div class="download-guide">
+        <p class="download-guide-text">
+          給付事由により必要な書類が異なります。まずはこちらをご確認ください。
+        </p>
+        <div class="hero-buttons">
+          <a href="{{ '/pdf/kyufu-required-documents.pdf' | relative_url }}" class="btn btn-primary" target="_blank" rel="noopener">
+            給付事由による必要書類について
+          </a>
+        </div>
+      </div>
+
+      <h3>申請書</h3>
+      <ul class="download-list">
+        <li><a href="{{ '/pdf/claim-form-general.pdf' | relative_url }}" class="text-link" target="_blank" rel="noopener">給付申請書（火災、慶弔以外）</a></li>
+        <li><a href="{{ '/pdf/claim-form-kasai.pdf' | relative_url }}" class="text-link" target="_blank" rel="noopener">給付申請書（火災）</a></li>
+        <li><a href="{{ '/pdf/claim-form-central-keicho.pdf' | relative_url }}" class="text-link" target="_blank" rel="noopener">給付申請書（中央慶弔）</a></li>
+        <li><a href="{{ '/pdf/claim-form-keiji-keicho.pdf' | relative_url }}" class="text-link" target="_blank" rel="noopener">給付申請書（京滋慶弔）</a></li>
+      </ul>
+
+      <h3>証明書・報告書等</h3>
+      <ul class="download-list">
+        <li><a href="{{ '/pdf/medical-certificate.pdf' | relative_url }}" class="text-link" target="_blank" rel="noopener">診断書</a></li>
+        <li><a href="{{ '/pdf/treatment-certificate.pdf' | relative_url }}" class="text-link" target="_blank" rel="noopener">治療証明書</a></li>
+        <li><a href="{{ '/pdf/leave-certificate.pdf' | relative_url }}" class="text-link" target="_blank" rel="noopener">休業証明書</a></li>
+        <li><a href="{{ '/pdf/accident-report-initial.pdf' | relative_url }}" class="text-link" target="_blank" rel="noopener">事故状況報告書（速報）</a></li>
+        <li><a href="{{ '/pdf/housing-damage-report-initial.pdf' | relative_url }}" class="text-link" target="_blank" rel="noopener">住宅災害状況報告書（速報）</a></li>
+        <li><a href="{{ '/pdf/injury-accident-certificate.pdf' | relative_url }}" class="text-link" target="_blank" rel="noopener">傷害事故発生証明書</a></li>
+        <li><a href="{{ '/pdf/disability-certificate.pdf' | relative_url }}" class="text-link" target="_blank" rel="noopener">後遺障害診断書</a></li>
+        <li><a href="{{ '/pdf/consent-form.pdf' | relative_url }}" class="text-link" target="_blank" rel="noopener">同意書</a></li>
+      </ul>
+
+      <h3>補足書類</h3>
+      <p class="download-note">
+        状況により追加で提出が必要となる書類です。
+      </p>
+      <ul class="download-list">
+        <li><a href="{{ '/pdf/union-accident-certificate.pdf' | relative_url }}" class="text-link" target="_blank" rel="noopener">公的証明が得られない場合の組合証明書</a></li>
+      </ul>
     </div>
   </section>
 
@@ -71,7 +124,7 @@ breadcrumb_json_ld: >
     <h2>その他書類</h2>
 
     <div class="image-card">
-      <p>現在準備中です。</p>
+      <p>その他の書類は、今後追加予定です。</p>
     </div>
   </section>
 
