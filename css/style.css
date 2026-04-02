@@ -537,6 +537,18 @@ a:focus-visible {
   border-radius: 6px;
 }
 
+.image-card h3 {
+  margin-top: 24px;
+  margin-bottom: 12px;
+  font-size: 1.08rem;
+  line-height: 1.5;
+  color: #123456;
+}
+
+.image-card h3:first-of-type {
+  margin-top: 18px;
+}
+
 .pdf-download {
   text-align: center;
   margin-top: 24px;
@@ -569,6 +581,42 @@ a:focus-visible {
 .text-link:focus-visible {
   color: #1d3f5f;
   text-decoration: underline;
+}
+
+/* download page */
+.download-list {
+  margin: 12px 0 24px;
+  padding-left: 1.2em;
+}
+
+.download-list li + li {
+  margin-top: 12px;
+}
+
+.download-list a {
+  font-size: 18px;
+  line-height: 1.6;
+  font-weight: 500;
+}
+
+.download-note {
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+.download-guide {
+  margin-top: 18px;
+  margin-bottom: 30px;
+  padding: 18px;
+  background: #f8fff8;
+  border: 1px solid #d6ead6;
+  border-radius: 10px;
+}
+
+.download-guide-text {
+  margin: 0 0 12px;
+  line-height: 1.7;
+  color: #123456;
 }
 
 /* contact */
@@ -776,6 +824,19 @@ a:focus-visible {
   .image-card {
     background: #fffaf0;
     padding: 6px;
+    margin-bottom: 24px;
+  }
+
+  .download-list {
+    margin-bottom: 24px;
+  }
+
+  .download-list a {
+    font-size: 18px;
+  }
+
+  .download-guide {
+    padding: 12px;
     margin-bottom: 24px;
   }
 
