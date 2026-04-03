@@ -530,6 +530,10 @@ a:focus-visible {
   box-shadow: none;
 }
 
+.image-card-spaced {
+  margin-top: 24px;
+}
+
 .image-card img {
   display: block;
   width: 100%;
