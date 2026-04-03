@@ -147,7 +147,7 @@ https://keijirodokyosai.github.io/
 | `kotsu.html`        | 交通災害共済              | `kotsu.png`        | `kotsu.pdf`        |
 | `korei-iryo.html`   | 高齢医療共済              | `korei-iryo.png`   | `korei-iryo.pdf`   |
 | `korei-seimei.html` | 高齢生命共済              | `korei-seimei.png` | `korei-seimei.pdf` |
-| `jitensha.html`     | 自転車共済               | `jitensha1/2.png`  | `jitensha1/2.pdf`  |
+| `jitensha.html`     | 自転車共済               | `jitensha1/2.png`  | `jitensha.pdf`     |
 | `jidosha.html`      | 自動車共済               | -                  | 外部リンク              |
 | `one-co.html`       | ONE-CO共済            | `one-co.png`       | `one-co.pdf`       |
 | `downloads.html`    | 書類ダウンロード            | -                  | 各種PDF              |
@@ -155,6 +155,120 @@ https://keijirodokyosai.github.io/
 | `news.html`         | お知らせ                | -                  | -                  |
 | `contact.html`      | お問い合わせ              | -                  | -                  |
 | `estimate.html`     | おうちの安心共済（火災共済）見積り依頼 | -                  | -                  |
+
+---
+
+## 共済ページUI仕様
+
+### 対象ページ
+
+* `kasai.html`
+* `iryo.html`
+* `seimei.html`
+* `kotsu.html`
+* `korei-iryo.html`
+* `korei-seimei.html`
+* `jitensha.html`
+* `jidosha.html`
+* `one-co.html`
+
+### 基本構成
+
+共済ページは、原則として以下の構成で統一します。
+
+1. パンくず
+2. ページタイトル
+3. 概要説明
+4. パンフレットまたは案内
+5. 制度確認の注意書き
+6. 必要書類案内
+
+### 共済ページのパンフレット表示ルール
+
+パンフレットがある共済ページでは、PDFだけに頼らず、まずページ上で内容を確認できるようにします。
+そのため、パンフレットは画像（PNG）で掲載します。
+
+```html
+<div class="image-card">
+  <img src="{{ '/images/xxx.png' | relative_url }}" alt="〇〇共済のパンフレット">
+</div>
+```
+
+#### 理由
+
+* 利用者がページを開いた時点で内容を確認できる
+* PDFを別途開かなくても概要が把握できる
+* 高齢者を含めて直感的に分かりやすい
+
+### 共済ページのPDFボタンルール
+
+パンフレットPDFは、共済ページでは `download` 属性を使用します。
+
+```html
+<div class="pdf-download">
+  <a href="{{ '/pdf/xxx.pdf' | relative_url }}" download class="btn btn-primary">
+    パンフレットをダウンロード
+  </a>
+</div>
+```
+
+#### ルール
+
+* `download` を使用する
+* `target="_blank"` は使用しない
+* ボタン文言は原則として `パンフレットをダウンロード` とする
+
+#### 理由
+
+* ページ上でパンフレット内容をすでに確認できるため
+* 共済ページ内のPDFは「閲覧用」より「保存用」の意味合いが強いため
+* 同じ内容を別タブで開かせる必要性が低いため
+
+### 自転車共済の例外仕様
+
+自転車共済ページは、パンフレットが表裏2枚構成です。
+
+* 画像：`jitensha1.png`、`jitensha2.png`
+* PDF：`jitensha.pdf`
+
+ページ上では表裏2枚を画像で表示し、PDFは1つにまとめたファイルをダウンロードできる構成にします。
+
+### 外部案内型ページ
+
+`jidosha.html` は、他の共済ページとは異なり、外部サイト案内型のページです。
+
+#### 仕様
+
+* パンフレット画像なし
+* PDFなし
+* 外部サイトへ誘導するボタンを配置する
+
+外部リンクには以下を使用します。
+
+```html
+<a href="https://nishijikyo.com/" target="_blank" rel="noopener" class="btn btn-primary">
+```
+
+### 必要書類導線
+
+パンフレット型の共済ページでは、必要書類案内は原則として以下の形に統一します。
+
+```html
+<div class="pdf-download">
+  <a href="{{ '/downloads.html' | relative_url }}" class="btn btn-primary">
+    書類ダウンロードページ
+  </a>
+</div>
+```
+
+#### 役割
+
+* 加入
+* 変更
+* 解約
+* 給付申請
+
+などに必要な書類ページへ誘導するための共通導線とします。
 
 ---
 
@@ -168,6 +282,8 @@ https://keijirodokyosai.github.io/
 ### 自転車共済
 
 * パンフレット2種（表・裏）
+* PDFは `jitensha.pdf` に統合
+* ページでは表裏2枚を画像で表示する
 
 ### ONE-CO共済
 
@@ -256,6 +372,20 @@ kyufu-required-documents.pdf
 ```text
 給付事由による必要書類について
 ```
+
+### PDFの開き方ルール
+
+書類ダウンロードページでは、PDFリンクに `target="_blank"` を使用します。
+
+```html
+<a href="{{ '/pdf/xxx.pdf' | relative_url }}" class="text-link" target="_blank" rel="noopener">
+```
+
+#### 理由
+
+* 利用者が一覧ページを維持したまま複数のPDFを確認できる
+* 書類を比較しやすい
+* 元ページに戻る手間を減らせる
 
 ### なぜこの構成にしているか
 
@@ -367,6 +497,19 @@ union-accident-certificate.pdf
 
 ```text
 kyufu-required-documents.pdf
+```
+
+### 共済ページ用パンフレットPDF
+
+```text
+kasai.pdf
+iryo.pdf
+seimei.pdf
+kotsu.pdf
+korei-iryo.pdf
+korei-seimei.pdf
+jitensha.pdf
+one-co.pdf
 ```
 
 ---
@@ -532,6 +675,49 @@ kyufu-required-documents.pdf
 
 ---
 
+## CSS追加ルール
+
+### インラインstyle禁止
+
+コンポーネント間の余白調整などで、HTMLへ直接 `style=""` を書かないようにします。
+調整が必要な場合は、必ずCSSクラスを追加して対応します。
+
+#### 禁止例
+
+```html
+<div class="image-card" style="margin-top: 24px;">
+```
+
+#### 推奨例
+
+```html
+<div class="image-card image-card-spaced">
+```
+
+```css
+.image-card-spaced {
+  margin-top: 24px;
+}
+```
+
+### 採用済みクラス
+
+`jitensha.html` では、表裏2枚目のパンフレット画像に以下のクラスを使用します。
+
+```css
+.image-card-spaced {
+  margin-top: 24px;
+}
+```
+
+#### 理由
+
+* HTMLの可読性を保つため
+* 将来同様の構成が増えたときに再利用しやすいため
+* インラインstyleの混在を防ぐため
+
+---
+
 ## UI仕様メモ
 
 ### ヘッダー
@@ -556,6 +742,8 @@ kyufu-required-documents.pdf
 * 中央配置対応
 * 「お問い合わせはこちら」は primary ボタンを使用
 * 書類ダウンロードページでは案内系PDFのみボタン使用
+* 共済ページではパンフレットPDFの保存用ボタンとして使用
+* 必要書類導線では共通ボタンとして使用
 
 ### カード
 
@@ -578,6 +766,27 @@ kyufu-required-documents.pdf
 * `(PDF)` 表記も付けない
 * 給付関係の案内のみボタン使用
 * ダウンロード対象の書類名は、本文より少し目立つ設計にする
+* PDFは `target="_blank"` で開く
+
+### PDFリンクの使い分け
+
+* 共済ページのパンフレットPDFは `download`
+* `downloads.html` の各種書類PDFは `target="_blank"`
+* 外部サイトは `target="_blank" rel="noopener"`
+
+この使い分けは、用途ごとの利便性を優先した意図的な設計です。
+無理に統一しないことを前提とします。
+
+### include化
+
+現時点では include 化は採用しません。
+
+#### 理由
+
+* 現在のページ数であれば手管理が可能なため
+* 個別HTMLの可読性を優先するため
+* 過剰な共通化を避けるため
+* 将来必要になった時点で再検討すれば十分なため
 
 ---
 
@@ -596,6 +805,21 @@ kyufu-required-documents.pdf
 3. `downloads.html` にリンクを追加または修正
 4. 公開後、リンク先PDFが正しく開くか確認
 
+### 共済ページ更新手順
+
+1. パンフレット画像（PNG）を `/images/` に配置
+2. パンフレットPDFを `/pdf/` に配置
+3. 対象の共済ページHTMLを更新
+4. 画像表示とPDFリンクの両方が正しいか確認
+5. 必要書類導線が `downloads.html` を向いているか確認
+
+### 自転車共済更新手順
+
+1. 表画像と裏画像を `/images/` に配置
+2. 統合済みPDFを `/pdf/jitensha.pdf` として配置
+3. `jitensha.html` で表裏2画像が表示されるか確認
+4. ボタンが `jitensha.pdf` を指しているか確認
+
 ---
 
 ## 公開前チェック
@@ -613,6 +837,14 @@ kyufu-required-documents.pdf
 * PDFが正しく開くか確認
 * 表示名とPDF内容の一致確認
 * 案内ボタンの位置と文言が自然か確認
+
+### 共済ページ追加チェック
+
+* 画像が正しく表示されるか
+* PDFボタンが `download` になっているか
+* 外部リンクでないのに `target="_blank"` を付けていないか
+* `jidosha.html` 以外で外部案内型構成になっていないか
+* 必要書類案内が欠けていないか
 
 ---
 
@@ -639,5 +871,3 @@ kyufu-required-documents.pdf
 **長期安定運用・低コスト・高可読性** を目的として運用します。
 
 構造・命名・UIルールは、長期運用時の混乱を防ぐため、原則として統一を維持してください。
-
----
