@@ -1025,5 +1025,7 @@ a:focus-visible {
   color: #fafffa;
   text-decoration: none;
 }
-}
 
+.news-quiz-block {
+  margin-top: 48px;
+}
