@@ -13,7 +13,7 @@
 https://keijirodokyosai.github.io/
 ```
 
-**最終更新日：2026-04-03**
+**最終更新日：2026-04-23**
 
 ---
 
@@ -50,7 +50,8 @@ https://keijirodokyosai.github.io/
 ### 設計ルール
 
 * 色の分岐禁止
-* デバイス別デザイン禁止
+* デバイス別ページ分岐禁止（PC版・スマホ版の別HTMLを作らない）
+* 画面幅の差分はレスポンシブCSS（`@media`）で対応する
 * シンプル維持
 * UIの過剰装飾禁止
 * コンポーネント再利用前提
@@ -104,7 +105,8 @@ https://keijirodokyosai.github.io/
 ```text
 /
 ├─ _layouts/
-│  └─ default.html
+│  ├─ base.html
+│  └─ site-shell.html
 ├─ _includes/
 │  ├─ header.html
 │  └─ footer.html
@@ -122,13 +124,15 @@ https://keijirodokyosai.github.io/
 ├─ faq.html
 ├─ news.html
 ├─ contact.html
-├─ estimate.html
+├─ soshiki.html
 ├─ sitemap.xml
 ├─ robots.txt
 ├─ css/
 │  └─ style.css
 ├─ js/
 │  └─ script.js
+├─ other_pages/
+│  └─ estimate.html
 ├─ images/
 ├─ icons/
 └─ pdf/
@@ -138,7 +142,7 @@ https://keijirodokyosai.github.io/
 
 ## ページ一覧
 
-| ページ                 | 内容                  | 画像                 | PDF                |
+| 公開パス                | 内容                  | 画像                 | PDF                |
 | ------------------- | ------------------- | ------------------ | ------------------ |
 | `index.html`        | トップページ              | -                  | -                  |
 | `kasai.html`        | 火災共済                | `kasai.png`        | `kasai.pdf`        |
@@ -155,6 +159,10 @@ https://keijirodokyosai.github.io/
 | `news.html`         | お知らせ                | -                  | -                  |
 | `contact.html`      | お問い合わせ              | -                  | -                  |
 | `estimate.html`     | おうちの安心共済（火災共済）見積り依頼 | -                  | -                  |
+| `soshiki.html`      | 組織共済（補助ページ）         | -                  | -                  |
+
+※ `estimate.html` は実ファイル `other_pages/estimate.html` を `permalink: /estimate.html` で公開しています。
+※ `soshiki.html` は単体HTMLの補助ページです（現時点でグローバルナビ・`sitemap.xml` には未掲載）。
 
 ---
 
@@ -447,6 +455,9 @@ kyufu-required-documents.pdf
 
 ## PDFファイル一覧
 
+以下は運用ルール上のファイル一覧です。  
+実ファイルの配置状況は「未配置PDF（今後実装予定）」をあわせて確認してください。
+
 ### 契約関係（申込書）
 
 ```text
@@ -510,6 +521,18 @@ korei-iryo.pdf
 korei-seimei.pdf
 jitensha.pdf
 one-co.pdf
+```
+
+### 未配置PDF（今後実装予定）
+
+以下は2026-04-23時点で `/pdf/` に未配置です。
+
+```text
+oneco-form.pdf
+kanwa-iryo-form.pdf
+health-declaration-kanwa.pdf
+disability-certificate.pdf
+kyufu-required-documents.pdf
 ```
 
 ---
@@ -779,11 +802,18 @@ one-co.pdf
 
 ### include化
 
-現時点では include 化は採用しません。
+現時点では、`header` / `footer` のみ include 化を採用します。
+本文セクションの過剰な include 化は採用しません。
+
+### レイアウト構成
+
+* `base`：`head`（meta/OGP/JSON-LD/CSS等）を管理するベースレイアウト
+* `site-shell`：ヘッダー/フッターと本文領域（`<main>`）のみを扱うレイアウト
+* 各ページは原則 `layout: site-shell` を参照する
 
 #### 理由
 
-* 現在のページ数であれば手管理が可能なため
+* 共通ヘッダー・フッターの更新漏れを防ぐため
 * 個別HTMLの可読性を優先するため
 * 過剰な共通化を避けるため
 * 将来必要になった時点で再検討すれば十分なため
