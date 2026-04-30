@@ -1,7 +1,7 @@
 # 京滋労働組合共済会サイト
 
-京滋労働組合共済会の共済制度を案内する公式サイトです。
-組合員向けに、制度概要、パンフレット、各種書類、お問い合わせ先、見積り依頼などを提供します。
+京滋労働組合共済会の共済制度を案内する公式サイトです。  
+組合員向けに、制度概要、パンフレット、各種書類、お問い合わせ先、見積り依頼、ニュース、キャンペーン情報などを提供します。
 
 本サイトは、**長期運用を前提とした、軽量で可読性の高い静的サイト**として構築しています。
 
@@ -13,7 +13,7 @@
 https://keijirodokyosai.github.io/
 ```
 
-**最終更新日：2026-04-23**
+**最終更新日：2026-04-30**
 
 ---
 
@@ -28,8 +28,10 @@ https://keijirodokyosai.github.io/
 * お知らせ
 * お問い合わせ
 * おうちの安心共済（火災共済）の見積り依頼
+* 共済クイズへの導線
+* 春期拡大キャンペーンの案内
 
-特に重要視しているのは、**利用者が迷わず必要な情報にたどり着けること**です。
+特に重要視しているのは、**利用者が迷わず必要な情報にたどり着けること**です。  
 見た目の派手さよりも、分かりやすさ、読みやすさ、運用しやすさを優先しています。
 
 ---
@@ -79,6 +81,26 @@ https://keijirodokyosai.github.io/
   * お知らせ
   * お問い合わせ
   * おうちの安心共済（火災共済）見積り依頼
+  * 共済クイズ
+  * 春期拡大キャンペーン
+
+### トップページの主要CTA
+
+トップページのヒーロー部分には、以下の3つの導線を配置します。
+
+* 火災共済の見積依頼はこちら
+* 共済クイズの参加はこちら
+* 春期拡大キャンペーンの詳細はこちら
+
+これらは、通常のテキストリンクではなく、**薄い黄色背景・濃い紺色文字のボタン型リンク**として表示します。
+
+#### リンク先
+
+| 表示文言 | リンク先 |
+| --- | --- |
+| 火災共済の見積依頼はこちら | `/estimate.html` |
+| 共済クイズの参加はこちら | Googleフォーム |
+| 春期拡大キャンペーンの詳細はこちら | `/news/spring-campaign.html` |
 
 ---
 
@@ -123,6 +145,8 @@ https://keijirodokyosai.github.io/
 ├─ downloads.html
 ├─ faq.html
 ├─ news.html
+├─ news/
+│  └─ spring-campaign.html
 ├─ contact.html
 ├─ soshiki.html
 ├─ sitemap.xml
@@ -142,27 +166,130 @@ https://keijirodokyosai.github.io/
 
 ## ページ一覧
 
-| 公開パス                | 内容                  | 画像                 | PDF                |
-| ------------------- | ------------------- | ------------------ | ------------------ |
-| `index.html`        | トップページ              | -                  | -                  |
-| `kasai.html`        | 火災共済                | `kasai.png`        | `kasai.pdf`        |
-| `iryo.html`         | 医療共済                | `iryo.png`         | `iryo.pdf`         |
-| `seimei.html`       | 生命共済                | `seimei.png`       | `seimei.pdf`       |
-| `kotsu.html`        | 交通災害共済              | `kotsu.png`        | `kotsu.pdf`        |
-| `korei-iryo.html`   | 高齢医療共済              | `korei-iryo.png`   | `korei-iryo.pdf`   |
-| `korei-seimei.html` | 高齢生命共済              | `korei-seimei.png` | `korei-seimei.pdf` |
-| `jitensha.html`     | 自転車共済               | `jitensha1/2.png`  | `jitensha.pdf`     |
-| `jidosha.html`      | 自動車共済               | -                  | 外部リンク              |
-| `one-co.html`       | ONE-CO共済            | `one-co.png`       | `one-co.pdf`       |
-| `downloads.html`    | 書類ダウンロード            | -                  | 各種PDF              |
-| `faq.html`          | よくある質問              | -                  | -                  |
-| `news.html`         | お知らせ                | -                  | -                  |
-| `contact.html`      | お問い合わせ              | -                  | -                  |
-| `estimate.html`     | おうちの安心共済（火災共済）見積り依頼 | -                  | -                  |
-| `soshiki.html`      | 組織共済（補助ページ）         | -                  | -                  |
+| 公開パス | 内容 | 画像 | PDF |
+| --- | --- | --- | --- |
+| `index.html` | トップページ | - | - |
+| `kasai.html` | 火災共済 | `kasai.png` | `kasai.pdf` |
+| `iryo.html` | 医療共済 | `iryo.png` | `iryo.pdf` |
+| `seimei.html` | 生命共済 | `seimei.png` | `seimei.pdf` |
+| `kotsu.html` | 交通災害共済 | `kotsu.png` | `kotsu.pdf` |
+| `korei-iryo.html` | 高齢医療共済 | `korei-iryo.png` | `korei-iryo.pdf` |
+| `korei-seimei.html` | 高齢生命共済 | `korei-seimei.png` | `korei-seimei.pdf` |
+| `jitensha.html` | 自転車共済 | `jitensha1.png` / `jitensha2.png` | `jitensha.pdf` |
+| `jidosha.html` | 自動車共済 | - | 外部リンク |
+| `one-co.html` | ONE-CO共済 | `one-co.png` | `one-co.pdf` |
+| `downloads.html` | 書類ダウンロード | - | 各種PDF |
+| `faq.html` | よくある質問 | - | - |
+| `news.html` | お知らせ | - | - |
+| `news/spring-campaign.html` | 春期拡大キャンペーン | - | - |
+| `contact.html` | お問い合わせ | - | - |
+| `estimate.html` | おうちの安心共済（火災共済）見積り依頼 | - | - |
+| `soshiki.html` | 組織共済（補助ページ） | - | - |
 
-※ `estimate.html` は実ファイル `other_pages/estimate.html` を `permalink: /estimate.html` で公開しています。
+※ `estimate.html` は実ファイル `other_pages/estimate.html` を `permalink: /estimate.html` で公開しています。  
+※ `news/spring-campaign.html` はニュース配下の個別案内ページです。グローバルナビには直接追加せず、トップページ・ニュースページから誘導します。  
 ※ `soshiki.html` は単体HTMLの補助ページです（現時点でグローバルナビ・`sitemap.xml` には未掲載）。
+
+---
+
+## ニュースページ仕様
+
+### 対象ページ
+
+```text
+/news.html
+```
+
+### 役割
+
+ニュースページは、共済会からのお知らせや更新情報を掲載するページです。  
+サイト全体の大項目としての「ニュース」を維持し、その中から個別案内ページへ誘導します。
+
+### 更新履歴ルール
+
+更新履歴は、**新しいものを上に表示**します。
+
+例：
+
+```text
+2026年4月
+春期拡大キャンペーンの詳細ページを公開しました。
+
+2026年4月
+共済クイズのリンクをつくりました。
+
+2026年3月
+おうちの安心共済（火災共済）の見積り依頼ページをつくりました。
+
+2026年3月
+京滋労働組合共済会サイトを公開しました。
+```
+
+### 関連ページ
+
+ニュースページの関連ページには、以下の導線を配置します。
+
+* おうちの安心共済　見積り依頼
+* 共済クイズ
+* 春期拡大キャンペーン
+
+---
+
+## 春期拡大キャンペーンページ仕様
+
+### 対象ページ
+
+```text
+/news/spring-campaign.html
+```
+
+### 位置づけ
+
+春期拡大キャンペーンは、`downloads.html`、`faq.html`、`news.html` と同列の大項目ではありません。  
+**ニュース配下の個別案内ページ**として扱います。
+
+### 掲載内容
+
+春期拡大キャンペーンページでは、以下の内容をカード型UIで掲載します。
+
+* 自然災害特約掛金1年分プレゼント
+* 火災共済・自動車共済見積りキャンペーン
+* 共済クイズチャレンジ
+* プラスワン（＋1）キャンペーン
+* 共済説明会援助金
+
+### URL
+
+```text
+https://keijirodokyosai.github.io/news/spring-campaign.html
+```
+
+### FrontMatter
+
+```yaml
+---
+layout: site-shell
+title: 春期拡大キャンペーン | 京滋労働組合共済会
+description: 京滋労働組合共済会の春期拡大キャンペーンのご案内です。自然災害特約掛金1年分プレゼント、火災共済・自動車共済見積りキャンペーン、共済クイズチャレンジ、プラスワンキャンペーン、共済説明会援助金について掲載しています。
+permalink: /news/spring-campaign.html
+---
+```
+
+### パンくず
+
+```text
+ホーム > ニュース > 春期拡大キャンペーン
+```
+
+### サイトマップ掲載
+
+`sitemap.xml` には、以下を追加します。
+
+```xml
+<url>
+  <loc>https://keijirodokyosai.github.io/news/spring-campaign.html</loc>
+</url>
+```
 
 ---
 
@@ -193,7 +320,7 @@ https://keijirodokyosai.github.io/
 
 ### 共済ページのパンフレット表示ルール
 
-パンフレットがある共済ページでは、PDFだけに頼らず、まずページ上で内容を確認できるようにします。
+パンフレットがある共済ページでは、PDFだけに頼らず、まずページ上で内容を確認できるようにします。  
 そのため、パンフレットは画像（PNG）で掲載します。
 
 ```html
@@ -303,11 +430,13 @@ https://keijirodokyosai.github.io/
 ### 見積り依頼ページ
 
 * ページ名：`estimate.html`
+* 実ファイル：`other_pages/estimate.html`
 * 対象：おうちの安心共済（火災共済）
 * 見積り依頼方法：Eメール
 * メール送信先：`kjkyosaikai@msn.com`
 * 3日以内に見積内容をメールで返信
 * 案内ページ（`kasai.html`）へのリンクあり
+* トップページのCTAボタンから誘導する
 
 #### 必要事項
 
@@ -319,6 +448,20 @@ https://keijirodokyosai.github.io/
 * 他の火災保険の加入の有無
 
 メール本文には入力用ひな形を自動挿入します。
+
+### 共済クイズ
+
+* トップページのCTAボタンからGoogleフォームへ誘導する
+* ニュースページの関連ページからも誘導する
+* 外部リンクのため `target="_blank" rel="noopener"` を使用する
+
+### 春期拡大キャンペーン
+
+* ページ名：`news/spring-campaign.html`
+* ニュース配下の個別案内ページとして管理する
+* トップページのCTAボタンから誘導する
+* ニュースページの更新履歴・関連ページから誘導する
+* `sitemap.xml` に掲載する
 
 ---
 
@@ -332,7 +475,7 @@ https://keijirodokyosai.github.io/
 
 ### 役割
 
-書類ダウンロードページは、利用者が必要な申請書類・証明書類を迷わず探せるように整理したページです。
+書類ダウンロードページは、利用者が必要な申請書類・証明書類を迷わず探せるように整理したページです。  
 本ページでは、PDFを直接ダウンロードまたは表示できるようにします。
 
 ### ページ構成
@@ -433,7 +576,7 @@ kyufu-required-documents.pdf
 
 ### 命名の考え方
 
-ファイル名は、利用者向けではなく**管理者向け**の識別子として扱います。
+ファイル名は、利用者向けではなく**管理者向け**の識別子として扱います。  
 そのため、以下を優先します。
 
 * 短い
@@ -443,13 +586,13 @@ kyufu-required-documents.pdf
 
 ### 種別ルール
 
-| 種類            | 用途    |
-| ------------- | ----- |
-| `form`        | 申込書   |
-| `claim-form`  | 給付申請書 |
-| `certificate` | 証明書   |
-| `report`      | 報告書   |
-| `declaration` | 告知書   |
+| 種類 | 用途 |
+| --- | --- |
+| `form` | 申込書 |
+| `claim-form` | 給付申請書 |
+| `certificate` | 証明書 |
+| `report` | 報告書 |
+| `declaration` | 告知書 |
 
 ---
 
@@ -525,7 +668,7 @@ one-co.pdf
 
 ### 未配置PDF（今後実装予定）
 
-以下は2026-04-23時点で `/pdf/` に未配置です。
+以下は2026-04-30時点で `/pdf/` に未配置です。
 
 ```text
 oneco-form.pdf
@@ -689,6 +832,46 @@ kyufu-required-documents.pdf
 * hover背景：`#247248`
 * hover文字：`#fafffa`
 
+### トップページCTAボタン
+
+トップページのヒーロー下に配置するCTAボタンは、通常の `btn-primary` とは別に `.hero-sub-link` を使用します。
+
+* 背景：`#fff8d8`
+* 文字：`#123660`
+* 枠線：`#123660`
+* hover背景：`#123660`
+* hover文字：`#fff8d8`
+* 形状：角丸999px
+* 配置：縦並び
+* スマホでは横幅100%
+
+対象リンク：
+
+* 火災共済の見積依頼はこちら
+* 共済クイズの参加はこちら
+* 春期拡大キャンペーンの詳細はこちら
+
+### 春期拡大キャンペーン用UI
+
+春期拡大キャンペーンページでは、以下の専用クラスを使用します。
+
+* `.campaign-intro-box`
+* `.campaign-grid`
+* `.campaign-card`
+* `.campaign-card-featured`
+* `.campaign-card-header`
+* `.campaign-badge`
+* `.campaign-detail-list`
+* `.campaign-note`
+* `.campaign-alert`
+* `.campaign-contact-box`
+
+#### 役割
+
+* PDFの内容をWeb上で読みやすく整理する
+* キャンペーンごとにカード分けして視認性を高める
+* 対象者・条件・内容・注意事項を見分けやすくする
+
 ### ONE-CO共済アイコン
 
 * ファイル：`/icons/one-co.svg`
@@ -702,7 +885,7 @@ kyufu-required-documents.pdf
 
 ### インラインstyle禁止
 
-コンポーネント間の余白調整などで、HTMLへ直接 `style=""` を書かないようにします。
+コンポーネント間の余白調整などで、HTMLへ直接 `style=""` を書かないようにします。  
 調整が必要な場合は、必ずCSSクラスを追加して対応します。
 
 #### 禁止例
@@ -757,6 +940,7 @@ kyufu-required-documents.pdf
 * ヒーロー本文は最大幅を制御
 * 補助テキストあり
 * 解説文は `font-weight: 500;`
+* トップページでは3つのCTAボタンを配置する
 * 必要以上の装飾は避ける
 
 ### ボタン
@@ -767,6 +951,7 @@ kyufu-required-documents.pdf
 * 書類ダウンロードページでは案内系PDFのみボタン使用
 * 共済ページではパンフレットPDFの保存用ボタンとして使用
 * 必要書類導線では共通ボタンとして使用
+* トップページの主要導線は `.hero-sub-link` を使用する
 
 ### カード
 
@@ -774,6 +959,7 @@ kyufu-required-documents.pdf
 * hover時に軽く浮き上がる
 * 情報表示枠は別コンポーネントで管理
 * カード本文は行間1.5で調整
+* 春期拡大キャンペーンページではキャンペーンカードを使用する
 
 ### 詳細ページ本文
 
@@ -797,12 +983,12 @@ kyufu-required-documents.pdf
 * `downloads.html` の各種書類PDFは `target="_blank"`
 * 外部サイトは `target="_blank" rel="noopener"`
 
-この使い分けは、用途ごとの利便性を優先した意図的な設計です。
+この使い分けは、用途ごとの利便性を優先した意図的な設計です。  
 無理に統一しないことを前提とします。
 
 ### include化
 
-現時点では、`header` / `footer` のみ include 化を採用します。
+現時点では、`header` / `footer` のみ include 化を採用します。  
 本文セクションの過剰な include 化は採用しません。
 
 ### レイアウト構成
@@ -820,11 +1006,77 @@ kyufu-required-documents.pdf
 
 ---
 
+## SEO
+
+* `sitemap.xml`
+* `robots.txt`
+* JSON-LD対応
+* OGP対応
+* canonical対応
+* favicon対応
+
+### サイト名対策
+
+Google検索結果でサイト名が意図しない表示になる可能性があるため、以下を設定します。
+
+* `WebSite` 構造化データ
+* `Organization` 構造化データ
+* `og:site_name`
+* `application-name`
+* `apple-mobile-web-app-title`
+* favicon
+* canonical URL
+
+### canonicalルール
+
+トップページの canonical は、原則として `/index.html` ではなく `/` に統一します。
+
+```html
+<link rel="canonical" href="{{ '/' | absolute_url }}">
+```
+
+トップページ以外は、各ページのURLを canonical として使用します。
+
+### sitemap.xml
+
+サイトマップには、公開している主要ページを掲載します。
+
+春期拡大キャンペーンページを追加したため、以下を含めます。
+
+```xml
+<url>
+  <loc>https://keijirodokyosai.github.io/news/spring-campaign.html</loc>
+</url>
+```
+
+### robots.txt
+
+`robots.txt` には、サイトマップの場所を明記します。
+
+```text
+User-agent: *
+Allow: /
+
+Sitemap: https://keijirodokyosai.github.io/sitemap.xml
+```
+
+### Search Console
+
+サイト修正後は、Google Search Consoleで以下を確認します。
+
+* `sitemap.xml` を送信する
+* トップページをURL検査する
+* 公開URLをテストする
+* インデックス登録をリクエストする
+
+---
+
 ## 更新方法
 
 * HTML編集
 * CSS編集
 * PDF追加・差し替え
+* `sitemap.xml` 更新
 * `main` ブランチへ push
 * GitHub Pages に自動反映
 
@@ -850,6 +1102,22 @@ kyufu-required-documents.pdf
 3. `jitensha.html` で表裏2画像が表示されるか確認
 4. ボタンが `jitensha.pdf` を指しているか確認
 
+### ニュース更新手順
+
+1. `news.html` の更新履歴に新しい項目を追加する
+2. 新しい項目は上に追加する
+3. 必要に応じて関連ページにボタンを追加する
+4. 個別ページがある場合は `news/` フォルダ内に作成する
+5. `sitemap.xml` に個別ページURLを追加する
+
+### 春期拡大キャンペーン更新手順
+
+1. `news/spring-campaign.html` を更新する
+2. トップページのCTAリンクが正しいか確認する
+3. ニュースページの更新履歴・関連ページからリンクされているか確認する
+4. `sitemap.xml` にURLが含まれているか確認する
+5. スマホ表示でカードが1列表示になるか確認する
+
 ---
 
 ## 公開前チェック
@@ -860,6 +1128,8 @@ kyufu-required-documents.pdf
 * PDFがすべて `/pdf/` に存在するか
 * スペルミスがないか
 * リンク切れがないか
+* `sitemap.xml` に新規ページが追加されているか
+* トップページCTAのリンク先が正しいか
 
 ### 推奨
 
@@ -867,6 +1137,7 @@ kyufu-required-documents.pdf
 * PDFが正しく開くか確認
 * 表示名とPDF内容の一致確認
 * 案内ボタンの位置と文言が自然か確認
+* Search ConsoleでURL検査を行う
 
 ### 共済ページ追加チェック
 
@@ -876,28 +1147,27 @@ kyufu-required-documents.pdf
 * `jidosha.html` 以外で外部案内型構成になっていないか
 * 必要書類案内が欠けていないか
 
----
+### ニュース・キャンペーン追加チェック
 
-## SEO
-
-* `sitemap.xml`
-* `robots.txt`
-* JSON-LD対応
-* OGP対応
+* ニュース一覧に追加されているか
+* 更新履歴は新しいものが上になっているか
+* 個別ページのパンくずが自然か
+* トップページから必要な導線があるか
+* `sitemap.xml` に掲載されているか
 
 ---
 
 ## 管理
 
-京滋労働組合共済会
-専務理事
+京滋労働組合共済会  
+専務理事  
 横山雄介
 
 ---
 
 ## 備考
 
-本サイトは GitHub Pages + 静的HTML により、
+本サイトは GitHub Pages + 静的HTML により、  
 **長期安定運用・低コスト・高可読性** を目的として運用します。
 
 構造・命名・UIルールは、長期運用時の混乱を防ぐため、原則として統一を維持してください。
