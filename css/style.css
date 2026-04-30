@@ -338,6 +338,48 @@ a:focus-visible {
   color: #123456;
 }
 
+/* hero cta links */
+.hero-cta-links {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.hero-cta-links p {
+  margin: 0;
+}
+
+.hero-sub-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 340px;
+  min-height: 56px;
+  padding: 12px 24px;
+  border: 2px solid #123660;
+  border-radius: 999px;
+  background: #fff8d8;
+  color: #123660;
+  font-size: 1.05rem;
+  font-weight: 800;
+  line-height: 1.5;
+  text-align: center;
+  text-decoration: none;
+  box-shadow: 0 6px 16px rgba(18, 54, 96, 0.12);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.hero-sub-link:hover,
+.hero-sub-link:focus-visible {
+  background: #123660;
+  color: #fff8d8;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(18, 54, 96, 0.18);
+  text-decoration: none;
+}
+
 /* buttons */
 .btn {
   display: inline-flex;
@@ -751,6 +793,7 @@ a:focus-visible {
   line-height: 1.4;
 }
 
+.campaign-card h2,
 .campaign-card h3 {
   margin: 0;
   color: #123456;
@@ -1011,6 +1054,15 @@ a:focus-visible {
     font-size: 1.12rem;
   }
 
+  .hero-cta-links {
+    align-items: stretch;
+  }
+
+  .hero-sub-link {
+    width: 100%;
+    min-width: 0;
+  }
+
   .section {
     padding: 48px 0;
   }
@@ -1116,6 +1168,7 @@ a:focus-visible {
     padding: 20px;
   }
 
+  .campaign-card h2,
   .campaign-card h3 {
     font-size: 1.22rem;
   }
@@ -1214,34 +1267,6 @@ a:focus-visible {
   .kyosai-page {
     padding-left: 36px;
     padding-right: 36px;
-  }
-
-  .hero-cta-links {
-    margin-top: 24px;
-  }
-
-  .hero-cta-links p + p {
-    margin-top: 12px;
-  }
-
-  .hero-sub-link {
-    display: inline-block;
-    padding: 12px 18px;
-    border: 2px solid #247248;
-    border-radius: 12px;
-    background: #fffaf0;
-    color: #123456;
-    font-size: 1.05rem;
-    font-weight: 700;
-    line-height: 1.5;
-    text-decoration: none;
-  }
-
-  .hero-sub-link:hover,
-  .hero-sub-link:focus {
-    background: #247248;
-    color: #fafffa;
-    text-decoration: none;
   }
 
   .news-quiz-block {
