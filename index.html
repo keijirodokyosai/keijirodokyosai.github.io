@@ -1,7 +1,7 @@
 ---
 layout: site-shell
 title: 京滋労働組合共済会
-description: 京滋労働組合共済会の共済制度を紹介しています。火災共済、生命共済、医療共済、交通災害共済など、組合員の暮らしを守る各種共済制度をおすすめします。
+description: 京滋労働組合共済会の共済制度を紹介しています。火災共済、生命共済、医療共済、緩和型医療共済、交通災害共済など、組合員の暮らしを守る各種共済制度をおすすめします。
 permalink: /index.html
 structured_data_json_ld: >
   [
@@ -44,7 +44,7 @@ structured_data_json_ld: >
       "@type": "ItemList",
       "name": "共済制度一覧",
       "url": "{{ '/' | absolute_url }}",
-      "numberOfItems": 9,
+      "numberOfItems": 11,
       "itemListElement": [
         {
           "@type": "ListItem",
@@ -85,20 +85,32 @@ structured_data_json_ld: >
         {
           "@type": "ListItem",
           "position": 7,
+          "name": "ONE-CO共済",
+          "url": "{{ '/one-co.html' | absolute_url }}"
+        },
+        {
+          "@type": "ListItem",
+          "position": 8,
+          "name": "緩和型医療共済",
+          "url": "{{ '/kanwa-iryo.html' | absolute_url }}"
+        },
+        {
+          "@type": "ListItem",
+          "position": 9,
+          "name": "組織共済",
+          "url": "{{ '/soshiki.html' | absolute_url }}"
+        },
+        {
+          "@type": "ListItem",
+          "position": 10,
           "name": "自転車共済",
           "url": "{{ '/jitensha.html' | absolute_url }}"
         },
         {
           "@type": "ListItem",
-          "position": 8,
+          "position": 11,
           "name": "自動車共済",
           "url": "{{ '/jidosha.html' | absolute_url }}"
-        },
-        {
-          "@type": "ListItem",
-          "position": 9,
-          "name": "ONE-CO共済",
-          "url": "{{ '/one-co.html' | absolute_url }}"
         }
       ]
     }
@@ -224,6 +236,36 @@ structured_data_json_ld: >
         </p>
       </a>
 
+      <a href="{{ '/one-co.html' | relative_url }}" class="kyosai-card">
+        <div class="kyosai-card-header">
+          <img src="{{ '/icons/one-co.svg' | relative_url }}" alt="ONE-CO共済">
+          <h3>ONE-CO共済</h3>
+        </div>
+        <p>
+          30歳未満の方なら月500円の掛金で加入できる共済制度です。
+        </p>
+      </a>
+
+      <a href="{{ '/kanwa-iryo.html' | relative_url }}" class="kyosai-card">
+        <div class="kyosai-card-header">
+          <img src="{{ '/icons/kanwa-iryo.svg' | relative_url }}" alt="緩和型医療共済">
+          <h3>緩和型医療共済</h3>
+        </div>
+        <p>
+          健康状態に不安のある方にもご検討いただきやすい医療共済制度です。
+        </p>
+      </a>
+
+      <a href="{{ '/soshiki.html' | relative_url }}" class="kyosai-card">
+        <div class="kyosai-card-header">
+          <img src="{{ '/icons/soshiki.svg' | relative_url }}" alt="組織共済">
+          <h3>組織共済</h3>
+        </div>
+        <p>
+          組織での活動や加入者の暮らしを支えるための共済制度です。
+        </p>
+      </a>
+
       <a href="{{ '/jitensha.html' | relative_url }}" class="kyosai-card">
         <div class="kyosai-card-header">
           <img src="{{ '/icons/jitensha.svg' | relative_url }}" alt="自転車共済">
@@ -241,16 +283,6 @@ structured_data_json_ld: >
         </div>
         <p>
           自動車に関する事故や補償に備えるための共済制度です。
-        </p>
-      </a>
-
-      <a href="{{ '/one-co.html' | relative_url }}" class="kyosai-card">
-        <div class="kyosai-card-header">
-          <img src="{{ '/icons/one-co.svg' | relative_url }}" alt="ONE-CO共済">
-          <h3>ONE-CO共済</h3>
-        </div>
-        <p>
-          30歳未満の方なら月500円の掛金で加入できる共済制度です。
         </p>
       </a>
 
