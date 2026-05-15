@@ -814,7 +814,7 @@ a:focus-visible {
   border-radius: 999px;
   background: #ffffff;
   color: #123660;
-  border: 1px solid rgba(18, 54, 96, 0.22);
+  border: 2px solid rgba(18, 54, 96, 0.42);
   font-size: 0.96rem;
   font-weight: 700;
   line-height: 1.4;
@@ -848,9 +848,9 @@ a:focus-visible {
 }
 
 .campaign-card-featured {
-  background: #ffffff;
-  border-color: #bbeebb;
-  box-shadow: 0 12px 30px rgba(54, 168, 114, 0.15);
+  background: rgba(255, 250, 240, 0.97);
+  border-color: #e0e6ee;
+  box-shadow: 0 8px 22px rgba(15, 35, 60, 0.07);
 }
 
 .campaign-card-wide {
@@ -891,7 +891,7 @@ a:focus-visible {
 
 .campaign-detail-list div {
   display: grid;
-  grid-template-columns: 96px 1fr;
+  grid-template-columns: 5.2em 1fr;
   gap: 14px;
   padding: 13px 0;
   border-bottom: 1px solid #e8edf3;
@@ -907,9 +907,13 @@ a:focus-visible {
 }
 
 .campaign-detail-list dt {
+  width: 4em;
   color: #123660;
   font-weight: 800;
   line-height: 1.7;
+  text-align: justify;
+  text-align-last: justify;
+  text-justify: inter-character;
 }
 
 .campaign-detail-list dd {
