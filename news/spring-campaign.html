@@ -38,43 +38,51 @@ breadcrumb_json_ld: >
   </ol>
 </nav>
 
-<section class="hero">
+<section class="hero campaign-hero">
   <div class="container">
-    <div class="hero-content">
-      <div class="hero-eyebrow-wrap">
-        <p class="hero-eyebrow">春期拡大キャンペーン</p>
-      </div>
+    <div class="hero-content campaign-hero-content">
+      <p class="hero-eyebrow">春期拡大キャンペーン</p>
 
-      <div class="hero-title-wrap">
-        <h1>春期拡大キャンペーン</h1>
-      </div>
+      <h1>春期拡大キャンペーン</h1>
 
-      <div class="hero-lead-group">
-        <p class="lead">
-          組合員が利用できるキャンペーンと、組合活動を支援する援助制度をご案内します。
-        </p>
-        <p class="lead-message">
-          見積り・共済クイズ・新規/増口加入・共済説明会など、拡大の取り組みにぜひご活用ください。
-        </p>
-      </div>
+      <p class="lead">
+        組合員が利用できるキャンペーンと、組合活動を支援する援助制度をご案内します。
+      </p>
+
+      <p class="lead-message">
+        見積り・共済クイズ・新規／増口加入・共済説明会など、拡大の取り組みにぜひご活用ください。
+      </p>
     </div>
   </div>
 </section>
 
-<section class="section">
+<section class="section campaign-page">
   <div class="container">
 
     <div class="campaign-intro-box">
       <p>
         春期拡大キャンペーンでは、自然災害特約の掛金キャッシュバック、火災共済・自動車共済の見積りキャンペーン、
         共済クイズチャレンジ、プラスワンキャンペーン、共済説明会援助金などを実施しています。
-        対象者・条件・実施期間をご確認のうえ、ぜひご活用ください。
+      </p>
+      <p>
+        対象者・条件・実施期間をご確認のうえ、加入促進や組合員への案内にぜひご活用ください。
       </p>
     </div>
 
+    <nav class="campaign-anchor-box" aria-label="キャンペーン内メニュー">
+      <p class="campaign-anchor-title">掲載内容</p>
+      <ul class="campaign-anchor-list">
+        <li><a href="#natural-disaster">自然災害特約掛金1年分プレゼント</a></li>
+        <li><a href="#estimate-campaign">火災共済・自動車共済見積りキャンペーン</a></li>
+        <li><a href="#quiz-campaign">共済クイズチャレンジ</a></li>
+        <li><a href="#plus-one-campaign">プラスワンキャンペーン</a></li>
+        <li><a href="#meeting-support">共済説明会援助金</a></li>
+      </ul>
+    </nav>
+
     <div class="campaign-grid">
 
-      <article class="campaign-card campaign-card-featured">
+      <article class="campaign-card campaign-card-featured" id="natural-disaster">
         <div class="campaign-card-header">
           <span class="campaign-badge">2027年末まで</span>
           <h2>自然災害特約掛金<br>1年分プレゼント</h2>
@@ -102,7 +110,7 @@ breadcrumb_json_ld: >
         </p>
       </article>
 
-      <article class="campaign-card">
+      <article class="campaign-card" id="estimate-campaign">
         <div class="campaign-card-header">
           <span class="campaign-badge">通年</span>
           <h2>火災共済・自動車共済<br>見積りキャンペーン</h2>
@@ -137,7 +145,7 @@ breadcrumb_json_ld: >
         </p>
       </article>
 
-      <article class="campaign-card campaign-card-featured">
+      <article class="campaign-card campaign-card-featured" id="quiz-campaign">
         <div class="campaign-card-header">
           <span class="campaign-badge">6月末まで</span>
           <h2>共済クイズチャレンジ</h2>
@@ -173,9 +181,15 @@ breadcrumb_json_ld: >
         <p class="campaign-note">
           ※パンフレットを見れば答えられる難易度です。パンフレットの配布やホームページの案内をお願いします。
         </p>
+
+        <div class="campaign-card-button">
+          <a href="https://forms.gle/TbmxQt2C7KtV1Has8" target="_blank" rel="noopener" class="button primary">
+            共済クイズに挑戦する
+          </a>
+        </div>
       </article>
 
-      <article class="campaign-card">
+      <article class="campaign-card" id="plus-one-campaign">
         <div class="campaign-card-header">
           <span class="campaign-badge">拡大月間中</span>
           <h2>プラスワン（＋1）<br>キャンペーン</h2>
@@ -209,7 +223,7 @@ breadcrumb_json_ld: >
         </p>
       </article>
 
-      <article class="campaign-card">
+      <article class="campaign-card campaign-card-wide" id="meeting-support">
         <div class="campaign-card-header">
           <span class="campaign-badge">通年・当面の間</span>
           <h2>共済説明会援助金</h2>
