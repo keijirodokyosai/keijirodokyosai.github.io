@@ -739,13 +739,33 @@ a:focus-visible {
 }
 
 /* spring campaign page */
+.campaign-hero {
+  padding: 42px 0 56px;
+}
+
+.campaign-hero-content {
+  max-width: 920px;
+}
+
+.campaign-hero .hero-eyebrow {
+  margin: 0 0 14px;
+}
+
+.campaign-hero h1 {
+  margin-bottom: 18px;
+}
+
+.campaign-page {
+  padding-top: 44px;
+}
+
 .campaign-intro-box {
-  margin: 0 0 32px;
-  padding: 22px 26px;
-  background: #ffffff;
+  margin: 0 0 28px;
+  padding: 26px 30px;
+  background: rgba(255, 255, 255, 0.94);
   border: 1px solid #d9e3ef;
-  border-radius: 18px;
-  box-shadow: 0 8px 22px rgba(18, 54, 96, 0.06);
+  border-radius: 20px;
+  box-shadow: 0 10px 26px rgba(18, 54, 96, 0.08);
 }
 
 .campaign-intro-box p {
@@ -756,48 +776,111 @@ a:focus-visible {
   line-height: 1.9;
 }
 
+.campaign-intro-box p + p {
+  margin-top: 0.8em;
+}
+
+.campaign-anchor-box {
+  margin: 0 0 34px;
+  padding: 22px 24px;
+  background: #fff8d8;
+  border: 1px solid #ecd982;
+  border-radius: 18px;
+  box-shadow: 0 8px 20px rgba(18, 54, 96, 0.06);
+}
+
+.campaign-anchor-title {
+  margin: 0 0 12px;
+  color: #123660;
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.campaign-anchor-list {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+}
+
+.campaign-anchor-list a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #123660;
+  border: 1px solid rgba(18, 54, 96, 0.22);
+  font-size: 0.96rem;
+  font-weight: 700;
+  line-height: 1.4;
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.campaign-anchor-list a:hover,
+.campaign-anchor-list a:focus-visible {
+  background: #123660;
+  color: #fff8d8;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(18, 54, 96, 0.16);
+  text-decoration: none;
+}
+
 .campaign-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 24px;
-  margin-top: 32px;
+  gap: 26px;
+  margin-top: 0;
 }
 
 .campaign-card {
-  background: #fffaf0;
+  scroll-margin-top: 96px;
+  background: rgba(255, 250, 240, 0.97);
   border: 1px solid #e0e6ee;
-  border-radius: 18px;
-  padding: 24px;
-  box-shadow: 0 8px 20px rgba(15, 35, 60, 0.06);
+  border-radius: 20px;
+  padding: 26px;
+  box-shadow: 0 8px 22px rgba(15, 35, 60, 0.07);
 }
 
 .campaign-card-featured {
   background: #ffffff;
   border-color: #bbeebb;
-  box-shadow: 0 10px 26px rgba(54, 168, 114, 0.14);
+  box-shadow: 0 12px 30px rgba(54, 168, 114, 0.15);
+}
+
+.campaign-card-wide {
+  grid-column: 1 / -1;
 }
 
 .campaign-card-header {
-  margin-bottom: 18px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #e8edf3;
 }
 
 .campaign-badge {
   display: inline-block;
-  margin-bottom: 10px;
-  padding: 6px 14px;
+  margin-bottom: 12px;
+  padding: 7px 15px;
   border-radius: 999px;
   background: #e8f5ee;
   color: #247248;
-  font-size: 0.9rem;
+  font-size: 0.92rem;
   font-weight: 800;
   line-height: 1.4;
+  letter-spacing: 0.02em;
 }
 
 .campaign-card h2,
 .campaign-card h3 {
   margin: 0;
   color: #123456;
-  font-size: 1.35rem;
+  font-size: clamp(1.28rem, 2.2vw, 1.55rem);
   font-weight: 800;
   line-height: 1.45;
 }
@@ -808,27 +891,37 @@ a:focus-visible {
 
 .campaign-detail-list div {
   display: grid;
-  grid-template-columns: 92px 1fr;
-  gap: 12px;
-  padding: 12px 0;
-  border-top: 1px solid #e8edf3;
+  grid-template-columns: 96px 1fr;
+  gap: 14px;
+  padding: 13px 0;
+  border-bottom: 1px solid #e8edf3;
+}
+
+.campaign-detail-list div:first-child {
+  padding-top: 0;
+}
+
+.campaign-detail-list div:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
 }
 
 .campaign-detail-list dt {
   color: #123660;
   font-weight: 800;
+  line-height: 1.7;
 }
 
 .campaign-detail-list dd {
   margin: 0;
   color: #234567;
-  line-height: 1.75;
+  line-height: 1.8;
 }
 
 .campaign-note {
   margin: 18px 0 0;
   padding: 14px 16px;
-  border-radius: 12px;
+  border-radius: 14px;
   background: #fff8e6;
   color: #5f4500;
   font-size: 0.94rem;
@@ -839,26 +932,34 @@ a:focus-visible {
 .campaign-alert {
   margin: 18px 0 0;
   padding: 14px 16px;
-  border-radius: 12px;
+  border-radius: 14px;
   background: #eef5ff;
   color: #123660;
   font-size: 0.96rem;
-  font-weight: 700;
+  font-weight: 800;
   line-height: 1.8;
 }
 
+.campaign-card-button {
+  margin-top: 22px;
+  text-align: center;
+}
+
 .campaign-contact-box {
-  margin-top: 40px;
-  padding: 28px;
-  border-radius: 20px;
+  margin-top: 42px;
+  padding: 30px;
+  border-radius: 22px;
   background: #f3f7fb;
   border: 1px solid #d9e3ef;
   text-align: center;
+  box-shadow: 0 8px 22px rgba(18, 54, 96, 0.07);
 }
 
 .campaign-contact-box h2 {
   margin-top: 0;
+  margin-bottom: 14px;
   color: #123456;
+  font-size: clamp(1.45rem, 2.6vw, 1.9rem);
 }
 
 .campaign-contact-box p {
@@ -869,7 +970,7 @@ a:focus-visible {
 
 .campaign-contact-box .button-group,
 .campaign-contact-box .button-group-center {
-  margin-top: 20px;
+  margin-top: 22px;
 }
 
 .button {
@@ -885,7 +986,7 @@ a:focus-visible {
   line-height: 1.4;
   text-align: center;
   text-decoration: none;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
 .button.primary {
@@ -899,6 +1000,7 @@ a:focus-visible {
   background: #247248;
   color: #fafffa;
   transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(54, 168, 114, 0.28);
   text-decoration: none;
 }
 
@@ -947,6 +1049,10 @@ a:focus-visible {
 
   .campaign-grid {
     grid-template-columns: 1fr;
+  }
+
+  .campaign-card-wide {
+    grid-column: auto;
   }
 }
 
@@ -1159,9 +1265,34 @@ a:focus-visible {
     font-size: 0.9rem;
   }
 
+  .campaign-hero {
+    padding: 34px 0 44px;
+  }
+
+  .campaign-page {
+    padding-top: 36px;
+  }
+
   .campaign-intro-box {
     padding: 18px;
     border-radius: 16px;
+  }
+
+  .campaign-anchor-box {
+    padding: 18px;
+    border-radius: 16px;
+  }
+
+  .campaign-anchor-list {
+    display: block;
+  }
+
+  .campaign-anchor-list li + li {
+    margin-top: 10px;
+  }
+
+  .campaign-anchor-list a {
+    width: 100%;
   }
 
   .campaign-card {
