@@ -1431,6 +1431,51 @@ a:focus-visible {
   padding-bottom: 8px;
 }
 
+.soshiki-form-date-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 16px;
+  width: 1100px;
+  max-width: 100%;
+  margin: 0 auto 16px;
+  padding: 12px 16px;
+  background: #fff;
+  border: 1px solid #d8e8d8;
+  border-radius: 4px;
+}
+
+.soshiki-form-date-label {
+  font-weight: 700;
+  color: #123456;
+  white-space: nowrap;
+}
+
+.soshiki-form-date-input {
+  width: 10em;
+  margin: 0;
+  padding: 6px 10px;
+  border: 1px solid #c8d8c8;
+  border-radius: 4px;
+  background: #fff;
+  color: #123456;
+  font-family: "Meiryo", "Hiragino Sans", sans-serif;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+.soshiki-form-date-input:hover,
+.soshiki-form-date-input:focus {
+  border-color: #36a872;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(54, 168, 114, 0.25);
+}
+
+.soshiki-form-date-format {
+  font-size: 15px;
+  color: #567;
+}
+
 .soshiki-form-sheet {
   position: relative;
   width: 1100px;
@@ -1476,27 +1521,6 @@ a:focus-visible {
   border-color: #36a872;
   outline: none;
   box-shadow: 0 0 0 2px rgba(54, 168, 114, 0.25);
-}
-
-.soshiki-form-field--application-year {
-  left: 70.5%;
-  top: 7.2%;
-  width: 3.4%;
-  height: 3.2%;
-}
-
-.soshiki-form-field--application-month {
-  left: 75.4%;
-  top: 7.2%;
-  width: 4.2%;
-  height: 3.2%;
-}
-
-.soshiki-form-field--application-day {
-  left: 81.2%;
-  top: 7.2%;
-  width: 8%;
-  height: 3.2%;
 }
 
 .soshiki-form-field--union-name {

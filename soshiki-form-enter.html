@@ -54,6 +54,22 @@ breadcrumb_json_ld: >
   <section class="detail-section detail-section-last">
     <div class="soshiki-form-enter-wrap">
       <form class="soshiki-form-enter" action="#" method="post" novalidate>
+        <div class="soshiki-form-date-row">
+          <label class="soshiki-form-date-label" for="application-date">申込日</label>
+          <input
+            type="text"
+            id="application-date"
+            name="application-date"
+            class="soshiki-form-date-input"
+            inputmode="numeric"
+            autocomplete="off"
+            maxlength="10"
+            placeholder="yyyy/mm/dd"
+            aria-describedby="application-date-format"
+          >
+          <span id="application-date-format" class="soshiki-form-date-format">年：yyyy　月：mm　日：dd</span>
+        </div>
+
         <div class="soshiki-form-sheet" aria-label="組織共済申込書">
           <img
             class="soshiki-form-sheet-bg"
@@ -65,42 +81,6 @@ breadcrumb_json_ld: >
           >
 
           <div class="soshiki-form-fields">
-            <label class="sr-only" for="application-year">申込日（年・下2桁）</label>
-            <input
-              type="text"
-              id="application-year"
-              name="application-year"
-              class="soshiki-form-field soshiki-form-field--application-year"
-              inputmode="numeric"
-              maxlength="2"
-              placeholder="26"
-              aria-label="申込日・年（西暦20の下2桁）"
-            >
-
-            <label class="sr-only" for="application-month">申込日（月）</label>
-            <input
-              type="text"
-              id="application-month"
-              name="application-month"
-              class="soshiki-form-field soshiki-form-field--application-month"
-              inputmode="numeric"
-              maxlength="2"
-              placeholder="8"
-              aria-label="申込日・月"
-            >
-
-            <label class="sr-only" for="application-day">申込日（日）</label>
-            <input
-              type="text"
-              id="application-day"
-              name="application-day"
-              class="soshiki-form-field soshiki-form-field--application-day"
-              inputmode="numeric"
-              maxlength="2"
-              placeholder="10"
-              aria-label="申込日・日"
-            >
-
             <label class="sr-only" for="union-name">組合名</label>
             <input
               type="text"
@@ -119,3 +99,5 @@ breadcrumb_json_ld: >
     </p>
   </section>
 </section>
+
+<script src="{{ '/js/soshiki-form-enter.js' | relative_url }}"></script>
