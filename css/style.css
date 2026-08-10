@@ -1408,3 +1408,110 @@ a:focus-visible {
     margin-top: 48px;
   }
 }
+
+/* soshiki form enter (step 1: application date + union name) */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.soshiki-form-enter-section .detail-section {
+  max-width: none;
+}
+
+.soshiki-form-enter-wrap {
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+
+.soshiki-form-sheet {
+  position: relative;
+  width: 1100px;
+  max-width: none;
+  margin: 0 auto;
+  aspect-ratio: 841.68 / 595.2;
+  background: #fff;
+  box-shadow: 0 2px 12px rgba(18, 52, 86, 0.12);
+}
+
+.soshiki-form-sheet-bg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: fill;
+  pointer-events: none;
+  user-select: none;
+}
+
+.soshiki-form-fields {
+  position: absolute;
+  inset: 0;
+}
+
+.soshiki-form-field {
+  position: absolute;
+  margin: 0;
+  padding: 0 4px;
+  border: 1px solid transparent;
+  border-radius: 0;
+  background: rgba(255, 255, 255, 0.55);
+  color: #123456;
+  font-family: "Meiryo", "Hiragino Sans", sans-serif;
+  font-size: 16px;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.soshiki-form-field:hover,
+.soshiki-form-field:focus {
+  background: rgba(255, 255, 255, 0.92);
+  border-color: #36a872;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(54, 168, 114, 0.25);
+}
+
+.soshiki-form-field--application-year {
+  left: 70.5%;
+  top: 7.2%;
+  width: 3.4%;
+  height: 3.2%;
+}
+
+.soshiki-form-field--application-month {
+  left: 75.4%;
+  top: 7.2%;
+  width: 4.2%;
+  height: 3.2%;
+}
+
+.soshiki-form-field--application-day {
+  left: 81.2%;
+  top: 7.2%;
+  width: 8%;
+  height: 3.2%;
+}
+
+.soshiki-form-field--union-name {
+  left: 58.2%;
+  top: 15.2%;
+  width: 27.8%;
+  height: 3.6%;
+  text-align: left;
+  font-size: 18px;
+}
+
+.soshiki-form-enter-note {
+  width: 1100px;
+  max-width: 100%;
+  margin: 16px auto 0;
+  font-size: 16px;
+  color: #456;
+}

@@ -1,0 +1,121 @@
+---
+layout: site-shell
+title: 組織共済申込書（入力） | 京滋労働組合共済会
+description: 組織共済申込書をブラウザ上で入力できます。
+permalink: /soshiki-form-enter.html
+body_class: soshiki-form-enter-page
+breadcrumb_json_ld: >
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "ホーム",
+        "item": "{{ '/index.html' | absolute_url }}"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "書類ダウンロード",
+        "item": "{{ '/downloads.html' | absolute_url }}"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "組織共済申込書（入力）",
+        "item": "{{ '/soshiki-form-enter.html' | absolute_url }}"
+      }
+    ]
+  }
+---
+
+<nav class="breadcrumb" aria-label="パンくずリスト">
+  <ol class="breadcrumb-list">
+    <li><a href="{{ '/index.html' | relative_url }}">ホーム</a></li>
+    <li><a href="{{ '/downloads.html' | relative_url }}">書類ダウンロード</a></li>
+    <li aria-current="page">組織共済申込書（入力）</li>
+  </ol>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-content">
+      <h1>組織共済申込書（入力）</h1>
+      <p class="lead">
+        申込書の各欄に直接入力してください。入力欄は順次追加していきます。
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="kyosai-page soshiki-form-enter-section">
+  <section class="detail-section detail-section-last">
+    <div class="soshiki-form-enter-wrap">
+      <form class="soshiki-form-enter" action="#" method="post" novalidate>
+        <div class="soshiki-form-sheet" aria-label="組織共済申込書">
+          <img
+            class="soshiki-form-sheet-bg"
+            src="{{ '/images/soshiki-form-enter.png' | relative_url }}"
+            alt=""
+            width="1683"
+            height="1190"
+            decoding="async"
+          >
+
+          <div class="soshiki-form-fields">
+            <label class="sr-only" for="application-year">申込日（年・下2桁）</label>
+            <input
+              type="text"
+              id="application-year"
+              name="application-year"
+              class="soshiki-form-field soshiki-form-field--application-year"
+              inputmode="numeric"
+              maxlength="2"
+              placeholder="26"
+              aria-label="申込日・年（西暦20の下2桁）"
+            >
+
+            <label class="sr-only" for="application-month">申込日（月）</label>
+            <input
+              type="text"
+              id="application-month"
+              name="application-month"
+              class="soshiki-form-field soshiki-form-field--application-month"
+              inputmode="numeric"
+              maxlength="2"
+              placeholder="8"
+              aria-label="申込日・月"
+            >
+
+            <label class="sr-only" for="application-day">申込日（日）</label>
+            <input
+              type="text"
+              id="application-day"
+              name="application-day"
+              class="soshiki-form-field soshiki-form-field--application-day"
+              inputmode="numeric"
+              maxlength="2"
+              placeholder="10"
+              aria-label="申込日・日"
+            >
+
+            <label class="sr-only" for="union-name">組合名</label>
+            <input
+              type="text"
+              id="union-name"
+              name="union-name"
+              class="soshiki-form-field soshiki-form-field--union-name"
+              aria-label="組合名"
+            >
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <p class="soshiki-form-enter-note">
+      ※ 押印が必要な場合は、入力後に印刷してご捺印ください。
+    </p>
+  </section>
+</section>
