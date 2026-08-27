@@ -57,7 +57,7 @@ breadcrumb_json_ld: >
         <div class="soshiki-form-sheet" aria-label="組織共済申込書">
           <img
             class="soshiki-form-sheet-bg"
-            src="{{ '/images/soshiki-form-enter.png' | relative_url }}?v=20260827-date4"
+            src="{{ '/images/soshiki-form-enter.png' | relative_url }}?v=20260827-union2"
             alt=""
             width="1683"
             height="1190"
@@ -112,14 +112,16 @@ breadcrumb_json_ld: >
               </div>
             </div>
 
-            <label class="sr-only" for="union-name">組合名</label>
-            <input
-              type="text"
-              id="union-name"
-              name="union-name"
-              class="soshiki-form-field soshiki-form-field--union-name"
-              aria-label="組合名"
-            >
+            <div class="soshiki-form-union-name-group">
+              <label class="sr-only" for="union-name">組合名</label>
+              <input
+                type="text"
+                id="union-name"
+                name="union-name"
+                class="soshiki-form-field soshiki-form-field--union-name"
+                aria-label="組合名"
+              >
+            </div>
           </div>
         </div>
       </form>

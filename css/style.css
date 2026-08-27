@@ -1538,13 +1538,28 @@ a:focus-visible {
   user-select: none;
 }
 
-.soshiki-form-field--union-name {
-  left: 58.2%;
-  top: 15.2%;
-  width: 27.8%;
-  height: 3.6%;
+.soshiki-form-union-name-group {
+  position: absolute;
+  left: calc(58.2% - 0.1cm);
+  right: calc(8.73% + 0.1cm);
+  width: auto;
+  top: 13.01%;
+  height: 5.4%;
+  display: flex;
+  align-items: flex-end;
+  box-sizing: border-box;
+}
+
+.soshiki-form-union-name-group .soshiki-form-field--union-name {
+  position: static;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  padding: 4px 8px 5px;
+  box-sizing: border-box;
   text-align: left;
-  font-size: 18px;
+  font-size: 20px;
+  line-height: 1.1;
 }
 
 .soshiki-form-enter-note {
