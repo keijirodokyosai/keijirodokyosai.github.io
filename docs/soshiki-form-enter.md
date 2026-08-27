@@ -108,9 +108,29 @@ union-master.json の name と完全一致？
 
 kyosai-system（Access）から出力。Web は fetch して照合のみ。
 
-### 6.1 エクスポート元（現行 DB）
+### 6.1 関連テーブル（整理）
 
-**`SetItem` は廃止済み。** 次の経路を使う。
+**組織共済申込書の入力 HTML および `union-master.json` 出力で参照するテーブル**
+
+| テーブル | 用途 |
+|----------|------|
+| **`Subbranch`** | 共済会（組合）。組合名・産別・支部・分会。**`CollectiveKyosaiId`** で採用パッケージを指す |
+| **`CollectiveKyosai`** | 組織共済パッケージ（組合員一律の加入セット） |
+| **`CollectiveKyosaiItem`** | パッケージ内訳（`KyosaiId` + 口数 `Units`） |
+| **`Kyosai`** | 種目名（`KyosaiName`）、掛金（`Premi`）、分類（`CategoryId`） |
+
+**この入力 HTML では使わないテーブル**
+
+| テーブル | 理由 |
+|----------|------|
+| **`UnionMemberKyosai`** | 組合員ごとの加入契約。申込書入力時点では未確定の個人データ |
+| **`MemberKyosai`** | 組合員ごとの共済内訳契約。同上 |
+
+申込書 Web 入力が扱うのは **組合（Subbranch）単位のマスタ**（その組合が採用する組織共済パッケージの内容）であり、組合員個人の加入状態は対象外。
+
+### 6.2 エクスポート経路
+
+**`SetItem` は廃止済み。** 次の経路で出力する。
 
 ```text
 Subbranch（KyosaikaiName, industry, branch, subbranch, CollectiveKyosaiId）
@@ -119,7 +139,7 @@ Subbranch（KyosaikaiName, industry, branch, subbranch, CollectiveKyosaiId）
   → Kyosai（KyosaiName, Premi, CategoryId）
 ```
 
-### 6.2 1 組合あたりのフィールド
+### 6.3 1 組合あたりのフィールド
 
 | JSON フィールド | 意味 |
 |----------------|------|
@@ -130,7 +150,7 @@ Subbranch（KyosaikaiName, industry, branch, subbranch, CollectiveKyosaiId）
 | `kakekinPerPerson` | 1 人あたり月額掛金 = **Σ (Premi × Units)** |
 | `kyosai[]` | 加入共済の内訳 |
 
-### 6.3 `kyosai[]` の各要素
+### 6.4 `kyosai[]` の各要素
 
 | フィールド | 意味 |
 |-----------|------|
@@ -141,7 +161,7 @@ Subbranch（KyosaikaiName, industry, branch, subbranch, CollectiveKyosaiId）
 | `premi` | 1 口あたり掛金 |
 | `formKey` | 申込書欄 ID（`form-kyosai-map.json` と対応。エクスポート時または Web 側で付与） |
 
-### 6.4 サンプル
+### 6.5 サンプル
 
 ```json
 {
@@ -170,7 +190,7 @@ Subbranch（KyosaikaiName, industry, branch, subbranch, CollectiveKyosaiId）
 }
 ```
 
-### 6.5 ビジネスルール
+### 6.6 ビジネスルール
 
 * 組合員は **全員一律** 同内容で加入
 * 口数は **共済種目ごと** の契約口数
@@ -215,7 +235,7 @@ VBA 名は申込書反映には **使わない**。`CategoryId` または `Kyosa
 
 | # | 内容 |
 |---|------|
-| 1 | `Subbranch` → `CollectiveKyosaiId` 経由で内訳を取得するエクスポート実装 |
+| 1 | `Subbranch.CollectiveKyosaiId` 起点で内訳を取得するエクスポート実装（`UnionMemberKyosai` / `MemberKyosai` は参照しない） |
 | 2 | `union-master.json` 出力 |
 | 3 | 1 組合分で `kakekinPerPerson = Σ(Premi×Units)` を検算 |
 | 4 | 全組合で出力テスト |
