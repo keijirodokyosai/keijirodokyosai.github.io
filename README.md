@@ -13,7 +13,7 @@
 https://keijirodokyosai.github.io/
 ```
 
-**最終更新日：2026-04-30**
+**最終更新日：2026-08-27**
 
 ---
 
@@ -111,6 +111,8 @@ https://keijirodokyosai.github.io/
 * JavaScript（最小限）
 * Jekyll（layout / include / FrontMatter のみ使用）
 
+ローカルプレビューは `jekyll serve`（生成物 `_site/` は `.gitignore` で除外）。
+
 ---
 
 ## ホスティング
@@ -126,12 +128,16 @@ https://keijirodokyosai.github.io/
 
 ```text
 /
+├─ .gitignore
 ├─ _layouts/
 │  ├─ base.html
 │  └─ site-shell.html
 ├─ _includes/
 │  ├─ header.html
 │  └─ footer.html
+├─ docs/
+│  └─ soshiki-form-enter.md
+├─ data/                    … union-master.json 等（未配置）
 ├─ index.html
 ├─ kasai.html
 ├─ iryo.html
@@ -143,6 +149,7 @@ https://keijirodokyosai.github.io/
 ├─ jidosha.html
 ├─ one-co.html
 ├─ downloads.html
+├─ soshiki-form-enter.html  … 組織共済申込書（ブラウザ入力）
 ├─ faq.html
 ├─ news.html
 ├─ news/
@@ -154,7 +161,8 @@ https://keijirodokyosai.github.io/
 ├─ css/
 │  └─ style.css
 ├─ js/
-│  └─ script.js
+│  ├─ script.js
+│  └─ soshiki-form-enter.js
 ├─ other_pages/
 │  └─ estimate.html
 ├─ images/
@@ -179,6 +187,7 @@ https://keijirodokyosai.github.io/
 | `jidosha.html` | 自動車共済 | - | 外部リンク |
 | `one-co.html` | ONE-CO共済 | `one-co.png` | `one-co.pdf` |
 | `downloads.html` | 書類ダウンロード | - | 各種PDF |
+| `soshiki-form-enter.html` | 組織共済申込書（ブラウザ入力・PC向け） | `soshiki-form-enter.png` | - |
 | `faq.html` | よくある質問 | - | - |
 | `news.html` | お知らせ | - | - |
 | `news/spring-campaign.html` | 春期拡大キャンペーン | - | - |
@@ -188,7 +197,23 @@ https://keijirodokyosai.github.io/
 
 ※ `estimate.html` は実ファイル `other_pages/estimate.html` を `permalink: /estimate.html` で公開しています。  
 ※ `news/spring-campaign.html` はニュース配下の個別案内ページです。グローバルナビには直接追加せず、トップページ・ニュースページから誘導します。  
-※ `soshiki.html` は単体HTMLの補助ページです（現時点でグローバルナビ・`sitemap.xml` には未掲載）。
+※ `soshiki.html` は単体HTMLの補助ページです（現時点でグローバルナビ・`sitemap.xml` には未掲載）。  
+※ 組織共済申込書のブラウザ入力は `soshiki-form-enter.html`。設計・今後の実装は [`docs/soshiki-form-enter.md`](docs/soshiki-form-enter.md) を参照。
+
+---
+
+## 組織共済申込書（ブラウザ入力）
+
+`downloads.html` 最下部から `/soshiki-form-enter.html` へ誘導する。**PC のみ**想定（スマホ非推奨）。
+
+| 項目 | 内容 |
+|------|------|
+| 入力方式 | 申込書 PNG を背景に、HTML 入力欄を重ねる |
+| 完了済み | 申込日（年・月・日）、組合名枠 |
+| マスタ | `data/union-master.json`（kyosai-system が出力・UI には一覧非表示） |
+| 組合名記憶 | ブラウザ localStorage（PC ごと） |
+
+詳細仕様（Enter 判定、ダイアログ、マスタ JSON、申込書欄マッピング）は **[docs/soshiki-form-enter.md](docs/soshiki-form-enter.md)** に記載。
 
 ---
 
@@ -607,6 +632,7 @@ kyufu-required-documents.pdf
 kasai-form.pdf
 kojin-form.pdf
 soshiki-form.pdf
+soshiki-form-enter.pdf   … ブラウザ入力ページ背景の原本
 oneco-form.pdf
 jitensha-form.pdf
 kanwa-iryo-form.pdf
