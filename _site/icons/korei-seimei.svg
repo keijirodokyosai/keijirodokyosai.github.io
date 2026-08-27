@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+viewBox="0 0 72 72"
+width="72"
+height="72"
+style="color:#1D2088">
+
+<rect x="6" y="6" width="60" height="60" rx="18" fill="currentColor"/>
+
+<path fill="#ffffff" d="
+M36 52
+L22 38
+C18 33.6 19.2 26.8 25.2 25.2
+C29.6 24 33.4 26.2 35.7 29.6
+L36 30
+L36.3 29.6
+C38.6 26.2 42.4 24 46.8 25.2
+C52.8 26.8 54 33.6 50 38
+L36 52
+Z"/>
+
+</svg>
