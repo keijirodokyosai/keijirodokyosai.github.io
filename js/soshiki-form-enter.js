@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
   initApplicationDate();
   initUnionMaster();
+  initMemberRows();
 });
 
 var KUCHI_FIELD_IDS = {

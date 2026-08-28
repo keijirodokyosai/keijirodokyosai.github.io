@@ -1,0 +1,202 @@
+{% comment %}
+  組合員入力欄（最大5名）。位置は css/style.css の .soshiki-form-member-* で調整。
+  DEV: placeholder / .soshiki-form-dev-marker は配置確認用。本番前に削除する。
+{% endcomment %}
+<div class="soshiki-form-member-rows" aria-label="組合員入力（最大5名）">
+  {% for row in (1..5) %}
+  <div
+    class="soshiki-form-member-row"
+    data-row="{{ row }}"
+    style="--member-row-index: {{ row | minus: 1 }};"
+  >
+    <div class="soshiki-form-idou-group" role="group" aria-label="{{ row }}行目・異動内容">
+      <input type="hidden" id="member-{{ row }}-idou" name="member-{{ row }}-idou" value="">
+      <button
+        type="button"
+        class="soshiki-form-idou-btn soshiki-form-idou-btn--shinki"
+        data-idou="shinki"
+        data-row="{{ row }}"
+        aria-pressed="false"
+        aria-label="{{ row }}行目・新規"
+      ><span class="soshiki-form-dev-marker" aria-hidden="true">新{{ row }}</span><span class="sr-only">新規</span></button>
+      <button
+        type="button"
+        class="soshiki-form-idou-btn soshiki-form-idou-btn--kaiyaku"
+        data-idou="kaiyaku"
+        data-row="{{ row }}"
+        aria-pressed="false"
+        aria-label="{{ row }}行目・解約"
+      ><span class="soshiki-form-dev-marker" aria-hidden="true">解{{ row }}</span><span class="sr-only">解約</span></button>
+      <button
+        type="button"
+        class="soshiki-form-idou-btn soshiki-form-idou-btn--henkou"
+        data-idou="henkou"
+        data-row="{{ row }}"
+        aria-pressed="false"
+        aria-label="{{ row }}行目・変更"
+      ><span class="soshiki-form-dev-marker" aria-hidden="true">変{{ row }}</span><span class="sr-only">変更</span></button>
+    </div>
+
+    <div class="soshiki-form-member-code-group" role="group" aria-label="{{ row }}行目・組合員コード">
+      {% for digit in (1..6) %}
+      <input
+        type="text"
+        id="member-{{ row }}-code-{{ digit }}"
+        name="member-{{ row }}-code-{{ digit }}"
+        class="soshiki-form-field soshiki-form-member-code-digit"
+        data-row="{{ row }}"
+        data-digit-index="{{ digit }}"
+        inputmode="numeric"
+        autocomplete="off"
+        maxlength="1"
+        placeholder="ｺ{{ digit }}"
+        aria-label="{{ row }}行目・組合員コード {{ digit }}桁目"
+      >
+      {% endfor %}
+    </div>
+
+    <label class="sr-only" for="member-{{ row }}-kana-sei">{{ row }}行目・カナ姓</label>
+    <input
+      type="text"
+      id="member-{{ row }}-kana-sei"
+      name="member-{{ row }}-kana-sei"
+      class="soshiki-form-field soshiki-form-member-field soshiki-form-member-kana-sei"
+      data-halfwidth-kana
+      autocomplete="off"
+      placeholder="ｾｲ{{ row }}"
+      aria-label="{{ row }}行目・カナ姓"
+    >
+
+    <label class="sr-only" for="member-{{ row }}-kana-mei">{{ row }}行目・カナ名</label>
+    <input
+      type="text"
+      id="member-{{ row }}-kana-mei"
+      name="member-{{ row }}-kana-mei"
+      class="soshiki-form-field soshiki-form-member-field soshiki-form-member-kana-mei"
+      data-halfwidth-kana
+      autocomplete="off"
+      placeholder="ﾒｲ{{ row }}"
+      aria-label="{{ row }}行目・カナ名"
+    >
+
+    <label class="sr-only" for="member-{{ row }}-kanji-sei">{{ row }}行目・漢字姓</label>
+    <input
+      type="text"
+      id="member-{{ row }}-kanji-sei"
+      name="member-{{ row }}-kanji-sei"
+      class="soshiki-form-field soshiki-form-member-field soshiki-form-member-kanji-sei"
+      autocomplete="off"
+      placeholder="姓{{ row }}"
+      aria-label="{{ row }}行目・漢字姓"
+    >
+
+    <label class="sr-only" for="member-{{ row }}-kanji-mei">{{ row }}行目・漢字名</label>
+    <input
+      type="text"
+      id="member-{{ row }}-kanji-mei"
+      name="member-{{ row }}-kanji-mei"
+      class="soshiki-form-field soshiki-form-member-field soshiki-form-member-kanji-mei"
+      autocomplete="off"
+      placeholder="名{{ row }}"
+      aria-label="{{ row }}行目・漢字名"
+    >
+
+    <label class="sr-only" for="member-{{ row }}-birth-year">{{ row }}行目・生年月日・年</label>
+    <input
+      type="text"
+      id="member-{{ row }}-birth-year"
+      name="member-{{ row }}-birth-year"
+      class="soshiki-form-field soshiki-form-member-field soshiki-form-member-birth-year"
+      data-halfwidth-numeric
+      data-max-digits="4"
+      data-birth-part
+      inputmode="numeric"
+      autocomplete="off"
+      maxlength="4"
+      placeholder="年{{ row }}"
+      aria-label="{{ row }}行目・生年月日・年（西暦4桁）"
+    >
+
+    <label class="sr-only" for="member-{{ row }}-birth-month">{{ row }}行目・生年月日・月</label>
+    <input
+      type="text"
+      id="member-{{ row }}-birth-month"
+      name="member-{{ row }}-birth-month"
+      class="soshiki-form-field soshiki-form-member-field soshiki-form-member-birth-month"
+      data-halfwidth-numeric
+      data-max-digits="2"
+      data-pad-2
+      data-birth-part
+      inputmode="numeric"
+      autocomplete="off"
+      maxlength="2"
+      placeholder="月{{ row }}"
+      aria-label="{{ row }}行目・生年月日・月"
+    >
+
+    <label class="sr-only" for="member-{{ row }}-birth-day">{{ row }}行目・生年月日・日</label>
+    <input
+      type="text"
+      id="member-{{ row }}-birth-day"
+      name="member-{{ row }}-birth-day"
+      class="soshiki-form-field soshiki-form-member-field soshiki-form-member-birth-day"
+      data-halfwidth-numeric
+      data-max-digits="2"
+      data-pad-2
+      data-birth-part
+      inputmode="numeric"
+      autocomplete="off"
+      maxlength="2"
+      placeholder="日{{ row }}"
+      aria-label="{{ row }}行目・生年月日・日"
+    >
+
+    <div class="soshiki-form-gender-group" role="radiogroup" aria-label="{{ row }}行目・性別">
+      <input type="hidden" id="member-{{ row }}-gender" name="member-{{ row }}-gender" value="">
+      <button
+        type="button"
+        class="soshiki-form-gender-btn soshiki-form-gender-btn--male"
+        data-gender="1"
+        data-row="{{ row }}"
+        aria-pressed="false"
+        aria-label="{{ row }}行目・男"
+      ><span class="soshiki-form-dev-marker" aria-hidden="true">男{{ row }}</span><span class="sr-only">男</span></button>
+      <button
+        type="button"
+        class="soshiki-form-gender-btn soshiki-form-gender-btn--female"
+        data-gender="2"
+        data-row="{{ row }}"
+        aria-pressed="false"
+        aria-label="{{ row }}行目・女"
+      ><span class="soshiki-form-dev-marker" aria-hidden="true">女{{ row }}</span><span class="sr-only">女</span></button>
+    </div>
+
+    <label class="sr-only" for="member-{{ row }}-zip">{{ row }}行目・郵便番号</label>
+    <input
+      type="text"
+      id="member-{{ row }}-zip"
+      name="member-{{ row }}-zip"
+      class="soshiki-form-field soshiki-form-member-field soshiki-form-member-zip"
+      data-zip-field
+      data-zip-lookup
+      data-row="{{ row }}"
+      inputmode="numeric"
+      autocomplete="postal-code"
+      maxlength="8"
+      placeholder="郵{{ row }}"
+      aria-label="{{ row }}行目・郵便番号（123-4567）"
+    >
+
+    <label class="sr-only" for="member-{{ row }}-address">{{ row }}行目・住所</label>
+    <input
+      type="text"
+      id="member-{{ row }}-address"
+      name="member-{{ row }}-address"
+      class="soshiki-form-field soshiki-form-member-field soshiki-form-member-address"
+      autocomplete="off"
+      placeholder="住所{{ row }}"
+      aria-label="{{ row }}行目・住所"
+    >
+  </div>
+  {% endfor %}
+</div>

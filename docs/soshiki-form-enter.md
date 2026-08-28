@@ -38,7 +38,7 @@
 |------|------|
 | 申込日 | 年（4 桁）・月・日。ページ読込時に今日の日付を JS でセット |
 | 組合名 | 背景上に入力枠配置（日付欄と同系統の枠線・サイズ） |
-| 背景 PNG | `pdf/soshiki-form-enter.pdf` から生成。㊞・不要な線を除去済み |
+| 背景 PNG | `pdf/soshiki-form-enter.pdf` から生成。㊞除去済み。組合員欄の郵便番号用 **背景ハイフン** 除去済み（§9.7） |
 | `.gitignore` | `_site/` 等の Jekyll 生成物を除外 |
 | ローカルプレビュー | `scripts/serve-open.ps1`（Jekyll 起動・URL 表示） |
 | マスタ設計 | 本ドキュメント・`data/form-kyosai-map.json`（確定） |
@@ -47,8 +47,24 @@
 | 共済口欄（7）・掛金 | HTML 配置完了（配置確認用仮表示あり） |
 
 ### 未実装
-* 組合名プルダウン（localStorage）
+
+* 組合員各欄の **CSS 位置の最終調整**（現状は初期値・要微調整）
+* 組合名プルダウン（localStorage）・追加確認・削除 UI
+* `validateSoshikiForm()` の確認画面・送信ボタンへの **配線**
+* 開発用仮表示（§14）の **本番前削除**
 * 確認画面・PDF 出力・メール送信
+* 本番用 `union-master.json` の kyosai-system からの出力・配置
+
+### 完了（組合員入力・2026-08-28）
+
+| 項目 | 内容 |
+|------|------|
+| 異動内容 | 5行×（新規／解約／変更）トグル。実線枠・再クリックで解除 |
+| 組合員各欄 | コード・氏名・生年月日・性別・郵便番号・住所（HTML/CSS 配置済み） |
+| 半角制限 | カナ・コード・生年月日・郵便番号 |
+| blur 処理 | コード左0埋め、月日2桁化、生年月日の実在日チェック |
+| 郵便番号 | zipcloud API で住所自動入力（任意） |
+| 必須チェック | `validateSoshikiForm()`（確認画面用・未配線） |
 
 ---
 
@@ -57,6 +73,8 @@
 ```text
 soshiki-form-enter.html      … 入力ページ
 js/soshiki-form-enter.js     … 日付初期値・マスタ連携（Enter 判定・口・掛金反映）
+js/soshiki-form-members.js   … 組合員5行・異動トグル・半角制限・郵便番号検索
+_includes/soshiki-form-member-rows.html … 組合員行マークアップ
 css/style.css                … .soshiki-form-* オーバーレイ用
 images/soshiki-form-enter.png
 pdf/soshiki-form-enter.pdf   … 原本 PDF
@@ -278,11 +296,75 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 
 ---
 
-## 9. union-master.json 仕様
+## 9. 組合員入力（最大5名・確定仕様）
+
+1画面に **5行** まで入力できる。完全に空の行は無視する。
+
+### 9.1 異動内容
+
+| 項目 | 内容 |
+|------|------|
+| 選択肢 | **新規** / **解約** / **変更**（1行につき0または1つ） |
+| 操作 | クリックで実線の楕円枠。別の選択肢で切替。同じ選択肢の再クリックで解除 |
+| 値 | `shinki` / `kaiyaku` / `henkou`（hidden input） |
+
+### 9.2 必須項目
+
+**申込全体:** 申込日（年・月・日）、組合名（マスタ一致済み）
+
+**行に1項目でも入力がある場合:**
+
+| 必須 | 任意 |
+|------|------|
+| 異動内容、漢字姓・名、半角カナ姓・名、生年月日（年4桁・月・日）、性別 | 組合員コード、住所（〒・番地） |
+
+### 9.3 半角・正規化（blur 時）
+
+| 欄 | 入力制限 | blur 時 |
+|----|----------|---------|
+| カナ姓・名 | 半角カナのみ（全角カナ・ひらがな・漢字は除去） | — |
+| 組合員コード | 半角数字、最大6桁 | 左0埋めで6桁表示 |
+| 生年月日 | 半角数字。全角数字は半角に変換 | 月・日は2桁化。年・月・日が揃えば実在日チェック |
+| 郵便番号 | 半角数字7桁、表示は `123-4567` | 7桁そろえば zipcloud で住所候補を自動入力 |
+
+### 9.4 性別・郵便番号
+
+* 性別: 男（`1`）/ 女（`2`）。再クリックで解除可
+* 郵便番号: **1枠**・値は `123-4567` 形式。7桁連続入力可
+* 郵便番号 API: `https://zipcloud.ibsnet.co.jp/api/search?zipcode=`（方式1・外部API。API には数字7桁のみ渡す）
+
+### 9.5 CSS 配置（初期値・要調整）
+
+| 変数 | 値 |
+|------|-----|
+| 1行目 `top` | `37.45%`（PNG 実測） |
+| 行間 | `7.66%` |
+| 行の高さ | `7.55%` |
+
+### 9.6 バリデーション
+
+確認画面・送信前に `validateSoshikiForm()`（`js/soshiki-form-members.js`）を呼ぶ。現状は **関数のみ実装**（UI 未配線）。
+
+### 9.7 背景 PNG の郵便番号ハイフン除去（2026-08-28 完了）
+
+旧来紙の `〒 [___]-[____]` 形式に合わせて PDF 由来 PNG に印刷されていた **背景の `-`（ハイフン）** を、HTML 入力欄の **1 枠郵便番号**（§9.4）に合わせて除去した。
+
+| 項目 | 内容 |
+|------|------|
+| 対象ファイル | `images/soshiki-form-enter.png` |
+| 除去対象 | 各組合員行の住所欄・郵便番号行に印刷されていた横棒（**画面中央寄り・郵便番号入力枠の直左**） |
+| 画像上の位置（1684×1191px 基準） | 横 **約 71.0%〜71.8%**、縦は行ごとに **y ≈ 465 / 556 / 648 / 739 / 831** 付近（±2px） |
+| 触れないもの | **〒**（約 60.9%）、縦罫線（約 64.7%）、住所欄の横罫線、その他の枠線 |
+| 注意 | **62〜64% 付近**にも旧 2 枠間の小さな `-` があるが、画面上で目立つのは **71% 付近** の方。CSS オーバーレイで隠す方式は使わない（PNG を直接編集する） |
+| キャッシュ | `soshiki-form-enter.html` の PNG URL にクエリ（例 `?v=20260828-hyphen-71pct`）。変更後は **Ctrl+Shift+R** |
+
+---
+
+## 10. union-master.json 仕様
 
 kyosai-system（Access）から出力。Web は fetch して照合のみ。
 
-### 9.1 関連テーブル
+### 10.1 関連テーブル
 
 **参照するテーブル**
 
@@ -295,7 +377,7 @@ kyosai-system（Access）から出力。Web は fetch して照合のみ。
 
 **使わないテーブル:** `UnionMemberKyosai` / `MemberKyosai`（個人の加入契約）
 
-### 9.2 エクスポート経路
+### 10.2 エクスポート経路
 
 **`SetItem` は廃止済み。**
 
@@ -306,7 +388,7 @@ Subbranch（KyosaikaiName, industry, branch, subbranch, CollectiveKyosaiId）
   → Kyosai（KyosaiName, Premi）
 ```
 
-### 9.3 1 組合あたりのフィールド
+### 10.3 1 組合あたりのフィールド
 
 | JSON フィールド | 意味 |
 |----------------|------|
@@ -317,7 +399,7 @@ Subbranch（KyosaikaiName, industry, branch, subbranch, CollectiveKyosaiId）
 | `kakekinPerPerson` | 1 人あたり月額掛金 = **Σ (Premi × Units)**（エクスポート時に確定） |
 | `kyosai[]` | 加入共済の内訳 |
 
-### 9.4 `kyosai[]` の各要素（Web が使用するもの）
+### 10.4 `kyosai[]` の各要素（Web が使用するもの）
 
 | フィールド | 必須 | 意味 |
 |-----------|------|------|
@@ -328,7 +410,7 @@ Subbranch（KyosaikaiName, industry, branch, subbranch, CollectiveKyosaiId）
 
 `categoryId` / `minorCategory` は Access 内部用としてよいが、**Web の口欄反映では使わない**。
 
-### 9.5 サンプル
+### 10.5 サンプル
 
 ```json
 {
@@ -355,14 +437,14 @@ Subbranch（KyosaikaiName, industry, branch, subbranch, CollectiveKyosaiId）
 }
 ```
 
-### 9.6 ビジネスルール
+### 10.6 ビジネスルール
 
 * 組合員は **全員一律** 同内容で加入
 * 申込書の掛金欄 1 つ = 組織共済全体の **1 人あたり月額**
 
 ---
 
-## 10. form-kyosai-map.json
+## 11. form-kyosai-map.json
 
 機械可読な定義は [`data/form-kyosai-map.json`](../data/form-kyosai-map.json) を正とする。
 
@@ -377,7 +459,7 @@ Subbranch（KyosaikaiName, industry, branch, subbranch, CollectiveKyosaiId）
 
 ---
 
-## 11. kyosai-system 側の作業
+## 12. kyosai-system 側の作業
 
 | # | 内容 |
 |---|------|
@@ -392,16 +474,19 @@ Subbranch（KyosaikaiName, industry, branch, subbranch, CollectiveKyosaiId）
 
 ---
 
-## 12. Web 側の今後（実装順）
+## 13. Web 側の今後（実装順）
 
 1. ~~産別・支部・分会の入力枠を背景に追加~~ → **完了**
 2. ~~`data/union-master.json` を受け取り、Enter 判定・コード・口欄・掛金反映~~ → **完了**
-3. 組合名プルダウン（localStorage）・追加確認・削除 UI
-4. 確認画面・PDF 出力・メール送信（任意・後回し可）
+3. ~~組合員5行（異動内容・氏名・生年月日・性別・住所）・半角制限・郵便番号検索~~ → **完了**（位置は要微調整）
+4. ~~背景 PNG の郵便番号ハイフン除去~~ → **完了**（§9.7）
+5. 組合員欄 CSS の最終調整・開発用仮表示の削除
+6. 組合名プルダウン（localStorage）・追加確認・削除 UI
+7. `validateSoshikiForm()` の配線 → 確認画面・PDF 出力・メール送信（任意・後回し可）
 
 ---
 
-## 13. ローカルプレビュー
+## 14. ローカルプレビュー
 
 ```powershell
 .\scripts\serve-open.ps1
@@ -440,11 +525,24 @@ Jekyll をバックグラウンドで起動し、プレビュー URL を表示�
 | 総合共済 | 総 |
 | 掛金 | 金 |
 
+**組合員5行**（`_includes/soshiki-form-member-rows.html` の `placeholder` / `.soshiki-form-dev-marker`）:
+
+| 欄 | 仮表示（N = 1〜5） |
+|----|-------------------|
+| 異動・新規／解約／変更 | 新N / 解N / 変N |
+| 組合員コード（6マス） | ｺ1〜ｺ6（桁位置） |
+| カナ姓・名 | ｾｲN / ﾒｲN |
+| 漢字姓・名 | 姓N / 名N |
+| 生年月日 | 年N / 月N / 日N |
+| 性別 | 男N / 女N |
+| 郵便番号 | `郵N`（1枠・配置確認用） |
+| 住所 | 住所N |
+
 組合名 Enter でマスタ反映すると上書きされる。未登録名で Enter するとクリアされる。
 
 ---
 
-## 14. 関連 PDF
+## 15. 関連 PDF
 
 | ファイル | 用途 |
 |----------|------|

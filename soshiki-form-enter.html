@@ -57,7 +57,7 @@ breadcrumb_json_ld: >
         <div class="soshiki-form-sheet" aria-label="組織共済申込書">
           <img
             class="soshiki-form-sheet-bg"
-            src="{{ '/images/soshiki-form-enter.png' | relative_url }}?v=20260827-union2"
+            src="{{ '/images/soshiki-form-enter.png' | relative_url }}?v=20260828-hyphen-71pct"
             alt=""
             width="1683"
             height="1190"
@@ -266,6 +266,8 @@ breadcrumb_json_ld: >
               tabindex="-1"
               aria-label="掛金（1人あたり）"
             >
+
+            {% include soshiki-form-member-rows.html %}
           </div>
         </div>
       </form>
@@ -277,4 +279,5 @@ breadcrumb_json_ld: >
   </section>
 </section>
 
+<script src="{{ '/js/soshiki-form-members.js' | relative_url }}"></script>
 <script src="{{ '/js/soshiki-form-enter.js' | relative_url }}"></script>
