@@ -1,0 +1,56 @@
+{
+  "sogoCollectiveKyosaiIds": [],
+  "formFields": [
+    {
+      "formKey": "danketsu",
+      "label": "団結共済",
+      "subtitle": "労働組合事故見舞共済",
+      "match": { "categoryIds": [11, 12] },
+      "aggregateKuchi": true
+    },
+    {
+      "formKey": "soshiki-seimei",
+      "label": "組織生命",
+      "match": { "categoryIds": [16, 116] },
+      "aggregateKuchi": true
+    },
+    {
+      "formKey": "soshiki-iryo",
+      "label": "組織医療",
+      "match": { "categoryIds": [13, 113, 119] },
+      "aggregateKuchi": true
+    },
+    {
+      "formKey": "soshiki-kotsu",
+      "label": "組織交通",
+      "match": { "categoryIds": [17, 117] },
+      "aggregateKuchi": true
+    },
+    {
+      "formKey": "soshiki-kasai",
+      "label": "組織火災",
+      "match": { "categoryIds": [15, 115] },
+      "aggregateKuchi": true
+    },
+    {
+      "formKey": "keicho",
+      "label": "慶弔②",
+      "match": { "categoryIds": [14, 114] },
+      "aggregateKuchi": true,
+      "minorCategoryRules": {
+        "categoryId": 114,
+        "byMinorCategory": {
+          "0": { "type": "units" },
+          "1": { "type": "units" },
+          "2": { "type": "unitsMultiply", "factor": 0.5 },
+          "3": { "type": "unitsMultiply", "factor": 2 }
+        }
+      }
+    },
+    {
+      "formKey": "sogo-kyosai",
+      "label": "総合共済",
+      "fixedKuchi": 1
+    }
+  ]
+}

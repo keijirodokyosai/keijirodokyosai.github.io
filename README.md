@@ -151,7 +151,9 @@ https://keijirodokyosai.github.io/
 ├─ scripts/
 │  ├─ serve-open.ps1
 │  └─ _jekyll-common.ps1
-├─ data/                    … union-master.json 等（未配置）
+├─ data/
+│  ├─ form-kyosai-map.json  … 申込書口欄 ↔ CategoryId（草案）
+│  └─ union-master.json     … 未作成（kyosai-system が出力）
 ├─ index.html
 ├─ kasai.html
 ├─ iryo.html
@@ -224,10 +226,11 @@ https://keijirodokyosai.github.io/
 |------|------|
 | 入力方式 | 申込書 PNG を背景に、HTML 入力欄を重ねる |
 | 完了済み | 申込日（年・月・日）、組合名枠 |
-| マスタ | `data/union-master.json`（kyosai-system が出力・UI には一覧非表示） |
+| マスタ | `data/union-master.json`（kyosai-system が出力）、`data/form-kyosai-map.json`（口欄マッピング） |
+| 共済欄 | 「口」7 欄＋掛金 1 欄。マスタ反映のみ（**手入力不可**） |
 | 組合名記憶 | ブラウザ localStorage（PC ごと） |
 
-詳細仕様（Enter 判定、ダイアログ、マスタ JSON、申込書欄マッピング）は **[docs/soshiki-form-enter.md](docs/soshiki-form-enter.md)** に記載。
+詳細仕様（Enter 判定、口数・掛金ルール、総合パッケージ、MinorCategory）は **[docs/soshiki-form-enter.md](docs/soshiki-form-enter.md)** に記載。
 
 ---
 
