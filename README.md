@@ -111,7 +111,18 @@ https://keijirodokyosai.github.io/
 * JavaScript（最小限）
 * Jekyll（layout / include / FrontMatter のみ使用）
 
-ローカルプレビューは `jekyll serve`（生成物 `_site/` は `.gitignore` で除外）。
+ローカルプレビュー（生成物 `_site/` は `.gitignore` で除外）:
+
+```powershell
+.\scripts\serve-open.ps1
+```
+
+表示された URL を **Ctrl+クリック**して Cursor 内 Browser で開く。
+
+| 操作 | コマンド |
+|------|----------|
+| 起動 | `.\scripts\serve-open.ps1` |
+| 停止 | `.\scripts\serve-open.ps1 -Stop` |
 
 ---
 
@@ -137,6 +148,9 @@ https://keijirodokyosai.github.io/
 │  └─ footer.html
 ├─ docs/
 │  └─ soshiki-form-enter.md
+├─ scripts/
+│  ├─ serve-open.ps1
+│  └─ _jekyll-common.ps1
 ├─ data/                    … union-master.json 等（未配置）
 ├─ index.html
 ├─ kasai.html

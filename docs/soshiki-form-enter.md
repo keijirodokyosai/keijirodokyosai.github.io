@@ -257,6 +257,24 @@ VBA 名は申込書反映には **使わない**。`CategoryId` または `Kyosa
 
 ## 10. ローカルプレビュー
 
+リポジトリ直下で:
+
+```powershell
+.\scripts\serve-open.ps1
+```
+
+Jekyll をバックグラウンドで起動し、プレビュー URL を表示して **終了**する。
+
+**Browser で開く:** ターミナルに表示された URL を **Ctrl+クリック**。
+
+停止:
+
+```powershell
+.\scripts\serve-open.ps1 -Stop
+```
+
+### 手動
+
 ```bash
 jekyll serve
 ```
