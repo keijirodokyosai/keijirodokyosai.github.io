@@ -26,7 +26,7 @@
 * 全組合の一覧プルダウンは **出さない**（関係ない組合を選べないようにする）
 * 組合名の正否・自動反映は **`union-master.json`**（裏で読み込み）が担当
 * よく使う組合名だけ **ブラウザ localStorage** に記憶（PC ごと）
-* 申込書の欄名と DB 種目名は **1 対 1 ではない** → `form-kyosai-map.json` でマッピング
+* 申込書の口欄マッピングは **`KyosaiId` のみ**（`CategoryId` / `MinorCategory` は Web では使わない）
 
 ---
 
@@ -41,7 +41,7 @@
 | 背景 PNG | `pdf/soshiki-form-enter.pdf` から生成。㊞・不要な線を除去済み |
 | `.gitignore` | `_site/` 等の Jekyll 生成物を除外 |
 | ローカルプレビュー | `scripts/serve-open.ps1`（Jekyll 起動・URL 表示） |
-| マスタ設計 | 本ドキュメント・`data/form-kyosai-map.json`（草案） |
+| マスタ設計 | 本ドキュメント・`data/form-kyosai-map.json`（確定） |
 
 ### 未実装
 
@@ -62,7 +62,7 @@ css/style.css                … .soshiki-form-* オーバーレイ用
 images/soshiki-form-enter.png
 pdf/soshiki-form-enter.pdf   … 原本 PDF
 data/union-master.json       … 未作成（kyosai-system が出力）
-data/form-kyosai-map.json    … 申込書欄 ↔ CategoryId 対応（確定草案）
+data/form-kyosai-map.json    … 申込書口欄 ↔ KyosaiId 対応（確定）
 scripts/serve-open.ps1       … ローカルプレビュー（起動 / -Stop で停止）
 scripts/_jekyll-common.ps1   … serve-open 用ヘルパー
 docs/soshiki-form-enter.md   … 本ドキュメント
@@ -77,7 +77,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | データ | 置き場所 | 役割 |
 |--------|----------|------|
 | **union-master.json** | サイト `data/` | 組合名完全一致 → コード・口数内訳・掛金を返す。**UI には一覧を出さない** |
-| **form-kyosai-map.json** | サイト `data/` | 申込書の「口」欄と `CategoryId` の対応、総合パッケージ ID リスト |
+| **form-kyosai-map.json** | サイト `data/` | 申込書の「口」欄と `KyosaiId` の対応、総合・抑制ルール |
 | **localStorage** | 各 PC のブラウザ | よく使う組合名だけ記憶。正しさは union-master が担当 |
 
 ※ 公開 GitHub Pages でも URL を知れば JSON は取得可能。目的は「画面上で全組合を選べないこと」であり、ファイル自体の秘匿ではない。
@@ -137,41 +137,97 @@ union-master.json の name と完全一致？
 
 * **Access エクスポート時**に `Σ(Premi × Units)` を計算し、`union-master.json` に書き込む
 * Web は **表示のみ**（口欄の表示用数字から掛金を再計算しない）
-* 慶弔 `categoryId` 114 の MinorCategory による **表示口数の変換**は掛金計算に使わない（掛金は常に生の `Units × Premi` の合計）
-
-### 6.4 通常パッケージ（総合以外）
-
-`collectiveKyosaiId` が `sogoCollectiveKyosaiIds` に**含まれない**組合:
-
-1. `union.kyosai[]` の各行について、表示用口数を求める（114 は MinorCategory 適用）
-2. `form-kyosai-map.json` の `categoryIds` で **どの口欄か** を判定
-3. 同一口欄に複数行が該当する場合は **変換後の口数を合算**（原則 1 行だが、ルール上は合算）
-4. **総合共済の口欄は空**（または 0）
-5. 掛金欄に `kakekinPerPerson` をセット
-
-### 6.5 総合パッケージ
-
-Access 側の仕様変更により、以前「総合共済」としていた支部向けパッケージは **1 つの `CollectiveKyosaiId`** にまとまった。対象は約 **10 団体**。
-
-`collectiveKyosaiId` が **`sogoCollectiveKyosaiIds`（固定リスト）** に含まれる組合:
-
-| 口欄 | 値 |
-|------|-----|
-| 総合共済 | **常に `1`** |
-| その他 6 欄 | 空（または 0） |
-| 掛金 | `kakekinPerPerson`（パッケージ全体の月額） |
-
-`kyosai[]` の内訳はエクスポートに含めてよいが、**申込書の 6 口欄には振り分けない**。
-
-`sogoCollectiveKyosaiIds` の実 ID は kyosai-system で確定後、`form-kyosai-map.json` に列挙する（現状は空配列）。
+* 表示口数の変換（KyosaiId 42 / 43 など）は掛金計算に使わない（掛金は常に生の `Units × Premi` の合計）
 
 ---
 
-## 7. union-master.json 仕様
+## 7. 口欄マッピング（KyosaiId・確定）
+
+申込書の 6 口欄（団結〜慶弔②）は **`KyosaiId` でのみ** 振り分ける。`CategoryId` は Web では参照しない。
+
+| formKey | 申込書の欄 | kyosaiIds | 表示口数 |
+|---------|-----------|-----------|----------|
+| `danketsu` | 団結共済 | 1, 2 | `Units`（複数行は合算） |
+| `soshiki-seimei` | 組織生命 | 6, 45 | 同上 |
+| `soshiki-iryo` | 組織医療 | 3, 39, 47 | 同上 |
+| `soshiki-kotsu` | 組織交通 | 7, 46 | 同上 |
+| `soshiki-kasai` | 組織火災 | 5, 44 | 同上（§7.2 の抑制あり） |
+| `keicho` | 慶弔② | 4, 40, 41, 42, 43 | 下表のとおり |
+
+### 7.1 慶弔②の KyosaiId 別表示口数
+
+| kyosaiId | 申込書に入れる口数 |
+|----------|-------------------|
+| 4, 40, 41 | `Units` |
+| **42** | **`Units × 0.5`** |
+| **43** | **`Units × 2`** |
+
+### 7.2 KyosaiId 41 と 44 のセット（抑制ルール）
+
+* **KyosaiId 41 があるとき**は、データ上 **KyosaiId 44 もセット**で入っている
+* このとき **KyosaiId 44 の口数は口欄に載せない**（組織火災欄にも出さない）
+* **KyosaiId 41** は慶弔②欄に `Units` を載せる
+* **KyosaiId 44 のみ**（41 なし）のときは、通常どおり **組織火災** 欄に載せる
+
+| kyosai[] の例 | 慶弔② | 組織火災 |
+|---------------|-------|----------|
+| 41(口A), 44(口B) | A | 空（44 は載せない） |
+| 44(口B) のみ | — | B |
+
+`form-kyosai-map.json` の `suppressKyosaiWhenPresent`: `{ "41": [44] }` で表現する。
+
+### 7.3 総合共済
+
+対象は約 **10 団体**。パッケージ内訳（KyosaiId 5, 40, 44, 46 など）は申込書に **載せず**、総合共済の口欄に **常に `1`** と表示する。
+
+| 設定 | 内容 |
+|------|------|
+| `sogoCollectiveKyosaiIds` | 総合パッケージの `CollectiveKyosaiId` リスト（kyosai-system で確定後に列挙） |
+| `sogoHiddenKyosaiIds` | `5, 40, 44, 46` — 総合パッケージ時に **6 口欄へ載せない** 種目 |
+| 総合共済の口欄 | **常に `1`**（内訳の合算ではない） |
+
+**§7 の 6 口欄マッピングは省略しない。** 総合と団結などが **同一パッケージに共存** し得る。
+
+#### パターン A — 総合のみ（約 9 団体）
+
+* 総合共済の口 ← `1`
+* `sogoHiddenKyosaiIds` に該当する種目は 6 口欄に出さない
+* その他の kyosaiId がなければ団結〜慶弔②は空
+* 掛金 ← `kakekinPerPerson`
+
+#### パターン B — 総合 ＋ 団結など（1 団体）
+
+例: 総合内訳（5, 40, 44, 46）＋ 団結（KyosaiId 1 または 2 で 10 口）。
+
+* 総合共済の口 ← `1`
+* 5, 40, 44, 46 ← 6 口欄に出さない（`sogoHiddenKyosaiIds`）
+* 団結共済など ← 上表の `kyosaiIds` で通常マッピング
+* 掛金 ← パッケージ全体の `kakekinPerPerson`
+
+---
+
+## 8. Enter 確定後の反映フロー（口・掛金）
+
+```
+1. kyosai[] の各行について表示口数を計算
+     - kyosaiDisplayRules（42→×0.5, 43→×2）
+     - それ以外は Units
+2. suppressKyosaiWhenPresent を適用
+     - kyosaiId 41 がある → kyosaiId 44 は口欄マッピングから除外
+3. collectiveKyosaiId ∈ sogoCollectiveKyosaiIds なら
+     - sogoHiddenKyosaiIds（5,40,44,46）を 6 口欄マッピングから除外
+4. 残りを form-kyosai-map の kyosaiIds で 6 口欄へ振り分け・合算
+5. 総合パッケージなら 総合共済の口 ← "1"、でなければ空
+6. 掛金 ← kakekinPerPerson
+```
+
+---
+
+## 9. union-master.json 仕様
 
 kyosai-system（Access）から出力。Web は fetch して照合のみ。
 
-### 7.1 関連テーブル
+### 9.1 関連テーブル
 
 **参照するテーブル**
 
@@ -180,11 +236,11 @@ kyosai-system（Access）から出力。Web は fetch して照合のみ。
 | **`Subbranch`** | 共済会（組合）。組合名・産別・支部・分会。**`CollectiveKyosaiId`** で採用パッケージを指す |
 | **`CollectiveKyosai`** | 組織共済パッケージ（組合員一律の加入セット） |
 | **`CollectiveKyosaiItem`** | パッケージ内訳（`KyosaiId` + 口数 `Units`） |
-| **`Kyosai`** | 種目名（`KyosaiName`）、掛金（`Premi`）、分類（`CategoryId`）、**`MinorCategory`**（114 用） |
+| **`Kyosai`** | 種目名（`KyosaiName`）、掛金（`Premi`） |
 
 **使わないテーブル:** `UnionMemberKyosai` / `MemberKyosai`（個人の加入契約）
 
-### 7.2 エクスポート経路
+### 9.2 エクスポート経路
 
 **`SetItem` は廃止済み。**
 
@@ -192,10 +248,10 @@ kyosai-system（Access）から出力。Web は fetch して照合のみ。
 Subbranch（KyosaikaiName, industry, branch, subbranch, CollectiveKyosaiId）
   → CollectiveKyosai
   → CollectiveKyosaiItem（KyosaiId, Units）
-  → Kyosai（KyosaiName, Premi, CategoryId, MinorCategory）
+  → Kyosai（KyosaiName, Premi）
 ```
 
-### 7.3 1 組合あたりのフィールド
+### 9.3 1 組合あたりのフィールド
 
 | JSON フィールド | 意味 |
 |----------------|------|
@@ -206,18 +262,18 @@ Subbranch（KyosaikaiName, industry, branch, subbranch, CollectiveKyosaiId）
 | `kakekinPerPerson` | 1 人あたり月額掛金 = **Σ (Premi × Units)**（エクスポート時に確定） |
 | `kyosai[]` | 加入共済の内訳 |
 
-### 7.4 `kyosai[]` の各要素
+### 9.4 `kyosai[]` の各要素（Web が使用するもの）
 
-| フィールド | 意味 |
-|-----------|------|
-| `kyosaiId` | 種目 ID |
-| `name` | `Kyosai.KyosaiName` |
-| `categoryId` | `Kyosai.CategoryId` |
-| `minorCategory` | **`categoryId` が 114 のとき必須**。それ以外は 0 または省略可 |
-| `kuchi` | 契約口数（`CollectiveKyosaiItem.Units`、掛金計算の元） |
-| `premi` | 1 口あたり掛金 |
+| フィールド | 必須 | 意味 |
+|-----------|------|------|
+| `kyosaiId` | ○ | 種目 ID（口欄マッピングのキー） |
+| `kuchi` | ○ | 契約口数（`CollectiveKyosaiItem.Units`） |
+| `premi` | ○ | 1 口あたり掛金（エクスポート・検算用） |
+| `name` | △ | `Kyosai.KyosaiName`（デバッグ用） |
 
-### 7.5 サンプル
+`categoryId` / `minorCategory` は Access 内部用としてよいが、**Web の口欄反映では使わない**。
+
+### 9.5 サンプル
 
 ```json
 {
@@ -233,10 +289,8 @@ Subbranch（KyosaikaiName, industry, branch, subbranch, CollectiveKyosaiId）
       "kakekinPerPerson": 2500,
       "kyosai": [
         {
-          "kyosaiId": 18,
+          "kyosaiId": 3,
           "name": "組織医療",
-          "categoryId": 13,
-          "minorCategory": 0,
           "kuchi": 20,
           "premi": 100
         }
@@ -246,89 +300,36 @@ Subbranch（KyosaikaiName, industry, branch, subbranch, CollectiveKyosaiId）
 }
 ```
 
-### 7.6 ビジネスルール
+### 9.6 ビジネスルール
 
 * 組合員は **全員一律** 同内容で加入
 * 申込書の掛金欄 1 つ = 組織共済全体の **1 人あたり月額**
 
 ---
 
-## 8. form-kyosai-map.json 仕様
+## 10. form-kyosai-map.json
 
-申込書の「口」欄と DB の `CategoryId` を結ぶ **固定表**（`data/form-kyosai-map.json`）。Web 側で保守。
+機械可読な定義は [`data/form-kyosai-map.json`](../data/form-kyosai-map.json) を正とする。
 
-### 8.1 CategoryId と申込書欄（確定）
-
-| formKey | 申込書の欄 | categoryIds | 備考 |
-|---------|-----------|-------------|------|
-| `danketsu` | 団結共済 | 11, 12 | 変換後合算 |
-| `soshiki-seimei` | 組織生命 | 16, **116** | 116 は組織系別系統（支部用など） |
-| `soshiki-iryo` | 組織医療 | 13, **113**, **119** | 同上 |
-| `soshiki-kotsu` | 組織交通 | 17, **117** | 同上 |
-| `soshiki-kasai` | 組織火災 | 15, **115** | 同上 |
-| `keicho` | 慶弔② | 14, **114** | 114 は MinorCategory 適用（下表） |
-| `sogo-kyosai` | 総合共済 | （CategoryId では判定しない） | `sogoCollectiveKyosaiIds` で判定、口は **1 固定** |
-
-### 8.2 `categoryId` 114 の MinorCategory（表示口数）
-
-掛金計算には使わない。**申込書に表示する口数**のみ変換する。
-
-| MinorCategory | 表示口数 |
-|---------------|----------|
-| 0 | `Units` |
-| 1 | `Units` |
-| 2 | `Units × 0.5` |
-| 3 | `Units × 2` |
-
-### 8.3 総合パッケージ ID リスト
-
-```json
-"sogoCollectiveKyosaiIds": [ /* kyosai-system で確定した ID を列挙 */ ]
-```
-
-約 10 団体。ID が増減したらこの配列のみ更新する。
-
-### 8.4 1 対 1 でない理由（参考）
-
-| 名称の種類 | 例 |
-|------------|-----|
-| 申込書の欄 | 団結共済、慶弔② |
-| DB `KyosaiName` | 組織医療、中央慶弔② |
-| VBA 集計名 | 労組見舞全 など |
-
-VBA 名は申込書反映には **使わない**。
-
-### 8.5 ファイル本体
-
-確定草案は [`data/form-kyosai-map.json`](../data/form-kyosai-map.json) を参照。
+| キー | 用途 |
+|------|------|
+| `formFields[].kyosaiIds` | 各口欄に載せる KyosaiId 一覧 |
+| `formFields[].kyosaiDisplayRules` | KyosaiId ごとの表示口数変換（慶弔②の 42, 43） |
+| `suppressKyosaiWhenPresent` | 41 存在時に 44 を口欄から除外 |
+| `sogoCollectiveKyosaiIds` | 総合パッケージ ID リスト |
+| `sogoHiddenKyosaiIds` | 総合パッケージ時に 6 口欄へ載せない KyosaiId |
+| `sogo-kyosai.displayKuchi` | 総合欄の固定表示値 `1` |
 
 ---
 
-## 9. Enter 確定後の反映フロー（口・掛金）
-
-```
-collectiveKyosaiId ∈ sogoCollectiveKyosaiIds ?
-  ├─ はい
-  │     総合共済の口 ← "1"
-  │     他 6 口     ← 空
-  │     掛金        ← kakekinPerPerson
-  └─ いいえ
-        各 kyosai 行 → 表示口数を計算（114 は MinorCategory）
-        → form-kyosai-map で 6 口欄に振り分け・合算
-        総合共済の口 ← 空
-        掛金        ← kakekinPerPerson
-```
-
----
-
-## 10. kyosai-system 側の作業
+## 11. kyosai-system 側の作業
 
 | # | 内容 |
 |---|------|
 | 1 | `Subbranch.CollectiveKyosaiId` 起点で内訳を取得するエクスポート実装 |
-| 2 | `kyosai[]` に `minorCategory` を含める（114 用） |
+| 2 | `kyosai[]` に `kyosaiId`, `kuchi`, `premi` を出力 |
 | 3 | `kakekinPerPerson = Σ(Premi×Units)` をエクスポート時に計算 |
-| 4 | 総合扱いの `CollectiveKyosaiId` を確定し、Web の `sogoCollectiveKyosaiIds` に連携 |
+| 4 | 総合扱いの `CollectiveKyosaiId` を確定し、`sogoCollectiveKyosaiIds` に連携 |
 | 5 | 1 組合分で検算 → 全組合で出力テスト |
 | 6 | `keijirodokyosai.github.io/data/` へ配置 |
 
@@ -336,7 +337,7 @@ collectiveKyosaiId ∈ sogoCollectiveKyosaiIds ?
 
 ---
 
-## 11. Web 側の今後（実装順）
+## 12. Web 側の今後（実装順）
 
 1. 産別・支部・分会の入力枠を背景に追加
 2. `data/union-master.json` を受け取り、Enter 判定・自動反映
@@ -346,7 +347,7 @@ collectiveKyosaiId ∈ sogoCollectiveKyosaiIds ?
 
 ---
 
-## 12. ローカルプレビュー
+## 13. ローカルプレビュー
 
 ```powershell
 .\scripts\serve-open.ps1
@@ -354,7 +355,7 @@ collectiveKyosaiId ∈ sogoCollectiveKyosaiIds ?
 
 Jekyll をバックグラウンドで起動し、プレビュー URL を表示して終了する。
 
-**Browser で開く:** ターミナルに表示された URL を **Ctrl+クリック**（Cursor 3.17 では CLI からの自動オープンは空タブになるため）。
+**Browser で開く:** ターミナルに表示された URL を **Ctrl+クリック**。
 
 停止:
 
@@ -369,7 +370,7 @@ Jekyll をバックグラウンドで起動し、プレビュー URL を表示�
 
 ---
 
-## 13. 関連 PDF
+## 14. 関連 PDF
 
 | ファイル | 用途 |
 |----------|------|
