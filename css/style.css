@@ -1439,6 +1439,8 @@ a:focus-visible {
   aspect-ratio: 841.68 / 595.2;
   background: #fff;
   box-shadow: 0 2px 12px rgba(18, 52, 86, 0.12);
+  --soshiki-form-sheet-row-top: 28.5%;
+  --soshiki-form-sheet-row-height: 2.8%;
 }
 
 .soshiki-form-sheet-bg {
@@ -1462,8 +1464,8 @@ a:focus-visible {
   padding: 0 4px;
   border: 1px solid rgba(54, 168, 114, 0.42);
   border-radius: 2px;
-  background: rgba(255, 255, 255, 0.78);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.65);
+  background: transparent;
+  box-shadow: none;
   color: #123456;
   font-family: "Meiryo", "Hiragino Sans", sans-serif;
   font-size: 16px;
@@ -1473,11 +1475,11 @@ a:focus-visible {
 
 .soshiki-form-field:hover {
   border-color: rgba(54, 168, 114, 0.65);
-  background: rgba(255, 255, 255, 0.88);
+  background: transparent;
 }
 
 .soshiki-form-field:focus {
-  background: rgba(255, 255, 255, 0.96);
+  background: transparent;
   border-color: #36a872;
   outline: none;
   box-shadow: 0 0 0 2px rgba(54, 168, 114, 0.25);
@@ -1560,6 +1562,115 @@ a:focus-visible {
   text-align: left;
   font-size: 20px;
   line-height: 1.1;
+}
+
+.soshiki-form-code-group {
+  position: static;
+}
+
+/* 産別・支部・分会コード（見出し下の行・3桁） */
+.soshiki-form-code-field {
+  width: 5.7%;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.52em;
+  text-indent: 0.27em;
+  padding: 0;
+}
+
+.soshiki-form-code-field.soshiki-form-sheet-row-field {
+  padding: 0;
+}
+
+.soshiki-form-code-field--industry {
+  left: 6%;
+}
+
+.soshiki-form-code-field--branch {
+  left: 11.7%;
+}
+
+.soshiki-form-code-field--subbranch {
+  left: 17.4%;
+}
+
+.soshiki-form-sheet-row-field {
+  position: absolute;
+  top: var(--soshiki-form-sheet-row-top);
+  height: var(--soshiki-form-sheet-row-height);
+  margin: 0;
+  padding: 0 2px;
+  box-sizing: border-box;
+  font-size: 18px;
+  line-height: var(--soshiki-form-sheet-row-height);
+  text-align: center;
+  cursor: default;
+}
+
+.soshiki-form-code-field[readonly],
+.soshiki-form-sheet-row-field[readonly],
+.soshiki-form-kakekin-field[readonly] {
+  background: transparent;
+  border-color: rgba(54, 168, 114, 0.28);
+  color: #123456;
+}
+
+.soshiki-form-code-field[readonly]:hover,
+.soshiki-form-code-field[readonly]:focus,
+.soshiki-form-sheet-row-field[readonly]:hover,
+.soshiki-form-sheet-row-field[readonly]:focus,
+.soshiki-form-kakekin-field[readonly]:hover,
+.soshiki-form-kakekin-field[readonly]:focus {
+  border-color: rgba(54, 168, 114, 0.28);
+  background: transparent;
+  box-shadow: none;
+  outline: none;
+}
+
+/* 共済口数欄（見出し下の行） */
+.soshiki-form-kuchi-field {
+  top: var(--soshiki-form-sheet-row-top);
+  height: var(--soshiki-form-sheet-row-height);
+  width: 3.1%;
+  line-height: var(--soshiki-form-sheet-row-height);
+}
+
+.soshiki-form-kuchi-field--danketsu {
+  left: 29.7%;
+}
+
+.soshiki-form-kuchi-field--soshiki-seimei {
+  left: 35.4%;
+}
+
+.soshiki-form-kuchi-field--soshiki-iryo {
+  left: 41.1%;
+}
+
+.soshiki-form-kuchi-field--soshiki-kotsu {
+  left: 46.8%;
+}
+
+.soshiki-form-kuchi-field--soshiki-kasai {
+  left: 52.5%;
+}
+
+.soshiki-form-kuchi-field--keicho {
+  left: 58.2%;
+}
+
+.soshiki-form-kuchi-field--sogo-kyosai {
+  left: 63.9%;
+}
+
+/* 掛金（団結枠幅 3.1% の 2.5 倍） */
+.soshiki-form-kakekin-field {
+  top: var(--soshiki-form-sheet-row-top);
+  height: var(--soshiki-form-sheet-row-height);
+  left: 81.9%;
+  width: 7.75%;
+  line-height: var(--soshiki-form-sheet-row-height);
+  text-align: right;
+  padding-right: 6px;
 }
 
 .soshiki-form-enter-note {

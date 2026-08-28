@@ -1,0 +1,35 @@
+{
+  "updatedAt": "2026-08-28",
+  "note": "開発・プレビュー用サンプル。name は Subbranch.KyosaikaiName。本番は kyosai-system が出力して置き換える。",
+  "unions": [
+    {
+      "code": "001034056",
+      "name": "サンプル労働組合",
+      "industry": "001",
+      "branch": "034",
+      "subbranch": "056",
+      "collectiveKyosaiId": 42,
+      "kakekinPerPerson": 3200,
+      "kyosai": [
+        { "kyosaiId": 1, "name": "団結共済", "kuchi": 10, "premi": 50 },
+        { "kyosaiId": 3, "name": "組織医療", "kuchi": 8, "premi": 100 },
+        { "kyosaiId": 4, "name": "慶弔", "kuchi": 8, "premi": 25 }
+      ]
+    },
+    {
+      "code": "002001001",
+      "name": "総合共済サンプル組合",
+      "industry": "002",
+      "branch": "001",
+      "subbranch": "001",
+      "collectiveKyosaiId": 19,
+      "kakekinPerPerson": 1800,
+      "kyosai": [
+        { "kyosaiId": 5, "name": "組織火災", "kuchi": 1, "premi": 200 },
+        { "kyosaiId": 40, "name": "慶弔", "kuchi": 2, "premi": 50 },
+        { "kyosaiId": 44, "name": "組織火災", "kuchi": 9, "premi": 30 },
+        { "kyosaiId": 46, "name": "組織交通", "kuchi": 1, "premi": 100 }
+      ]
+    }
+  ]
+}

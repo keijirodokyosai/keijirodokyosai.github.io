@@ -1,5 +1,5 @@
 {
-  "sogoCollectiveKyosaiIds": [],
+  "sogoCollectiveKyosaiIds": [19, 41, 44, 55, 57, 58, 88, 95, 97, 98],
   "sogoHiddenKyosaiIds": [5, 40, 44, 46],
   "suppressKyosaiWhenPresent": {
     "41": [44]

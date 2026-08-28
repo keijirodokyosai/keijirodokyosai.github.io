@@ -42,12 +42,11 @@
 | `.gitignore` | `_site/` 等の Jekyll 生成物を除外 |
 | ローカルプレビュー | `scripts/serve-open.ps1`（Jekyll 起動・URL 表示） |
 | マスタ設計 | 本ドキュメント・`data/form-kyosai-map.json`（確定） |
+| 産別・支部・分会 | 背景上に 3 桁×3 の入力枠（`readonly`）・Enter でマスタ反映 |
+| Enter 連携 | `union-master.json` 読込・組合名判定・コード・口欄（7）・掛金を自動反映 |
+| 共済口欄（7）・掛金 | HTML 配置完了（配置確認用仮表示あり） |
 
 ### 未実装
-
-* 産別・支部・分会コード欄
-* 共済 **口** 欄・掛金欄（HTML 配置＋マスタ自動反映）
-* `union-master.json` 連携（Enter 判定・自動反映）
 * 組合名プルダウン（localStorage）
 * 確認画面・PDF 出力・メール送信
 
@@ -57,11 +56,11 @@
 
 ```text
 soshiki-form-enter.html      … 入力ページ
-js/soshiki-form-enter.js     … 日付初期値・（今後）マスタ連携
+js/soshiki-form-enter.js     … 日付初期値・マスタ連携（Enter 判定・口・掛金反映）
 css/style.css                … .soshiki-form-* オーバーレイ用
 images/soshiki-form-enter.png
 pdf/soshiki-form-enter.pdf   … 原本 PDF
-data/union-master.json       … 未作成（kyosai-system が出力）
+data/union-master.json       … 開発用サンプル（kyosai-system 本番出力で置換）
 data/form-kyosai-map.json    … 申込書口欄 ↔ KyosaiId 対応（確定）
 scripts/serve-open.ps1       … ローカルプレビュー（起動 / -Stop で停止）
 scripts/_jekyll-common.ps1   … serve-open 用ヘルパー
@@ -90,11 +89,26 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 
 ### 5.3 Enter キー確定時の動作
 
+#### 名称一致のキー（確定）
+
+組合名の正否判定は、Access **`Subbranch` テーブルの `KyosaikaiName`** に対して行う。
+
+| 項目 | 内容 |
+|------|------|
+| Access | `Subbranch.KyosaikaiName` |
+| エクスポート | `union-master.json` の **`name`** フィールド |
+| Web の照合 | 入力欄の文字列と **`name`（= `KyosaikaiName`）の完全一致** |
+| 照合方式 | 部分一致・あいまい検索は **しない** |
+| 正規化 | 前後の空白のみ `trim`（全角半角変換・大文字小文字変換はしない） |
+
+一致時は、入力欄の表記ゆれを避けるため **`KyosaikaiName`（`name`）の値で組合名欄を上書き**する。
+
 ```
 組合名を Enter
     ↓
-union-master.json の name と完全一致？
+入力文字列（trim 後）と union-master.json の name（= Subbranch.KyosaikaiName）が完全一致？
     ├─ はい → 産別・支部・分会・口欄（7）・掛金を反映
+    │         組合名欄 ← KyosaikaiName（name）
     │         記憶リストに未登録なら「組合リストに追加しますか？」
     │         ├─ はい → localStorage に追加
     │         └─ いいえ → 今回だけ使う
@@ -104,7 +118,46 @@ union-master.json の name と完全一致？
 ```
 
 * 判定タイミングは **Enter のみ**（blur では行わない）
-* 一致時に保存する組合名は、可能なら **マスタ上の正式名称** を使う
+* localStorage に保存する組合名も **`KyosaikaiName`（`name`）** を使う
+
+### 5.4 産別・支部・分会コード
+
+| 項目 | 内容 |
+|------|------|
+| 桁数 | 各 **3 桁**（`industry` / `branch` / `subbranch`） |
+| 入力 | **手入力不可**（`readonly`） |
+| 反映 | 組合名 Enter 確定時に `union-master.json` からセット |
+| 縦位置・高さ | 共済口欄と同じ（`top: 28.5%` / `height: 2.8%`） |
+| 幅 | 各 **`5.7%`** |
+| 字間・字位置 | `letter-spacing: 0.52em` / `text-indent: 0.27em` / `font-variant-numeric: tabular-nums` |
+| 横位置（`left`） | 産別 **`6%`** / 支部 **`11.7%`** / 分会 **`17.4%`**（枠同士は隙間なく接続） |
+| 背景 | **透明**（`background: transparent`） |
+| HTML id | `industry-code` / `branch-code` / `subbranch-code` |
+
+### 5.5 共済口欄・掛金（CSS 配置・確定）
+
+口欄・掛金もコード欄と同じ行（`top: 28.5%` / `height: 2.8%`）。背景は透明。
+
+**口欄（幅 `3.1%`）**
+
+| formKey | 申込書の欄 | `left` |
+|---------|-----------|--------|
+| `danketsu` | 団結共済 | 29.7% |
+| `soshiki-seimei` | 組織生命 | 35.4% |
+| `soshiki-iryo` | 組織医療 | 41.1% |
+| `soshiki-kotsu` | 組織交通 | 46.8% |
+| `soshiki-kasai` | 組織火災 | 52.5% |
+| `keicho` | 慶弔② | 58.2% |
+| `sogo-kyosai` | 総合共済 | 63.9% |
+
+**掛金**
+
+| 項目 | 値 |
+|------|-----|
+| HTML id | `kakekin-per-person` |
+| `left` | **81.9%** |
+| `width` | **7.75%**（団結口欄幅 3.1% の 2.5 倍） |
+| 文字揃え | 右寄せ（`text-align: right`） |
 
 ---
 
@@ -182,9 +235,11 @@ union-master.json の name と完全一致？
 
 | 設定 | 内容 |
 |------|------|
-| `sogoCollectiveKyosaiIds` | 総合パッケージの `CollectiveKyosaiId` リスト（kyosai-system で確定後に列挙） |
-| `sogoHiddenKyosaiIds` | `5, 40, 44, 46` — 総合パッケージ時に **6 口欄へ載せない** 種目 |
+| `sogoCollectiveKyosaiIds` | 総合パッケージの **`CollectiveKyosaiId`** リスト（確定）: **19, 41, 44, 55, 57, 58, 88, 95, 97, 98** |
+| `sogoHiddenKyosaiIds` | **`KyosaiId`** `5, 40, 44, 46` — 総合パッケージ時に **6 口欄へ載せない** 種目 |
 | 総合共済の口欄 | **常に `1`**（内訳の合算ではない） |
+
+※ `sogoCollectiveKyosaiIds` の **41, 44** は **パッケージ ID**（`union.collectiveKyosaiId` と比較）。§7.2 の **KyosaiId 41 / 44** や `sogoHiddenKyosaiIds` の **44** は **種目 ID** であり、別物。
 
 **§7 の 6 口欄マッピングは省略しない。** 総合と団結などが **同一パッケージに共存** し得る。
 
@@ -256,7 +311,7 @@ Subbranch（KyosaikaiName, industry, branch, subbranch, CollectiveKyosaiId）
 | JSON フィールド | 意味 |
 |----------------|------|
 | `code` | 9 桁（産別 3 + 支部 3 + 分会 3） |
-| `name` | 組合名（`Subbranch.KyosaikaiName`）— **完全一致キー** |
+| `name` | 組合名 — **`Subbranch.KyosaikaiName` をそのまま出力**。Enter 時の **完全一致キー** |
 | `industry` / `branch` / `subbranch` | 各 3 桁 |
 | `collectiveKyosaiId` | 組織共済パッケージ ID（総合判定に使用） |
 | `kakekinPerPerson` | 1 人あたり月額掛金 = **Σ (Premi × Units)**（エクスポート時に確定） |
@@ -316,7 +371,7 @@ Subbranch（KyosaikaiName, industry, branch, subbranch, CollectiveKyosaiId）
 | `formFields[].kyosaiIds` | 各口欄に載せる KyosaiId 一覧 |
 | `formFields[].kyosaiDisplayRules` | KyosaiId ごとの表示口数変換（慶弔②の 42, 43） |
 | `suppressKyosaiWhenPresent` | 41 存在時に 44 を口欄から除外 |
-| `sogoCollectiveKyosaiIds` | 総合パッケージ ID リスト |
+| `sogoCollectiveKyosaiIds` | 総合パッケージ **`CollectiveKyosaiId`** リスト（19, 41, 44, 55, 57, 58, 88, 95, 97, 98） |
 | `sogoHiddenKyosaiIds` | 総合パッケージ時に 6 口欄へ載せない KyosaiId |
 | `sogo-kyosai.displayKuchi` | 総合欄の固定表示値 `1` |
 
@@ -329,7 +384,7 @@ Subbranch（KyosaikaiName, industry, branch, subbranch, CollectiveKyosaiId）
 | 1 | `Subbranch.CollectiveKyosaiId` 起点で内訳を取得するエクスポート実装 |
 | 2 | `kyosai[]` に `kyosaiId`, `kuchi`, `premi` を出力 |
 | 3 | `kakekinPerPerson = Σ(Premi×Units)` をエクスポート時に計算 |
-| 4 | 総合扱いの `CollectiveKyosaiId` を確定し、`sogoCollectiveKyosaiIds` に連携 |
+| 4 | ~~総合扱いの `CollectiveKyosaiId` を確定し、`sogoCollectiveKyosaiIds` に連携~~ → **確定済み**（Web 側 `form-kyosai-map.json` に反映） |
 | 5 | 1 組合分で検算 → 全組合で出力テスト |
 | 6 | `keijirodokyosai.github.io/data/` へ配置 |
 
@@ -339,11 +394,10 @@ Subbranch（KyosaikaiName, industry, branch, subbranch, CollectiveKyosaiId）
 
 ## 12. Web 側の今後（実装順）
 
-1. 産別・支部・分会の入力枠を背景に追加
-2. `data/union-master.json` を受け取り、Enter 判定・自動反映
-3. 共済 **口** 欄（7）・掛金欄を配置し、`form-kyosai-map.json` に従って自動反映（`readonly`）
-4. 組合名プルダウン（localStorage）・追加確認・削除 UI
-5. 確認画面・PDF 出力・メール送信（任意・後回し可）
+1. ~~産別・支部・分会の入力枠を背景に追加~~ → **完了**
+2. ~~`data/union-master.json` を受け取り、Enter 判定・コード・口欄・掛金反映~~ → **完了**
+3. 組合名プルダウン（localStorage）・追加確認・削除 UI
+4. 確認画面・PDF 出力・メール送信（任意・後回し可）
 
 ---
 
@@ -367,6 +421,26 @@ Jekyll をバックグラウンドで起動し、プレビュー URL を表示�
 
 * CSS 変更後は **Ctrl+Shift+R** で再読み込み
 * `_site/` は `.gitignore` 対象
+
+### 配置調整時の仮表示（開発用）
+
+枠の位置合わせのため、`soshiki-form-enter.html` の `value` に仮の1文字を入れている。**本番前に削除**する。
+
+| 欄 | 仮表示 |
+|----|--------|
+| 産別 | 000（3桁・字間調整） |
+| 支部 | 000（3桁・字間調整） |
+| 分会 | 000（3桁・字間調整） |
+| 団結共済 | 団 |
+| 組織生命 | 生 |
+| 組織医療 | 医 |
+| 組織交通 | 交 |
+| 組織火災 | 火 |
+| 慶弔② | 慶 |
+| 総合共済 | 総 |
+| 掛金 | 金 |
+
+組合名 Enter でマスタ反映すると上書きされる。未登録名で Enter するとクリアされる。
 
 ---
 

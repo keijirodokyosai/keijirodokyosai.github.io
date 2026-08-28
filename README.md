@@ -153,7 +153,7 @@ https://keijirodokyosai.github.io/
 │  └─ _jekyll-common.ps1
 ├─ data/
 │  ├─ form-kyosai-map.json  … 申込書口欄 ↔ KyosaiId（確定）
-│  └─ union-master.json     … 未作成（kyosai-system が出力）
+│  └─ union-master.json     … 開発用サンプル（kyosai-system 本番出力で置換）
 ├─ index.html
 ├─ kasai.html
 ├─ iryo.html
@@ -225,8 +225,9 @@ https://keijirodokyosai.github.io/
 | 項目 | 内容 |
 |------|------|
 | 入力方式 | 申込書 PNG を背景に、HTML 入力欄を重ねる |
-| 完了済み | 申込日（年・月・日）、組合名枠 |
+| 完了済み | 申込日、組合名、産別・支部・分会、共済口7欄、掛金欄（Enter でマスタ反映） |
 | マスタ | `data/union-master.json`（kyosai-system が出力）、`data/form-kyosai-map.json`（KyosaiId 口欄マッピング） |
+| 組合名照合 | `Subbranch.KyosaikaiName`（JSON の `name`）と **完全一致** |
 | 共済欄 | 「口」7 欄＋掛金 1 欄。マスタ反映のみ（**手入力不可**） |
 | 組合名記憶 | ブラウザ localStorage（PC ごと） |
 
