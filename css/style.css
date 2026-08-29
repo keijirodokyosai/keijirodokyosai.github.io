@@ -1691,6 +1691,15 @@ a:focus-visible {
   /* 〒・郵便番号文字の縦中心（PNG 実測: 旧ハイフン y≈465 / 行高 → 約 21.09%） */
   --soshiki-form-member-zip-text-center: 21.09%;
   --soshiki-form-member-zip-text-nudge: -1px;
+  /* 生年月日文字の縦中心（旧レガシー枠 top 54% + height 40%/2） */
+  --soshiki-form-member-birth-text-center: 74%;
+  --soshiki-form-member-birth-year-width: 50px;
+  --soshiki-form-member-birth-2digit-width: 30px;
+  --soshiki-form-member-birth-month-width: 28px;
+  --soshiki-form-member-birth-month-left: 53.1%;
+  --soshiki-form-member-birth-month-left-nudge: 1px;
+  --soshiki-form-member-birth-day-left: 56.9%;
+  --soshiki-form-member-birth-year-left: 47.5%;
   --soshiki-form-member-address-field-gap: 2px;
   --soshiki-form-member-town-gap-from-zip: 2px;
   --soshiki-form-member-building-gap-from-town: 2px;
@@ -1922,35 +1931,61 @@ a:focus-visible {
   font-size: 14px;
 }
 
-.soshiki-form-member-birth-year {
-  position: absolute;
-  left: 35.1%;
-  top: 54%;
-  width: 6.8%;
-  height: 40%;
-  text-align: center;
-  font-variant-numeric: tabular-nums;
-  font-size: 14px;
-}
-
+.soshiki-form-member-birth-year,
 .soshiki-form-member-birth-month,
 .soshiki-form-member-birth-day {
   position: absolute;
-  top: 54%;
-  height: 40%;
+  top: calc(
+    var(--soshiki-form-member-birth-text-center) -
+      var(--soshiki-form-member-box-height) / 2
+  );
   text-align: center;
   font-variant-numeric: tabular-nums;
-  font-size: 14px;
+  width: calc(
+    var(--soshiki-form-member-box-chars) *
+      var(--soshiki-form-member-box-font-size) +
+      2 * var(--soshiki-form-member-box-padding-inline) +
+      2 * var(--soshiki-form-member-box-border-width)
+  );
+  min-width: calc(
+    var(--soshiki-form-member-box-chars) *
+      var(--soshiki-form-member-box-font-size) +
+      2 * var(--soshiki-form-member-box-padding-inline) +
+      2 * var(--soshiki-form-member-box-border-width)
+  );
+  max-width: calc(
+    var(--soshiki-form-member-box-chars) *
+      var(--soshiki-form-member-box-font-size) +
+      2 * var(--soshiki-form-member-box-padding-inline) +
+      2 * var(--soshiki-form-member-box-border-width)
+  );
+}
+
+.soshiki-form-member-birth-year {
+  --soshiki-form-member-box-chars: 4;
+  left: var(--soshiki-form-member-birth-year-left);
+  width: var(--soshiki-form-member-birth-year-width);
+  min-width: var(--soshiki-form-member-birth-year-width);
+  max-width: var(--soshiki-form-member-birth-year-width);
 }
 
 .soshiki-form-member-birth-month {
-  left: 42.9%;
-  width: 3%;
+  --soshiki-form-member-box-chars: 2;
+  left: calc(
+    var(--soshiki-form-member-birth-month-left) +
+      var(--soshiki-form-member-birth-month-left-nudge)
+  );
+  width: var(--soshiki-form-member-birth-month-width);
+  min-width: var(--soshiki-form-member-birth-month-width);
+  max-width: var(--soshiki-form-member-birth-month-width);
 }
 
 .soshiki-form-member-birth-day {
-  left: 46.6%;
-  width: 3%;
+  --soshiki-form-member-box-chars: 2;
+  left: var(--soshiki-form-member-birth-day-left);
+  width: var(--soshiki-form-member-birth-2digit-width);
+  min-width: var(--soshiki-form-member-birth-2digit-width);
+  max-width: var(--soshiki-form-member-birth-2digit-width);
 }
 
 /* 性別 */

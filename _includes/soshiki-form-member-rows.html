@@ -110,7 +110,7 @@
       type="text"
       id="member-{{ row }}-birth-year"
       name="member-{{ row }}-birth-year"
-      class="soshiki-form-field soshiki-form-member-field soshiki-form-member-birth-year"
+      class="soshiki-form-member-box soshiki-form-member-birth-year"
       data-access-field="BirthDate"
       data-birth-part="year"
       data-halfwidth-numeric
@@ -118,7 +118,7 @@
       inputmode="numeric"
       autocomplete="off"
       maxlength="4"
-      placeholder="年{{ row }}"
+      value="2026"
       aria-label="{{ row }}行目・生年月日・年（西暦4桁）"
     >
 
@@ -127,7 +127,7 @@
       type="text"
       id="member-{{ row }}-birth-month"
       name="member-{{ row }}-birth-month"
-      class="soshiki-form-field soshiki-form-member-field soshiki-form-member-birth-month"
+      class="soshiki-form-member-box soshiki-form-member-birth-month"
       data-birth-part="month"
       data-halfwidth-numeric
       data-max-digits="2"
@@ -135,7 +135,7 @@
       inputmode="numeric"
       autocomplete="off"
       maxlength="2"
-      placeholder="月{{ row }}"
+      value="12"
       aria-label="{{ row }}行目・生年月日・月"
     >
 
@@ -144,7 +144,7 @@
       type="text"
       id="member-{{ row }}-birth-day"
       name="member-{{ row }}-birth-day"
-      class="soshiki-form-field soshiki-form-member-field soshiki-form-member-birth-day"
+      class="soshiki-form-member-box soshiki-form-member-birth-day"
       data-birth-part="day"
       data-halfwidth-numeric
       data-max-digits="2"
@@ -152,7 +152,7 @@
       inputmode="numeric"
       autocomplete="off"
       maxlength="2"
-      placeholder="日{{ row }}"
+      value="28"
       aria-label="{{ row }}行目・生年月日・日"
     >
 

@@ -557,9 +557,25 @@ HTML の `id` / `name` は Access 列名の **kebab-case**（`member-{行}-` + �
 * サイズ変更は **変数だけ** 触る（1 箇所で全標準枠が連動）
 * `.soshiki-form-field` は標準枠に付けない（旧 16px / `position: absolute` と競合）
 
-**適用済み:** 郵便番号・住所5分割すべて（§9.11 標準枠）。
+**適用済み:** 郵便番号・住所5分割・生年月日（年月日）すべて（§9.11 標準枠）。
 
-**未移行:** 氏名・カナ（12/14px）など組合員欄のレガシー枠。
+**未移行:** 氏名・カナ（12/14px）・組合員コードなど組合員欄のレガシー枠。
+
+### 9.12 生年月日 CSS（§9.11 標準枠）
+
+| クラス | `left` | 文字数 | 備考 |
+|--------|--------|--------|------|
+| `.soshiki-form-member-birth-year` | `47.5%`（`--soshiki-form-member-birth-year-left`） | 4（**幅 50px**） | 年4桁 |
+| `.soshiki-form-member-birth-month` | `53.1%` + nudge **1px** | 2（**幅 28px**） | 月 |
+| `.soshiki-form-member-birth-day` | `56.9%`（`--soshiki-form-member-birth-day-left`） | 2（**幅 30px**） | 日 |
+
+HTML: `input.soshiki-form-member-box.soshiki-form-member-birth-*`（`.soshiki-form-field` は付けない）。
+
+| 項目 | 値 |
+|------|-----|
+| 枠サイズ | §9.11（高さ 18px・15px・上 padding 3px・左右 3px） |
+| 縦位置 | `--soshiki-form-member-birth-text-center`（74%）− 枠高 / 2 |
+| 字揃え | 中央・`tabular-nums` |
 
 ---
 
