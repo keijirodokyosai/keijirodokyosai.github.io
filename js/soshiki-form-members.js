@@ -25,6 +25,7 @@ function initMemberRows() {
   initHalfWidthInputs();
   initZipFields();
   initZipLookup();
+  initTownAreaFields();
 }
 
 function memberFieldId(row, suffix) {
@@ -373,9 +374,71 @@ function setAddressFieldsFromZipcloud(row, chosen) {
   var prefecture = getMemberField(row, "prefecture");
   var city = getMemberField(row, "city");
   var townArea = getMemberField(row, "town-area");
-  if (prefecture) prefecture.value = chosen.address1 || "";
+  var prefectureValue = chosen.address1 || "";
+  if (prefecture) prefecture.value = prefectureValue;
   if (city) city.value = chosen.address2 || "";
-  if (townArea) townArea.value = chosen.address3 || "";
+  if (townArea) {
+    townArea.value = normalizeTownAreaValue(prefectureValue, chosen.address3 || "");
+  }
+}
+
+function initTownAreaFields() {
+  document.querySelectorAll(".soshiki-form-member-town-area").forEach(function (input) {
+    input.addEventListener("blur", function () {
+      normalizeTownAreaField(input);
+    });
+  });
+}
+
+function normalizeTownAreaField(input) {
+  var row = getRowFromField(input);
+  var prefecture = getMemberField(row, "prefecture");
+  var prefectureValue = prefecture ? prefecture.value.trim() : "";
+  var normalized = normalizeTownAreaValue(prefectureValue, input.value);
+  if (normalized !== input.value) {
+    input.value = normalized;
+  }
+}
+
+/**
+ * 住所3（町村域）の正規化。
+ * - 全国: （…）・(…) のカッコ書きを除去
+ * - 京都府のみ: 通り名（…下る/上る/東入等の手前）を除去し、町域名部分を残す
+ */
+function normalizeTownAreaValue(prefecture, rawValue) {
+  if (!rawValue) return "";
+
+  var value = stripParentheticalFromTownArea(rawValue);
+  if (prefecture === "京都府") {
+    value = stripKyotoStreetNameFromTownArea(value);
+  }
+  return value.trim();
+}
+
+function stripParentheticalFromTownArea(value) {
+  var result = value;
+  var previous;
+  do {
+    previous = result;
+    result = result.replace(/（[^）]*）/g, "").replace(/\([^)]*\)/g, "");
+  } while (result !== previous);
+  return result.trim();
+}
+
+function stripKyotoStreetNameFromTownArea(value) {
+  if (!value) return "";
+
+  var directionalMatch = value.match(/(?:下る|上る|東入|西入|南入|北入)(.+)$/);
+  if (directionalMatch) {
+    return directionalMatch[1].trim();
+  }
+
+  // 通り名のみで町域名がない address3（例: 「河原町通」）は空にして手入力を促す
+  if (/通/.test(value)) {
+    return "";
+  }
+
+  return value.trim();
 }
 
 function lookupAddressFromZip(row) {
@@ -457,7 +520,10 @@ function addressGroupHasAnyInput(row) {
 
 function validateAddressGroupForRow(row, rowLabel, errors) {
   if (!addressGroupHasAnyInput(row)) {
-    clearFieldErrorForRow(row, ".soshiki-form-member-address-field");
+    clearFieldErrorForRow(
+      row,
+      ".soshiki-form-member-prefecture, .soshiki-form-member-city, .soshiki-form-member-town-area, .soshiki-form-member-area-number"
+    );
     setFieldError(getMemberField(row, "postal-code"), false);
     return;
   }

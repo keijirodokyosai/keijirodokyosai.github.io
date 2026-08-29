@@ -176,83 +176,88 @@
       ><span class="soshiki-form-dev-marker" aria-hidden="true">女{{ row }}</span><span class="sr-only">女</span></button>
     </div>
 
-    <label class="sr-only" for="member-{{ row }}-postal-code">{{ row }}行目・郵便番号</label>
-    <div class="soshiki-form-member-zip-wrap">
-      <div class="soshiki-form-member-zip-inner">
-        <span class="soshiki-form-member-zip-view" aria-hidden="true"></span>
-        <input
-          type="text"
-          id="member-{{ row }}-postal-code"
-          name="member-{{ row }}-postal-code"
-          class="soshiki-form-field soshiki-form-member-field soshiki-form-member-zip"
-          data-access-field="PostalCode"
-          data-zip-field
-          data-zip-lookup
-          data-row="{{ row }}"
-          inputmode="numeric"
-          autocomplete="postal-code"
-          maxlength="8"
-          value="123-4567"
-          placeholder="郵{{ row }}"
-          aria-label="{{ row }}行目・郵便番号（123-4567）"
-        >
+    <div class="soshiki-form-member-zip-address-row">
+      <label class="sr-only" for="member-{{ row }}-postal-code">{{ row }}行目・郵便番号</label>
+      <div class="soshiki-form-member-zip-wrap">
+        <div class="soshiki-form-member-zip-inner soshiki-form-member-box">
+          <span class="soshiki-form-member-zip-view" aria-hidden="true"></span>
+          <input
+            type="text"
+            id="member-{{ row }}-postal-code"
+            name="member-{{ row }}-postal-code"
+            class="soshiki-form-member-zip"
+            data-access-field="PostalCode"
+            data-zip-field
+            data-zip-lookup
+            data-row="{{ row }}"
+            inputmode="numeric"
+            autocomplete="postal-code"
+            maxlength="8"
+            value="123-4567"
+            placeholder="郵{{ row }}"
+            aria-label="{{ row }}行目・郵便番号（123-4567）"
+          >
+        </div>
       </div>
+
+      <label class="sr-only" for="member-{{ row }}-prefecture">{{ row }}行目・都道府県</label>
+      <input
+        type="text"
+        id="member-{{ row }}-prefecture"
+        name="member-{{ row }}-prefecture"
+        class="soshiki-form-member-box soshiki-form-member-prefecture"
+        data-access-field="Prefecture"
+        autocomplete="off"
+        value="京都府"
+        placeholder="都{{ row }}"
+        aria-label="{{ row }}行目・都道府県"
+      >
+
+      <label class="sr-only" for="member-{{ row }}-city">{{ row }}行目・市区町村</label>
+      <input
+        type="text"
+        id="member-{{ row }}-city"
+        name="member-{{ row }}-city"
+        class="soshiki-form-member-box soshiki-form-member-city"
+        data-access-field="City"
+        autocomplete="off"
+        placeholder="市{{ row }}"
+        aria-label="{{ row }}行目・市区町村"
+      >
     </div>
 
-    <label class="sr-only" for="member-{{ row }}-prefecture">{{ row }}行目・都道府県</label>
-    <input
-      type="text"
-      id="member-{{ row }}-prefecture"
-      name="member-{{ row }}-prefecture"
-      class="soshiki-form-field soshiki-form-member-field soshiki-form-member-address-field soshiki-form-member-prefecture"
-      data-access-field="Prefecture"
-      autocomplete="off"
-      placeholder="都{{ row }}"
-      aria-label="{{ row }}行目・都道府県"
-    >
+    <div class="soshiki-form-member-town-area-number-row">
+      <label class="sr-only" for="member-{{ row }}-town-area">{{ row }}行目・町村域</label>
+      <input
+        type="text"
+        id="member-{{ row }}-town-area"
+        name="member-{{ row }}-town-area"
+        class="soshiki-form-member-box soshiki-form-member-town-area"
+        data-access-field="TownArea"
+        autocomplete="off"
+        placeholder="町{{ row }}"
+        aria-label="{{ row }}行目・町村域"
+      >
 
-    <label class="sr-only" for="member-{{ row }}-city">{{ row }}行目・市区町村</label>
-    <input
-      type="text"
-      id="member-{{ row }}-city"
-      name="member-{{ row }}-city"
-      class="soshiki-form-field soshiki-form-member-field soshiki-form-member-address-field soshiki-form-member-city"
-      data-access-field="City"
-      autocomplete="off"
-      placeholder="市{{ row }}"
-      aria-label="{{ row }}行目・市区町村"
-    >
-
-    <label class="sr-only" for="member-{{ row }}-town-area">{{ row }}行目・町村域</label>
-    <input
-      type="text"
-      id="member-{{ row }}-town-area"
-      name="member-{{ row }}-town-area"
-      class="soshiki-form-field soshiki-form-member-field soshiki-form-member-address-field soshiki-form-member-town-area"
-      data-access-field="TownArea"
-      autocomplete="off"
-      placeholder="町{{ row }}"
-      aria-label="{{ row }}行目・町村域"
-    >
-
-    <label class="sr-only" for="member-{{ row }}-area-number">{{ row }}行目・番地</label>
-    <input
-      type="text"
-      id="member-{{ row }}-area-number"
-      name="member-{{ row }}-area-number"
-      class="soshiki-form-field soshiki-form-member-field soshiki-form-member-address-field soshiki-form-member-area-number"
-      data-access-field="AreaNumber"
-      autocomplete="off"
-      placeholder="番{{ row }}"
-      aria-label="{{ row }}行目・番地"
-    >
+      <label class="sr-only" for="member-{{ row }}-area-number">{{ row }}行目・番地</label>
+      <input
+        type="text"
+        id="member-{{ row }}-area-number"
+        name="member-{{ row }}-area-number"
+        class="soshiki-form-member-box soshiki-form-member-area-number"
+        data-access-field="AreaNumber"
+        autocomplete="off"
+        placeholder="番{{ row }}"
+        aria-label="{{ row }}行目・番地"
+      >
+    </div>
 
     <label class="sr-only" for="member-{{ row }}-building-name">{{ row }}行目・建物名</label>
     <input
       type="text"
       id="member-{{ row }}-building-name"
       name="member-{{ row }}-building-name"
-      class="soshiki-form-field soshiki-form-member-field soshiki-form-member-address-field soshiki-form-member-building-name"
+      class="soshiki-form-member-box soshiki-form-member-building-name"
       data-access-field="BuildingName"
       autocomplete="off"
       placeholder="建{{ row }}"

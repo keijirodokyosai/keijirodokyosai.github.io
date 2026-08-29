@@ -14,6 +14,7 @@
 | 入力ページ | `/soshiki-form-enter.html` |
 | 導線 | `downloads.html` 最下部「組織共済申込書入力」 |
 | 入力方式 | 背景 PNG（`images/soshiki-form-enter.png`）＋ HTML 入力欄を重ねる |
+| 用紙キャンバス | **A4 横**（`297mm × 210mm`）= 原本 PDF と同サイズ（§9.0） |
 | 対象端末 | **PC のみ**（スマホは非推奨） |
 | 有料ソフト | 不要 |
 | Access 直結 | しない（マスタ JSON 経由） |
@@ -74,7 +75,7 @@
 ```text
 soshiki-form-enter.html      … 入力ページ
 js/soshiki-form-enter.js     … 日付初期値・マスタ連携（Enter 判定・口・掛金反映）
-js/soshiki-form-members.js   … 組合員5行・異動トグル・半角制限・郵便番号検索・表示同期（updateZipView）
+js/soshiki-form-members.js   … 組合員5行・異動トグル・半角制限・郵便番号検索・町村域正規化（§9.9）・表示同期（updateZipView）
 _includes/soshiki-form-member-rows.html … 組合員行マークアップ
 css/style.css                … .soshiki-form-* オーバーレイ用
 images/soshiki-form-enter.png
@@ -301,6 +302,19 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 
 1画面に **5行** まで入力できる。完全に空の行は無視する。
 
+### 9.0 用紙キャンバス（`.soshiki-form-sheet`）
+
+入力欄の `%` 配置はすべてこの矩形を基準にする。
+
+| 項目 | 値 |
+|------|-----|
+| 原本 | `pdf/soshiki-form-enter.pdf`（**A4 横**） |
+| PDF / CSS | **841.68 × 595.2 pt** = **297 × 210 mm** |
+| ブラウザ | `width: 297mm; height: 210mm;`（96dpi 換算 **約 1122 × 794 px**） |
+| 背景 PNG | 1684 × 1191 px（pt の **2 倍**解像度。§9.7 実測の基準） |
+
+**注意:** 旧実装の `1100px` 固定幅は廃止。サイト他ページの `max-width: 1100px`（`.kyosai-page`）とは無関係。
+
 ### 9.1 異動内容
 
 | 項目 | 内容 |
@@ -337,15 +351,15 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | カナ姓・名 | 半角カナのみ（全角カナ・ひらがな・漢字は除去） | — |
 | 組合員コード | 半角数字、最大6桁（**1枠**） | 左0埋めで6桁表示 |
 | 生年月日 | 半角数字。全角数字は半角に変換 | 月・日は2桁化。年・月・日が揃えば実在日チェック |
-| 郵便番号 | 半角数字7桁、表示は `123-4567` | 7桁そろえば zipcloud で都道府県・市区町村・町村域を自動入力 |
+| 郵便番号 | 半角数字7桁、表示は `123-4567` | 7桁そろえば zipcloud で都道府県・市区町村・町村域を自動入力（町村域は §9.9 正規化） |
 
 ### 9.4 性別・郵便番号
 
 * 性別: 男（`1`）/ 女（`2`）。再クリックで解除可
 * 郵便番号: **1枠**・値は `123-4567` 形式。7桁連続入力可
 * 郵便番号 API: `https://zipcloud.ibsnet.co.jp/api/search?zipcode=`（方式1・外部API。API には数字7桁のみ渡す）
-* **表示**: 入力 `<input>` の文字は透明。`.soshiki-form-member-zip-view` に `updateZipView()`（`js/soshiki-form-members.js`）で同期表示
-* **字間**: 数字同士 `letter-spacing: 0.06em`。ハイフン前後のみ `margin: 0.12em`（`<input>` 単体では不可のため表示レイヤーで分割）
+* **表示**: 枠は `.soshiki-form-member-zip-inner.soshiki-form-member-box`（§9.11）。文字は透明 `input` + `.soshiki-form-member-zip-view` に `updateZipView()` で同期
+* **字間**: 数字 `.soshiki-form-member-zip-part` → `letter-spacing: 0.06em`。ハイフン前後 `.soshiki-form-member-zip-hyphen` → `margin: 0.12em`
 
 ### 9.5 CSS 配置（組合員行・共通）
 
@@ -374,17 +388,21 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 
 ### 9.8 郵便番号枠の配置（2026-08-29 完了）
 
-5 行共通。クラスは `.soshiki-form-member-zip-wrap` → `.soshiki-form-member-zip-inner` →（`.soshiki-form-member-zip-view` + `input.soshiki-form-member-zip`）。
+5 行共通。郵便番号のみ **表示レイヤー**（`.soshiki-form-member-zip-wrap` → `.soshiki-form-member-zip-inner.soshiki-form-member-box` → view + 透明 input）。都道府県・市区町村は `input.soshiki-form-member-box`。
 
 | 項目 | 値 | 備考 |
 |------|-----|------|
 | 横位置 `left` | `66.6%` | 行幅＝用紙幅のため用紙基準と同じ |
-| 文字の縦中心 | `--soshiki-form-member-zip-text-center: 21.09%` | PNG 実測（§9.7 の旧ハイフン y≈465 ÷ 行高 ≈ 21.09%）。背景 **〒** と同一行 |
-| 縦微調整 | `--soshiki-form-member-zip-text-nudge: -1px` | 文字中心の px 補正（枠中心ではない） |
-| 枠余白 | `padding: 0.12px` | 幅・高さは `max-content` |
-| フォント | Meiryo 15px | `.soshiki-form-member-field`（15px）と同サイズ |
+| 1行目 `top`（枠上端） | `--soshiki-form-member-zip-text-center` − `--soshiki-form-member-box-height` / 2 + nudge | 基準は PNG 実測の文字中心（21.09%）。`translateY(-50%)` は使わない |
+| 縦微調整 | `--soshiki-form-member-zip-text-nudge: -1px` | 文字中心の px 補正 |
+| 1行目 flex | `align-items: flex-start` | 郵便・都道府県・市区町村の **枠上端** を揃える |
+| 郵便番号ラッパ | `.soshiki-form-member-zip-wrap` 高さ 18px・`zip-inner` は **`display: flex`（`inline-flex` 不可）** | インライン行ボックスの余白で縦ズレするため |
+| 枠サイズ | §9.11 `.soshiki-form-member-box` on `.soshiki-form-member-zip-inner` | 高さ 18px・15px・padding 0 |
+| 郵便番号幅 | `--soshiki-form-member-box-chars: 5` + `--soshiki-form-member-zip-width-extra: 6px` | px で微調整 |
 | 字間（数字） | `0.06em` | `.soshiki-form-member-zip-part` |
 | 字間（ハイフン前後） | `0.12em` | `.soshiki-form-member-zip-hyphen` の margin |
+| 横並び | `.soshiki-form-member-zip-address-row` | 郵便番号 → 都道府県（3文字）→ 市区町村（10文字）。`gap: 2px`（行間と同じ） |
+| 町村域 | `.soshiki-form-member-town-area-number-row` | 1行目枠下 + 2px。番地は町村域の右 |
 
 **座標の注意:** 組合員行内の `%` は行高（用紙の 7.55%）に対する割合。用紙全体で 1% 動かす場合は行内 `%` に換算して指定する（行内 1% ≒ 用紙 0.0755%）。
 
@@ -404,7 +422,7 @@ HTML の `id` / `name` は Access 列名の **kebab-case**（`member-{行}-` + �
 | PostalCode | `postal-code` | 表示 `123-4567`。zipcloud 検索キー |
 | Prefecture | `prefecture` | zipcloud `address1` |
 | City | `city` | zipcloud `address2` |
-| TownArea | `town-area` | zipcloud `address3` |
+| TownArea | `town-area` | zipcloud `address3` → **正規化後**（§9.9 町村域） |
 | AreaNumber | `area-number` | 手入力（番地） |
 | BuildingName | `building-name` | 手入力（建物名・常に任意） |
 | — | `idou` | Web のみ（新規/解約/変更） |
@@ -414,6 +432,19 @@ HTML の `id` / `name` は Access 列名の **kebab-case**（`member-{行}-` + �
 * 7桁確定（blur）で zipcloud 検索
 * **郵便番号が前回と異なる** 場合: 都道府県・市区町村・町村域を上書きし、**番地・建物名をクリア**
 * 複数候補: アラート「入力の郵便番号には、複数の住所候補があります。表示された住所が異なる場合は手入力でお願いします。」→ 先頭候補を反映
+
+**町村域（TownArea・住所3）の正規化** — `normalizeTownAreaValue()`（`js/soshiki-form-members.js`）
+
+**Access 側に同種ルールは設けない。** 正規化は Web のみ。保存・送信される `TownArea` は正規化後の値。
+
+| 対象 | ルール | 例 |
+|------|--------|-----|
+| **全国** | カッコ書き `（…）`・`(...)` を除去 | `○○町（次のビルを除く）` → `○○町` |
+| **京都府のみ** | 通り名を除去。**最後**の `下る` / `上る` / `東入` / `西入` / `南入` / `北入` **以降**を町域名とする | `大和大路通三条下る東入若松町` → `若松町` |
+| **京都府のみ** | 上記の方位がなく `通` を含む（通り名のみ） | **空欄**（手入力） |
+
+* zipcloud 自動入力時と、町村域 **blur** 時に適用（都道府県欄の値を参照）
+* 都道府県・市区町村は zipcloud の値をそのまま使用
 
 ### 9.10 組合員コード・住所枠 CSS（2026-08-29）
 
@@ -426,17 +457,49 @@ HTML の `id` / `name` は Access 列名の **kebab-case**（`member-{行}-` + �
 | `width` | `11.1%` |
 | 字間 | `letter-spacing: 0.08em` |
 
-**住所（5分割・暫定縦積み）** — 共通 `.soshiki-form-member-address-field` + 行別クラス
+**住所（5分割）** — すべて §9.11 標準枠
 
-| クラス | `top`（行内%） |
-|--------|----------------|
-| `.soshiki-form-member-prefecture` | `54%` |
-| `.soshiki-form-member-city` | `61.2%` |
-| `.soshiki-form-member-town-area` | `68.4%` |
-| `.soshiki-form-member-area-number` | `75.6%` |
-| `.soshiki-form-member-building-name` | `82.8%` |
+| クラス | 配置 | 文字数 |
+|--------|------|--------|
+| `.soshiki-form-member-zip-inner` | 1行目左（枠） | 5文字 + `zip-width-extra`（6px）。表示は view |
+| `.soshiki-form-member-prefecture` | 郵便番号の右 | 3（4文字県名ははみ出可） |
+| `.soshiki-form-member-city` | 都道府県の右 | 10 |
+| `.soshiki-form-member-town-area` | 郵便番号枠の下（2行目左） | 12 |
+| `.soshiki-form-member-area-number` | 町村域の右（2行目） | 8 |
+| `.soshiki-form-member-building-name` | 町村域の下（3行目） | 12 |
 
-共通: `left: 66%`、`width: calc(41.5% * 0.7)`、`height: 7.2%`。背景 PNG への最終合わせは後続調整。
+**1行目:** `.soshiki-form-member-zip-address-row` — 郵便番号・都道府県・市区町村。
+
+**2行目:** `.soshiki-form-member-town-area-number-row` — 町村域・番地（1行目枠下 + `--soshiki-form-member-town-gap-from-zip`: **2px**）。
+
+**3行目:** 建物名 — 2行目枠下 + `--soshiki-form-member-building-gap-from-town`: **2px**、`left: 66.6%`。
+
+### 9.11 組合員・標準枠サイズ（2026-08-29 確定）
+
+郵便番号・都道府県以降の組合員枠は、**CSS 変数 + `.soshiki-form-member-box`** でサイズを統一する。定義は `.soshiki-form-sheet` と `css/style.css`。
+
+| 変数 | 値 | 意味 |
+|------|-----|------|
+| `--soshiki-form-member-box-font-size` | `15px` | 枠内フォント（Meiryo） |
+| `--soshiki-form-member-box-line-height` | `1` | 変数定義（描画は `.soshiki-form-member-box` で `line-height: var(--soshiki-form-member-box-height)` に統一） |
+| `--soshiki-form-member-box-padding-block` | `0` | 上下 padding |
+| `--soshiki-form-member-box-padding-inline` | `3px` | 左右 padding |
+| `--soshiki-form-member-box-height` | `18px` | **外側の高さ**（`box-sizing: border-box`） |
+| `--soshiki-form-member-box-chars` | （欄ごと） | 全角文字数。幅 = `chars × 1em + padding + border`。郵便番号は下記 extra も加算 |
+| `--soshiki-form-member-zip-width-extra` | `6px` | 郵便番号枠のみ。5文字幅に px で追加（微調整用） |
+| `--soshiki-form-member-box-border-width` | `1px` | 枠線 |
+| `--soshiki-form-member-box-border-radius` | `2px` | 角丸 |
+
+**使い方**
+
+* HTML: `<input class="soshiki-form-member-box …">`（都道府県以降）。**郵便番号のみ** 枠は `div.soshiki-form-member-zip-inner.soshiki-form-member-box` + 表示 view + 透明 input
+* 個別クラスは **位置・`--soshiki-form-member-box-chars` のみ**
+* サイズ変更は **変数だけ** 触る（1 箇所で全標準枠が連動）
+* `.soshiki-form-field` は標準枠に付けない（旧 16px / `position: absolute` と競合）
+
+**適用済み:** 郵便番号・住所5分割すべて（§9.11 標準枠）。
+
+**未移行:** 氏名・カナ（12/14px）など組合員欄のレガシー枠。
 
 ---
 
@@ -558,7 +621,7 @@ Subbranch（KyosaikaiName, industry, branch, subbranch, CollectiveKyosaiId）
 
 1. ~~産別・支部・分会の入力枠を背景に追加~~ → **完了**
 2. ~~`data/union-master.json` を受け取り、Enter 判定・コード・口欄・掛金反映~~ → **完了**
-3. ~~組合員5行（異動内容・氏名・生年月日・性別・住所）・半角制限・郵便番号検索~~ → **完了**（郵便番号枠 §9.8、Access 対応・住所5分割・コード1枠 §9.9）
+3. ~~組合員5行（異動内容・氏名・生年月日・性別・住所）・半角制限・郵便番号検索~~ → **完了**（郵便番号枠 §9.8、Access 対応・住所5分割・コード1枠 §9.9、**町村域正規化 §9.9**）
 4. ~~背景 PNG の郵便番号ハイフン除去~~ → **完了**（§9.7）
 5. 組合員欄 CSS の最終調整（住所5枠の横位置など）・開発用仮表示の削除（郵便番号枠は §9.8 完了済み）
 6. 組合名プルダウン（localStorage）・追加確認・削除 UI
@@ -615,8 +678,9 @@ Jekyll をバックグラウンドで起動し、プレビュー URL を表示�
 | 漢字姓・名 | 姓N / 名N |
 | 生年月日 | 年N / 月N / 日N |
 | 性別 | 男N / 女N |
-| 郵便番号 | `123-4567`（1行目のみ `value` 仮設定・配置確認用） |
-| 都道府県・市区町村・町村域・番地・建物名 | 都N / 市N / 町N / 番N / 建N |
+| 郵便番号 | `123-4567`（`value` 仮設定・配置確認用） |
+| 都道府県 | `京都府`（`value` 仮設定・配置確認用） |
+| 市区町村・町村域・番地・建物名 | 市N / 町N / 番N / 建N |
 
 組合名 Enter でマスタ反映すると上書きされる。未登録名で Enter するとクリアされる。
 

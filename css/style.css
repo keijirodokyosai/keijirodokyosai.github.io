@@ -1433,10 +1433,11 @@ a:focus-visible {
 
 .soshiki-form-sheet {
   position: relative;
-  width: 1100px;
+  /* A4 横（pdf/soshiki-form-enter.pdf = 841.68×595.2 pt = 297×210 mm） */
+  width: 297mm;
+  height: 210mm;
   max-width: none;
   margin: 0 auto;
-  aspect-ratio: 841.68 / 595.2;
   background: #fff;
   box-shadow: 0 2px 12px rgba(18, 52, 86, 0.12);
   --soshiki-form-sheet-row-top: 28.5%;
@@ -1674,7 +1675,7 @@ a:focus-visible {
 }
 
 .soshiki-form-enter-note {
-  width: 1100px;
+  width: 297mm;
   max-width: 100%;
   margin: 16px auto 0;
   font-size: 16px;
@@ -1690,6 +1691,24 @@ a:focus-visible {
   /* 〒・郵便番号文字の縦中心（PNG 実測: 旧ハイフン y≈465 / 行高 → 約 21.09%） */
   --soshiki-form-member-zip-text-center: 21.09%;
   --soshiki-form-member-zip-text-nudge: -1px;
+  --soshiki-form-member-address-field-gap: 2px;
+  --soshiki-form-member-town-gap-from-zip: 2px;
+  --soshiki-form-member-building-gap-from-town: 2px;
+  /* 郵便番号枠：文字数に加えて px で幅を微調整（5文字 + extra が目安） */
+  --soshiki-form-member-zip-width-extra: 6px;
+  /* 組合員・標準枠（§9.11）— 郵便番号・住所など新規枠は必ずここを参照 */
+  --soshiki-form-member-box-font-size: 15px;
+  --soshiki-form-member-box-line-height: 1;
+  --soshiki-form-member-box-padding-block: 0;
+  --soshiki-form-member-box-padding-inline: 3px;
+  --soshiki-form-member-box-height: 18px;
+  --soshiki-form-member-box-border-width: 1px;
+  --soshiki-form-member-box-border-radius: 2px;
+  --soshiki-form-member-box-border-color: rgba(54, 168, 114, 0.42);
+  --soshiki-form-member-box-border-color-hover: rgba(54, 168, 114, 0.65);
+  --soshiki-form-member-box-border-color-focus: #36a872;
+  --soshiki-form-member-box-focus-ring: 0 0 0 2px rgba(54, 168, 114, 0.25);
+  --soshiki-form-member-box-color: #123456;
 }
 
 .soshiki-form-member-rows {
@@ -1712,6 +1731,44 @@ a:focus-visible {
 
 .soshiki-form-member-row > * {
   pointer-events: auto;
+}
+
+/* 組合員・標準枠（div / input 共通・§9.11） */
+.soshiki-form-member-box {
+  box-sizing: border-box;
+  margin: 0;
+  padding: var(--soshiki-form-member-box-padding-block)
+    var(--soshiki-form-member-box-padding-inline);
+  border: var(--soshiki-form-member-box-border-width) solid
+    var(--soshiki-form-member-box-border-color);
+  border-radius: var(--soshiki-form-member-box-border-radius);
+  background: transparent;
+  font-family: "Meiryo", "Hiragino Sans", sans-serif;
+  font-size: var(--soshiki-form-member-box-font-size);
+  line-height: var(--soshiki-form-member-box-height);
+  height: var(--soshiki-form-member-box-height);
+  min-height: var(--soshiki-form-member-box-height);
+  max-height: var(--soshiki-form-member-box-height);
+  color: var(--soshiki-form-member-box-color);
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.soshiki-form-member-box:hover {
+  border-color: var(--soshiki-form-member-box-border-color-hover);
+}
+
+.soshiki-form-member-box:focus,
+.soshiki-form-member-box:focus-within {
+  border-color: var(--soshiki-form-member-box-border-color-focus);
+  outline: none;
+  box-shadow: var(--soshiki-form-member-box-focus-ring);
+}
+
+.soshiki-form-member-box.soshiki-form-field--error,
+.soshiki-form-member-box:has(.soshiki-form-field--error) {
+  border-color: #c0392b;
+  box-shadow: 0 0 0 1px rgba(192, 57, 43, 0.35);
 }
 
 /* 異動内容（新規・解約・変更） */
@@ -1774,7 +1831,7 @@ a:focus-visible {
   line-height: 1;
 }
 
-/* 氏名・生年月日・住所（行内共通） */
+/* 氏名・生年月日など（行内共通・レガシー。標準枠サイズは §9.11 / .soshiki-form-member-box） */
 .soshiki-form-member-field {
   margin: 0;
   padding: 0 3px;
@@ -1899,50 +1956,84 @@ a:focus-visible {
   height: 38%;
 }
 
-/* 郵便番号・住所 */
-.soshiki-form-member-zip-wrap {
+/* 郵便番号・住所1〜3（横並び） */
+.soshiki-form-member-zip-address-row {
   position: absolute;
   left: 66.6%;
-  top: 0;
+  top: calc(
+    var(--soshiki-form-member-zip-text-center) +
+      var(--soshiki-form-member-zip-text-nudge) -
+      var(--soshiki-form-member-box-height) / 2
+  );
+  display: inline-flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--soshiki-form-member-address-field-gap);
   width: max-content;
-  height: 100%;
+}
+
+/* 住所3〜5・文字幅（§9.11 標準枠 + --soshiki-form-member-box-chars） */
+.soshiki-form-member-prefecture,
+.soshiki-form-member-city,
+.soshiki-form-member-town-area,
+.soshiki-form-member-area-number,
+.soshiki-form-member-building-name {
+  width: calc(
+    var(--soshiki-form-member-box-chars) * 1em +
+      2 * var(--soshiki-form-member-box-padding-inline) +
+      2 * var(--soshiki-form-member-box-border-width)
+  );
+  min-width: calc(
+    var(--soshiki-form-member-box-chars) * 1em +
+      2 * var(--soshiki-form-member-box-padding-inline) +
+      2 * var(--soshiki-form-member-box-border-width)
+  );
+  max-width: calc(
+    var(--soshiki-form-member-box-chars) * 1em +
+      2 * var(--soshiki-form-member-box-padding-inline) +
+      2 * var(--soshiki-form-member-box-border-width)
+  );
+}
+
+.soshiki-form-member-zip-wrap {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  flex: 0 0 auto;
+  width: max-content;
+  height: var(--soshiki-form-member-box-height);
+  line-height: 0;
   pointer-events: none;
 }
 
 .soshiki-form-member-zip-inner {
-  position: absolute;
-  left: 0;
-  top: calc(
-    var(--soshiki-form-member-zip-text-center) +
-      var(--soshiki-form-member-zip-text-nudge)
-  );
-  transform: translateY(-50%);
-  display: inline-flex;
+  --soshiki-form-member-box-chars: 5;
+  position: relative;
+  display: flex;
   align-items: center;
   justify-content: center;
-  box-sizing: border-box;
-  width: max-content;
-  height: max-content;
-  padding: 0.12px;
-  border: 1px solid rgba(54, 168, 114, 0.42);
-  border-radius: 2px;
-  background: transparent;
+  flex: 0 0 auto;
+  width: calc(
+    var(--soshiki-form-member-box-chars) * 1em +
+      2 * var(--soshiki-form-member-box-padding-inline) +
+      2 * var(--soshiki-form-member-box-border-width) +
+      var(--soshiki-form-member-zip-width-extra)
+  );
+  min-width: calc(
+    var(--soshiki-form-member-box-chars) * 1em +
+      2 * var(--soshiki-form-member-box-padding-inline) +
+      2 * var(--soshiki-form-member-box-border-width) +
+      var(--soshiki-form-member-zip-width-extra)
+  );
+  max-width: calc(
+    var(--soshiki-form-member-box-chars) * 1em +
+      2 * var(--soshiki-form-member-box-padding-inline) +
+      2 * var(--soshiki-form-member-box-border-width) +
+      var(--soshiki-form-member-zip-width-extra)
+  );
+  overflow-x: visible;
+  overflow-y: hidden;
   pointer-events: auto;
-}
-
-.soshiki-form-member-zip-inner:hover {
-  border-color: rgba(54, 168, 114, 0.65);
-}
-
-.soshiki-form-member-zip-inner:focus-within {
-  border-color: #36a872;
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(54, 168, 114, 0.25);
-}
-
-.soshiki-form-member-zip-inner:has(.soshiki-form-field--error) {
-  border-color: #c0392b;
-  box-shadow: 0 0 0 1px rgba(192, 57, 43, 0.35);
 }
 
 .soshiki-form-member-zip-view {
@@ -1950,11 +2041,12 @@ a:focus-visible {
   align-items: center;
   justify-content: center;
   pointer-events: none;
+  white-space: nowrap;
   font-family: "Meiryo", "Hiragino Sans", sans-serif;
-  font-size: 15px;
+  font-size: var(--soshiki-form-member-box-font-size);
   font-variant-numeric: tabular-nums;
   line-height: 1;
-  color: #123456;
+  color: var(--soshiki-form-member-box-color);
 }
 
 .soshiki-form-member-zip-part {
@@ -1983,7 +2075,7 @@ a:focus-visible {
   caret-color: #123456;
   text-align: center;
   font-family: "Meiryo", "Hiragino Sans", sans-serif;
-  font-size: 15px;
+  font-size: var(--soshiki-form-member-box-font-size);
   font-variant-numeric: tabular-nums;
   line-height: 1;
 }
@@ -1999,39 +2091,81 @@ a:focus-visible {
   box-shadow: none;
 }
 
-/* 住所（5分割・配置は後続調整） */
-.soshiki-form-member-address-field {
-  position: absolute;
-  left: 66%;
-  width: calc(41.5% * 0.7);
-  height: 7.2%;
+.soshiki-form-member-prefecture,
+.soshiki-form-member-city,
+.soshiki-form-member-town-area,
+.soshiki-form-member-area-number,
+.soshiki-form-member-building-name {
   text-align: left;
-  font-size: 13px;
 }
 
 .soshiki-form-member-prefecture {
-  top: 54%;
+  --soshiki-form-member-box-chars: 3;
+  position: relative;
+  top: auto;
+  left: auto;
+  flex: 0 0 auto;
 }
 
 .soshiki-form-member-city {
-  top: 61.2%;
+  --soshiki-form-member-box-chars: 10;
+  position: relative;
+  top: auto;
+  left: auto;
+  flex: 0 0 auto;
+}
+
+.soshiki-form-member-town-area-number-row {
+  position: absolute;
+  left: 66.6%;
+  top: calc(
+    var(--soshiki-form-member-zip-text-center) +
+      var(--soshiki-form-member-zip-text-nudge) -
+      var(--soshiki-form-member-box-height) / 2 +
+      var(--soshiki-form-member-box-height) +
+      var(--soshiki-form-member-town-gap-from-zip)
+  );
+  display: inline-flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--soshiki-form-member-address-field-gap);
+  width: max-content;
 }
 
 .soshiki-form-member-town-area {
-  top: 68.4%;
+  --soshiki-form-member-box-chars: 12;
+  position: relative;
+  top: auto;
+  left: auto;
+  flex: 0 0 auto;
 }
 
 .soshiki-form-member-area-number {
-  top: 75.6%;
+  --soshiki-form-member-box-chars: 8;
+  position: relative;
+  top: auto;
+  left: auto;
+  flex: 0 0 auto;
 }
 
 .soshiki-form-member-building-name {
-  top: 82.8%;
+  --soshiki-form-member-box-chars: 12;
+  position: absolute;
+  left: 66.6%;
+  top: calc(
+    var(--soshiki-form-member-zip-text-center) +
+      var(--soshiki-form-member-zip-text-nudge) -
+      var(--soshiki-form-member-box-height) / 2 +
+      2 * var(--soshiki-form-member-box-height) +
+      var(--soshiki-form-member-town-gap-from-zip) +
+      var(--soshiki-form-member-building-gap-from-town)
+  );
 }
 
 /* 配置確認用ラベル（開発用・本番前に削除） */
 .soshiki-form-member-field::placeholder,
-.soshiki-form-member-union-member-code::placeholder {
+.soshiki-form-member-union-member-code::placeholder,
+.soshiki-form-member-box::placeholder {
   color: rgba(18, 52, 86, 0.72);
   opacity: 1;
 }
@@ -2062,7 +2196,8 @@ a:focus-visible {
   }
 
   .soshiki-form-member-field,
-  .soshiki-form-member-union-member-code {
+  .soshiki-form-member-union-member-code,
+  .soshiki-form-member-box {
     border-color: transparent !important;
     box-shadow: none !important;
   }
