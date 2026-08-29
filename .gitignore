@@ -3,3 +3,8 @@ _site/
 .jekyll-cache/
 .jekyll-metadata
 .jekyll-serve.pid
+
+# soshiki-form-enter.png 編集時の切り出し確認（scripts が再生成）
+/measure/
+/_*.png
+/_head.png
