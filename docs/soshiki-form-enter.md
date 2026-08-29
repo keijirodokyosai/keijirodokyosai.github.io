@@ -60,7 +60,7 @@
 
 | 項目 | 内容 |
 |------|------|
-| 異動内容 | 5行×（新規／解約／変更）トグル。実線枠・再クリックで解除 |
+| 異動内容 | 5行×（新規／解約／変更）トグル。性別と同系統の枠（点線 1.5px / 選択時 実線 2.4px・紺 `#123456`）。再クリックで解除 |
 | 組合員各欄 | コード（6桁1枠）・氏名・生年月日・性別・郵便番号・住所5分割（HTML/CSS 配置済み） |
 | 半角制限 | カナ・コード・生年月日・郵便番号 |
 | blur 処理 | コード左0埋め、月日2桁化、生年月日の実在日チェック |
@@ -320,7 +320,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | 項目 | 内容 |
 |------|------|
 | 選択肢 | **新規** / **解約** / **変更**（1行につき0または1つ） |
-| 操作 | クリックで実線の楕円枠。別の選択肢で切替。同じ選択肢の再クリックで解除 |
+| 操作 | クリックで選択（**実線 2.4px** の楕円枠）。別の選択肢で切替。同じ選択肢の再クリックで解除。未選択時は **点線 1.5px**（紺 `#123456`・性別欄と同値） |
 | 値 | `shinki` / `kaiyaku` / `henkou`（hidden input） |
 
 ### 9.2 必須項目
@@ -355,7 +355,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 
 ### 9.4 性別・郵便番号
 
-* 性別: 男（`1`）/ 女（`2`）。再クリックで解除可
+* 性別: 男（`1`）/ 女（`2`）。再クリックで解除可。各ボタン枠は **紺 `#123456`・点線 1.5px**（`.soshiki-form-gender-btn`）。選択時は **実線 2.4px** 同色系。幅 **2.4%**。横位置は **性別列（PNG x1028–1088）内で中央**（`--soshiki-form-member-gender-column-left` 61.08%）。縦は枠高 **33%**、男 **10%** / 女 **57%** 起点（`--soshiki-form-member-gender-male-top` / `--soshiki-form-member-gender-female-top`）。表示文字（`.soshiki-form-dev-marker`）は **13px**・上余白 **3px**
 * 郵便番号: **1枠**・値は `123-4567` 形式。7桁連続入力可
 * 郵便番号 API: `https://zipcloud.ibsnet.co.jp/api/search?zipcode=`（方式1・外部API。API には数字7桁のみ渡す）
 * **表示**: 枠は `.soshiki-form-member-zip-inner.soshiki-form-member-box`（§9.11）。文字は透明 `input` + `.soshiki-form-member-zip-view` に `updateZipView()` で同期
@@ -456,7 +456,7 @@ x は全行共通。**1.男** x **1045–1080**、**2.女** x **1044–1081**。
 | 縦微調整 | `--soshiki-form-member-zip-text-nudge: -1px` | 文字中心の px 補正 |
 | 1行目 flex | `align-items: flex-start` | 郵便・都道府県・市区町村の **枠上端** を揃える |
 | 郵便番号ラッパ | `.soshiki-form-member-zip-wrap` 高さ 18px・`zip-inner` は **`display: flex`（`inline-flex` 不可）** | インライン行ボックスの余白で縦ズレするため |
-| 枠サイズ | §9.11 `.soshiki-form-member-box` on `.soshiki-form-member-zip-inner` | 高さ 18px・15px・padding 0 |
+| 枠サイズ | §9.11 `.soshiki-form-member-box` on `.soshiki-form-member-zip-inner` | 高さ 18px・15px・上 padding 3px |
 | 郵便番号幅 | `--soshiki-form-member-box-chars: 5` + `--soshiki-form-member-zip-width-extra: 6px` | px で微調整 |
 | 字間（数字） | `0.06em` | `.soshiki-form-member-zip-part` |
 | 字間（ハイフン前後） | `0.12em` | `.soshiki-form-member-zip-hyphen` の margin |
@@ -540,8 +540,9 @@ HTML の `id` / `name` は Access 列名の **kebab-case**（`member-{行}-` + �
 | 変数 | 値 | 意味 |
 |------|-----|------|
 | `--soshiki-form-member-box-font-size` | `15px` | 枠内フォント（Meiryo） |
-| `--soshiki-form-member-box-line-height` | `1` | 変数定義（描画は `.soshiki-form-member-box` で `line-height: var(--soshiki-form-member-box-height)` に統一） |
-| `--soshiki-form-member-box-padding-block` | `0` | 上下 padding |
+| `--soshiki-form-member-box-line-height` | `1` | 変数定義（描画は `.soshiki-form-member-box` で `padding-top` / `padding-bottom` を除いた高さに合わせる） |
+| `--soshiki-form-member-box-padding-top` | `3px` | 上 padding（性別表示文字と同値） |
+| `--soshiki-form-member-box-padding-bottom` | `0` | 下 padding |
 | `--soshiki-form-member-box-padding-inline` | `3px` | 左右 padding |
 | `--soshiki-form-member-box-height` | `18px` | **外側の高さ**（`box-sizing: border-box`） |
 | `--soshiki-form-member-box-chars` | （欄ごと） | 全角文字数。幅 = `chars × 1em + padding + border`。郵便番号は下記 extra も加算 |
@@ -737,7 +738,7 @@ Jekyll をバックグラウンドで起動し、プレビュー URL を表示�
 | カナ姓・名 | ｾｲN / ﾒｲN |
 | 漢字姓・名 | 姓N / 名N |
 | 生年月日 | 年N / 月N / 日N |
-| 性別 | 男N / 女N |
+| 性別 | 男 / 女（行番号なし。`aria-label` に N 行目） |
 | 郵便番号 | `123-4567`（`value` 仮設定・配置確認用） |
 | 都道府県 | `京都府`（`value` 仮設定・配置確認用） |
 | 市区町村・町村域・番地・建物名 | 市N / 町N / 番N / 建N |

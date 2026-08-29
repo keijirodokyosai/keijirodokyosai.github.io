@@ -22,7 +22,8 @@ alwaysApply: true
 | フォント | `--soshiki-form-member-box-font-size` | 15px |
 | 住所1〜5・最小フォント | `--soshiki-form-member-box-font-size-min` | 10px |
 | 行高 | `--soshiki-form-member-box-line-height` | 1 |
-| 上下 padding | `--soshiki-form-member-box-padding-block` | 0 |
+| 上 padding | `--soshiki-form-member-box-padding-top` | 3px |
+| 下 padding | `--soshiki-form-member-box-padding-bottom` | 0 |
 | 左右 padding | `--soshiki-form-member-box-padding-inline` | 3px |
 | 外側の高さ | `--soshiki-form-member-box-height` | 18px（border-box） |
 | 文字幅 | `--soshiki-form-member-box-chars` | 都道府県 3、市区町村 10、町村域 12、番地 8、建物名 20 など |

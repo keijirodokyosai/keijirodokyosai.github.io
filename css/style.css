@@ -1696,14 +1696,33 @@ a:focus-visible {
   --soshiki-form-member-building-gap-from-town: 2px;
   /* 郵便番号枠：文字数に加えて px で幅を微調整（5文字 + extra が目安） */
   --soshiki-form-member-zip-width-extra: 6px;
-  /* 性別（男/女ボタン） */
-  --soshiki-form-member-gender-left: 46.1%;
-  --soshiki-form-member-gender-left-nudge: 30px;
+  /* 性別（男/女ボタン）— 列位置は PNG 実測 §9.7.1（x1028–1088 / 1683px 基準） */
+  --soshiki-form-member-gender-column-left: 61.08%;
+  --soshiki-form-member-gender-column-width: 3.63%;
+  --soshiki-form-member-gender-width: 2.4%;
+  --soshiki-form-member-gender-left: calc(
+    var(--soshiki-form-member-gender-column-left) +
+      (var(--soshiki-form-member-gender-column-width) -
+        var(--soshiki-form-member-gender-width)) /
+      2
+  );
+  --soshiki-form-member-gender-border-width: 1.5px;
+  --soshiki-form-member-gender-border-width-selected: 2.4px;
+  --soshiki-form-member-gender-border-style: dotted;
+  --soshiki-form-member-gender-border-color: #123456;
+  --soshiki-form-member-gender-border-color-selected: #123456;
+  --soshiki-form-member-gender-text-padding-top: var(
+    --soshiki-form-member-box-padding-top
+  );
+  --soshiki-form-member-gender-btn-height: 33%;
+  --soshiki-form-member-gender-male-top: 10%;
+  --soshiki-form-member-gender-female-top: 57%;
   /* 組合員・標準枠（§9.11）— 郵便番号・住所など新規枠は必ずここを参照 */
   --soshiki-form-member-box-font-size: 15px;
   --soshiki-form-member-box-font-size-min: 10px;
   --soshiki-form-member-box-line-height: 1;
-  --soshiki-form-member-box-padding-block: 0;
+  --soshiki-form-member-box-padding-top: 3px;
+  --soshiki-form-member-box-padding-bottom: 0;
   --soshiki-form-member-box-padding-inline: 3px;
   --soshiki-form-member-box-height: 18px;
   --soshiki-form-member-box-border-width: 1px;
@@ -1741,15 +1760,20 @@ a:focus-visible {
 .soshiki-form-member-box {
   box-sizing: border-box;
   margin: 0;
-  padding: var(--soshiki-form-member-box-padding-block)
-    var(--soshiki-form-member-box-padding-inline);
+  padding: var(--soshiki-form-member-box-padding-top)
+    var(--soshiki-form-member-box-padding-inline)
+    var(--soshiki-form-member-box-padding-bottom);
   border: var(--soshiki-form-member-box-border-width) solid
     var(--soshiki-form-member-box-border-color);
   border-radius: var(--soshiki-form-member-box-border-radius);
   background: transparent;
   font-family: "Meiryo", "Hiragino Sans", sans-serif;
   font-size: var(--soshiki-form-member-box-font-size);
-  line-height: var(--soshiki-form-member-box-height);
+  line-height: calc(
+    var(--soshiki-form-member-box-height) -
+      var(--soshiki-form-member-box-padding-top) -
+      var(--soshiki-form-member-box-padding-bottom)
+  );
   height: var(--soshiki-form-member-box-height);
   min-height: var(--soshiki-form-member-box-height);
   max-height: var(--soshiki-form-member-box-height);
@@ -1780,25 +1804,32 @@ a:focus-visible {
   position: absolute;
   margin: 0;
   padding: 0;
-  border: 2px solid transparent;
+  border: var(--soshiki-form-member-gender-border-width)
+    var(--soshiki-form-member-gender-border-style)
+    var(--soshiki-form-member-gender-border-color);
   border-radius: 999px;
   background: transparent;
   cursor: pointer;
   box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .soshiki-form-idou-btn:hover {
-  border-color: rgba(54, 168, 114, 0.45);
+  border-color: var(--soshiki-form-member-gender-border-color);
 }
 
 .soshiki-form-idou-btn:focus {
   outline: none;
-  border-color: #36a872;
-  box-shadow: 0 0 0 2px rgba(54, 168, 114, 0.25);
+  border-color: var(--soshiki-form-member-gender-border-color);
+  box-shadow: 0 0 0 2px rgba(18, 52, 86, 0.25);
 }
 
 .soshiki-form-idou-btn.is-selected {
-  border-color: #123456;
+  border-style: solid;
+  border-width: var(--soshiki-form-member-gender-border-width-selected);
+  border-color: var(--soshiki-form-member-gender-border-color-selected);
 }
 
 .soshiki-form-idou-btn--shinki {
@@ -1925,42 +1956,46 @@ a:focus-visible {
 /* 性別 */
 .soshiki-form-gender-btn {
   position: absolute;
-  left: calc(
-    var(--soshiki-form-member-gender-left) +
-      var(--soshiki-form-member-gender-left-nudge)
-  );
-  width: 5.2%;
+  left: var(--soshiki-form-member-gender-left);
+  width: var(--soshiki-form-member-gender-width);
   margin: 0;
   padding: 0;
-  border: 2px solid transparent;
+  border: var(--soshiki-form-member-gender-border-width)
+    var(--soshiki-form-member-gender-border-style)
+    var(--soshiki-form-member-gender-border-color);
   border-radius: 4px;
   background: transparent;
   cursor: pointer;
   box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .soshiki-form-gender-btn:hover {
-  border-color: rgba(54, 168, 114, 0.45);
+  border-color: var(--soshiki-form-member-gender-border-color);
 }
 
 .soshiki-form-gender-btn:focus {
   outline: none;
-  border-color: #36a872;
-  box-shadow: 0 0 0 2px rgba(54, 168, 114, 0.25);
+  border-color: var(--soshiki-form-member-gender-border-color);
+  box-shadow: 0 0 0 2px rgba(18, 52, 86, 0.25);
 }
 
 .soshiki-form-gender-btn.is-selected {
-  border-color: #123456;
+  border-style: solid;
+  border-width: var(--soshiki-form-member-gender-border-width-selected);
+  border-color: var(--soshiki-form-member-gender-border-color-selected);
 }
 
 .soshiki-form-gender-btn--male {
-  top: 9%;
-  height: 38%;
+  top: var(--soshiki-form-member-gender-male-top);
+  height: var(--soshiki-form-member-gender-btn-height);
 }
 
 .soshiki-form-gender-btn--female {
-  top: 54%;
-  height: 38%;
+  top: var(--soshiki-form-member-gender-female-top);
+  height: var(--soshiki-form-member-gender-btn-height);
 }
 
 /* 郵便番号・住所1〜3（横並び） */
@@ -2196,7 +2231,8 @@ a:focus-visible {
 }
 
 .soshiki-form-gender-btn .soshiki-form-dev-marker {
-  font-size: 10px;
+  font-size: 13px;
+  padding-top: var(--soshiki-form-member-gender-text-padding-top);
 }
 
 @media print {

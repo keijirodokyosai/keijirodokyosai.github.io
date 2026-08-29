@@ -101,6 +101,18 @@ function initGenderButtons() {
       }
     });
   });
+
+  /* DEV: 性別枠・選択時の見え方確認（本番前に削除） */
+  for (var row = 1; row <= MEMBER_ROW_COUNT; row++) {
+    var hidden = getMemberField(row, "gender");
+    var maleBtn = document.querySelector(
+      '.soshiki-form-gender-btn--male[data-row="' + row + '"]'
+    );
+    if (!hidden || !maleBtn) continue;
+    hidden.value = "1";
+    maleBtn.classList.add("is-selected");
+    maleBtn.setAttribute("aria-pressed", "true");
+  }
 }
 
 function clearGenderSelection(row) {
