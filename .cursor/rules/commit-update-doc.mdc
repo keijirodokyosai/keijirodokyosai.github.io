@@ -5,7 +5,7 @@ alwaysApply: true
 
 # コミット前の doc 更新
 
-組織共済申込書（`soshiki-form-enter`）の実装を変更し、**コミット・プッシュをユーザーに示唆または依頼される場合**は、コード変更だけで終えず **`docs/soshiki-form-enter.md` も同じターンで更新**する。
+組織共済申込書（`soshiki-form-enter`）の実装を変更したら、**ユーザーが手動コミットする前に** コード変更だけで終えず **`docs/soshiki-form-enter.md` も同じターンで更新**する（`manual-commit-only.mdc`：commit はエージェントが実行しない）。
 
 ## 更新する内容
 
