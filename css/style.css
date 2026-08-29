@@ -1691,7 +1691,15 @@ a:focus-visible {
   /* 〒・郵便番号文字の縦中心（PNG 実測: 旧ハイフン y≈465 / 行高 → 約 21.09%） */
   --soshiki-form-member-zip-text-center: 21.09%;
   --soshiki-form-member-zip-text-nudge: -1px;
-  /* 生年月日文字の縦中心（旧レガシー枠 top 54% + height 40%/2） */
+  --soshiki-form-member-zip-address-row-top: calc(
+    var(--soshiki-form-member-zip-text-center) +
+      var(--soshiki-form-member-zip-text-nudge) -
+      var(--soshiki-form-member-box-height) / 2
+  );
+  --soshiki-form-member-name-sei-left: 24.5%;
+  --soshiki-form-member-name-mei-left: 36%;
+  --soshiki-form-member-name-field-width: 8.5%;
+  /* 生年月日・漢字氏名行の縦中心（旧 top 54% + height 40%/2） */
   --soshiki-form-member-birth-text-center: 74%;
   --soshiki-form-member-birth-year-width: 50px;
   --soshiki-form-member-birth-2digit-width: 30px;
@@ -1902,33 +1910,36 @@ a:focus-visible {
 }
 
 .soshiki-form-member-kana-sei,
-.soshiki-form-member-kanji-sei {
-  position: absolute;
-  left: 23.1%;
-  width: 5.5%;
-  text-align: left;
-}
-
 .soshiki-form-member-kana-mei,
+.soshiki-form-member-kanji-sei,
 .soshiki-form-member-kanji-mei {
   position: absolute;
-  left: 29%;
-  width: 5.2%;
   text-align: left;
 }
 
 .soshiki-form-member-kana-sei,
+.soshiki-form-member-kanji-sei {
+  left: var(--soshiki-form-member-name-sei-left);
+  width: var(--soshiki-form-member-name-field-width);
+}
+
+.soshiki-form-member-kana-mei,
+.soshiki-form-member-kanji-mei {
+  left: var(--soshiki-form-member-name-mei-left);
+  width: var(--soshiki-form-member-name-field-width);
+}
+
+.soshiki-form-member-kana-sei,
 .soshiki-form-member-kana-mei {
-  top: 7%;
-  height: 36%;
-  font-size: 12px;
+  top: var(--soshiki-form-member-zip-address-row-top);
 }
 
 .soshiki-form-member-kanji-sei,
 .soshiki-form-member-kanji-mei {
-  top: 54%;
-  height: 40%;
-  font-size: 14px;
+  top: calc(
+    var(--soshiki-form-member-birth-text-center) -
+      var(--soshiki-form-member-box-height) / 2
+  );
 }
 
 .soshiki-form-member-birth-year,
@@ -2037,11 +2048,7 @@ a:focus-visible {
 .soshiki-form-member-zip-address-row {
   position: absolute;
   left: 66.6%;
-  top: calc(
-    var(--soshiki-form-member-zip-text-center) +
-      var(--soshiki-form-member-zip-text-nudge) -
-      var(--soshiki-form-member-box-height) / 2
-  );
+  top: var(--soshiki-form-member-zip-address-row-top);
   display: inline-flex;
   flex-direction: row;
   align-items: flex-start;

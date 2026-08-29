@@ -31,7 +31,7 @@ alwaysApply: true
 
 ## 実装ルール
 
-1. **住所・生年月日**: 都道府県以降・年月日は `<input class="soshiki-form-member-box …">`。**郵便番号のみ** 枠 `div.soshiki-form-member-zip-inner.soshiki-form-member-box` + view + 透明 input（§9.4 字間）。
+1. **住所・生年月日・氏名**: 都道府県以降・年月日・カナ/漢字姓/名は `<input class="soshiki-form-member-box …">`。**郵便番号のみ** 枠 `div.soshiki-form-member-zip-inner.soshiki-form-member-box` + view + 透明 input（§9.4 字間）。
 2. 個別クラス（例 `.soshiki-form-member-prefecture`）は **位置・`--soshiki-form-member-box-chars` のみ**。`font-size` / `height` / `padding` / `border` / `width` の直書きはしない。**例外:** 郵便番号枠幅は `--soshiki-form-member-box-chars: 5` + `--soshiki-form-member-zip-width-extra`（`.soshiki-form-member-zip-inner`）。
 3. **`.soshiki-form-field` を標準枠に付けない**（`position`・16px font などが競合する）。
 4. flex 行では **`align-items: center`**。`stretch` は input の min-content 高さでずれる。
@@ -39,4 +39,4 @@ alwaysApply: true
 
 ## レガシー（未移行）
 
-氏名・カナ（12/14px）・組合員コードなど **未移行** の組合員欄は従来 CSS のまま。住所5分割・生年月日は §9.11 移行済み。
+組合員コードなど **未移行** の組合員欄は従来 CSS のまま。氏名・住所5分割・生年月日は §9.11 移行済み（氏名 §9.13）。
