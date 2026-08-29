@@ -305,7 +305,31 @@ function initZipFields() {
     input.addEventListener("blur", function () {
       applyZipFieldValue(input);
     });
+
+    updateZipView(input);
   });
+}
+
+function updateZipView(input) {
+  var wrap = input.closest(".soshiki-form-member-zip-wrap");
+  if (!wrap) return;
+
+  var view = wrap.querySelector(".soshiki-form-member-zip-view");
+  if (!view) return;
+
+  var digits = extractZipDigits(input.value);
+  if (!digits) {
+    view.textContent = "";
+    return;
+  }
+
+  var html = '<span class="soshiki-form-member-zip-part">' + digits.slice(0, 3) + "</span>";
+  if (digits.length > 3) {
+    html += '<span class="soshiki-form-member-zip-hyphen">-</span>';
+    html += '<span class="soshiki-form-member-zip-part">' + digits.slice(3) + "</span>";
+  }
+
+  view.innerHTML = html;
 }
 
 function extractZipDigits(value) {
@@ -341,6 +365,8 @@ function applyZipFieldValue(input) {
   if (typeof input.setSelectionRange === "function") {
     input.setSelectionRange(nextCursor, nextCursor);
   }
+
+  updateZipView(input);
 }
 
 function initZipLookup() {
@@ -360,6 +386,7 @@ function lookupAddressFromZip(row) {
   if (digits.length !== 7) return;
 
   zipInput.value = formatZipCode(digits);
+  updateZipView(zipInput);
 
   fetch(ZIPCLOUD_API + "?zipcode=" + encodeURIComponent(digits))
     .then(function (response) {

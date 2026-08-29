@@ -172,20 +172,26 @@
     </div>
 
     <label class="sr-only" for="member-{{ row }}-zip">{{ row }}行目・郵便番号</label>
-    <input
-      type="text"
-      id="member-{{ row }}-zip"
-      name="member-{{ row }}-zip"
-      class="soshiki-form-field soshiki-form-member-field soshiki-form-member-zip"
-      data-zip-field
-      data-zip-lookup
-      data-row="{{ row }}"
-      inputmode="numeric"
-      autocomplete="postal-code"
-      maxlength="8"
-      placeholder="郵{{ row }}"
-      aria-label="{{ row }}行目・郵便番号（123-4567）"
-    >
+    <div class="soshiki-form-member-zip-wrap">
+      <div class="soshiki-form-member-zip-inner">
+        <span class="soshiki-form-member-zip-view" aria-hidden="true"></span>
+        <input
+          type="text"
+          id="member-{{ row }}-zip"
+          name="member-{{ row }}-zip"
+          class="soshiki-form-field soshiki-form-member-field soshiki-form-member-zip"
+          data-zip-field
+          data-zip-lookup
+          data-row="{{ row }}"
+          inputmode="numeric"
+          autocomplete="postal-code"
+          maxlength="8"
+          value="123-4567"
+          placeholder="郵{{ row }}"
+          aria-label="{{ row }}行目・郵便番号（123-4567）"
+        >
+      </div>
+    </div>
 
     <label class="sr-only" for="member-{{ row }}-address">{{ row }}行目・住所</label>
     <input

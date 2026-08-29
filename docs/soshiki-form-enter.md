@@ -73,7 +73,7 @@
 ```text
 soshiki-form-enter.html      … 入力ページ
 js/soshiki-form-enter.js     … 日付初期値・マスタ連携（Enter 判定・口・掛金反映）
-js/soshiki-form-members.js   … 組合員5行・異動トグル・半角制限・郵便番号検索
+js/soshiki-form-members.js   … 組合員5行・異動トグル・半角制限・郵便番号検索・表示同期（updateZipView）
 _includes/soshiki-form-member-rows.html … 組合員行マークアップ
 css/style.css                … .soshiki-form-* オーバーレイ用
 images/soshiki-form-enter.png
@@ -332,11 +332,13 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 * 性別: 男（`1`）/ 女（`2`）。再クリックで解除可
 * 郵便番号: **1枠**・値は `123-4567` 形式。7桁連続入力可
 * 郵便番号 API: `https://zipcloud.ibsnet.co.jp/api/search?zipcode=`（方式1・外部API。API には数字7桁のみ渡す）
+* **表示**: 入力 `<input>` の文字は透明。`.soshiki-form-member-zip-view` に `updateZipView()`（`js/soshiki-form-members.js`）で同期表示
+* **字間**: 数字同士 `letter-spacing: 0.06em`。ハイフン前後のみ `margin: 0.12em`（`<input>` 単体では不可のため表示レイヤーで分割）
 
-### 9.5 CSS 配置（初期値・要調整）
+### 9.5 CSS 配置（組合員行・共通）
 
-| 変数 | 値 |
-|------|-----|
+| 変数 / 項目 | 値 |
+|-------------|-----|
 | 1行目 `top` | `37.45%`（PNG 実測） |
 | 行間 | `7.66%` |
 | 行の高さ | `7.55%` |
@@ -357,6 +359,22 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | 触れないもの | **〒**（約 60.9%）、縦罫線（約 64.7%）、住所欄の横罫線、その他の枠線 |
 | 注意 | **62〜64% 付近**にも旧 2 枠間の小さな `-` があるが、画面上で目立つのは **71% 付近** の方。CSS オーバーレイで隠す方式は使わない（PNG を直接編集する） |
 | キャッシュ | `soshiki-form-enter.html` の PNG URL にクエリ（例 `?v=20260828-hyphen-71pct`）。変更後は **Ctrl+Shift+R** |
+
+### 9.8 郵便番号枠の配置（2026-08-29 完了）
+
+5 行共通。クラスは `.soshiki-form-member-zip-wrap` → `.soshiki-form-member-zip-inner` →（`.soshiki-form-member-zip-view` + `input.soshiki-form-member-zip`）。
+
+| 項目 | 値 | 備考 |
+|------|-----|------|
+| 横位置 `left` | `66.6%` | 行幅＝用紙幅のため用紙基準と同じ |
+| 文字の縦中心 | `--soshiki-form-member-zip-text-center: 21.09%` | PNG 実測（§9.7 の旧ハイフン y≈465 ÷ 行高 ≈ 21.09%）。背景 **〒** と同一行 |
+| 縦微調整 | `--soshiki-form-member-zip-text-nudge: -1px` | 文字中心の px 補正（枠中心ではない） |
+| 枠余白 | `padding: 0.12px` | 幅・高さは `max-content` |
+| フォント | Meiryo 15px | `.soshiki-form-member-field`（15px）と同サイズ |
+| 字間（数字） | `0.06em` | `.soshiki-form-member-zip-part` |
+| 字間（ハイフン前後） | `0.12em` | `.soshiki-form-member-zip-hyphen` の margin |
+
+**座標の注意:** 組合員行内の `%` は行高（用紙の 7.55%）に対する割合。用紙全体で 1% 動かす場合は行内 `%` に換算して指定する（行内 1% ≒ 用紙 0.0755%）。
 
 ---
 
@@ -478,9 +496,9 @@ Subbranch（KyosaikaiName, industry, branch, subbranch, CollectiveKyosaiId）
 
 1. ~~産別・支部・分会の入力枠を背景に追加~~ → **完了**
 2. ~~`data/union-master.json` を受け取り、Enter 判定・コード・口欄・掛金反映~~ → **完了**
-3. ~~組合員5行（異動内容・氏名・生年月日・性別・住所）・半角制限・郵便番号検索~~ → **完了**（位置は要微調整）
+3. ~~組合員5行（異動内容・氏名・生年月日・性別・住所）・半角制限・郵便番号検索~~ → **完了**（郵便番号枠配置は §9.8）
 4. ~~背景 PNG の郵便番号ハイフン除去~~ → **完了**（§9.7）
-5. 組合員欄 CSS の最終調整・開発用仮表示の削除
+5. 組合員欄 CSS の最終調整・開発用仮表示の削除（郵便番号枠は §9.8 完了済み）
 6. 組合名プルダウン（localStorage）・追加確認・削除 UI
 7. `validateSoshikiForm()` の配線 → 確認画面・PDF 出力・メール送信（任意・後回し可）
 
