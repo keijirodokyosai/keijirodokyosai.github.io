@@ -1,5 +1,6 @@
 {% comment %}
   組合員入力欄（最大5名）。位置は css/style.css の .soshiki-form-member-* で調整。
+  HTML id/name は Access 列名の kebab-case（§9.9）。異動内容 idou のみ Web 専用。
   DEV: placeholder / .soshiki-form-dev-marker は配置確認用。本番前に削除する。
 {% endcomment %}
 <div class="soshiki-form-member-rows" aria-label="組合員入力（最大5名）">
@@ -37,65 +38,68 @@
       ><span class="soshiki-form-dev-marker" aria-hidden="true">変{{ row }}</span><span class="sr-only">変更</span></button>
     </div>
 
-    <div class="soshiki-form-member-code-group" role="group" aria-label="{{ row }}行目・組合員コード">
-      {% for digit in (1..6) %}
-      <input
-        type="text"
-        id="member-{{ row }}-code-{{ digit }}"
-        name="member-{{ row }}-code-{{ digit }}"
-        class="soshiki-form-field soshiki-form-member-code-digit"
-        data-row="{{ row }}"
-        data-digit-index="{{ digit }}"
-        inputmode="numeric"
-        autocomplete="off"
-        maxlength="1"
-        placeholder="ｺ{{ digit }}"
-        aria-label="{{ row }}行目・組合員コード {{ digit }}桁目"
-      >
-      {% endfor %}
-    </div>
-
-    <label class="sr-only" for="member-{{ row }}-kana-sei">{{ row }}行目・カナ姓</label>
+    <label class="sr-only" for="member-{{ row }}-union-member-code">{{ row }}行目・組合員コード（6桁）</label>
     <input
       type="text"
-      id="member-{{ row }}-kana-sei"
-      name="member-{{ row }}-kana-sei"
+      id="member-{{ row }}-union-member-code"
+      name="member-{{ row }}-union-member-code"
+      class="soshiki-form-field soshiki-form-member-field soshiki-form-member-union-member-code"
+      data-access-field="UnionMemberCode"
+      data-halfwidth-numeric
+      data-max-digits="6"
+      data-row="{{ row }}"
+      inputmode="numeric"
+      autocomplete="off"
+      maxlength="6"
+      placeholder="コード{{ row }}"
+      aria-label="{{ row }}行目・組合員コード（6桁）"
+    >
+
+    <label class="sr-only" for="member-{{ row }}-family-name-kana">{{ row }}行目・カナ姓</label>
+    <input
+      type="text"
+      id="member-{{ row }}-family-name-kana"
+      name="member-{{ row }}-family-name-kana"
       class="soshiki-form-field soshiki-form-member-field soshiki-form-member-kana-sei"
+      data-access-field="FamilyNameKana"
       data-halfwidth-kana
       autocomplete="off"
       placeholder="ｾｲ{{ row }}"
       aria-label="{{ row }}行目・カナ姓"
     >
 
-    <label class="sr-only" for="member-{{ row }}-kana-mei">{{ row }}行目・カナ名</label>
+    <label class="sr-only" for="member-{{ row }}-given-name-kana">{{ row }}行目・カナ名</label>
     <input
       type="text"
-      id="member-{{ row }}-kana-mei"
-      name="member-{{ row }}-kana-mei"
+      id="member-{{ row }}-given-name-kana"
+      name="member-{{ row }}-given-name-kana"
       class="soshiki-form-field soshiki-form-member-field soshiki-form-member-kana-mei"
+      data-access-field="GivenNameKana"
       data-halfwidth-kana
       autocomplete="off"
       placeholder="ﾒｲ{{ row }}"
       aria-label="{{ row }}行目・カナ名"
     >
 
-    <label class="sr-only" for="member-{{ row }}-kanji-sei">{{ row }}行目・漢字姓</label>
+    <label class="sr-only" for="member-{{ row }}-family-name">{{ row }}行目・漢字姓</label>
     <input
       type="text"
-      id="member-{{ row }}-kanji-sei"
-      name="member-{{ row }}-kanji-sei"
+      id="member-{{ row }}-family-name"
+      name="member-{{ row }}-family-name"
       class="soshiki-form-field soshiki-form-member-field soshiki-form-member-kanji-sei"
+      data-access-field="FamilyName"
       autocomplete="off"
       placeholder="姓{{ row }}"
       aria-label="{{ row }}行目・漢字姓"
     >
 
-    <label class="sr-only" for="member-{{ row }}-kanji-mei">{{ row }}行目・漢字名</label>
+    <label class="sr-only" for="member-{{ row }}-given-name">{{ row }}行目・漢字名</label>
     <input
       type="text"
-      id="member-{{ row }}-kanji-mei"
-      name="member-{{ row }}-kanji-mei"
+      id="member-{{ row }}-given-name"
+      name="member-{{ row }}-given-name"
       class="soshiki-form-field soshiki-form-member-field soshiki-form-member-kanji-mei"
+      data-access-field="GivenName"
       autocomplete="off"
       placeholder="名{{ row }}"
       aria-label="{{ row }}行目・漢字名"
@@ -107,9 +111,10 @@
       id="member-{{ row }}-birth-year"
       name="member-{{ row }}-birth-year"
       class="soshiki-form-field soshiki-form-member-field soshiki-form-member-birth-year"
+      data-access-field="BirthDate"
+      data-birth-part="year"
       data-halfwidth-numeric
       data-max-digits="4"
-      data-birth-part
       inputmode="numeric"
       autocomplete="off"
       maxlength="4"
@@ -123,10 +128,10 @@
       id="member-{{ row }}-birth-month"
       name="member-{{ row }}-birth-month"
       class="soshiki-form-field soshiki-form-member-field soshiki-form-member-birth-month"
+      data-birth-part="month"
       data-halfwidth-numeric
       data-max-digits="2"
       data-pad-2
-      data-birth-part
       inputmode="numeric"
       autocomplete="off"
       maxlength="2"
@@ -140,10 +145,10 @@
       id="member-{{ row }}-birth-day"
       name="member-{{ row }}-birth-day"
       class="soshiki-form-field soshiki-form-member-field soshiki-form-member-birth-day"
+      data-birth-part="day"
       data-halfwidth-numeric
       data-max-digits="2"
       data-pad-2
-      data-birth-part
       inputmode="numeric"
       autocomplete="off"
       maxlength="2"
@@ -152,7 +157,7 @@
     >
 
     <div class="soshiki-form-gender-group" role="radiogroup" aria-label="{{ row }}行目・性別">
-      <input type="hidden" id="member-{{ row }}-gender" name="member-{{ row }}-gender" value="">
+      <input type="hidden" id="member-{{ row }}-gender" name="member-{{ row }}-gender" value="" data-access-field="Gender">
       <button
         type="button"
         class="soshiki-form-gender-btn soshiki-form-gender-btn--male"
@@ -171,15 +176,16 @@
       ><span class="soshiki-form-dev-marker" aria-hidden="true">女{{ row }}</span><span class="sr-only">女</span></button>
     </div>
 
-    <label class="sr-only" for="member-{{ row }}-zip">{{ row }}行目・郵便番号</label>
+    <label class="sr-only" for="member-{{ row }}-postal-code">{{ row }}行目・郵便番号</label>
     <div class="soshiki-form-member-zip-wrap">
       <div class="soshiki-form-member-zip-inner">
         <span class="soshiki-form-member-zip-view" aria-hidden="true"></span>
         <input
           type="text"
-          id="member-{{ row }}-zip"
-          name="member-{{ row }}-zip"
+          id="member-{{ row }}-postal-code"
+          name="member-{{ row }}-postal-code"
           class="soshiki-form-field soshiki-form-member-field soshiki-form-member-zip"
+          data-access-field="PostalCode"
           data-zip-field
           data-zip-lookup
           data-row="{{ row }}"
@@ -193,15 +199,64 @@
       </div>
     </div>
 
-    <label class="sr-only" for="member-{{ row }}-address">{{ row }}行目・住所</label>
+    <label class="sr-only" for="member-{{ row }}-prefecture">{{ row }}行目・都道府県</label>
     <input
       type="text"
-      id="member-{{ row }}-address"
-      name="member-{{ row }}-address"
-      class="soshiki-form-field soshiki-form-member-field soshiki-form-member-address"
+      id="member-{{ row }}-prefecture"
+      name="member-{{ row }}-prefecture"
+      class="soshiki-form-field soshiki-form-member-field soshiki-form-member-address-field soshiki-form-member-prefecture"
+      data-access-field="Prefecture"
       autocomplete="off"
-      placeholder="住所{{ row }}"
-      aria-label="{{ row }}行目・住所"
+      placeholder="都{{ row }}"
+      aria-label="{{ row }}行目・都道府県"
+    >
+
+    <label class="sr-only" for="member-{{ row }}-city">{{ row }}行目・市区町村</label>
+    <input
+      type="text"
+      id="member-{{ row }}-city"
+      name="member-{{ row }}-city"
+      class="soshiki-form-field soshiki-form-member-field soshiki-form-member-address-field soshiki-form-member-city"
+      data-access-field="City"
+      autocomplete="off"
+      placeholder="市{{ row }}"
+      aria-label="{{ row }}行目・市区町村"
+    >
+
+    <label class="sr-only" for="member-{{ row }}-town-area">{{ row }}行目・町村域</label>
+    <input
+      type="text"
+      id="member-{{ row }}-town-area"
+      name="member-{{ row }}-town-area"
+      class="soshiki-form-field soshiki-form-member-field soshiki-form-member-address-field soshiki-form-member-town-area"
+      data-access-field="TownArea"
+      autocomplete="off"
+      placeholder="町{{ row }}"
+      aria-label="{{ row }}行目・町村域"
+    >
+
+    <label class="sr-only" for="member-{{ row }}-area-number">{{ row }}行目・番地</label>
+    <input
+      type="text"
+      id="member-{{ row }}-area-number"
+      name="member-{{ row }}-area-number"
+      class="soshiki-form-field soshiki-form-member-field soshiki-form-member-address-field soshiki-form-member-area-number"
+      data-access-field="AreaNumber"
+      autocomplete="off"
+      placeholder="番{{ row }}"
+      aria-label="{{ row }}行目・番地"
+    >
+
+    <label class="sr-only" for="member-{{ row }}-building-name">{{ row }}行目・建物名</label>
+    <input
+      type="text"
+      id="member-{{ row }}-building-name"
+      name="member-{{ row }}-building-name"
+      class="soshiki-form-field soshiki-form-member-field soshiki-form-member-address-field soshiki-form-member-building-name"
+      data-access-field="BuildingName"
+      autocomplete="off"
+      placeholder="建{{ row }}"
+      aria-label="{{ row }}行目・建物名"
     >
   </div>
   {% endfor %}

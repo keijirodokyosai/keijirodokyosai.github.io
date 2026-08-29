@@ -5,14 +5,34 @@
 var MEMBER_ROW_COUNT = 5;
 var HALF_WIDTH_KANA_PATTERN = /[^ｦ-ﾟ]/g;
 var ZIPCLOUD_API = "https://zipcloud.ibsnet.co.jp/api/search";
+var ZIP_MULTIPLE_RESULTS_MESSAGE =
+  "入力の郵便番号には、複数の住所候補があります。表示された住所が異なる場合は手入力でお願いします。";
+
+var ADDRESS_GROUP_FIELD_SUFFIXES = [
+  "postal-code",
+  "prefecture",
+  "city",
+  "town-area",
+  "area-number",
+];
+
+var lastPostalCodeLookupByRow = {};
 
 function initMemberRows() {
   initIdouButtons();
   initGenderButtons();
-  initMemberCodeDigits();
+  initUnionMemberCodeFields();
   initHalfWidthInputs();
   initZipFields();
   initZipLookup();
+}
+
+function memberFieldId(row, suffix) {
+  return "member-" + row + "-" + suffix;
+}
+
+function getMemberField(row, suffix) {
+  return document.getElementById(memberFieldId(row, suffix));
 }
 
 function initIdouButtons() {
@@ -20,7 +40,7 @@ function initIdouButtons() {
     button.addEventListener("click", function () {
       var row = button.getAttribute("data-row");
       var idou = button.getAttribute("data-idou");
-      var hidden = document.getElementById("member-" + row + "-idou");
+      var hidden = getMemberField(row, "idou");
       if (!hidden) return;
 
       var isSelected = button.classList.contains("is-selected");
@@ -38,7 +58,7 @@ function initIdouButtons() {
 }
 
 function clearIdouSelection(row) {
-  var hidden = document.getElementById("member-" + row + "-idou");
+  var hidden = getMemberField(row, "idou");
   if (hidden) hidden.value = "";
 
   document
@@ -54,7 +74,7 @@ function initGenderButtons() {
     button.addEventListener("click", function () {
       var row = button.getAttribute("data-row");
       var gender = button.getAttribute("data-gender");
-      var hidden = document.getElementById("member-" + row + "-gender");
+      var hidden = getMemberField(row, "gender");
       if (!hidden) return;
 
       var isSelected = button.classList.contains("is-selected");
@@ -70,7 +90,7 @@ function initGenderButtons() {
 }
 
 function clearGenderSelection(row) {
-  var hidden = document.getElementById("member-" + row + "-gender");
+  var hidden = getMemberField(row, "gender");
   if (hidden) hidden.value = "";
 
   document
@@ -81,8 +101,8 @@ function clearGenderSelection(row) {
     });
 }
 
-function initMemberCodeDigits() {
-  document.querySelectorAll(".soshiki-form-member-code-digit").forEach(function (input) {
+function initUnionMemberCodeFields() {
+  document.querySelectorAll(".soshiki-form-member-union-member-code").forEach(function (input) {
     var composing = false;
 
     input.addEventListener("compositionstart", function () {
@@ -90,81 +110,42 @@ function initMemberCodeDigits() {
     });
     input.addEventListener("compositionend", function () {
       composing = false;
-      filterMemberCodeDigitInput(input);
+      filterUnionMemberCodeInput(input);
     });
 
     input.addEventListener("input", function () {
       if (composing) return;
-      filterMemberCodeDigitInput(input);
-      if (input.value.length === 1) {
-        focusNextCodeDigit(input);
-      }
+      filterUnionMemberCodeInput(input);
     });
 
     input.addEventListener("blur", function () {
-      normalizeMemberCodeRow(input.getAttribute("data-row"));
+      normalizeUnionMemberCodeField(input);
     });
   });
 }
 
-function filterMemberCodeDigitInput(input) {
-  var digit = toHalfWidthDigits(input.value).replace(/[^0-9]/g, "").slice(-1);
-  input.value = digit;
+function filterUnionMemberCodeInput(input) {
+  var digits = toHalfWidthDigits(input.value).replace(/[^0-9]/g, "").slice(0, 6);
+  input.value = digits;
 }
 
-function focusNextCodeDigit(input) {
-  var index = Number(input.getAttribute("data-digit-index"));
-  if (index >= 6) return;
-  var next = document.getElementById(
-    "member-" + input.getAttribute("data-row") + "-code-" + (index + 1)
-  );
-  if (next) next.focus();
-}
+function normalizeUnionMemberCodeField(input) {
+  var digits = toHalfWidthDigits(input.value).replace(/[^0-9]/g, "");
 
-function collectMemberCodeDigits(row) {
-  var chars = [];
-  var hasAny = false;
-
-  for (var i = 1; i <= 6; i += 1) {
-    var field = document.getElementById("member-" + row + "-code-" + i);
-    var digit = "";
-    if (field) {
-      digit = toHalfWidthDigits(field.value).replace(/[^0-9]/g, "").charAt(0) || "";
-    }
-    chars.push(digit);
-    if (digit) hasAny = true;
-  }
-
-  if (!hasAny) return "";
-
-  var joined = chars.join("");
-  if (joined.length > 6) joined = joined.slice(0, 6);
-  return joined.padStart(6, "0");
-}
-
-function normalizeMemberCodeRow(row) {
-  var padded = collectMemberCodeDigits(row);
-  if (!padded) {
-    clearMemberCodeRow(row);
+  if (!digits) {
+    input.value = "";
+    setFieldError(input, false);
     return;
   }
 
-  for (var i = 1; i <= 6; i += 1) {
-    var field = document.getElementById("member-" + row + "-code-" + i);
-    if (field) field.value = padded.charAt(i - 1);
-  }
-  clearFieldErrorForRow(row, ".soshiki-form-member-code-digit");
-}
-
-function clearMemberCodeRow(row) {
-  for (var i = 1; i <= 6; i += 1) {
-    var field = document.getElementById("member-" + row + "-code-" + i);
-    if (field) field.value = "";
-  }
+  input.value = digits.slice(0, 6).padStart(6, "0");
+  setFieldError(input, false);
 }
 
 function initHalfWidthInputs() {
   document.querySelectorAll("[data-halfwidth-kana]").forEach(function (input) {
+    if (input.classList.contains("soshiki-form-member-union-member-code")) return;
+
     var composing = false;
 
     input.addEventListener("compositionstart", function () {
@@ -191,6 +172,8 @@ function initHalfWidthInputs() {
   });
 
   document.querySelectorAll("[data-halfwidth-numeric]").forEach(function (input) {
+    if (input.classList.contains("soshiki-form-member-union-member-code")) return;
+
     var composing = false;
     var maxDigits = Number(input.getAttribute("data-max-digits")) || 99;
 
@@ -245,9 +228,9 @@ function padTwoDigitField(input) {
 function validateBirthDateForRow(row) {
   if (!row) return true;
 
-  var yearInput = document.getElementById("member-" + row + "-birth-year");
-  var monthInput = document.getElementById("member-" + row + "-birth-month");
-  var dayInput = document.getElementById("member-" + row + "-birth-day");
+  var yearInput = getMemberField(row, "birth-year");
+  var monthInput = getMemberField(row, "birth-month");
+  var dayInput = getMemberField(row, "birth-day");
   if (!yearInput || !monthInput || !dayInput) return true;
 
   var year = yearInput.value.trim();
@@ -323,10 +306,12 @@ function updateZipView(input) {
     return;
   }
 
-  var html = '<span class="soshiki-form-member-zip-part">' + digits.slice(0, 3) + "</span>";
+  var html =
+    '<span class="soshiki-form-member-zip-part">' + digits.slice(0, 3) + "</span>";
   if (digits.length > 3) {
     html += '<span class="soshiki-form-member-zip-hyphen">-</span>';
-    html += '<span class="soshiki-form-member-zip-part">' + digits.slice(3) + "</span>";
+    html +=
+      '<span class="soshiki-form-member-zip-part">' + digits.slice(3) + "</span>";
   }
 
   view.innerHTML = html;
@@ -377,16 +362,34 @@ function initZipLookup() {
   });
 }
 
+function clearManualAddressFields(row) {
+  var areaNumber = getMemberField(row, "area-number");
+  var buildingName = getMemberField(row, "building-name");
+  if (areaNumber) areaNumber.value = "";
+  if (buildingName) buildingName.value = "";
+}
+
+function setAddressFieldsFromZipcloud(row, chosen) {
+  var prefecture = getMemberField(row, "prefecture");
+  var city = getMemberField(row, "city");
+  var townArea = getMemberField(row, "town-area");
+  if (prefecture) prefecture.value = chosen.address1 || "";
+  if (city) city.value = chosen.address2 || "";
+  if (townArea) townArea.value = chosen.address3 || "";
+}
+
 function lookupAddressFromZip(row) {
-  var zipInput = document.getElementById("member-" + row + "-zip");
-  var address = document.getElementById("member-" + row + "-address");
-  if (!zipInput || !address) return;
+  var zipInput = getMemberField(row, "postal-code");
+  if (!zipInput) return;
 
   var digits = extractZipDigits(zipInput.value);
   if (digits.length !== 7) return;
 
   zipInput.value = formatZipCode(digits);
   updateZipView(zipInput);
+
+  var previousDigits = lastPostalCodeLookupByRow[row] || "";
+  var postalCodeChanged = previousDigits !== digits;
 
   fetch(ZIPCLOUD_API + "?zipcode=" + encodeURIComponent(digits))
     .then(function (response) {
@@ -400,15 +403,15 @@ function lookupAddressFromZip(row) {
       var results = data.results;
       var chosen = results[0];
       if (results.length > 1) {
-        window.alert(
-          "郵便番号に複数の住所が見つかりました。最初の候補を入力しました。必要に応じて修正してください。"
-        );
+        window.alert(ZIP_MULTIPLE_RESULTS_MESSAGE);
       }
 
-      address.value =
-        (chosen.address1 || "") +
-        (chosen.address2 || "") +
-        (chosen.address3 || "");
+      if (postalCodeChanged) {
+        clearManualAddressFields(row);
+      }
+
+      setAddressFieldsFromZipcloud(row, chosen);
+      lastPostalCodeLookupByRow[row] = digits;
     })
     .catch(function (error) {
       console.error("郵便番号検索に失敗しました:", error);
@@ -445,6 +448,38 @@ function clearFieldErrorForRow(row, selector) {
     });
 }
 
+function addressGroupHasAnyInput(row) {
+  return ADDRESS_GROUP_FIELD_SUFFIXES.some(function (suffix) {
+    var field = getMemberField(row, suffix);
+    return field && field.value.trim();
+  });
+}
+
+function validateAddressGroupForRow(row, rowLabel, errors) {
+  if (!addressGroupHasAnyInput(row)) {
+    clearFieldErrorForRow(row, ".soshiki-form-member-address-field");
+    setFieldError(getMemberField(row, "postal-code"), false);
+    return;
+  }
+
+  var labels = {
+    "postal-code": "郵便番号",
+    prefecture: "都道府県",
+    city: "市区町村",
+    "town-area": "町村域",
+    "area-number": "番地",
+  };
+
+  ADDRESS_GROUP_FIELD_SUFFIXES.forEach(function (suffix) {
+    var field = getMemberField(row, suffix);
+    var missing = !field || !field.value.trim();
+    setFieldError(field, missing);
+    if (missing) {
+      errors.push(rowLabel + "：" + labels[suffix] + "が未入力です");
+    }
+  });
+}
+
 /**
  * 行に1項目でも入力があるか（確認画面用のたたき）
  */
@@ -452,31 +487,33 @@ function memberRowHasAnyInput(row) {
   var rowEl = document.querySelector('.soshiki-form-member-row[data-row="' + row + '"]');
   if (!rowEl) return false;
 
-  if (document.getElementById("member-" + row + "-idou").value) return true;
+  if (getMemberField(row, "idou").value) return true;
 
-  for (var c = 1; c <= 6; c += 1) {
-    var codeField = document.getElementById("member-" + row + "-code-" + c);
-    if (codeField && codeField.value.trim()) return true;
-  }
+  var unionMemberCode = getMemberField(row, "union-member-code");
+  if (unionMemberCode && unionMemberCode.value.trim()) return true;
 
-  var textIds = [
-    "kana-sei",
-    "kana-mei",
-    "kanji-sei",
-    "kanji-mei",
+  var textSuffixes = [
+    "family-name-kana",
+    "given-name-kana",
+    "family-name",
+    "given-name",
     "birth-year",
     "birth-month",
     "birth-day",
-    "zip",
-    "address",
+    "postal-code",
+    "prefecture",
+    "city",
+    "town-area",
+    "area-number",
+    "building-name",
   ];
 
-  for (var i = 0; i < textIds.length; i += 1) {
-    var field = document.getElementById("member-" + row + "-" + textIds[i]);
+  for (var i = 0; i < textSuffixes.length; i += 1) {
+    var field = getMemberField(row, textSuffixes[i]);
     if (field && field.value.trim()) return true;
   }
 
-  if (document.getElementById("member-" + row + "-gender").value) return true;
+  if (getMemberField(row, "gender").value) return true;
   return false;
 }
 
@@ -490,32 +527,34 @@ function validateMemberRows() {
     if (!memberRowHasAnyInput(row)) continue;
 
     var rowLabel = row + "行目";
-    var idou = document.getElementById("member-" + row + "-idou").value;
+    var idou = getMemberField(row, "idou").value;
     if (!idou) errors.push(rowLabel + "：異動内容を選択してください");
 
     var requiredText = [
-      { id: "kanji-sei", label: "漢字姓" },
-      { id: "kanji-mei", label: "漢字名" },
-      { id: "kana-sei", label: "カナ姓" },
-      { id: "kana-mei", label: "カナ名" },
-      { id: "birth-year", label: "生年月日・年" },
-      { id: "birth-month", label: "生年月日・月" },
-      { id: "birth-day", label: "生年月日・日" },
+      { suffix: "family-name", label: "漢字姓" },
+      { suffix: "given-name", label: "漢字名" },
+      { suffix: "family-name-kana", label: "カナ姓" },
+      { suffix: "given-name-kana", label: "カナ名" },
+      { suffix: "birth-year", label: "生年月日・年" },
+      { suffix: "birth-month", label: "生年月日・月" },
+      { suffix: "birth-day", label: "生年月日・日" },
     ];
 
     requiredText.forEach(function (item) {
-      var field = document.getElementById("member-" + row + "-" + item.id);
+      var field = getMemberField(row, item.suffix);
       if (!field || !field.value.trim()) {
         errors.push(rowLabel + "：" + item.label + "が未入力です");
       }
     });
 
-    var gender = document.getElementById("member-" + row + "-gender").value;
+    var gender = getMemberField(row, "gender").value;
     if (!gender) errors.push(rowLabel + "：性別を選択してください");
 
     if (!validateBirthDateForRow(String(row))) {
       errors.push(rowLabel + "：生年月日が正しくありません");
     }
+
+    validateAddressGroupForRow(String(row), rowLabel, errors);
   }
 
   return errors;

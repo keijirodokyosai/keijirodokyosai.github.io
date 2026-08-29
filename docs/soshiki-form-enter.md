@@ -1,6 +1,6 @@
 # 組織共済申込書（ブラウザ入力）設計書
 
-**最終更新:** 2026-08-28  
+**最終更新:** 2026-08-29  
 **関連リポジトリ:** [keijirodokyosai.github.io](https://github.com/keijirodokyosai/keijirodokyosai.github.io)（Web）、`kyosai-system`（Access・マスタ出力）
 
 ---
@@ -60,10 +60,11 @@
 | 項目 | 内容 |
 |------|------|
 | 異動内容 | 5行×（新規／解約／変更）トグル。実線枠・再クリックで解除 |
-| 組合員各欄 | コード・氏名・生年月日・性別・郵便番号・住所（HTML/CSS 配置済み） |
+| 組合員各欄 | コード（6桁1枠）・氏名・生年月日・性別・郵便番号・住所5分割（HTML/CSS 配置済み） |
 | 半角制限 | カナ・コード・生年月日・郵便番号 |
 | blur 処理 | コード左0埋め、月日2桁化、生年月日の実在日チェック |
-| 郵便番号 | zipcloud API で住所自動入力（任意） |
+| 郵便番号 | zipcloud API で都道府県・市区町村・町村域を自動入力（任意） |
+| 住所 | 5分割（都道府県・市区町村・町村域・番地・建物名）。一部入力時は1〜5が必須 |
 | 必須チェック | `validateSoshikiForm()`（確認画面用・未配線） |
 
 ---
@@ -316,16 +317,27 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 
 | 必須 | 任意 |
 |------|------|
-| 異動内容、漢字姓・名、半角カナ姓・名、生年月日（年4桁・月・日）、性別 | 組合員コード、住所（〒・番地） |
+| 異動内容、漢字姓・名、半角カナ姓・名、生年月日（年4桁・月・日）、性別 | 組合員コード（UnionMemberCode・6桁1枠） |
+
+**住所（5分割）:** 郵便番号・都道府県・市区町村・町村域・番地の **いずれか1つでも入力** がある行では、上記 **5項目すべて必須**。建物名は常に任意。
+
+| 欄 | 必須条件 |
+|----|----------|
+| 郵便番号（PostalCode） | 住所グループ入力時 |
+| 都道府県（Prefecture） | 〃 |
+| 市区町村（City） | 〃 |
+| 町村域（TownArea） | 〃 |
+| 番地（AreaNumber） | 〃 |
+| 建物名（BuildingName） | 常に任意 |
 
 ### 9.3 半角・正規化（blur 時）
 
 | 欄 | 入力制限 | blur 時 |
 |----|----------|---------|
 | カナ姓・名 | 半角カナのみ（全角カナ・ひらがな・漢字は除去） | — |
-| 組合員コード | 半角数字、最大6桁 | 左0埋めで6桁表示 |
+| 組合員コード | 半角数字、最大6桁（**1枠**） | 左0埋めで6桁表示 |
 | 生年月日 | 半角数字。全角数字は半角に変換 | 月・日は2桁化。年・月・日が揃えば実在日チェック |
-| 郵便番号 | 半角数字7桁、表示は `123-4567` | 7桁そろえば zipcloud で住所候補を自動入力 |
+| 郵便番号 | 半角数字7桁、表示は `123-4567` | 7桁そろえば zipcloud で都道府県・市区町村・町村域を自動入力 |
 
 ### 9.4 性別・郵便番号
 
@@ -375,6 +387,56 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | 字間（ハイフン前後） | `0.12em` | `.soshiki-form-member-zip-hyphen` の margin |
 
 **座標の注意:** 組合員行内の `%` は行高（用紙の 7.55%）に対する割合。用紙全体で 1% 動かす場合は行内 `%` に換算して指定する（行内 1% ≒ 用紙 0.0755%）。
+
+### 9.9 Access 列名 ↔ Web フィールド（2026-08-29 確定）
+
+HTML の `id` / `name` は Access 列名の **kebab-case**（`member-{行}-` + 下表の suffix）。`data-access-field` に Access 列名（PascalCase）を付与。**異動内容（idou）のみ Web 専用**（Access 列なし）。
+
+| Access 列 | HTML suffix | 備考 |
+|-----------|-------------|------|
+| UnionMemberCode | `union-member-code` | **6桁1枠**（旧6マス入力を統合） |
+| FamilyNameKana | `family-name-kana` | 半角カナ |
+| GivenNameKana | `given-name-kana` | 半角カナ |
+| FamilyName | `family-name` | 漢字姓 |
+| GivenName | `given-name` | 漢字名 |
+| BirthDate | `birth-year` / `birth-month` / `birth-day` | UI は年月日3入力。`data-access-field="BirthDate"` は年欄のみ |
+| Gender | `gender` | hidden + 男/女ボタン（`1` / `2`） |
+| PostalCode | `postal-code` | 表示 `123-4567`。zipcloud 検索キー |
+| Prefecture | `prefecture` | zipcloud `address1` |
+| City | `city` | zipcloud `address2` |
+| TownArea | `town-area` | zipcloud `address3` |
+| AreaNumber | `area-number` | 手入力（番地） |
+| BuildingName | `building-name` | 手入力（建物名・常に任意） |
+| — | `idou` | Web のみ（新規/解約/変更） |
+
+**郵便番号変更時の自動入力ルール**
+
+* 7桁確定（blur）で zipcloud 検索
+* **郵便番号が前回と異なる** 場合: 都道府県・市区町村・町村域を上書きし、**番地・建物名をクリア**
+* 複数候補: アラート「入力の郵便番号には、複数の住所候補があります。表示された住所が異なる場合は手入力でお願いします。」→ 先頭候補を反映
+
+### 9.10 組合員コード・住所枠 CSS（2026-08-29）
+
+**組合員コード（6桁1枠）** — `.soshiki-form-member-union-member-code`
+
+| 項目 | 値 |
+|------|-----|
+| `left` | `11.75%` |
+| `top` / `height` | `5%` / `90%` |
+| `width` | `11.1%` |
+| 字間 | `letter-spacing: 0.08em` |
+
+**住所（5分割・暫定縦積み）** — 共通 `.soshiki-form-member-address-field` + 行別クラス
+
+| クラス | `top`（行内%） |
+|--------|----------------|
+| `.soshiki-form-member-prefecture` | `54%` |
+| `.soshiki-form-member-city` | `61.2%` |
+| `.soshiki-form-member-town-area` | `68.4%` |
+| `.soshiki-form-member-area-number` | `75.6%` |
+| `.soshiki-form-member-building-name` | `82.8%` |
+
+共通: `left: 66%`、`width: calc(41.5% * 0.7)`、`height: 7.2%`。背景 PNG への最終合わせは後続調整。
 
 ---
 
@@ -496,9 +558,9 @@ Subbranch（KyosaikaiName, industry, branch, subbranch, CollectiveKyosaiId）
 
 1. ~~産別・支部・分会の入力枠を背景に追加~~ → **完了**
 2. ~~`data/union-master.json` を受け取り、Enter 判定・コード・口欄・掛金反映~~ → **完了**
-3. ~~組合員5行（異動内容・氏名・生年月日・性別・住所）・半角制限・郵便番号検索~~ → **完了**（郵便番号枠配置は §9.8）
+3. ~~組合員5行（異動内容・氏名・生年月日・性別・住所）・半角制限・郵便番号検索~~ → **完了**（郵便番号枠 §9.8、Access 対応・住所5分割・コード1枠 §9.9）
 4. ~~背景 PNG の郵便番号ハイフン除去~~ → **完了**（§9.7）
-5. 組合員欄 CSS の最終調整・開発用仮表示の削除（郵便番号枠は §9.8 完了済み）
+5. 組合員欄 CSS の最終調整（住所5枠の横位置など）・開発用仮表示の削除（郵便番号枠は §9.8 完了済み）
 6. 組合名プルダウン（localStorage）・追加確認・削除 UI
 7. `validateSoshikiForm()` の配線 → 確認画面・PDF 出力・メール送信（任意・後回し可）
 
@@ -548,13 +610,13 @@ Jekyll をバックグラウンドで起動し、プレビュー URL を表示�
 | 欄 | 仮表示（N = 1〜5） |
 |----|-------------------|
 | 異動・新規／解約／変更 | 新N / 解N / 変N |
-| 組合員コード（6マス） | ｺ1〜ｺ6（桁位置） |
+| 組合員コード | コードN（6桁1枠） |
 | カナ姓・名 | ｾｲN / ﾒｲN |
 | 漢字姓・名 | 姓N / 名N |
 | 生年月日 | 年N / 月N / 日N |
 | 性別 | 男N / 女N |
-| 郵便番号 | `郵N`（1枠・配置確認用） |
-| 住所 | 住所N |
+| 郵便番号 | `123-4567`（1行目のみ `value` 仮設定・配置確認用） |
+| 都道府県・市区町村・町村域・番地・建物名 | 都N / 市N / 町N / 番N / 建N |
 
 組合名 Enter でマスタ反映すると上書きされる。未登録名で Enter するとクリアされる。
 
