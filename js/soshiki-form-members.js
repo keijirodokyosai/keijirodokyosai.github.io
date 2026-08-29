@@ -18,6 +18,17 @@ var ADDRESS_GROUP_FIELD_SUFFIXES = [
 
 var lastPostalCodeLookupByRow = {};
 
+var ADDRESS_FONT_FIT_SUFFIXES = [
+  "prefecture",
+  "city",
+  "town-area",
+  "area-number",
+  "building-name",
+];
+
+var ADDRESS_FONT_FIT_SELECTOR =
+  ".soshiki-form-member-prefecture, .soshiki-form-member-city, .soshiki-form-member-town-area, .soshiki-form-member-area-number, .soshiki-form-member-building-name";
+
 function initMemberRows() {
   initIdouButtons();
   initGenderButtons();
@@ -26,6 +37,8 @@ function initMemberRows() {
   initZipFields();
   initZipLookup();
   initTownAreaFields();
+  initAddressFieldFontFit();
+  fitAllAddressFieldFonts();
 }
 
 function memberFieldId(row, suffix) {
@@ -380,6 +393,72 @@ function setAddressFieldsFromZipcloud(row, chosen) {
   if (townArea) {
     townArea.value = normalizeTownAreaValue(prefectureValue, chosen.address3 || "");
   }
+  fitAddressFieldsForRow(row);
+}
+
+function getMemberBoxFontLimits(input) {
+  var sheet = input ? input.closest(".soshiki-form-sheet") : null;
+  if (!sheet) {
+    return { max: 15, min: 10 };
+  }
+
+  var styles = getComputedStyle(sheet);
+  var max =
+    parseFloat(styles.getPropertyValue("--soshiki-form-member-box-font-size")) || 15;
+  var min =
+    parseFloat(styles.getPropertyValue("--soshiki-form-member-box-font-size-min")) ||
+    10;
+
+  if (min > max) {
+    min = max;
+  }
+
+  return { max: max, min: min };
+}
+
+function fitAddressFieldFont(input) {
+  if (!input) return;
+
+  if (!input.value) {
+    input.style.fontSize = "";
+    return;
+  }
+
+  var limits = getMemberBoxFontLimits(input);
+  input.style.fontSize = limits.max + "px";
+
+  if (input.scrollWidth <= input.clientWidth) {
+    return;
+  }
+
+  for (var size = limits.max - 1; size >= limits.min; size -= 1) {
+    input.style.fontSize = size + "px";
+    if (input.scrollWidth <= input.clientWidth) {
+      return;
+    }
+  }
+
+  input.style.fontSize = limits.min + "px";
+}
+
+function fitAddressFieldsForRow(row) {
+  ADDRESS_FONT_FIT_SUFFIXES.forEach(function (suffix) {
+    fitAddressFieldFont(getMemberField(row, suffix));
+  });
+}
+
+function fitAllAddressFieldFonts() {
+  document.querySelectorAll(ADDRESS_FONT_FIT_SELECTOR).forEach(function (input) {
+    fitAddressFieldFont(input);
+  });
+}
+
+function initAddressFieldFontFit() {
+  document.querySelectorAll(ADDRESS_FONT_FIT_SELECTOR).forEach(function (input) {
+    input.addEventListener("input", function () {
+      fitAddressFieldFont(input);
+    });
+  });
 }
 
 function initTownAreaFields() {
@@ -398,6 +477,7 @@ function normalizeTownAreaField(input) {
   if (normalized !== input.value) {
     input.value = normalized;
   }
+  fitAddressFieldFont(input);
 }
 
 /**

@@ -1696,8 +1696,12 @@ a:focus-visible {
   --soshiki-form-member-building-gap-from-town: 2px;
   /* 郵便番号枠：文字数に加えて px で幅を微調整（5文字 + extra が目安） */
   --soshiki-form-member-zip-width-extra: 6px;
+  /* 性別（男/女ボタン） */
+  --soshiki-form-member-gender-left: 46.1%;
+  --soshiki-form-member-gender-left-nudge: 30px;
   /* 組合員・標準枠（§9.11）— 郵便番号・住所など新規枠は必ずここを参照 */
   --soshiki-form-member-box-font-size: 15px;
+  --soshiki-form-member-box-font-size-min: 10px;
   --soshiki-form-member-box-line-height: 1;
   --soshiki-form-member-box-padding-block: 0;
   --soshiki-form-member-box-padding-inline: 3px;
@@ -1921,7 +1925,10 @@ a:focus-visible {
 /* 性別 */
 .soshiki-form-gender-btn {
   position: absolute;
-  left: 46.1%;
+  left: calc(
+    var(--soshiki-form-member-gender-left) +
+      var(--soshiki-form-member-gender-left-nudge)
+  );
   width: 5.2%;
   margin: 0;
   padding: 0;
@@ -1972,27 +1979,32 @@ a:focus-visible {
   width: max-content;
 }
 
-/* 住所3〜5・文字幅（§9.11 標準枠 + --soshiki-form-member-box-chars） */
+/* 住所1〜5・文字幅（§9.11）— 幅は max フォント（15px）基準。1em にしない（縮小時に枠が縮む） */
 .soshiki-form-member-prefecture,
 .soshiki-form-member-city,
 .soshiki-form-member-town-area,
 .soshiki-form-member-area-number,
 .soshiki-form-member-building-name {
   width: calc(
-    var(--soshiki-form-member-box-chars) * 1em +
+    var(--soshiki-form-member-box-chars) *
+      var(--soshiki-form-member-box-font-size) +
       2 * var(--soshiki-form-member-box-padding-inline) +
       2 * var(--soshiki-form-member-box-border-width)
   );
   min-width: calc(
-    var(--soshiki-form-member-box-chars) * 1em +
+    var(--soshiki-form-member-box-chars) *
+      var(--soshiki-form-member-box-font-size) +
       2 * var(--soshiki-form-member-box-padding-inline) +
       2 * var(--soshiki-form-member-box-border-width)
   );
   max-width: calc(
-    var(--soshiki-form-member-box-chars) * 1em +
+    var(--soshiki-form-member-box-chars) *
+      var(--soshiki-form-member-box-font-size) +
       2 * var(--soshiki-form-member-box-padding-inline) +
       2 * var(--soshiki-form-member-box-border-width)
   );
+  flex: 0 0 auto;
+  overflow-x: visible;
 }
 
 .soshiki-form-member-zip-wrap {
@@ -2149,7 +2161,7 @@ a:focus-visible {
 }
 
 .soshiki-form-member-building-name {
-  --soshiki-form-member-box-chars: 12;
+  --soshiki-form-member-box-chars: 20;
   position: absolute;
   left: 66.6%;
   top: calc(
