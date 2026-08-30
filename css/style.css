@@ -1699,6 +1699,12 @@ a:focus-visible {
   --soshiki-form-member-name-sei-left: 24.5%;
   --soshiki-form-member-name-mei-left: 36%;
   --soshiki-form-member-name-field-width: 8.5%;
+  /* 組合員コード（6桁1枠）— 分会コード字間を基準に 6 マス目線へ微調整 */
+  --soshiki-form-member-union-member-code-left: 11.55%;
+  --soshiki-form-member-union-member-code-width: 11.5%;
+  --soshiki-form-member-union-member-code-letter-spacing: 0.56em;
+  --soshiki-form-member-union-member-code-text-indent: 0.14em;
+  --soshiki-form-member-union-member-code-padding-left: 4px;
   /* 生年月日・漢字氏名行の縦中心（旧 top 54% + height 40%/2） */
   --soshiki-form-member-birth-text-center: 74%;
   --soshiki-form-member-birth-year-width: 50px;
@@ -1713,6 +1719,14 @@ a:focus-visible {
   --soshiki-form-member-building-gap-from-town: 2px;
   /* 郵便番号枠：文字数に加えて px で幅を微調整（5文字 + extra が目安） */
   --soshiki-form-member-zip-width-extra: 6px;
+  /* 異動内容（新規・解約・変更）— 行内 left（2026-08-30: 16.2% から −10%） */
+  --soshiki-form-member-idou-left: 6.2%;
+  --soshiki-form-member-idou-left-nudge: 5px;
+  --soshiki-form-member-idou-btn-width: 5%;
+  --soshiki-form-member-idou-width-nudge: -6px;
+  --soshiki-form-member-idou-btn-height: 26%;
+  --soshiki-form-member-idou-height-nudge: 2px;
+  --soshiki-form-member-idou-top-nudge: 0px;
   /* 性別（男/女ボタン）— 列位置は PNG 実測 §9.7.1（x1028–1088 / 1683px 基準） */
   --soshiki-form-member-gender-column-left: 61.08%;
   --soshiki-form-member-gender-column-width: 3.63%;
@@ -1849,37 +1863,45 @@ a:focus-visible {
   border-color: var(--soshiki-form-member-gender-border-color-selected);
 }
 
+.soshiki-form-idou-btn--shinki,
+.soshiki-form-idou-btn--kaiyaku,
+.soshiki-form-idou-btn--henkou {
+  left: calc(
+    var(--soshiki-form-member-idou-left) + var(--soshiki-form-member-idou-left-nudge)
+  );
+  width: calc(
+    var(--soshiki-form-member-idou-btn-width) +
+      var(--soshiki-form-member-idou-width-nudge)
+  );
+  height: calc(
+    var(--soshiki-form-member-idou-btn-height) +
+      var(--soshiki-form-member-idou-height-nudge)
+  );
+}
+
 .soshiki-form-idou-btn--shinki {
-  left: 6.2%;
-  top: 5%;
-  width: 5%;
-  height: 26%;
+  top: calc(5% + var(--soshiki-form-member-idou-top-nudge));
 }
 
 .soshiki-form-idou-btn--kaiyaku {
-  left: 6.2%;
-  top: 37%;
-  width: 5%;
-  height: 26%;
+  top: calc(37% + var(--soshiki-form-member-idou-top-nudge));
 }
 
 .soshiki-form-idou-btn--henkou {
-  left: 6.2%;
-  top: 69%;
-  width: 5%;
-  height: 26%;
+  top: calc(69% + var(--soshiki-form-member-idou-top-nudge));
 }
 
-/* 組合員コード（UnionMemberCode・6桁1枠） */
+/* 組合員コード（UnionMemberCode・6桁1枠）— 字間・フォントは分会コード（.soshiki-form-code-field）と同系 */
 .soshiki-form-member-union-member-code {
   position: absolute;
-  left: 11.75%;
+  left: var(--soshiki-form-member-union-member-code-left);
   top: 5%;
-  width: 11.1%;
+  width: var(--soshiki-form-member-union-member-code-width);
   height: 90%;
   text-align: center;
   font-variant-numeric: tabular-nums;
-  letter-spacing: 0.08em;
+  letter-spacing: var(--soshiki-form-member-union-member-code-letter-spacing);
+  text-indent: var(--soshiki-form-member-union-member-code-text-indent);
   line-height: 1;
 }
 
@@ -1901,6 +1923,11 @@ a:focus-visible {
   border-color: #36a872;
   outline: none;
   box-shadow: 0 0 0 2px rgba(54, 168, 114, 0.25);
+}
+
+.soshiki-form-member-union-member-code.soshiki-form-member-field {
+  font-size: 18px;
+  padding-left: var(--soshiki-form-member-union-member-code-padding-left);
 }
 
 .soshiki-form-member-field.soshiki-form-field--error,
@@ -2269,7 +2296,9 @@ a:focus-visible {
 }
 
 .soshiki-form-idou-btn .soshiki-form-dev-marker {
-  font-size: 10px;
+  font-size: 12px;
+  padding-top: 2px;
+  color: #123456;
 }
 
 .soshiki-form-gender-btn .soshiki-form-dev-marker {

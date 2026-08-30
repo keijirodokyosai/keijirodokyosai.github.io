@@ -19,7 +19,7 @@
         data-row="{{ row }}"
         aria-pressed="false"
         aria-label="{{ row }}行目・新規"
-      ><span class="soshiki-form-dev-marker" aria-hidden="true">新{{ row }}</span><span class="sr-only">新規</span></button>
+      ><span class="soshiki-form-dev-marker" aria-hidden="true">新 規</span><span class="sr-only">新規</span></button>
       <button
         type="button"
         class="soshiki-form-idou-btn soshiki-form-idou-btn--kaiyaku"
@@ -27,7 +27,7 @@
         data-row="{{ row }}"
         aria-pressed="false"
         aria-label="{{ row }}行目・解約"
-      ><span class="soshiki-form-dev-marker" aria-hidden="true">解{{ row }}</span><span class="sr-only">解約</span></button>
+      ><span class="soshiki-form-dev-marker" aria-hidden="true">解 約</span><span class="sr-only">解約</span></button>
       <button
         type="button"
         class="soshiki-form-idou-btn soshiki-form-idou-btn--henkou"
@@ -35,7 +35,7 @@
         data-row="{{ row }}"
         aria-pressed="false"
         aria-label="{{ row }}行目・変更"
-      ><span class="soshiki-form-dev-marker" aria-hidden="true">変{{ row }}</span><span class="sr-only">変更</span></button>
+      ><span class="soshiki-form-dev-marker" aria-hidden="true">変 更</span><span class="sr-only">変更</span></button>
     </div>
 
     <label class="sr-only" for="member-{{ row }}-union-member-code">{{ row }}行目・組合員コード（6桁）</label>
@@ -51,6 +51,7 @@
       inputmode="numeric"
       autocomplete="off"
       maxlength="6"
+      value="000000"
       placeholder="コード{{ row }}"
       aria-label="{{ row }}行目・組合員コード（6桁）"
     >

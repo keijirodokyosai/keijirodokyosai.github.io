@@ -16,6 +16,10 @@ var ADDRESS_GROUP_FIELD_SUFFIXES = [
   "area-number",
 ];
 
+var UNION_MEMBER_CODE_MAX_DIGITS = 6;
+var UNION_MEMBER_CODE_OVERFLOW_MESSAGE =
+  "組合員コードは6桁以内で入力してください";
+
 var lastPostalCodeLookupByRow = {};
 
 var ADDRESS_FONT_FIT_SUFFIXES = [
@@ -150,21 +154,50 @@ function initUnionMemberCodeFields() {
   });
 }
 
-function filterUnionMemberCodeInput(input) {
-  var digits = toHalfWidthDigits(input.value).replace(/[^0-9]/g, "").slice(0, 6);
-  input.value = digits;
+function unionMemberCodeDigits(value) {
+  return toHalfWidthDigits(value).replace(/[^0-9]/g, "");
 }
 
-function normalizeUnionMemberCodeField(input) {
-  var digits = toHalfWidthDigits(input.value).replace(/[^0-9]/g, "");
-
-  if (!digits) {
-    input.value = "";
+function setUnionMemberCodeOverflow(input, overflow) {
+  if (overflow) {
+    input.dataset.unionMemberCodeOverflow = "true";
+    setFieldError(input, true);
+  } else {
+    delete input.dataset.unionMemberCodeOverflow;
     setFieldError(input, false);
+  }
+}
+
+function filterUnionMemberCodeInput(input) {
+  var digits = unionMemberCodeDigits(input.value);
+  if (digits.length > UNION_MEMBER_CODE_MAX_DIGITS) {
+    input.value = digits.slice(0, UNION_MEMBER_CODE_MAX_DIGITS);
+    setUnionMemberCodeOverflow(input, true);
     return;
   }
 
-  input.value = digits.slice(0, 6).padStart(6, "0");
+  input.value = digits;
+  setUnionMemberCodeOverflow(input, false);
+}
+
+function normalizeUnionMemberCodeField(input) {
+  var digits = unionMemberCodeDigits(input.value);
+
+  if (!digits) {
+    input.value = "";
+    setUnionMemberCodeOverflow(input, false);
+    return;
+  }
+
+  if (input.dataset.unionMemberCodeOverflow === "true") {
+    input.value = digits
+      .slice(0, UNION_MEMBER_CODE_MAX_DIGITS)
+      .padStart(UNION_MEMBER_CODE_MAX_DIGITS, "0");
+    setFieldError(input, true);
+    return;
+  }
+
+  input.value = digits.padStart(UNION_MEMBER_CODE_MAX_DIGITS, "0");
   setFieldError(input, false);
 }
 
@@ -638,6 +671,30 @@ function validateAddressGroupForRow(row, rowLabel, errors) {
   });
 }
 
+function validateUnionMemberCodeForRow(row, rowLabel, errors) {
+  var field = getMemberField(row, "union-member-code");
+  if (!field || !field.value.trim()) return;
+
+  if (field.dataset.unionMemberCodeOverflow === "true") {
+    errors.push(rowLabel + "：" + UNION_MEMBER_CODE_OVERFLOW_MESSAGE);
+    setFieldError(field, true);
+    return;
+  }
+
+  var digits = unionMemberCodeDigits(field.value);
+  if (digits.length > UNION_MEMBER_CODE_MAX_DIGITS) {
+    setUnionMemberCodeOverflow(field, true);
+    field.value = digits.slice(0, UNION_MEMBER_CODE_MAX_DIGITS);
+    errors.push(rowLabel + "：" + UNION_MEMBER_CODE_OVERFLOW_MESSAGE);
+    return;
+  }
+
+  if (digits.length > 0) {
+    field.value = digits.padStart(UNION_MEMBER_CODE_MAX_DIGITS, "0");
+  }
+  setFieldError(field, false);
+}
+
 /**
  * 行に1項目でも入力があるか（確認画面用のたたき）
  */
@@ -712,6 +769,7 @@ function validateMemberRows() {
       errors.push(rowLabel + "：生年月日が正しくありません");
     }
 
+    validateUnionMemberCodeForRow(String(row), rowLabel, errors);
     validateAddressGroupForRow(String(row), rowLabel, errors);
   }
 
