@@ -267,6 +267,31 @@ breadcrumb_json_ld: >
               aria-label="掛金（1人あたり）"
             >
 
+            <div class="soshiki-form-page-count-group" role="group" aria-label="ページ枚数">
+              <label class="sr-only" for="page-count-current">ページ枚数（現在のページ）</label>
+              <input
+                type="text"
+                id="page-count-current"
+                name="page-count-current"
+                class="soshiki-form-field soshiki-form-page-count-field soshiki-form-page-count-field--current"
+                inputmode="numeric"
+                autocomplete="off"
+                maxlength="2"
+                aria-label="ページ枚数（現在のページ）"
+              >
+              <label class="sr-only" for="page-count-total">ページ枚数（総ページ数）</label>
+              <input
+                type="text"
+                id="page-count-total"
+                name="page-count-total"
+                class="soshiki-form-field soshiki-form-page-count-field soshiki-form-page-count-field--total"
+                inputmode="numeric"
+                autocomplete="off"
+                maxlength="2"
+                aria-label="ページ枚数（総ページ数）"
+              >
+            </div>
+
             {% include soshiki-form-member-rows.html %}
           </div>
         </div>

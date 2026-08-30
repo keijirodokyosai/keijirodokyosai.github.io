@@ -179,6 +179,26 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | `width` | **7.75%**（団結口欄幅 3.1% の 2.5 倍） |
 | 文字揃え | 右寄せ（`text-align: right`） |
 
+### 5.6 ページ枚数（CSS 配置）
+
+申込書左下フッターの **ページ枚数** 欄。背景 PNG に印刷された **`/`** の左右に数字を入力する（形式: 現在ページ / 総ページ）。
+
+| 項目 | 値 |
+|------|-----|
+| HTML id | `page-count-current`（`/` 左） / `page-count-total`（`/` 右） |
+| 入力 | 手入力可。`inputmode="numeric"`、`maxlength="2"` |
+| PNG 枠（実測） | x450–499, y933–997 |
+| オーバーレイ（内側 2px・実測基準） | 高さ `5.038%`（幅は 2 つの正方形＋ gap で自動） |
+| 位置微調整 | `left-nudge: -10%` / `top-nudge: +5%` → **確定** `left: 16.841%` / `top: 83.505%` |
+| 枠形状 | 各入力 `height: 100%` + `aspect-ratio: 1` で **正方形** |
+| 枠サイズ | `box-scale: 0.8` → 1 辺 **4.030%**（シート高さ比）≈ **8.46 mm** ≈ **48 px**（PNG 1191px 高さ時） |
+| `/` 間隔 | `--soshiki-form-page-count-slash-gap: 1.1em` |
+| レイアウト | `.soshiki-form-page-count-group` を flex（左入力・gap・右入力） |
+| 左枠位置調整 | `transform: translate(-9px, -14px)` |
+| 右枠位置調整 | `transform: translate(-20px, 6px)` |
+| フォント | 14px、中央揃え、`tabular-nums` |
+| 実測スクリプト | `scripts/measure-soshiki-form-png-page-count.py` → `measure/page-count/` |
+
 ---
 
 ## 6. 申込書の共済欄・掛金（確定仕様）
@@ -836,6 +856,7 @@ Subbranch（KyosaikaiName, industry, branch, subbranch, CollectiveKyosaiId）
 6. ~~背景 PNG の組合員氏名欄 カナ 除去~~ → **完了**（§9.7.2）
 7. ~~背景 PNG の異動内容列 新規/解約/変更 除去~~ → **完了**（§9.7.3）
 8. ~~組合員氏名欄 CSS（§9.11 標準枠・位置）~~ → **完了**（§9.13）
+8b. ~~ページ枚数（`/` 左右）入力枠~~ → **完了**（§5.6）
 9. 組合員欄 CSS の最終調整（住所5枠の横位置など）・開発用仮表示の削除（郵便番号枠は §9.8 完了済み）
 10. 組合名プルダウン（localStorage）・追加確認・削除 UI
 11. `validateSoshikiForm()` の配線 → 確認画面・PDF 出力・メール送信（任意・後回し可）

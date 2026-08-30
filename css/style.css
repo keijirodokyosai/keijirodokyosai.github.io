@@ -1442,6 +1442,31 @@ a:focus-visible {
   box-shadow: 0 2px 12px rgba(18, 52, 86, 0.12);
   --soshiki-form-sheet-row-top: 28.5%;
   --soshiki-form-sheet-row-height: 2.8%;
+  /* ページ枚数（PNG 実測: 枠 x450–499 y933–997、入力は内側 2px） */
+  --soshiki-form-page-count-left-base: 26.841%;
+  --soshiki-form-page-count-top-base: 78.505%;
+  --soshiki-form-page-count-left-nudge: -10%;
+  --soshiki-form-page-count-top-nudge: 5%;
+  --soshiki-form-page-count-left: calc(
+    var(--soshiki-form-page-count-left-base) +
+      var(--soshiki-form-page-count-left-nudge)
+  );
+  --soshiki-form-page-count-top: calc(
+    var(--soshiki-form-page-count-top-base) + var(--soshiki-form-page-count-top-nudge)
+  );
+  --soshiki-form-page-count-width: 2.672%;
+  --soshiki-form-page-count-box-height-base: 5.038%;
+  --soshiki-form-page-count-box-scale: 0.8;
+  --soshiki-form-page-count-height: calc(
+    var(--soshiki-form-page-count-box-height-base) *
+      var(--soshiki-form-page-count-box-scale)
+  );
+  --soshiki-form-page-count-slash-gap: 1.1em;
+  --soshiki-form-page-count-font-size: 14px;
+  --soshiki-form-page-count-current-offset-x: -9px;
+  --soshiki-form-page-count-current-offset-y: -14px;
+  --soshiki-form-page-count-total-offset-x: -20px;
+  --soshiki-form-page-count-total-offset-y: 6px;
 }
 
 .soshiki-form-sheet-bg {
@@ -1672,6 +1697,51 @@ a:focus-visible {
   line-height: var(--soshiki-form-sheet-row-height);
   text-align: right;
   padding-right: 6px;
+}
+
+/* ページ枚数（「/」左右・PNG 実測 §5.6） */
+.soshiki-form-page-count-group {
+  position: absolute;
+  left: var(--soshiki-form-page-count-left);
+  top: var(--soshiki-form-page-count-top);
+  width: auto;
+  height: var(--soshiki-form-page-count-height);
+  display: flex;
+  align-items: center;
+  gap: var(--soshiki-form-page-count-slash-gap);
+  box-sizing: border-box;
+}
+
+.soshiki-form-page-count-field {
+  position: static;
+  flex: 0 0 auto;
+  width: auto;
+  height: 100%;
+  aspect-ratio: 1;
+  min-width: 0;
+  margin: 0;
+  padding: 0 1px;
+  box-sizing: border-box;
+  font-size: var(--soshiki-form-page-count-font-size);
+  line-height: 1;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.soshiki-form-page-count-field--current {
+  order: 1;
+  transform: translate(
+    var(--soshiki-form-page-count-current-offset-x),
+    var(--soshiki-form-page-count-current-offset-y)
+  );
+}
+
+.soshiki-form-page-count-field--total {
+  order: 3;
+  transform: translate(
+    var(--soshiki-form-page-count-total-offset-x),
+    var(--soshiki-form-page-count-total-offset-y)
+  );
 }
 
 .soshiki-form-enter-note {
