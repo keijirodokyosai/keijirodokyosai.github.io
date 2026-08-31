@@ -1467,6 +1467,20 @@ a:focus-visible {
   --soshiki-form-page-count-current-offset-y: -14px;
   --soshiki-form-page-count-total-offset-x: -20px;
   --soshiki-form-page-count-total-offset-y: 6px;
+  /* 前月残・月計（PNG 実測:「人」左・ラベル下の枠。左 70×33 / 右 92×33 px） */
+  --soshiki-form-zengetsu-zan-left: 30.285%;
+  --soshiki-form-zengetsu-zan-top: 80.940%;
+  --soshiki-form-zengetsu-zan-width: 4.157%;
+  --soshiki-form-zengetsu-zan-height: 2.771%;
+  --soshiki-form-zengetsu-zan-offset-x: 0px;
+  --soshiki-form-zengetsu-zan-offset-y: 0px;
+  --soshiki-form-zengetsu-tsuki-kei-left: 40.380%;
+  --soshiki-form-zengetsu-tsuki-kei-top: 80.940%;
+  --soshiki-form-zengetsu-tsuki-kei-width: 5.463%;
+  --soshiki-form-zengetsu-tsuki-kei-height: 2.771%;
+  --soshiki-form-zengetsu-tsuki-kei-offset-x: 0px;
+  --soshiki-form-zengetsu-tsuki-kei-offset-y: 0px;
+  --soshiki-form-zengetsu-font-size: 14px;
 }
 
 .soshiki-form-sheet-bg {
@@ -1742,6 +1756,49 @@ a:focus-visible {
     var(--soshiki-form-page-count-total-offset-x),
     var(--soshiki-form-page-count-total-offset-y)
   );
+}
+
+/* 前月残・月計（人数・PNG 実測 §5.7。ページ枚数欄と同型: グループを absolute 配置） */
+.soshiki-form-zengetsu-group {
+  position: absolute;
+  box-sizing: border-box;
+}
+
+.soshiki-form-zengetsu-group--zan {
+  left: calc(
+    var(--soshiki-form-zengetsu-zan-left) + var(--soshiki-form-zengetsu-zan-offset-x)
+  );
+  top: calc(
+    var(--soshiki-form-zengetsu-zan-top) + var(--soshiki-form-zengetsu-zan-offset-y)
+  );
+  width: var(--soshiki-form-zengetsu-zan-width);
+  height: var(--soshiki-form-zengetsu-zan-height);
+}
+
+.soshiki-form-zengetsu-group--tsuki-kei {
+  left: calc(
+    var(--soshiki-form-zengetsu-tsuki-kei-left) +
+      var(--soshiki-form-zengetsu-tsuki-kei-offset-x)
+  );
+  top: calc(
+    var(--soshiki-form-zengetsu-tsuki-kei-top) +
+      var(--soshiki-form-zengetsu-tsuki-kei-offset-y)
+  );
+  width: var(--soshiki-form-zengetsu-tsuki-kei-width);
+  height: var(--soshiki-form-zengetsu-tsuki-kei-height);
+}
+
+.soshiki-form-zengetsu-field {
+  position: static;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0 1px;
+  box-sizing: border-box;
+  font-size: var(--soshiki-form-zengetsu-font-size);
+  line-height: 1;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
 }
 
 .soshiki-form-enter-note {

@@ -292,6 +292,41 @@ breadcrumb_json_ld: >
               >
             </div>
 
+            <div
+              class="soshiki-form-zengetsu-group soshiki-form-zengetsu-group--zan"
+              role="group"
+              aria-label="前月残（人数）"
+            >
+              <label class="sr-only" for="zengetsu-zan-count">前月残（人数）</label>
+              <input
+                type="text"
+                id="zengetsu-zan-count"
+                name="zengetsu-zan-count"
+                class="soshiki-form-field soshiki-form-zengetsu-field"
+                inputmode="numeric"
+                autocomplete="off"
+                maxlength="3"
+                aria-label="前月残（人数）"
+              >
+            </div>
+            <div
+              class="soshiki-form-zengetsu-group soshiki-form-zengetsu-group--tsuki-kei"
+              role="group"
+              aria-label="月計（人数）"
+            >
+              <label class="sr-only" for="tsuki-kei-count">月計（人数）</label>
+              <input
+                type="text"
+                id="tsuki-kei-count"
+                name="tsuki-kei-count"
+                class="soshiki-form-field soshiki-form-zengetsu-field"
+                inputmode="numeric"
+                autocomplete="off"
+                maxlength="3"
+                aria-label="月計（人数）"
+              >
+            </div>
+
             {% include soshiki-form-member-rows.html %}
           </div>
         </div>

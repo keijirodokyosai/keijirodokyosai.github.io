@@ -199,6 +199,30 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | フォント | 14px、中央揃え、`tabular-nums` |
 | 実測スクリプト | `scripts/measure-soshiki-form-png-page-count.py` → `measure/page-count/` |
 
+### 5.7 前月残・月計（CSS 配置）
+
+フッター右側の **前月残** / **月計** 欄。背景 PNG の **「人」左側の横長矩形枠** に人数を入力する。
+
+#### 実測手順（§5.6・`soshiki-form-png-edit.mdc` と同型）
+
+1. 対象 = **「人」左の人数枠**（ラベル文字「前月残」「月計」ではない）
+2. PNG 上で **「人」** の位置を基点に、枠の **罫線（外側）** を確認
+3. オーバーレイは罫線 **内側 2px**（`INSET = 2`）
+4. `measure/zengetsu/PROOF_*_overlay.png`（赤＝罫線・緑＝入力）を **目視確認**（スクリプトは代替にならない）
+5. **実装後**: `python scripts/measure-soshiki-form-png-zengetsu.py` で `VERIFY_css_on_png.png` を生成し、続けて **ブラウザで** `soshiki-form-enter.html` を開いて緑枠が印刷枠（「人」左）と一致するか確認。未コミット CSS やキャッシュに注意
+
+| 項目 | 値 |
+|------|-----|
+| HTML id | `zengetsu-zan-count`（前月残） / `tsuki-kei-count`（月計） |
+| レイアウト | `.soshiki-form-zengetsu-group--zan` / `--tsuki-kei` を absolute 配置（§5.6 ページ枚数と同型）。input は `width/height: 100%` |
+| 入力 | 手入力可。`inputmode="numeric"`、`maxlength="3"` |
+| PNG 枠（外側・ラベル下〜底辺） | 前月残 x510–579 y964–996（**70×33px**）/ 月計 x680–771 y964–996（**92×33px**） |
+| 前月残配置 | `left 30.285%` / `top 80.940%` / `width 4.157%` / `height 2.771%` |
+| 月計配置 | `left 40.380%` / `top 80.940%` / `width 5.463%` / `height 2.771%` |
+| 位置微調整 | `--soshiki-form-zengetsu-*-offset-x/y`（px） |
+| フォント | 14px、中央揃え、`tabular-nums` |
+| 実測スクリプト | `scripts/measure-soshiki-form-png-zengetsu.py` → `measure/zengetsu/` |
+
 ---
 
 ## 6. 申込書の共済欄・掛金（確定仕様）
@@ -857,6 +881,7 @@ Subbranch（KyosaikaiName, industry, branch, subbranch, CollectiveKyosaiId）
 7. ~~背景 PNG の異動内容列 新規/解約/変更 除去~~ → **完了**（§9.7.3）
 8. ~~組合員氏名欄 CSS（§9.11 標準枠・位置）~~ → **完了**（§9.13）
 8b. ~~ページ枚数（`/` 左右）入力枠~~ → **完了**（§5.6）
+8c. 前月残・月計（人数）入力枠（§5.7）… **配置確認中**
 9. 組合員欄 CSS の最終調整（住所5枠の横位置など）・開発用仮表示の削除（郵便番号枠は §9.8 完了済み）
 10. 組合名プルダウン（localStorage）・追加確認・削除 UI
 11. `validateSoshikiForm()` の配線 → 確認画面・PDF 出力・メール送信（任意・後回し可）
