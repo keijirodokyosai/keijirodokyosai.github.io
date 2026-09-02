@@ -42,6 +42,7 @@ function initMemberRows() {
   initZipLookup();
   initTownAreaFields();
   initAddressFieldFontFit();
+  initMemberRowDevHintCleanup();
   fitAllAddressFieldFonts();
 }
 
@@ -105,18 +106,6 @@ function initGenderButtons() {
       }
     });
   });
-
-  /* DEV: 性別枠・選択時の見え方確認（本番前に削除） */
-  for (var row = 1; row <= MEMBER_ROW_COUNT; row++) {
-    var hidden = getMemberField(row, "gender");
-    var maleBtn = document.querySelector(
-      '.soshiki-form-gender-btn--male[data-row="' + row + '"]'
-    );
-    if (!hidden || !maleBtn) continue;
-    hidden.value = "1";
-    maleBtn.classList.add("is-selected");
-    maleBtn.setAttribute("aria-pressed", "true");
-  }
 }
 
 function clearGenderSelection(row) {
@@ -730,6 +719,70 @@ function memberRowHasAnyInput(row) {
 
   if (getMemberField(row, "gender").value) return true;
   return false;
+}
+
+/**
+ * 行の必須項目がすべて入力済みか（建物名は任意）
+ */
+function memberRowRequiredFieldsFilled(row) {
+  if (!getMemberField(row, "idou").value) return false;
+
+  var requiredText = [
+    "family-name",
+    "given-name",
+    "family-name-kana",
+    "given-name-kana",
+    "birth-year",
+    "birth-month",
+    "birth-day",
+  ];
+
+  for (var i = 0; i < requiredText.length; i += 1) {
+    var field = getMemberField(row, requiredText[i]);
+    if (!field || !field.value.trim()) return false;
+  }
+
+  if (!getMemberField(row, "gender").value) return false;
+  if (!validateBirthDateForRow(String(row))) return false;
+
+  if (addressGroupHasAnyInput(row)) {
+    for (var j = 0; j < ADDRESS_GROUP_FIELD_SUFFIXES.length; j += 1) {
+      var addressField = getMemberField(row, ADDRESS_GROUP_FIELD_SUFFIXES[j]);
+      if (!addressField || !addressField.value.trim()) return false;
+    }
+  }
+
+  return true;
+}
+
+function clearMemberRowDevHints(row) {
+  var rowEl = document.querySelector('.soshiki-form-member-row[data-row="' + row + '"]');
+  if (!rowEl) return;
+
+  rowEl.querySelectorAll(".soshiki-form-member-dev-hint").forEach(function (field) {
+    field.classList.remove("soshiki-form-member-dev-hint");
+    field.removeAttribute("placeholder");
+  });
+}
+
+function initMemberRowDevHintCleanup() {
+  document.querySelectorAll(".soshiki-form-member-row").forEach(function (rowEl) {
+    rowEl.addEventListener("focusout", function () {
+      var row = rowEl.getAttribute("data-row");
+      if (!row) return;
+
+      window.setTimeout(function () {
+        var active = document.activeElement;
+        if (active && rowEl.contains(active)) return;
+
+        var building = getMemberField(row, "building-name");
+        if (!building || building.value.trim()) return;
+        if (!memberRowRequiredFieldsFilled(row)) return;
+
+        clearMemberRowDevHints(row);
+      }, 0);
+    });
+  });
 }
 
 /**

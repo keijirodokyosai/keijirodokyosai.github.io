@@ -1703,9 +1703,10 @@ a:focus-visible {
 
 .soshiki-form-code-field[readonly],
 .soshiki-form-sheet-row-field[readonly],
+.soshiki-form-kuchi-field[readonly],
 .soshiki-form-kakekin-field[readonly] {
   background: transparent;
-  border-color: rgba(54, 168, 114, 0.28);
+  border-color: transparent;
   color: #123456;
 }
 
@@ -1713,9 +1714,11 @@ a:focus-visible {
 .soshiki-form-code-field[readonly]:focus,
 .soshiki-form-sheet-row-field[readonly]:hover,
 .soshiki-form-sheet-row-field[readonly]:focus,
+.soshiki-form-kuchi-field[readonly]:hover,
+.soshiki-form-kuchi-field[readonly]:focus,
 .soshiki-form-kakekin-field[readonly]:hover,
 .soshiki-form-kakekin-field[readonly]:focus {
-  border-color: rgba(54, 168, 114, 0.28);
+  border-color: transparent;
   background: transparent;
   box-shadow: none;
   outline: none;
@@ -1963,6 +1966,9 @@ a:focus-visible {
   --soshiki-form-member-name-sei-left: 24.5%;
   --soshiki-form-member-name-mei-left: 36%;
   --soshiki-form-member-name-field-width: 8.5%;
+  --soshiki-form-member-kanji-name-font-size: 16px;
+  --soshiki-form-member-kanji-name-height-extra: 5px;
+  --soshiki-form-member-kanji-name-top-offset: -5px;
   /* 組合員コード（6桁1枠）— 分会コード字間を基準に 6 マス目線へ微調整 */
   --soshiki-form-member-union-member-code-left: 11.55%;
   --soshiki-form-member-union-member-code-width: 11.5%;
@@ -1979,10 +1985,14 @@ a:focus-visible {
   --soshiki-form-member-birth-day-left: 56.9%;
   --soshiki-form-member-birth-year-left: 47.5%;
   --soshiki-form-member-address-field-gap: 2px;
+  --soshiki-form-member-address-block-left: 66.6%;
+  --soshiki-form-member-town-area-row-left-nudge: -10px;
+  --soshiki-form-member-building-left-nudge: -5px;
   --soshiki-form-member-town-gap-from-zip: 2px;
   --soshiki-form-member-building-gap-from-town: 2px;
   /* 郵便番号枠：文字数に加えて px で幅を微調整（5文字 + extra が目安） */
   --soshiki-form-member-zip-width-extra: 6px;
+  --soshiki-form-member-zip-view-offset-y: 1px;
   /* 異動内容（新規・解約・変更）— 行内 left（2026-08-30: 16.2% から −10%） */
   --soshiki-form-member-idou-left: 6.2%;
   --soshiki-form-member-idou-left-nudge: 5px;
@@ -2208,6 +2218,29 @@ a:focus-visible {
   text-align: left;
 }
 
+.soshiki-form-member-kanji-sei,
+.soshiki-form-member-kanji-mei {
+  font-size: var(--soshiki-form-member-kanji-name-font-size);
+  height: calc(
+    var(--soshiki-form-member-box-height) +
+      var(--soshiki-form-member-kanji-name-height-extra)
+  );
+  min-height: calc(
+    var(--soshiki-form-member-box-height) +
+      var(--soshiki-form-member-kanji-name-height-extra)
+  );
+  max-height: calc(
+    var(--soshiki-form-member-box-height) +
+      var(--soshiki-form-member-kanji-name-height-extra)
+  );
+  line-height: calc(
+    var(--soshiki-form-member-box-height) +
+      var(--soshiki-form-member-kanji-name-height-extra) -
+      var(--soshiki-form-member-box-padding-top) -
+      var(--soshiki-form-member-box-padding-bottom)
+  );
+}
+
 .soshiki-form-member-kana-sei,
 .soshiki-form-member-kanji-sei {
   left: var(--soshiki-form-member-name-sei-left);
@@ -2229,7 +2262,8 @@ a:focus-visible {
 .soshiki-form-member-kanji-mei {
   top: calc(
     var(--soshiki-form-member-birth-text-center) -
-      var(--soshiki-form-member-box-height) / 2
+      var(--soshiki-form-member-box-height) / 2 +
+      var(--soshiki-form-member-kanji-name-top-offset)
   );
 }
 
@@ -2390,7 +2424,7 @@ a:focus-visible {
   --soshiki-form-member-box-chars: 5;
   position: relative;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   flex: 0 0 auto;
   width: calc(
@@ -2418,15 +2452,20 @@ a:focus-visible {
 
 .soshiki-form-member-zip-view {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   pointer-events: none;
   white-space: nowrap;
   font-family: "Meiryo", "Hiragino Sans", sans-serif;
   font-size: var(--soshiki-form-member-box-font-size);
   font-variant-numeric: tabular-nums;
-  line-height: 1;
+  line-height: calc(
+    var(--soshiki-form-member-box-height) -
+      var(--soshiki-form-member-box-padding-top) -
+      var(--soshiki-form-member-box-padding-bottom)
+  );
   color: var(--soshiki-form-member-box-color);
+  transform: translateY(var(--soshiki-form-member-zip-view-offset-y));
 }
 
 .soshiki-form-member-zip-part {
@@ -2445,7 +2484,7 @@ a:focus-visible {
   width: 100%;
   height: 100%;
   margin: 0;
-  padding: 0;
+  padding: var(--soshiki-form-member-zip-view-offset-y) 0 0;
   border: none;
   border-radius: 0;
   background: transparent;
@@ -2461,9 +2500,10 @@ a:focus-visible {
 }
 
 .soshiki-form-member-zip::placeholder {
-  color: rgba(18, 52, 86, 0.72);
-  -webkit-text-fill-color: rgba(18, 52, 86, 0.72);
+  color: rgba(18, 52, 86, 0.32);
+  -webkit-text-fill-color: rgba(18, 52, 86, 0.32);
   opacity: 1;
+  font-weight: 300;
 }
 
 .soshiki-form-member-zip:focus {
@@ -2497,7 +2537,10 @@ a:focus-visible {
 
 .soshiki-form-member-town-area-number-row {
   position: absolute;
-  left: 66.6%;
+  left: calc(
+    var(--soshiki-form-member-address-block-left) +
+      var(--soshiki-form-member-town-area-row-left-nudge)
+  );
   top: calc(
     var(--soshiki-form-member-zip-text-center) +
       var(--soshiki-form-member-zip-text-nudge) -
@@ -2531,7 +2574,10 @@ a:focus-visible {
 .soshiki-form-member-building-name {
   --soshiki-form-member-box-chars: 20;
   position: absolute;
-  left: 66.6%;
+  left: calc(
+    var(--soshiki-form-member-address-block-left) +
+      var(--soshiki-form-member-building-left-nudge)
+  );
   top: calc(
     var(--soshiki-form-member-zip-text-center) +
       var(--soshiki-form-member-zip-text-nudge) -
@@ -2546,8 +2592,9 @@ a:focus-visible {
 .soshiki-form-member-field::placeholder,
 .soshiki-form-member-union-member-code::placeholder,
 .soshiki-form-member-box::placeholder {
-  color: rgba(18, 52, 86, 0.72);
+  color: rgba(18, 52, 86, 0.32);
   opacity: 1;
+  font-weight: 300;
 }
 
 .soshiki-form-dev-marker {
@@ -2568,6 +2615,7 @@ a:focus-visible {
 .soshiki-form-gender-btn .soshiki-form-dev-marker {
   font-size: 13px;
   padding-top: var(--soshiki-form-member-gender-text-padding-top);
+  color: #123456;
 }
 
 @media print {

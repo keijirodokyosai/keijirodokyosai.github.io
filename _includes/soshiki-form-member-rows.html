@@ -1,7 +1,7 @@
 {% comment %}
   組合員入力欄（最大5名）。位置は css/style.css の .soshiki-form-member-* で調整。
   HTML id/name は Access 列名の kebab-case（§9.9）。異動内容 idou のみ Web 専用。
-  DEV: placeholder / .soshiki-form-dev-marker は配置確認用。本番前に削除する。
+  DEV: 1行目のみ placeholder（配置確認用）。異動・性別の .soshiki-form-dev-marker は全5行。本番前に削除する。
 {% endcomment %}
 <div class="soshiki-form-member-rows" aria-label="組合員入力（最大5名）">
   {% for row in (1..5) %}
@@ -51,8 +51,6 @@
       inputmode="numeric"
       autocomplete="off"
       maxlength="6"
-      value="000000"
-      placeholder="コード{{ row }}"
       aria-label="{{ row }}行目・組合員コード（6桁）"
     >
 
@@ -61,11 +59,11 @@
       type="text"
       id="member-{{ row }}-family-name-kana"
       name="member-{{ row }}-family-name-kana"
-      class="soshiki-form-member-box soshiki-form-member-kana-sei"
+      class="soshiki-form-member-box soshiki-form-member-kana-sei{% if row == 1 %} soshiki-form-member-dev-hint{% endif %}"
       data-access-field="FamilyNameKana"
       data-halfwidth-kana
       autocomplete="off"
-      placeholder="ｾｲ{{ row }}"
+      {% if row == 1 %}placeholder="ｾｲ"{% endif %}
       aria-label="{{ row }}行目・カナ姓"
     >
 
@@ -74,11 +72,11 @@
       type="text"
       id="member-{{ row }}-given-name-kana"
       name="member-{{ row }}-given-name-kana"
-      class="soshiki-form-member-box soshiki-form-member-kana-mei"
+      class="soshiki-form-member-box soshiki-form-member-kana-mei{% if row == 1 %} soshiki-form-member-dev-hint{% endif %}"
       data-access-field="GivenNameKana"
       data-halfwidth-kana
       autocomplete="off"
-      placeholder="ﾒｲ{{ row }}"
+      {% if row == 1 %}placeholder="ﾒｲ"{% endif %}
       aria-label="{{ row }}行目・カナ名"
     >
 
@@ -87,10 +85,10 @@
       type="text"
       id="member-{{ row }}-family-name"
       name="member-{{ row }}-family-name"
-      class="soshiki-form-member-box soshiki-form-member-kanji-sei"
+      class="soshiki-form-member-box soshiki-form-member-kanji-sei{% if row == 1 %} soshiki-form-member-dev-hint{% endif %}"
       data-access-field="FamilyName"
       autocomplete="off"
-      placeholder="姓{{ row }}"
+      {% if row == 1 %}placeholder="姓"{% endif %}
       aria-label="{{ row }}行目・漢字姓"
     >
 
@@ -99,10 +97,10 @@
       type="text"
       id="member-{{ row }}-given-name"
       name="member-{{ row }}-given-name"
-      class="soshiki-form-member-box soshiki-form-member-kanji-mei"
+      class="soshiki-form-member-box soshiki-form-member-kanji-mei{% if row == 1 %} soshiki-form-member-dev-hint{% endif %}"
       data-access-field="GivenName"
       autocomplete="off"
-      placeholder="名{{ row }}"
+      {% if row == 1 %}placeholder="名"{% endif %}
       aria-label="{{ row }}行目・漢字名"
     >
 
@@ -119,7 +117,6 @@
       inputmode="numeric"
       autocomplete="off"
       maxlength="4"
-      value="2026"
       aria-label="{{ row }}行目・生年月日・年（西暦4桁）"
     >
 
@@ -136,7 +133,6 @@
       inputmode="numeric"
       autocomplete="off"
       maxlength="2"
-      value="12"
       aria-label="{{ row }}行目・生年月日・月"
     >
 
@@ -153,7 +149,6 @@
       inputmode="numeric"
       autocomplete="off"
       maxlength="2"
-      value="28"
       aria-label="{{ row }}行目・生年月日・日"
     >
 
@@ -186,7 +181,7 @@
             type="text"
             id="member-{{ row }}-postal-code"
             name="member-{{ row }}-postal-code"
-            class="soshiki-form-member-zip"
+            class="soshiki-form-member-zip{% if row == 1 %} soshiki-form-member-dev-hint{% endif %}"
             data-access-field="PostalCode"
             data-zip-field
             data-zip-lookup
@@ -194,8 +189,7 @@
             inputmode="numeric"
             autocomplete="postal-code"
             maxlength="8"
-            value="123-4567"
-            placeholder="郵{{ row }}"
+            {% if row == 1 %}placeholder="郵便番号"{% endif %}
             aria-label="{{ row }}行目・郵便番号（123-4567）"
           >
         </div>
@@ -206,11 +200,10 @@
         type="text"
         id="member-{{ row }}-prefecture"
         name="member-{{ row }}-prefecture"
-        class="soshiki-form-member-box soshiki-form-member-prefecture"
+        class="soshiki-form-member-box soshiki-form-member-prefecture{% if row == 1 %} soshiki-form-member-dev-hint{% endif %}"
         data-access-field="Prefecture"
         autocomplete="off"
-        value="鹿児島県"
-        placeholder="都{{ row }}"
+        {% if row == 1 %}placeholder="都道府県"{% endif %}
         aria-label="{{ row }}行目・都道府県"
       >
 
@@ -219,10 +212,10 @@
         type="text"
         id="member-{{ row }}-city"
         name="member-{{ row }}-city"
-        class="soshiki-form-member-box soshiki-form-member-city"
+        class="soshiki-form-member-box soshiki-form-member-city{% if row == 1 %} soshiki-form-member-dev-hint{% endif %}"
         data-access-field="City"
         autocomplete="off"
-        placeholder="市{{ row }}"
+        {% if row == 1 %}placeholder="行政区"{% endif %}
         aria-label="{{ row }}行目・市区町村"
       >
     </div>
@@ -233,10 +226,10 @@
         type="text"
         id="member-{{ row }}-town-area"
         name="member-{{ row }}-town-area"
-        class="soshiki-form-member-box soshiki-form-member-town-area"
+        class="soshiki-form-member-box soshiki-form-member-town-area{% if row == 1 %} soshiki-form-member-dev-hint{% endif %}"
         data-access-field="TownArea"
         autocomplete="off"
-        placeholder="町{{ row }}"
+        {% if row == 1 %}placeholder="町村域"{% endif %}
         aria-label="{{ row }}行目・町村域"
       >
 
@@ -245,10 +238,10 @@
         type="text"
         id="member-{{ row }}-area-number"
         name="member-{{ row }}-area-number"
-        class="soshiki-form-member-box soshiki-form-member-area-number"
+        class="soshiki-form-member-box soshiki-form-member-area-number{% if row == 1 %} soshiki-form-member-dev-hint{% endif %}"
         data-access-field="AreaNumber"
         autocomplete="off"
-        placeholder="番{{ row }}"
+        {% if row == 1 %}placeholder="丁、番地"{% endif %}
         aria-label="{{ row }}行目・番地"
       >
     </div>
@@ -258,10 +251,10 @@
       type="text"
       id="member-{{ row }}-building-name"
       name="member-{{ row }}-building-name"
-      class="soshiki-form-member-box soshiki-form-member-building-name"
+      class="soshiki-form-member-box soshiki-form-member-building-name{% if row == 1 %} soshiki-form-member-dev-hint{% endif %}"
       data-access-field="BuildingName"
       autocomplete="off"
-      placeholder="建{{ row }}"
+      {% if row == 1 %}placeholder="建物名"{% endif %}
       aria-label="{{ row }}行目・建物名"
     >
   </div>

@@ -45,7 +45,7 @@
 | マスタ設計 | 本ドキュメント・`data/form-kyosai-map.json`（確定） |
 | 産別・支部・分会 | 背景上に 3 桁×3 の入力枠（`readonly`）・Enter でマスタ反映 |
 | Enter 連携 | `union-master.json` 読込・組合名判定・コード・口欄（7）・掛金を自動反映 |
-| 共済口欄（7）・掛金 | HTML 配置完了（配置確認用仮表示あり） |
+| 共済口欄（7）・掛金 | HTML 配置完了。マスタ反映表示のみ（枠線なし・初期値空） |
 
 ### 未実装
 
@@ -152,11 +152,12 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | 字間・字位置 | `letter-spacing: 0.52em` / `text-indent: 0.27em` / `font-variant-numeric: tabular-nums` |
 | 横位置（`left`） | 産別 **`6%`** / 支部 **`11.7%`** / 分会 **`17.4%`**（枠同士は隙間なく接続） |
 | 背景 | **透明**（`background: transparent`） |
+| 枠線 | **なし**（`border-color: transparent`） |
 | HTML id | `industry-code` / `branch-code` / `subbranch-code` |
 
 ### 5.5 共済口欄・掛金（CSS 配置・確定）
 
-口欄・掛金もコード欄と同じ行（`top: 28.5%` / `height: 2.8%`）。背景は透明。
+口欄・掛金もコード欄と同じ行（`top: 28.5%` / `height: 2.8%`）。背景・枠線は透明（表示専用）。
 
 **口欄（幅 `3.1%`）**
 
@@ -509,7 +510,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | 項目 | 内容 |
 |------|------|
 | 方式 | 性別列内の文字 bbox を PNG から実測 → 切り出し確認 → 白 `#FFF` 塗り |
-| 再実行 | `python scripts/remove-gender-bg-text.py`（西暦 bbox が変われば保存しない） |
+| 再実行 | 不要（`images/soshiki-form-enter.png` に反映済み。除去スクリプトはリポから削除。PDF から PNG を作り直す場合は §9.7.1 手順から再実装） |
 | 切り出し補助 | `python scripts/measure-soshiki-form-png-gender.py`（目視確認の代替にならない） |
 | キャッシュ | `?v=20260830-gender-text` |
 
@@ -569,7 +570,7 @@ x は全行共通。**1.男** x **1045–1080**、**2.女** x **1044–1081**。
 |------|------|
 | 対象 | 各組合員行・氏名列上半分（カナ行）右端セルに印刷された **カナ**（2 文字） |
 | 方式 | 横罫行を除外した **文字ピクセルのみ** 白 `#FFF` 塗り（bbox 一括塗りは横罫まで消えるため不可） |
-| 再実行 | `python scripts/remove-member-name-kana-bg-text.py` |
+| 再実行 | 不要（PNG 反映済み。除去スクリプトはリポから削除。再生成時は §9.7.2 手順から再実装） |
 | 切り出し補助 | `python scripts/measure-soshiki-form-png-name-kana.py`（目視確認の代替にならない） |
 | キャッシュ | `?v=20260830-name-kana-v2` |
 
@@ -619,7 +620,7 @@ x は全行共通。**1.男** x **1045–1080**、**2.女** x **1044–1081**。
 | 対象 | 各組合員行・異動内容列内（x102–194）の **新規 / 解約 / 変更** 文字と **点線楕円枠** |
 | 方式 | 列内側の暗ピクセルを白 `#FFF` 塗り。**実線横罫行**（下表）と **縦罫** は触れない |
 | 横罫判定 | x102–194 で暗ピクセル **≥90** の y 行 = 実線（点線楕円行は 40 未満） |
-| 再実行 | `python scripts/remove-idou-bg-text.py` |
+| 再実行 | 不要（PNG 反映済み。除去スクリプトはリポから削除。再生成時は §9.7.3 手順から再実装） |
 | 切り出し補助 | `python scripts/measure-soshiki-form-png-idou.py`（目視確認の代替にならない） |
 | キャッシュ | `?v=20260830-idou-v3` |
 
@@ -677,6 +678,8 @@ x は全行共通。**1.男** x **1045–1080**、**2.女** x **1044–1081**。
 | 縦微調整 | `--soshiki-form-member-zip-text-nudge: -1px` | 文字中心の px 補正 |
 | 1行目 flex | `align-items: flex-start` | 郵便・都道府県・市区町村の **枠上端** を揃える |
 | 郵便番号ラッパ | `.soshiki-form-member-zip-wrap` 高さ 18px・`zip-inner` は **`display: flex`（`inline-flex` 不可）** | インライン行ボックスの余白で縦ズレするため |
+| 枠内文字の縦位置 | `zip-inner` **`align-items: flex-start`**・`zip-view` の `line-height` を §9.11 標準枠と同じ | 都道府県 `input` と同じ上 padding 3px + line-height 15px の並び |
+| 枠内文字の縦微調整 | `--soshiki-form-member-zip-view-offset-y: 1px` | `zip-view` の `translateY` と透明 `input` の上 padding（キャレット・placeholder 同期） |
 | 枠サイズ | §9.11 `.soshiki-form-member-box` on `.soshiki-form-member-zip-inner` | 高さ 18px・15px・上 padding 3px |
 | 郵便番号幅 | `--soshiki-form-member-box-chars: 5` + `--soshiki-form-member-zip-width-extra: 6px` | px で微調整 |
 | 字間（数字） | `0.06em` | `.soshiki-form-member-zip-part` |
@@ -753,9 +756,9 @@ HTML の `id` / `name` は Access 列名の **kebab-case**（`member-{行}-` + �
 
 **1行目:** `.soshiki-form-member-zip-address-row` — 郵便番号・都道府県・市区町村。
 
-**2行目:** `.soshiki-form-member-town-area-number-row` — 町村域・番地（1行目枠下 + `--soshiki-form-member-town-gap-from-zip`: **2px**）。
+**2行目:** `.soshiki-form-member-town-area-number-row` — 町村域・番地（1行目枠下 + `--soshiki-form-member-town-gap-from-zip`: **2px**）。`left`: `66.6%` + `--soshiki-form-member-town-area-row-left-nudge`（**-10px**）。
 
-**3行目:** 建物名 — 2行目枠下 + `--soshiki-form-member-building-gap-from-town`: **2px**、`left: 66.6%`。
+**3行目:** 建物名 — 2行目枠下 + `--soshiki-form-member-building-gap-from-town`: **2px**。`left`: `66.6%` + `--soshiki-form-member-building-left-nudge`（**-5px**）。
 
 ### 9.11 組合員・標準枠サイズ（2026-08-29 確定）
 
@@ -807,8 +810,10 @@ HTML: `input.soshiki-form-member-box.soshiki-form-member-birth-*`（`.soshiki-fo
 |--------|--------|---------|--------|
 | `.soshiki-form-member-kana-sei` | `24.5%`（`--soshiki-form-member-name-sei-left`） | `8.5%` | 住所1行と同じ `--soshiki-form-member-zip-address-row-top` |
 | `.soshiki-form-member-kana-mei` | `36%`（`--soshiki-form-member-name-mei-left`） | `8.5%` | 同上 |
-| `.soshiki-form-member-kanji-sei` | `24.5%` | `8.5%` | `--soshiki-form-member-birth-text-center`（74%）− 枠高 / 2 |
+| `.soshiki-form-member-kanji-sei` | `24.5%` | `8.5%` | `--soshiki-form-member-birth-text-center`（74%）− 枠高 / 2 + `kanji-name-top-offset` |
 | `.soshiki-form-member-kanji-mei` | `36%` | `8.5%` | 同上 |
+
+漢字氏名2枠のみ: フォント `16px`（`--soshiki-form-member-kanji-name-font-size`）、高さ + `5px`、上へ `5px` 拡大（`kanji-name-top-offset: -5px`）。カナ姓・名は §9.11 標準枠のまま。
 
 HTML: `input.soshiki-form-member-box` + `kana-*` / `kanji-*`。背景 PNG のカナラベル除去は §9.7.2。
 
@@ -942,8 +947,9 @@ Subbranch（KyosaikaiName, industry, branch, subbranch, CollectiveKyosaiId）
 8c. ~~前月残・月計（人数）入力枠~~ → **完了**（§5.7・2026-08-31 実測修正）
 8d. ~~入力ページの横フィット（§9.0.1）~~ → **完了**
 8e. ~~備考入力枠~~ → **完了**（§5.8・2026-09-02 実測）
-9. 組合員欄 CSS の最終調整（住所5枠の横位置など）・開発用仮表示の削除（郵便番号枠は §9.8 完了済み）
-10. 組合名プルダウン（localStorage）・追加確認・削除 UI
+9. ~~組合員欄 CSS（住所2〜3行目横位置・郵便番号文字縦位置）~~ → **完了**（2026-09-02）
+9b. 開発用仮表示の本番前削除（§14・1行目 placeholder 等）
+10. 組合名プルダウン（localStorage）・マスタからのデータ引き出し・追加確認・削除 UI
 11. `validateSoshikiForm()` の配線 → 確認画面・PDF 出力・メール送信（任意・後回し可）
 
 ---
@@ -971,35 +977,26 @@ Jekyll をバックグラウンドで起動し、プレビュー URL を表示�
 
 ### 配置調整時の仮表示（開発用）
 
-枠の位置合わせのため、`soshiki-form-enter.html` の `value` に仮の1文字を入れている。**本番前に削除**する。
+**異動・性別**（`.soshiki-form-dev-marker`）: **全5行**。紺 `#123456`（入力欄の placeholder より濃い表示）。性別は **未選択**（ユーザーがクリックで選択）。
 
-| 欄 | 仮表示 |
-|----|--------|
-| 産別 | 000（3桁・字間調整） |
-| 支部 | 000（3桁・字間調整） |
-| 分会 | 000（3桁・字間調整） |
-| 団結共済 | 団 |
-| 組織生命 | 生 |
-| 組織医療 | 医 |
-| 組織交通 | 交 |
-| 組織火災 | 火 |
-| 慶弔② | 慶 |
-| 総合共済 | 総 |
-| 掛金 | 金 |
+**入力欄 placeholder**（1行目のみ）: `rgba(18, 52, 86, 0.32)`・`font-weight: 300`。2〜5行目は空欄。
 
-**組合員5行**（`_includes/soshiki-form-member-rows.html` の `placeholder` / `.soshiki-form-dev-marker`）:
+| 欄 | 1行目の仮表示 |
+|----|----------------|
+| 異動・新規／解約／変更 | **新 規 / 解 約 / 変 更**（全5行・行番号なし） |
+| 組合員コード | なし（手入力・blur で0埋め） |
+| カナ姓・名 | ｾｲ / ﾒｲ |
+| 漢字姓・名 | 姓 / 名 |
+| 生年月日 | なし |
+| 性別 | 男 / 女（全5行・未選択） |
+| 郵便番号 | 郵便番号 |
+| 都道府県 | 都道府県 |
+| 市区町村 | 行政区 |
+| 町村域 | 町村域 |
+| 番地 | 丁、番地 |
+| 建物名 | 建物名 |
 
-| 欄 | 仮表示（N = 1〜5） |
-|----|-------------------|
-| 異動・新規／解約／変更 | **新 規 / 解 約 / 変 更**（行番号なし） |
-| 組合員コード | コードN（6桁1枠） |
-| カナ姓・名 | ｾｲN / ﾒｲN |
-| 漢字姓・名 | 姓N / 名N |
-| 生年月日 | 年N / 月N / 日N |
-| 性別 | 男 / 女（行番号なし。`aria-label` に N 行目） |
-| 郵便番号 | `123-4567`（`value` 仮設定・配置確認用） |
-| 都道府県 | `京都府`（`value` 仮設定・配置確認用） |
-| 市区町村・町村域・番地・建物名 | 市N / 町N / 番N / 建N |
+**フォーカス移動時:** 必須項目が入力済みで行からフォーカスが外れ、建物名が空のとき、`initMemberRowDevHintCleanup()` が当該行の **placeholder のみ** 削除する（異動・性別マーカーは残す）。
 
 組合名 Enter でマスタ反映すると上書きされる。未登録名で Enter するとクリアされる。
 
