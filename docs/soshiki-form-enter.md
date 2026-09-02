@@ -369,7 +369,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 |------|------|
 | 対象 | `body.soshiki-form-enter-page` のみ |
 | 幅 | `.kyosai-page.soshiki-form-enter-section` の `max-width: none`（1100px 上限を解除） |
-| 余白 | `.kyosai-page` / `.detail-section` の左右 padding を **12px**（他ページは従来どおり） |
+| 余白 | `.kyosai-page` 左右 **8px**。`.detail-section` は **背景なし・padding 0**（幅は `fit-content` でシートに合わせる） |
 | 縮小 | ラッパー幅 &lt; シート実幅のとき `transform: scale()`（`--soshiki-form-scale`、上限 1） |
 | JS | `initSoshikiFormLayout()`（`resize` + `ResizeObserver`）。`margin-bottom` で scale 後の縦余白を補正 |
 | 縦 | ページ全体の縦スクロールはそのまま |

@@ -1429,22 +1429,34 @@ a:focus-visible {
 /* 入力ページのみ: 横スクロールなし・画面幅をほぼ使う（§9.0.1） */
 .soshiki-form-enter-page .kyosai-page.soshiki-form-enter-section {
   max-width: none;
-  padding-left: 12px;
-  padding-right: 12px;
+  padding-top: 12px;
+  padding-bottom: 24px;
+  padding-left: 8px;
+  padding-right: 8px;
 }
 
 .soshiki-form-enter-page .soshiki-form-enter-section .detail-section {
-  padding-left: 12px;
-  padding-right: 12px;
+  width: fit-content;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+}
+
+.soshiki-form-enter-page .soshiki-form-enter-wrap {
+  width: fit-content;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  overflow-x: hidden;
+  padding-bottom: 8px;
 }
 
 .soshiki-form-enter-wrap {
   overflow-x: auto;
   padding-bottom: 8px;
-}
-
-.soshiki-form-enter-page .soshiki-form-enter-wrap {
-  overflow-x: hidden;
 }
 
 .soshiki-form-enter-page .soshiki-form-sheet {
@@ -1827,9 +1839,10 @@ a:focus-visible {
 .soshiki-form-enter-note {
   width: 297mm;
   max-width: 100%;
-  margin: 16px auto 0;
+  margin: 12px auto 0;
   font-size: 16px;
   color: #456;
+  text-align: center;
 }
 
 /* --- 組合員入力（最大5名） --- */
