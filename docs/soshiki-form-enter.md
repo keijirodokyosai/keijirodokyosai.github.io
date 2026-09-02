@@ -74,7 +74,7 @@
 
 ```text
 soshiki-form-enter.html      … 入力ページ
-js/soshiki-form-enter.js     … 日付初期値・マスタ連携（Enter 判定・口・掛金反映）・横フィット（§9.0.1）
+js/soshiki-form-enter.js     … 日付初期値・申込月の翌月を当月枠へ反映・マスタ連携（Enter 判定・口・掛金反映）・横フィット（§9.0.1）
 js/soshiki-form-members.js   … 組合員5行・異動トグル・半角制限・郵便番号検索・町村域正規化（§9.9）・表示同期（updateZipView）
 _includes/soshiki-form-member-rows.html … 組合員行マークアップ
 css/style.css                … .soshiki-form-* オーバーレイ用
@@ -213,7 +213,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 
 | 項目 | 値 |
 |------|-----|
-| HTML id | `zengetsu-zan-count`（前月残） / `tsuki-kei-count`（月計） |
+| HTML id | `zengetsu-zan-count`（前月残） / `tougetsu-count`（当月） / `tsuki-kei-count`（月計） |
 | レイアウト | `.soshiki-form-zengetsu-group--zan` / `--tsuki-kei` を absolute 配置（§5.6 ページ枚数と同型）。input は `width/height: 100%` |
 | 入力 | 手入力可。`inputmode="numeric"`、`maxlength="3"` |
 | PNG 枠（外側・黒罫線） | 前月残 x508–556 y958–996（**49×39px**）/ 月計 x680–728 y958–996（**49×39px**） |
@@ -224,6 +224,38 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | 位置・サイズ微調整 | `--soshiki-form-zengetsu-*-offset-x/y`（px）、`*-width-extra` / `height-extra`（px） |
 | フォント | 18px、中央揃え、`tabular-nums` |
 | 実測スクリプト | `scripts/measure-soshiki-form-png-zengetsu.py` → `measure/zengetsu/` |
+
+#### 5.7.1 当月枠（CSS 配置）
+
+月計枠の **直上** に配置。サイズは月計枠の **縦・横とも 1/2**（月計の CSS 変数から `calc` で導出）。横位置は月計枠に対して中央揃え。
+
+| 項目 | 値 |
+|------|-----|
+| HTML id | `tougetsu-count` |
+| レイアウト | `.soshiki-form-zengetsu-group--tougetsu`（月計と同型。`padding: 1px`） |
+| 表示 | **申込日の月**（`application-month`）の **翌月** を JS で表示。月のみ・0 埋めなし（例: 申込 `9` → `10`、申込 `12` → `1`） |
+| 入力 | **手入力不可**（`readonly`）。申込月の `input` / `change` で再計算 |
+| サイズ | 月計の `width` / `height`（extra 込み）の **50%** + `width-extra 2px` / `height-extra 10px` |
+| 位置 | 月計の `top` から当月の `height` 分だけ上。`left` は月計幅の 1/4 だけ右（半分幅の中央揃え） / offset `-6px` / `-24px` |
+| 位置・サイズ微調整 | `--soshiki-form-zengetsu-tougetsu-offset-x/y`（px）、`width-extra` / `height-extra`（px） |
+| フォント | 16px、中央揃え、`tabular-nums`（`--soshiki-form-zengetsu-tougetsu-font-size`）。文字位置は input `padding` 上 `2px` / 下 `0` |
+
+### 5.8 備考（CSS 配置）
+
+フッター右の **備考** 欄。背景 PNG の「備考」ラベル下の矩形枠に自由記述を入力する。
+
+| 項目 | 値 |
+|------|-----|
+| HTML id | `biko-remarks` |
+| 要素 | `<textarea>`（`.soshiki-form-biko-group` + `.soshiki-form-biko-field`） |
+| 入力 | 手入力可。複数行。`resize: none` |
+| PNG 枠（外側・黒罫線） | x898–1601 y934–1120（**704×187px**） |
+| 入力オーバーレイ | グループを外枠に合わせ、`padding: 2px`（内側 700×183px） |
+| 配置 | `left 53.325%` / `top 78.421%` / `width 41.805%` / `height 15.701%` / offset `3px` / `30px` / width-extra `-6px` / height-extra `-33px` |
+| 文字開始位置 | `--soshiki-form-biko-padding-top: 40px`（印刷ラベル「備考」下） |
+| 位置・サイズ微調整 | `--soshiki-form-biko-*-offset-x/y`、`*-width-extra` / `height-extra`（px） |
+| フォント | 14px、左揃え、`line-height: 1.3` |
+| 実測スクリプト | `scripts/measure-soshiki-form-png-biko.py` → `measure/biko/` |
 
 ---
 
@@ -373,6 +405,17 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | 縮小 | ラッパー幅 &lt; シート実幅のとき `transform: scale()`（`--soshiki-form-scale`、上限 1） |
 | JS | `initSoshikiFormLayout()`（`resize` + `ResizeObserver`）。`margin-bottom` で scale 後の縦余白を補正 |
 | 縦 | ページ全体の縦スクロールはそのまま |
+
+### 9.0.2 印刷・PDF
+
+ブラウザの **印刷** および **PDF 保存**（`@media print`）では、画面上の入力ガイド用 **緑枠線を印字しない**。
+
+| 項目 | 内容 |
+|------|------|
+| 対象 | `.soshiki-form-sheet` 内の `.soshiki-form-field`、組合員欄 `.soshiki-form-member-box` 等 |
+| CSS | `border-color: transparent`、`box-shadow: none`、`outline: none` |
+| 印字されるもの | 背景 PNG・入力した **文字**・性別・異動の **選択枠**（実線楕円） |
+| 非印字 | 入力欄の緑枠、開発用マーカー（`.soshiki-form-dev-marker`） |
 
 ### 9.1 異動内容
 
@@ -898,6 +941,7 @@ Subbranch（KyosaikaiName, industry, branch, subbranch, CollectiveKyosaiId）
 8b. ~~ページ枚数（`/` 左右）入力枠~~ → **完了**（§5.6）
 8c. ~~前月残・月計（人数）入力枠~~ → **完了**（§5.7・2026-08-31 実測修正）
 8d. ~~入力ページの横フィット（§9.0.1）~~ → **完了**
+8e. ~~備考入力枠~~ → **完了**（§5.8・2026-09-02 実測）
 9. 組合員欄 CSS の最終調整（住所5枠の横位置など）・開発用仮表示の削除（郵便番号枠は §9.8 完了済み）
 10. 組合名プルダウン（localStorage）・追加確認・削除 UI
 11. `validateSoshikiForm()` の配線 → 確認画面・PDF 出力・メール送信（任意・後回し可）

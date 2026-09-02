@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
   initApplicationDate();
+  initTougetsuMonth();
   initUnionMaster();
   initMemberRows();
   initSoshikiFormLayout();
@@ -67,6 +68,25 @@ function initApplicationDate() {
   yearInput.value = String(today.getFullYear());
   monthInput.value = String(today.getMonth() + 1).padStart(2, "0");
   dayInput.value = String(today.getDate()).padStart(2, "0");
+}
+
+function initTougetsuMonth() {
+  var monthInput = document.getElementById("application-month");
+  var tougetsuInput = document.getElementById("tougetsu-count");
+  if (!monthInput || !tougetsuInput) return;
+
+  function updateTougetsuMonth() {
+    var month = parseInt(String(monthInput.value).trim(), 10);
+    if (!Number.isFinite(month) || month < 1 || month > 12) {
+      tougetsuInput.value = "";
+      return;
+    }
+    tougetsuInput.value = String(month === 12 ? 1 : month + 1);
+  }
+
+  monthInput.addEventListener("input", updateTougetsuMonth);
+  monthInput.addEventListener("change", updateTougetsuMonth);
+  updateTougetsuMonth();
 }
 
 function initUnionMaster() {

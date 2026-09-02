@@ -310,6 +310,24 @@ breadcrumb_json_ld: >
               >
             </div>
             <div
+              class="soshiki-form-zengetsu-group soshiki-form-zengetsu-group--tougetsu"
+              role="group"
+              aria-label="当月（月）"
+            >
+              <label class="sr-only" for="tougetsu-count">当月（月）</label>
+              <input
+                type="text"
+                id="tougetsu-count"
+                name="tougetsu-count"
+                class="soshiki-form-field soshiki-form-zengetsu-field"
+                inputmode="numeric"
+                autocomplete="off"
+                maxlength="2"
+                readonly
+                aria-label="当月（月）"
+              >
+            </div>
+            <div
               class="soshiki-form-zengetsu-group soshiki-form-zengetsu-group--tsuki-kei"
               role="group"
               aria-label="月計（人数）"
@@ -325,6 +343,18 @@ breadcrumb_json_ld: >
                 maxlength="3"
                 aria-label="月計（人数）"
               >
+            </div>
+
+            <div class="soshiki-form-biko-group" role="group" aria-label="備考">
+              <label class="sr-only" for="biko-remarks">備考</label>
+              <textarea
+                id="biko-remarks"
+                name="biko-remarks"
+                class="soshiki-form-field soshiki-form-biko-field"
+                rows="1"
+                autocomplete="off"
+                aria-label="備考"
+              ></textarea>
             </div>
 
             {% include soshiki-form-member-rows.html %}
