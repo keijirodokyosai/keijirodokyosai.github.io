@@ -1426,9 +1426,30 @@ a:focus-visible {
   max-width: none;
 }
 
+/* 入力ページのみ: 横スクロールなし・画面幅をほぼ使う（§9.0.1） */
+.soshiki-form-enter-page .kyosai-page.soshiki-form-enter-section {
+  max-width: none;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+.soshiki-form-enter-page .soshiki-form-enter-section .detail-section {
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
 .soshiki-form-enter-wrap {
   overflow-x: auto;
   padding-bottom: 8px;
+}
+
+.soshiki-form-enter-page .soshiki-form-enter-wrap {
+  overflow-x: hidden;
+}
+
+.soshiki-form-enter-page .soshiki-form-sheet {
+  transform: scale(var(--soshiki-form-scale, 1));
+  transform-origin: top center;
 }
 
 .soshiki-form-sheet {
@@ -1467,17 +1488,17 @@ a:focus-visible {
   --soshiki-form-page-count-current-offset-y: -14px;
   --soshiki-form-page-count-total-offset-x: -20px;
   --soshiki-form-page-count-total-offset-y: 6px;
-  /* 前月残・月計（PNG 実測:「人」左・ラベル下の枠。左 70×33 / 右 92×33 px） */
-  --soshiki-form-zengetsu-zan-left: 30.285%;
-  --soshiki-form-zengetsu-zan-top: 80.940%;
-  --soshiki-form-zengetsu-zan-width: 4.157%;
-  --soshiki-form-zengetsu-zan-height: 2.771%;
+  /* 前月残・月計（PNG 実測 §5.7: 左罫 x507 が y958–996。外枠 49×39 px、padding 2px） */
+  --soshiki-form-zengetsu-zan-left: 30.166%;
+  --soshiki-form-zengetsu-zan-top: 80.437%;
+  --soshiki-form-zengetsu-zan-width: 2.91%;
+  --soshiki-form-zengetsu-zan-height: 3.275%;
   --soshiki-form-zengetsu-zan-offset-x: 0px;
   --soshiki-form-zengetsu-zan-offset-y: 0px;
-  --soshiki-form-zengetsu-tsuki-kei-left: 40.380%;
-  --soshiki-form-zengetsu-tsuki-kei-top: 80.940%;
-  --soshiki-form-zengetsu-tsuki-kei-width: 5.463%;
-  --soshiki-form-zengetsu-tsuki-kei-height: 2.771%;
+  --soshiki-form-zengetsu-tsuki-kei-left: 40.381%;
+  --soshiki-form-zengetsu-tsuki-kei-top: 80.437%;
+  --soshiki-form-zengetsu-tsuki-kei-width: 2.91%;
+  --soshiki-form-zengetsu-tsuki-kei-height: 3.275%;
   --soshiki-form-zengetsu-tsuki-kei-offset-x: 0px;
   --soshiki-form-zengetsu-tsuki-kei-offset-y: 0px;
   --soshiki-form-zengetsu-font-size: 14px;
@@ -1758,10 +1779,11 @@ a:focus-visible {
   );
 }
 
-/* 前月残・月計（人数・PNG 実測 §5.7。ページ枚数欄と同型: グループを absolute 配置） */
+/* 前月残・月計（人数・PNG 実測 §5.7。外枠に合わせてグループ配置＋padding で内側 2px） */
 .soshiki-form-zengetsu-group {
   position: absolute;
   box-sizing: border-box;
+  padding: 2px;
 }
 
 .soshiki-form-zengetsu-group--zan {
@@ -1789,9 +1811,10 @@ a:focus-visible {
 }
 
 .soshiki-form-zengetsu-field {
-  position: static;
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  inset: 0;
+  width: auto;
+  height: auto;
   margin: 0;
   padding: 0 1px;
   box-sizing: border-box;

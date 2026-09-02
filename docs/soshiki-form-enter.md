@@ -1,6 +1,6 @@
 # 組織共済申込書（ブラウザ入力）設計書
 
-**最終更新:** 2026-08-29  
+**最終更新:** 2026-08-31  
 **関連リポジトリ:** [keijirodokyosai.github.io](https://github.com/keijirodokyosai/keijirodokyosai.github.io)（Web）、`kyosai-system`（Access・マスタ出力）
 
 ---
@@ -74,7 +74,7 @@
 
 ```text
 soshiki-form-enter.html      … 入力ページ
-js/soshiki-form-enter.js     … 日付初期値・マスタ連携（Enter 判定・口・掛金反映）
+js/soshiki-form-enter.js     … 日付初期値・マスタ連携（Enter 判定・口・掛金反映）・横フィット（§9.0.1）
 js/soshiki-form-members.js   … 組合員5行・異動トグル・半角制限・郵便番号検索・町村域正規化（§9.9）・表示同期（updateZipView）
 _includes/soshiki-form-member-rows.html … 組合員行マークアップ
 css/style.css                … .soshiki-form-* オーバーレイ用
@@ -216,9 +216,11 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | HTML id | `zengetsu-zan-count`（前月残） / `tsuki-kei-count`（月計） |
 | レイアウト | `.soshiki-form-zengetsu-group--zan` / `--tsuki-kei` を absolute 配置（§5.6 ページ枚数と同型）。input は `width/height: 100%` |
 | 入力 | 手入力可。`inputmode="numeric"`、`maxlength="3"` |
-| PNG 枠（外側・ラベル下〜底辺） | 前月残 x510–579 y964–996（**70×33px**）/ 月計 x680–771 y964–996（**92×33px**） |
-| 前月残配置 | `left 30.285%` / `top 80.940%` / `width 4.157%` / `height 2.771%` |
-| 月計配置 | `left 40.380%` / `top 80.940%` / `width 5.463%` / `height 2.771%` |
+| PNG 枠（外側・黒罫線） | 前月残 x508–556 y958–996（**49×39px**）/ 月計 x680–728 y958–996（**49×39px**） |
+| 入力オーバーレイ | グループを外枠に合わせ、`padding: 2px`（内側 45×35px） |
+| 前月残配置 | `left 30.166%` / `top 80.437%` / `width 2.91%` / `height 3.275%` |
+| 月計配置 | `left 40.381%` / `top 80.437%` / `width 2.91%` / `height 3.275%` |
+| 誤認注意 | y963–974 の薄い横線はラベル下の罫。**左罫の上端 y958** が黒枠の上辺（2026-08-31 再修正） |
 | 位置微調整 | `--soshiki-form-zengetsu-*-offset-x/y`（px） |
 | フォント | 14px、中央揃え、`tabular-nums` |
 | 実測スクリプト | `scripts/measure-soshiki-form-png-zengetsu.py` → `measure/zengetsu/` |
@@ -357,7 +359,20 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | ブラウザ | `width: 297mm; height: 210mm;`（96dpi 換算 **約 1122 × 794 px**） |
 | 背景 PNG | 1684 × 1191 px（pt の **2 倍**解像度。§9.7 実測の基準） |
 
-**注意:** 旧実装の `1100px` 固定幅は廃止。サイト他ページの `max-width: 1100px`（`.kyosai-page`）とは無関係。
+**注意:** 旧実装の `1100px` 固定幅は廃止。他ページの `.kyosai-page { max-width: 1100px }` はそのまま。入力ページ（`body.soshiki-form-enter-page`）のみ §9.0.1 で上書き。
+
+### 9.0.1 ページレイアウト（横フィット・入力ページのみ）
+
+縦スクロールは許容。**横スクロールは出さない**。画面幅をできるだけ申込書に使う。
+
+| 項目 | 内容 |
+|------|------|
+| 対象 | `body.soshiki-form-enter-page` のみ |
+| 幅 | `.kyosai-page.soshiki-form-enter-section` の `max-width: none`（1100px 上限を解除） |
+| 余白 | `.kyosai-page` / `.detail-section` の左右 padding を **12px**（他ページは従来どおり） |
+| 縮小 | ラッパー幅 &lt; シート実幅のとき `transform: scale()`（`--soshiki-form-scale`、上限 1） |
+| JS | `initSoshikiFormLayout()`（`resize` + `ResizeObserver`）。`margin-bottom` で scale 後の縦余白を補正 |
+| 縦 | ページ全体の縦スクロールはそのまま |
 
 ### 9.1 異動内容
 
@@ -881,7 +896,8 @@ Subbranch（KyosaikaiName, industry, branch, subbranch, CollectiveKyosaiId）
 7. ~~背景 PNG の異動内容列 新規/解約/変更 除去~~ → **完了**（§9.7.3）
 8. ~~組合員氏名欄 CSS（§9.11 標準枠・位置）~~ → **完了**（§9.13）
 8b. ~~ページ枚数（`/` 左右）入力枠~~ → **完了**（§5.6）
-8c. 前月残・月計（人数）入力枠（§5.7）… **配置確認中**
+8c. ~~前月残・月計（人数）入力枠~~ → **完了**（§5.7・2026-08-31 実測修正）
+8d. ~~入力ページの横フィット（§9.0.1）~~ → **完了**
 9. 組合員欄 CSS の最終調整（住所5枠の横位置など）・開発用仮表示の削除（郵便番号枠は §9.8 完了済み）
 10. 組合名プルダウン（localStorage）・追加確認・削除 UI
 11. `validateSoshikiForm()` の配線 → 確認画面・PDF 出力・メール送信（任意・後回し可）

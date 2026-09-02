@@ -2,7 +2,45 @@ document.addEventListener("DOMContentLoaded", function () {
   initApplicationDate();
   initUnionMaster();
   initMemberRows();
+  initSoshikiFormLayout();
 });
+
+function initSoshikiFormLayout() {
+  var wrap = document.querySelector(".soshiki-form-enter-wrap");
+  var sheet = document.querySelector(".soshiki-form-sheet");
+  if (!wrap || !sheet) return;
+
+  var resizeTimer;
+
+  function updateScale() {
+    sheet.style.setProperty("--soshiki-form-scale", "1");
+    sheet.style.marginBottom = "";
+
+    var naturalWidth = sheet.offsetWidth;
+    var naturalHeight = sheet.offsetHeight;
+    var available = wrap.clientWidth;
+    if (naturalWidth <= 0 || naturalHeight <= 0 || available <= 0) return;
+
+    var scale = Math.min(1, available / naturalWidth);
+    sheet.style.setProperty("--soshiki-form-scale", String(scale));
+    if (scale < 1) {
+      sheet.style.marginBottom = naturalHeight * (scale - 1) + "px";
+    }
+  }
+
+  function scheduleUpdate() {
+    if (resizeTimer) window.clearTimeout(resizeTimer);
+    resizeTimer = window.setTimeout(updateScale, 100);
+  }
+
+  updateScale();
+  window.addEventListener("resize", scheduleUpdate);
+
+  if (typeof ResizeObserver !== "undefined") {
+    var observer = new ResizeObserver(scheduleUpdate);
+    observer.observe(wrap);
+  }
+}
 
 var KUCHI_FIELD_IDS = {
   danketsu: "kuchi-danketsu",

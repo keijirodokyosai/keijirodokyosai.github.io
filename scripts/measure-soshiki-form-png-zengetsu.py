@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Measure 前月残・月計 boxes on soshiki-form-enter.png (§5.7).
 
-対象 = 「前月残」「月計」ラベルの下〜フッター罫線上までの入力枠（「人」の左）。
-60×23px など底辺だけの値は誤り。目視で CORRECT_boxes.png を確認すること。
+対象 = 「人」左の正方形に近い黒枠（ラベル文字ではない）。
+左罫 x507 の縦線は y958–996（外枠 49×39 px）。y963–974 の薄い線は誤認注意。
+グループは外枠に合わせ、padding 2px で内側に入力。PROOF_outer958.png を目視確認。
 """
 from __future__ import annotations
 
@@ -13,10 +14,27 @@ from PIL import Image, ImageDraw
 ROOT = Path(__file__).resolve().parents[1]
 PNG = ROOT / "images" / "soshiki-form-enter.png"
 MEASURE = ROOT / "measure" / "zengetsu"
+INSET = 2
 
-# PNG 1684×1191。ラベル直下 y964 〜 底辺 y996
-ZAN_BORDER = (510, 964, 579, 996)  # 70×33px
-TSUKI_KEI_BORDER = (680, 964, 771, 996)  # 92×33px
+# 2026-08-31 実測（1684×1191）。左罫 x507 y958–996。
+ZAN_BORDER = (508, 958, 556, 996)  # 49×39 px
+TSUKI_KEI_BORDER = (680, 958, 728, 996)  # 49×39 px
+
+
+def inner(border: tuple[int, int, int, int]) -> tuple[int, int, int, int]:
+    x0, y0, x1, y1 = border
+    return x0 + INSET, y0 + INSET, x1 - INSET, y1 - INSET
+
+
+def to_css_outer(border: tuple[int, int, int, int], w: int, h: int) -> dict[str, str]:
+    x0, y0, x1, y1 = border
+    bw, bh = x1 - x0 + 1, y1 - y0 + 1
+    return {
+        "left": f"{x0 / w * 100:.3f}%",
+        "top": f"{y0 / h * 100:.3f}%",
+        "width": f"{bw / w * 100:.3f}%",
+        "height": f"{bh / h * 100:.3f}%",
+    }
 
 
 def main() -> None:
@@ -26,36 +44,29 @@ def main() -> None:
 
     o = img.copy()
     d = ImageDraw.Draw(o)
-    css_fields: list[tuple[float, float, float, float, str]] = []
 
-    for label, border, color in (
-        ("zengetsu_zan", ZAN_BORDER, "lime"),
-        ("tsuki_kei", TSUKI_KEI_BORDER, "cyan"),
+    for label, border, outer_color in (
+        ("zengetsu_zan", ZAN_BORDER, "red"),
+        ("tsuki_kei", TSUKI_KEI_BORDER, "blue"),
     ):
+        inner_border = inner(border)
         x0, y0, x1, y1 = border
+        ix0, iy0, ix1, iy1 = inner_border
         bw, bh = x1 - x0 + 1, y1 - y0 + 1
-        d.rectangle(border, outline=color, width=2)
-        left_pct = x0 / w * 100
-        top_pct = y0 / h * 100
-        width_pct = bw / w * 100
-        height_pct = bh / h * 100
-        css_fields.append((left_pct, top_pct, width_pct, height_pct, color))
-        print(f"{label}: x{x0}-{x1} y{y0}-{y1} ({bw}×{bh}px)")
-        print(f"  left={left_pct:.3f}% top={top_pct:.3f}%")
-        print(f"  width={width_pct:.3f}% height={height_pct:.3f}%")
+        ibw, ibh = ix1 - ix0 + 1, iy1 - iy0 + 1
+        css = to_css_outer(border, w, h)
+
+        d.rectangle(border, outline=outer_color, width=2)
+        d.rectangle(inner_border, outline="lime", width=2)
+
+        print(f"{label} outer: x{x0}-{x1} y{y0}-{y1} ({bw}×{bh}px)")
+        print(f"  inner (padding {INSET}px): x{ix0}-{ix1} y{iy0}-{iy1} ({ibw}×{ibh}px)")
+        print(f"  group left={css['left']} top={css['top']}")
+        print(f"  group width={css['width']} height={css['height']}")
         print()
 
-    o.crop((500, 928, 800, 1010)).save(MEASURE / "CORRECT_boxes.png")
-    verify = img.copy()
-    dv = ImageDraw.Draw(verify)
-    for left, top, width, height, color in css_fields:
-        x0 = round(w * left / 100)
-        y0 = round(h * top / 100)
-        x1 = round(x0 + w * width / 100)
-        y1 = round(y0 + h * height / 100)
-        dv.rectangle((x0, y0, x1, y1), outline=color, width=2)
-    verify.crop((500, 928, 800, 1010)).save(MEASURE / "VERIFY_css_on_png.png")
-    print(f"-> {MEASURE / 'CORRECT_boxes.png'}")
+    o.crop((490, 900, 780, 1015)).save(MEASURE / "PROOF_outer958.png")
+    print(f"-> {MEASURE / 'PROOF_outer958.png'}")
 
 
 if __name__ == "__main__":
