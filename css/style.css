@@ -1505,15 +1505,19 @@ a:focus-visible {
   --soshiki-form-zengetsu-zan-top: 80.437%;
   --soshiki-form-zengetsu-zan-width: 2.91%;
   --soshiki-form-zengetsu-zan-height: 3.275%;
-  --soshiki-form-zengetsu-zan-offset-x: 0px;
-  --soshiki-form-zengetsu-zan-offset-y: 0px;
+  --soshiki-form-zengetsu-zan-width-extra: 22px;
+  --soshiki-form-zengetsu-zan-height-extra: 8px;
+  --soshiki-form-zengetsu-zan-offset-x: -12px;
+  --soshiki-form-zengetsu-zan-offset-y: 29px;
   --soshiki-form-zengetsu-tsuki-kei-left: 40.381%;
   --soshiki-form-zengetsu-tsuki-kei-top: 80.437%;
   --soshiki-form-zengetsu-tsuki-kei-width: 2.91%;
   --soshiki-form-zengetsu-tsuki-kei-height: 3.275%;
+  --soshiki-form-zengetsu-tsuki-kei-width-extra: 24px;
+  --soshiki-form-zengetsu-tsuki-kei-height-extra: 8px;
   --soshiki-form-zengetsu-tsuki-kei-offset-x: 0px;
-  --soshiki-form-zengetsu-tsuki-kei-offset-y: 0px;
-  --soshiki-form-zengetsu-font-size: 14px;
+  --soshiki-form-zengetsu-tsuki-kei-offset-y: 29px;
+  --soshiki-form-zengetsu-font-size: 18px;
 }
 
 .soshiki-form-sheet-bg {
@@ -1805,8 +1809,12 @@ a:focus-visible {
   top: calc(
     var(--soshiki-form-zengetsu-zan-top) + var(--soshiki-form-zengetsu-zan-offset-y)
   );
-  width: var(--soshiki-form-zengetsu-zan-width);
-  height: var(--soshiki-form-zengetsu-zan-height);
+  width: calc(
+    var(--soshiki-form-zengetsu-zan-width) + var(--soshiki-form-zengetsu-zan-width-extra)
+  );
+  height: calc(
+    var(--soshiki-form-zengetsu-zan-height) + var(--soshiki-form-zengetsu-zan-height-extra)
+  );
 }
 
 .soshiki-form-zengetsu-group--tsuki-kei {
@@ -1818,8 +1826,14 @@ a:focus-visible {
     var(--soshiki-form-zengetsu-tsuki-kei-top) +
       var(--soshiki-form-zengetsu-tsuki-kei-offset-y)
   );
-  width: var(--soshiki-form-zengetsu-tsuki-kei-width);
-  height: var(--soshiki-form-zengetsu-tsuki-kei-height);
+  width: calc(
+    var(--soshiki-form-zengetsu-tsuki-kei-width) +
+      var(--soshiki-form-zengetsu-tsuki-kei-width-extra)
+  );
+  height: calc(
+    var(--soshiki-form-zengetsu-tsuki-kei-height) +
+      var(--soshiki-form-zengetsu-tsuki-kei-height-extra)
+  );
 }
 
 .soshiki-form-zengetsu-field {

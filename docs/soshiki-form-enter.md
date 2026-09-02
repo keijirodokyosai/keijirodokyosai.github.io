@@ -218,11 +218,11 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | 入力 | 手入力可。`inputmode="numeric"`、`maxlength="3"` |
 | PNG 枠（外側・黒罫線） | 前月残 x508–556 y958–996（**49×39px**）/ 月計 x680–728 y958–996（**49×39px**） |
 | 入力オーバーレイ | グループを外枠に合わせ、`padding: 2px`（内側 45×35px） |
-| 前月残配置 | `left 30.166%` / `top 80.437%` / `width 2.91%` / `height 3.275%` |
-| 月計配置 | `left 40.381%` / `top 80.437%` / `width 2.91%` / `height 3.275%` |
+| 前月残配置 | `left 30.166%` / `top 80.437%` / `width 2.91%` + `22px` / `height 3.275%` + `8px` / offset `-12px` / `29px` |
+| 月計配置 | `left 40.381%` / `top 80.437%` / `width 2.91%` + `24px` / `height 3.275%` + `8px` / offset `0px` / `29px` |
 | 誤認注意 | y963–974 の薄い横線はラベル下の罫。**左罫の上端 y958** が黒枠の上辺（2026-08-31 再修正） |
-| 位置微調整 | `--soshiki-form-zengetsu-*-offset-x/y`（px） |
-| フォント | 14px、中央揃え、`tabular-nums` |
+| 位置・サイズ微調整 | `--soshiki-form-zengetsu-*-offset-x/y`（px）、`*-width-extra` / `height-extra`（px） |
+| フォント | 18px、中央揃え、`tabular-nums` |
 | 実測スクリプト | `scripts/measure-soshiki-form-png-zengetsu.py` → `measure/zengetsu/` |
 
 ---
