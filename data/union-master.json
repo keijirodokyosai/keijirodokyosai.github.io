@@ -1,34 +1,34 @@
 {
   "updatedAt": "2026-08-28",
-  "note": "開発・プレビュー用サンプル。name は Subbranch.KyosaikaiName。本番は kyosai-system が出力して置き換える。",
+  "note": "開発・プレビュー用サンプル。KyosaikaiName は Subbranch.KyosaikaiName。本番は kyosai-system が出力して置き換える。",
   "unions": [
     {
-      "code": "001034056",
-      "name": "サンプル労働組合",
-      "industry": "001",
-      "branch": "034",
-      "subbranch": "056",
-      "collectiveKyosaiId": 42,
-      "kakekinPerPerson": 3200,
-      "kyosai": [
-        { "kyosaiId": 1, "name": "団結共済", "kuchi": 10, "premi": 50 },
-        { "kyosaiId": 3, "name": "組織医療", "kuchi": 8, "premi": 100 },
-        { "kyosaiId": 4, "name": "慶弔", "kuchi": 8, "premi": 25 }
+      "KyosaikaiCode": "001034056",
+      "KyosaikaiName": "サンプル労働組合",
+      "IndustryCode": "001",
+      "BranchCode": "034",
+      "SubbranchCode": "056",
+      "CollectiveKyosaiId": 42,
+      "KakekinPerPerson": 3200,
+      "Kyosai": [
+        { "KyosaiId": 1, "KyosaiName": "団結共済", "Units": 10, "Premi": 50 },
+        { "KyosaiId": 3, "KyosaiName": "組織医療", "Units": 8, "Premi": 100 },
+        { "KyosaiId": 4, "KyosaiName": "慶弔", "Units": 8, "Premi": 25 }
       ]
     },
     {
-      "code": "002001001",
-      "name": "総合共済サンプル組合",
-      "industry": "002",
-      "branch": "001",
-      "subbranch": "001",
-      "collectiveKyosaiId": 19,
-      "kakekinPerPerson": 1800,
-      "kyosai": [
-        { "kyosaiId": 5, "name": "組織火災", "kuchi": 1, "premi": 200 },
-        { "kyosaiId": 40, "name": "慶弔", "kuchi": 2, "premi": 50 },
-        { "kyosaiId": 44, "name": "組織火災", "kuchi": 9, "premi": 30 },
-        { "kyosaiId": 46, "name": "組織交通", "kuchi": 1, "premi": 100 }
+      "KyosaikaiCode": "002001001",
+      "KyosaikaiName": "総合共済サンプル組合",
+      "IndustryCode": "002",
+      "BranchCode": "001",
+      "SubbranchCode": "001",
+      "CollectiveKyosaiId": 19,
+      "KakekinPerPerson": 1800,
+      "Kyosai": [
+        { "KyosaiId": 5, "KyosaiName": "組織火災", "Units": 1, "Premi": 200 },
+        { "KyosaiId": 40, "KyosaiName": "慶弔", "Units": 2, "Premi": 50 },
+        { "KyosaiId": 44, "KyosaiName": "組織火災", "Units": 9, "Premi": 30 },
+        { "KyosaiId": 46, "KyosaiName": "組織交通", "Units": 1, "Premi": 100 }
       ]
     }
   ]

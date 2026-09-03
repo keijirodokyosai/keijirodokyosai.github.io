@@ -120,7 +120,9 @@ breadcrumb_json_ld: >
                 name="union-name"
                 class="soshiki-form-field soshiki-form-field--union-name"
                 aria-label="組合名"
+                autocomplete="off"
               >
+              <datalist id="soshiki-form-saved-unions-datalist"></datalist>
             </div>
 
             <div class="soshiki-form-code-group" role="group" aria-label="産別・支部・分会コード">
@@ -349,6 +351,25 @@ breadcrumb_json_ld: >
           </div>
         </div>
 
+        <div
+          class="soshiki-form-saved-unions-panel"
+          id="soshiki-form-saved-unions-panel"
+          hidden
+        >
+          <p class="soshiki-form-saved-unions-title">保存した組合名</p>
+          <ul
+            class="soshiki-form-saved-unions-list"
+            id="soshiki-form-saved-unions-list"
+          ></ul>
+          <button
+            type="button"
+            id="soshiki-form-saved-unions-clear-all"
+            class="btn btn-secondary soshiki-form-saved-unions-clear-all"
+          >
+            すべて削除
+          </button>
+        </div>
+
         <div class="soshiki-form-actions" role="group" aria-label="申込書の操作">
           <button type="button" id="soshiki-form-clear" class="btn btn-secondary">
             クリア
@@ -388,5 +409,6 @@ breadcrumb_json_ld: >
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js" crossorigin="anonymous"></script>
 <script src="{{ '/js/soshiki-form-members.js' | relative_url }}"></script>
+<script src="{{ '/js/soshiki-form-union-storage.js' | relative_url }}"></script>
 <script src="{{ '/js/soshiki-form-enter.js' | relative_url }}"></script>
 <script src="{{ '/js/soshiki-form-submit.js' | relative_url }}"></script>

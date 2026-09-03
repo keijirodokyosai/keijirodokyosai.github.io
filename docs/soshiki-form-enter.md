@@ -74,6 +74,7 @@
 ```text
 soshiki-form-enter.html      … 入力ページ
 js/soshiki-form-enter.js     … 日付初期値・申込月の翌月を当月枠へ反映・マスタ連携・横フィット（§9.0.1）・操作ボタン（§5.9・クリア・保 存印刷）・組合確定状態
+js/soshiki-form-union-storage.js … 保存組合名 localStorage・datalist・削除 UI（§5.2）
 js/soshiki-form-submit.js    … WEB 受付（§5.10・JSON/PDF 生成・PA POST）
 js/soshiki-form-members.js   … 組合員5行・異動トグル・半角制限・郵便番号検索・町村域正規化（§9.9）・表示同期（updateZipView）・組合員欄クリア
 _includes/soshiki-form-member-rows.html … 組合員行マークアップ
@@ -105,8 +106,8 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 ### 5.2 組合名の入力 UI
 
 * 初回: **手入力**
-* 2 回目以降: **プルダウン**（localStorage に保存した組合名のみ）
-* 誤って記憶した名前は **1 件削除 / 全削除** できる UI を付ける
+* 2 回目以降: **datalist プルダウン**（localStorage に保存した `KyosaikaiName` のみ）。選択後も **Enter で確定**（§5.3）
+* 誤って記憶した名前は **1 件削除 / すべて削除** できる UI を付ける（申込書下の「保存した組合名」）
 
 ### 5.3 Enter キー確定時の動作
 
@@ -117,19 +118,19 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | 項目 | 内容 |
 |------|------|
 | Access | `Subbranch.KyosaikaiName` |
-| エクスポート | `union-master.json` の **`name`** フィールド |
-| Web の照合 | 入力欄の文字列と **`name`（= `KyosaikaiName`）の完全一致** |
+| エクスポート | `union-master.json` の **`KyosaikaiName`** フィールド |
+| Web の照合 | 入力欄の文字列と **`KyosaikaiName` の完全一致** |
 | 照合方式 | 部分一致・あいまい検索は **しない** |
 | 正規化 | 前後の空白のみ `trim`（全角半角変換・大文字小文字変換はしない） |
 
-一致時は、入力欄の表記ゆれを避けるため **`KyosaikaiName`（`name`）の値で組合名欄を上書き**する。
+一致時は、入力欄の表記ゆれを避けるため **`KyosaikaiName` の値で組合名欄を上書き**する。
 
 ```
 組合名を Enter
     ↓
-入力文字列（trim 後）と union-master.json の name（= Subbranch.KyosaikaiName）が完全一致？
+入力文字列（trim 後）と union-master.json の KyosaikaiName が完全一致？
     ├─ はい → 産別・支部・分会・口欄（7）・掛金を反映
-    │         組合名欄 ← KyosaikaiName（name）
+    │         組合名欄 ← KyosaikaiName
     │         記憶リストに未登録なら「組合リストに追加しますか？」
     │         ├─ はい → localStorage に追加
     │         └─ いいえ → 今回だけ使う
@@ -139,13 +140,13 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 ```
 
 * 判定タイミングは **Enter のみ**（blur では行わない）
-* localStorage に保存する組合名も **`KyosaikaiName`（`name`）** を使う
+* localStorage に保存する組合名も **`KyosaikaiName`** を使う
 
 ### 5.4 産別・支部・分会コード
 
 | 項目 | 内容 |
 |------|------|
-| 桁数 | 各 **3 桁**（`industry` / `branch` / `subbranch`） |
+| 桁数 | 各 **3 桁**（`IndustryCode` / `BranchCode` / `SubbranchCode`・JSON はゼロ埋め **string**） |
 | 入力 | **手入力不可**（`readonly`） |
 | 反映 | 組合名 Enter 確定時に `union-master.json` からセット |
 | 縦位置・高さ | 共済口欄と同じ（`top: 28.5%` / `height: 2.8%`） |
@@ -352,10 +353,12 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 
 | 含める | 含めない |
 |--------|----------|
-| `formType`, `formVersion`, `submittedAt` | 組合名（`unionName`） |
-| `code`, `industry`, `branch`, `subbranch` | 口欄・掛金 |
+| `formType`, `formVersion`, `submittedAt` | 組合名（POST の `unionName`） |
+| `IndustryCode`, `BranchCode`, `SubbranchCode`, `KyosaikaiCode` | 口欄・掛金 |
 | `applicationDate`, `coverageMonth`, `storageFolder` | フッター・備考 |
-| `members[]`（入力行のみ・Access 列名 PascalCase） | |
+| `members[]`（入力行のみ・`UnionMember` 列名 PascalCase） | |
+
+**JSON 型（組織キー）:** `KyosaikaiCode`・`IndustryCode`・`BranchCode`・`SubbranchCode`・`UnionMemberCode` は **ゼロ埋め string**。`CollectiveKyosaiId`・`KyosaiId`・`Units`・`Premi` は **number**。
 
 組合員行:
 
@@ -377,7 +380,18 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 1. HTTP 受信 → パスワード照合  
 2. `storageFolder` で `組織共済WEB受付/受付/{storageFolder}/json|pdf/` を作成  
 3. 受付 ID 生成 → ファイル保存  
-4. `union-contacts.json` で `code` 照合 → 担当者 + 共済会へ通知  
+4. `union-contacts.json` で `KyosaikaiCode` 照合 → 担当者 + 共済会へ通知  
+
+#### union-contacts.json（OneDrive・非公開）
+
+PA 通知専用。Web・GitHub には載せない。kyosai-system が `Subbranch` から export。
+
+| フィールド | 型 | 意味 |
+|------------|-----|------|
+| `KyosaikaiCode` | string 9桁 | 照合キー |
+| `IndustryCode` / `BranchCode` / `SubbranchCode` | string 3桁 | 任意（デバッグ用） |
+| `ManagerFamilyName` | string | 事務担当姓 |
+| `ManagerEmail` | string | 通知先メール（Access 列追加予定） |
 
 ---
 
@@ -402,11 +416,11 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | 欄 | 値の出所 | 手入力 |
 |----|----------|--------|
 | **口**（7 欄） | 組合名 Enter → マスタから計算してセット | **不可**（`readonly`） |
-| **掛金** | `kakekinPerPerson` をそのまま表示 | **不可**（`readonly`） |
+| **掛金** | `KakekinPerPerson` をそのまま表示 | **不可**（`readonly`） |
 
 入力規則（桁数・整数のみなど）は設けないが、**ユーザーが編集することはできない**。
 
-### 6.3 掛金（`kakekinPerPerson`）
+### 6.3 掛金（`KakekinPerPerson`）
 
 * **Access エクスポート時**に `Σ(Premi × Units)` を計算し、`union-master.json` に書き込む
 * Web は **表示のみ**（口欄の表示用数字から掛金を再計算しない）
@@ -442,7 +456,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 * **KyosaiId 41** は慶弔②欄に `Units` を載せる
 * **KyosaiId 44 のみ**（41 なし）のときは、通常どおり **組織火災** 欄に載せる
 
-| kyosai[] の例 | 慶弔② | 組織火災 |
+| `Kyosai[]` の例 | 慶弔② | 組織火災 |
 |---------------|-------|----------|
 | 41(口A), 44(口B) | A | 空（44 は載せない） |
 | 44(口B) のみ | — | B |
@@ -459,7 +473,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | `sogoHiddenKyosaiIds` | **`KyosaiId`** `5, 40, 44, 46` — 総合パッケージ時に **6 口欄へ載せない** 種目 |
 | 総合共済の口欄 | **常に `1`**（内訳の合算ではない） |
 
-※ `sogoCollectiveKyosaiIds` の **41, 44** は **パッケージ ID**（`union.collectiveKyosaiId` と比較）。§7.2 の **KyosaiId 41 / 44** や `sogoHiddenKyosaiIds` の **44** は **種目 ID** であり、別物。
+※ `sogoCollectiveKyosaiIds` の **41, 44** は **パッケージ ID**（`union.CollectiveKyosaiId` と比較）。§7.2 の **KyosaiId 41 / 44** や `sogoHiddenKyosaiIds` の **44** は **種目 ID** であり、別物。
 
 **§7 の 6 口欄マッピングは省略しない。** 総合と団結などが **同一パッケージに共存** し得る。
 
@@ -468,7 +482,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 * 総合共済の口 ← `1`
 * `sogoHiddenKyosaiIds` に該当する種目は 6 口欄に出さない
 * その他の kyosaiId がなければ団結〜慶弔②は空
-* 掛金 ← `kakekinPerPerson`
+* 掛金 ← `KakekinPerPerson`
 
 #### パターン B — 総合 ＋ 団結など（1 団体）
 
@@ -477,23 +491,23 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 * 総合共済の口 ← `1`
 * 5, 40, 44, 46 ← 6 口欄に出さない（`sogoHiddenKyosaiIds`）
 * 団結共済など ← 上表の `kyosaiIds` で通常マッピング
-* 掛金 ← パッケージ全体の `kakekinPerPerson`
+* 掛金 ← パッケージ全体の `KakekinPerPerson`
 
 ---
 
 ## 8. Enter 確定後の反映フロー（口・掛金）
 
 ```
-1. kyosai[] の各行について表示口数を計算
+1. `Kyosai[]` の各行について表示口数を計算
      - kyosaiDisplayRules（42→×0.5, 43→×2）
      - それ以外は Units
 2. suppressKyosaiWhenPresent を適用
      - kyosaiId 41 がある → kyosaiId 44 は口欄マッピングから除外
-3. collectiveKyosaiId ∈ sogoCollectiveKyosaiIds なら
+3. `CollectiveKyosaiId` ∈ sogoCollectiveKyosaiIds なら
      - sogoHiddenKyosaiIds（5,40,44,46）を 6 口欄マッピングから除外
 4. 残りを form-kyosai-map の kyosaiIds で 6 口欄へ振り分け・合算
 5. 総合パッケージなら 総合共済の口 ← "1"、でなければ空
-6. 掛金 ← kakekinPerPerson
+6. 掛金 ← `KakekinPerPerson`
 ```
 
 ---
@@ -968,7 +982,7 @@ kyosai-system（Access）から出力。Web は fetch して照合のみ。
 **`SetItem` は廃止済み。**
 
 ```text
-Subbranch（KyosaikaiName, industry, branch, subbranch, CollectiveKyosaiId）
+Subbranch（KyosaikaiName, IndustryCode, BranchCode, SubbranchCode, CollectiveKyosaiId）
   → CollectiveKyosai
   → CollectiveKyosaiItem（KyosaiId, Units）
   → Kyosai（KyosaiName, Premi）
@@ -976,23 +990,23 @@ Subbranch（KyosaikaiName, industry, branch, subbranch, CollectiveKyosaiId）
 
 ### 10.3 1 組合あたりのフィールド
 
-| JSON フィールド | 意味 |
-|----------------|------|
-| `code` | 9 桁（産別 3 + 支部 3 + 分会 3） |
-| `name` | 組合名 — **`Subbranch.KyosaikaiName` をそのまま出力**。Enter 時の **完全一致キー** |
-| `industry` / `branch` / `subbranch` | 各 3 桁 |
-| `collectiveKyosaiId` | 組織共済パッケージ ID（総合判定に使用） |
-| `kakekinPerPerson` | 1 人あたり月額掛金 = **Σ (Premi × Units)**（エクスポート時に確定） |
-| `kyosai[]` | 加入共済の内訳 |
+| JSON フィールド | 型 | 意味 |
+|----------------|-----|------|
+| `KyosaikaiCode` | string 9桁 | 共済会コード（`IndustryCode`+`BranchCode`+`SubbranchCode` の算出値） |
+| `KyosaikaiName` | string | **`Subbranch.KyosaikaiName`**。Enter 時の **完全一致キー** |
+| `IndustryCode` / `BranchCode` / `SubbranchCode` | string 3桁 | 産別・支部・分会 |
+| `CollectiveKyosaiId` | number | 組織共済パッケージ ID（総合判定に使用） |
+| `KakekinPerPerson` | number | 1 人あたり月額掛金 = **Σ (Premi × Units)**（エクスポート時に確定） |
+| `Kyosai[]` | array | 加入共済の内訳 |
 
-### 10.4 `kyosai[]` の各要素（Web が使用するもの）
+### 10.4 `Kyosai[]` の各要素（Web が使用するもの）
 
-| フィールド | 必須 | 意味 |
-|-----------|------|------|
-| `kyosaiId` | ○ | 種目 ID（口欄マッピングのキー） |
-| `kuchi` | ○ | 契約口数（`CollectiveKyosaiItem.Units`） |
-| `premi` | ○ | 1 口あたり掛金（エクスポート・検算用） |
-| `name` | △ | `Kyosai.KyosaiName`（デバッグ用） |
+| フィールド | 型 | 必須 | 意味 |
+|-----------|-----|------|------|
+| `KyosaiId` | number | ○ | 種目 ID（口欄マッピングのキー） |
+| `Units` | number | ○ | 契約口数（`CollectiveKyosaiItem.Units`） |
+| `Premi` | number | ○ | 1 口あたり掛金（エクスポート・検算用） |
+| `KyosaiName` | string | △ | `Kyosai.KyosaiName`（デバッグ用） |
 
 `categoryId` / `minorCategory` は Access 内部用としてよいが、**Web の口欄反映では使わない**。
 
@@ -1003,19 +1017,19 @@ Subbranch（KyosaikaiName, industry, branch, subbranch, CollectiveKyosaiId）
   "updatedAt": "2026-08-28",
   "unions": [
     {
-      "code": "001001001",
-      "name": "〇〇労働組合",
-      "industry": "001",
-      "branch": "001",
-      "subbranch": "001",
-      "collectiveKyosaiId": 42,
-      "kakekinPerPerson": 2500,
-      "kyosai": [
+      "KyosaikaiCode": "001001001",
+      "KyosaikaiName": "〇〇労働組合",
+      "IndustryCode": "001",
+      "BranchCode": "001",
+      "SubbranchCode": "001",
+      "CollectiveKyosaiId": 42,
+      "KakekinPerPerson": 2500,
+      "Kyosai": [
         {
-          "kyosaiId": 3,
-          "name": "組織医療",
-          "kuchi": 20,
-          "premi": 100
+          "KyosaiId": 3,
+          "KyosaiName": "組織医療",
+          "Units": 20,
+          "Premi": 100
         }
       ]
     }
@@ -1050,11 +1064,12 @@ Subbranch（KyosaikaiName, industry, branch, subbranch, CollectiveKyosaiId）
 | # | 内容 |
 |---|------|
 | 1 | `Subbranch.CollectiveKyosaiId` 起点で内訳を取得するエクスポート実装 |
-| 2 | `kyosai[]` に `kyosaiId`, `kuchi`, `premi` を出力 |
-| 3 | `kakekinPerPerson = Σ(Premi×Units)` をエクスポート時に計算 |
-| 4 | ~~総合扱いの `CollectiveKyosaiId` を確定し、`sogoCollectiveKyosaiIds` に連携~~ → **確定済み**（Web 側 `form-kyosai-map.json` に反映） |
-| 5 | 1 組合分で検算 → 全組合で出力テスト |
-| 6 | `keijirodokyosai.github.io/data/` へ配置 |
+| 2 | `Kyosai[]` に `KyosaiId`, `Units`, `Premi` を出力 → **`docs/WEB_FORM_EXPORT.md`** |
+| 3 | `KakekinPerPerson = Σ(Premi×Units)` をエクスポート時に計算 |
+| 4 | `union-contacts.json` に `KyosaikaiCode`, `ManagerFamilyName`, `ManagerEmail` を export |
+| 5 | ~~総合扱いの `CollectiveKyosaiId` を確定し、`sogoCollectiveKyosaiIds` に連携~~ → **確定済み**（Web 側 `form-kyosai-map.json` に反映） |
+| 6 | 1 組合分で検算 → 全組合で出力テスト |
+| 7 | `keijirodokyosai.github.io/data/` へ配置 |
 
 詳細は `kyosai-system` の `docs/COLLECTIVE_KYOSAI.md` を参照。
 
@@ -1077,7 +1092,7 @@ Subbranch（KyosaikaiName, industry, branch, subbranch, CollectiveKyosaiId）
 9. ~~組合員欄 CSS（住所2〜3行目横位置・郵便番号文字縦位置）~~ → **完了**（2026-09-02）
 9b. 開発用仮表示の本番前削除（§14・1行目 placeholder 等）
 9c. ~~操作ボタン・クリア~~ → **クリア完了**（§5.9）。~~保 存~~ → **完了**（§5.9・§9.0.2）。~~送 信~~ → **Web 実装完了**（§5.10）。**PA フロー・union-contacts エクスポート**は未構築
-10. 組合名プルダウン（localStorage）・マスタからのデータ引き出し・追加確認・削除 UI
+10. ~~組合名プルダウン（localStorage）・マスタからのデータ引き出し・追加確認・削除 UI~~ → **完了**（§5.2・`js/soshiki-form-union-storage.js`）
 11. ~~**送 信**（OneDrive アップロード）~~ → **Web 完了**（§5.10）。Power Automate・`union-contacts.json`・Access 取込は未構築
 12. ~~`validateSoshikiForm()` の配線（送信前チェック等）~~ → **完了**（§5.10）
 

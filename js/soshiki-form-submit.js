@@ -78,7 +78,7 @@ function handleSoshikiFormSendClick() {
   var confirmLines = [
     "申込内容を送信します。よろしいですか？",
     "",
-    "組合名：" + verifiedUnion.name,
+    "組合名：" + verifiedUnion.KyosaikaiName,
     "格納月：" + submissionPreview.storageFolder,
     "組合員：" + memberCount + "名",
     "",
@@ -107,7 +107,7 @@ function handleSoshikiFormSendClick() {
 
       var payload = {
         password: String(password),
-        unionName: verifiedUnion.name,
+        unionName: verifiedUnion.KyosaikaiName,
         fileNameDate: fileNameDate,
         submission: submission,
         pdfBase64: pdfBase64,
@@ -201,20 +201,20 @@ function getSoshikiFormVerifiedUnionMismatchErrors() {
   var errors = [];
   var unionName = getTrimmedFieldValue("union-name");
 
-  if (unionName !== verifiedUnion.name) {
+  if (unionName !== verifiedUnion.KyosaikaiName) {
     errors.push("組合名が変更されています。Enter キーで再度確定してください。");
   }
-  if (getTrimmedFieldValue("industry-code") !== verifiedUnion.industry) {
+  if (getTrimmedFieldValue("industry-code") !== verifiedUnion.IndustryCode) {
     errors.push("産別コードが組合確定時と一致しません。Enter キーで再度確定してください。");
   }
-  if (getTrimmedFieldValue("branch-code") !== verifiedUnion.branch) {
+  if (getTrimmedFieldValue("branch-code") !== verifiedUnion.BranchCode) {
     errors.push("支部コードが組合確定時と一致しません。Enter キーで再度確定してください。");
   }
-  if (getTrimmedFieldValue("subbranch-code") !== verifiedUnion.subbranch) {
+  if (getTrimmedFieldValue("subbranch-code") !== verifiedUnion.SubbranchCode) {
     errors.push("分会コードが組合確定時と一致しません。Enter キーで再度確定してください。");
   }
-  if (!verifiedUnion.code) {
-    errors.push("組合コードが取得できません。Enter キーで再度確定してください。");
+  if (!verifiedUnion.KyosaikaiCode) {
+    errors.push("共済会コードが取得できません。Enter キーで再度確定してください。");
   }
 
   return errors;
@@ -229,10 +229,10 @@ function buildSoshikiFormSubmission() {
     formType: "soshiki-form-enter",
     formVersion: "1",
     submittedAt: new Date().toISOString(),
-    code: verifiedUnion.code,
-    industry: verifiedUnion.industry,
-    branch: verifiedUnion.branch,
-    subbranch: verifiedUnion.subbranch,
+    IndustryCode: verifiedUnion.IndustryCode,
+    BranchCode: verifiedUnion.BranchCode,
+    SubbranchCode: verifiedUnion.SubbranchCode,
+    KyosaikaiCode: verifiedUnion.KyosaikaiCode,
     applicationDate: applicationDate,
     coverageMonth: coverageMonth,
     storageFolder: formatSoshikiStorageFolder(coverageMonth),

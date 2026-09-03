@@ -2003,6 +2003,49 @@ a:focus-visible {
   text-align: right;
 }
 
+.soshiki-form-saved-unions-panel {
+  width: 297mm;
+  max-width: 100%;
+  margin: 12px auto 0;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+.soshiki-form-saved-unions-title {
+  margin: 0 0 8px;
+  font-size: 14px;
+  color: #234;
+}
+
+.soshiki-form-saved-unions-list {
+  list-style: none;
+  margin: 0 0 8px;
+  padding: 0;
+}
+
+.soshiki-form-saved-unions-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 0;
+  border-bottom: 1px solid #dde3ea;
+}
+
+.soshiki-form-saved-unions-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 14px;
+  word-break: break-all;
+}
+
+.soshiki-form-saved-unions-remove,
+.soshiki-form-saved-unions-clear-all {
+  flex: 0 0 auto;
+  font-size: 13px;
+  padding: 4px 10px;
+}
+
 .soshiki-form-send-result {
   width: 297mm;
   max-width: 100%;
@@ -2713,6 +2756,7 @@ a:focus-visible {
   body.soshiki-form-enter-page .hero,
   body.soshiki-form-enter-page .soshiki-form-actions,
   body.soshiki-form-enter-page .soshiki-form-actions-hint,
+  body.soshiki-form-enter-page .soshiki-form-saved-unions-panel,
   body.soshiki-form-enter-page .soshiki-form-send-result {
     display: none !important;
   }
