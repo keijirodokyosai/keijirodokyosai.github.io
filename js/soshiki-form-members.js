@@ -46,6 +46,35 @@ function initMemberRows() {
   fitAllAddressFieldFonts();
 }
 
+var MEMBER_ROW_TEXT_SUFFIXES = [
+  "family-name-kana",
+  "given-name-kana",
+  "family-name",
+  "given-name",
+  "birth-year",
+  "birth-month",
+  "birth-day",
+  "postal-code",
+  "prefecture",
+  "city",
+  "town-area",
+  "area-number",
+  "building-name",
+];
+
+var MEMBER_ROW_ONE_DEV_HINTS = [
+  { suffix: "family-name-kana", placeholder: "ｾｲ" },
+  { suffix: "given-name-kana", placeholder: "ﾒｲ" },
+  { suffix: "family-name", placeholder: "姓" },
+  { suffix: "given-name", placeholder: "名" },
+  { suffix: "postal-code", placeholder: "郵便番号" },
+  { suffix: "prefecture", placeholder: "都道府県" },
+  { suffix: "city", placeholder: "行政区" },
+  { suffix: "town-area", placeholder: "町村域" },
+  { suffix: "area-number", placeholder: "丁、番地" },
+  { suffix: "building-name", placeholder: "建物名" },
+];
+
 function memberFieldId(row, suffix) {
   return "member-" + row + "-" + suffix;
 }
@@ -712,8 +741,8 @@ function memberRowHasAnyInput(row) {
     "building-name",
   ];
 
-  for (var i = 0; i < textSuffixes.length; i += 1) {
-    var field = getMemberField(row, textSuffixes[i]);
+  for (var i = 0; i < MEMBER_ROW_TEXT_SUFFIXES.length; i += 1) {
+    var field = getMemberField(row, MEMBER_ROW_TEXT_SUFFIXES[i]);
     if (field && field.value.trim()) return true;
   }
 
@@ -848,4 +877,51 @@ function validateSoshikiForm() {
   }
 
   return errors.concat(validateMemberRows());
+}
+
+function clearMemberRow(row) {
+  clearIdouSelection(row);
+  clearGenderSelection(row);
+
+  var unionMemberCode = getMemberField(row, "union-member-code");
+  if (unionMemberCode) {
+    unionMemberCode.value = "";
+    setUnionMemberCodeOverflow(unionMemberCode, false);
+  }
+
+  MEMBER_ROW_TEXT_SUFFIXES.forEach(function (suffix) {
+    var field = getMemberField(row, suffix);
+    if (!field) return;
+    field.value = "";
+    setFieldError(field, false);
+    if (suffix === "postal-code") {
+      updateZipView(field);
+    }
+  });
+
+  fitAddressFieldsForRow(row);
+  delete lastPostalCodeLookupByRow[row];
+}
+
+function restoreMemberRowOneDevHints() {
+  MEMBER_ROW_ONE_DEV_HINTS.forEach(function (item) {
+    var field = getMemberField("1", item.suffix);
+    if (!field) return;
+    field.setAttribute("placeholder", item.placeholder);
+    field.classList.add("soshiki-form-member-dev-hint");
+  });
+}
+
+function clearAllMemberRows() {
+  for (var row = 1; row <= MEMBER_ROW_COUNT; row += 1) {
+    clearMemberRow(row);
+  }
+  restoreMemberRowOneDevHints();
+}
+
+function memberRowsHaveAnyInput() {
+  for (var row = 1; row <= MEMBER_ROW_COUNT; row += 1) {
+    if (memberRowHasAnyInput(row)) return true;
+  }
+  return false;
 }

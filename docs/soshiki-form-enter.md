@@ -74,8 +74,8 @@
 
 ```text
 soshiki-form-enter.html      … 入力ページ
-js/soshiki-form-enter.js     … 日付初期値・申込月の翌月を当月枠へ反映・マスタ連携（Enter 判定・口・掛金反映）・横フィット（§9.0.1）
-js/soshiki-form-members.js   … 組合員5行・異動トグル・半角制限・郵便番号検索・町村域正規化（§9.9）・表示同期（updateZipView）
+js/soshiki-form-enter.js     … 日付初期値・申込月の翌月を当月枠へ反映・マスタ連携・横フィット（§9.0.1）・操作ボタン（§5.9）
+js/soshiki-form-members.js   … 組合員5行・異動トグル・半角制限・郵便番号検索・町村域正規化（§9.9）・表示同期（updateZipView）・組合員欄クリア
 _includes/soshiki-form-member-rows.html … 組合員行マークアップ
 css/style.css                … .soshiki-form-* オーバーレイ用
 images/soshiki-form-enter.png
@@ -257,6 +257,26 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | 位置・サイズ微調整 | `--soshiki-form-biko-*-offset-x/y`、`*-width-extra` / `height-extra`（px） |
 | フォント | 14px、左揃え、`line-height: 1.3` |
 | 実測スクリプト | `scripts/measure-soshiki-form-png-biko.py` → `measure/biko/` |
+
+### 5.9 操作ボタン（申込書シート外）
+
+用紙（`.soshiki-form-sheet`）の直下・`<form>` 内。`.soshiki-form-actions` で **右寄せ**（`justify-content: flex-end`）。幅はシートと同じ **297mm**（`max-width: 100%`）。背景 **#fffaf0**・ボタン **#fff8d8**（トップページ等の `.hero-sub-link` と同系）。印刷時は非表示。
+
+| 順（左→右） | id | ラベル | 状態 |
+|-------------|-----|--------|------|
+| 1 | `soshiki-form-clear` | クリア | **実装済み** |
+| 2 | `soshiki-form-save-pdf` | 保 存 | 未実装（`disabled`） |
+| 3 | `soshiki-form-send` | 送 信 | 未実装（`disabled`） |
+
+**クリア**（`js/soshiki-form-enter.js` + `js/soshiki-form-members.js`）:
+
+* 対象欄に1文字でも入力があるときだけ確認ダイアログ → OK でクリア
+* **組合員5行**（異動・コード・氏名・生年月日・性別・住所）
+* **ページ枚数**（`page-count-current` / `page-count-total`）
+* **前月残**（`zengetsu-zan-count`）・**月計**（`tsuki-kei-count`）・**備考**（`biko-remarks`）
+* **当月**（`tougetsu-count`）は **変更しない**（申込月からの自動表示のまま）
+* **残す**: 申込日・組合名・産別/支部/分会・口欄7・掛金
+* クリア後: 1行目の開発用 `placeholder` を復元（`restoreMemberRowOneDevHints()`）
 
 ---
 
@@ -949,8 +969,10 @@ Subbranch（KyosaikaiName, industry, branch, subbranch, CollectiveKyosaiId）
 8e. ~~備考入力枠~~ → **完了**（§5.8・2026-09-02 実測）
 9. ~~組合員欄 CSS（住所2〜3行目横位置・郵便番号文字縦位置）~~ → **完了**（2026-09-02）
 9b. 開発用仮表示の本番前削除（§14・1行目 placeholder 等）
+9c. ~~操作ボタン・クリア~~ → **クリア完了**（§5.9）。保 存・送 信は未実装
 10. 組合名プルダウン（localStorage）・マスタからのデータ引き出し・追加確認・削除 UI
-11. `validateSoshikiForm()` の配線 → 確認画面・PDF 出力・メール送信（任意・後回し可）
+11. **保 存**（PDF）・**送 信**（mailto）ボタンの実装
+12. `validateSoshikiForm()` の配線（送信前チェック等）
 
 ---
 

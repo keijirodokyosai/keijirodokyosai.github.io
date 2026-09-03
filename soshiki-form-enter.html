@@ -348,12 +348,32 @@ breadcrumb_json_ld: >
             {% include soshiki-form-member-rows.html %}
           </div>
         </div>
+
+        <div class="soshiki-form-actions" role="group" aria-label="申込書の操作">
+          <button type="button" id="soshiki-form-clear" class="btn btn-secondary">
+            クリア
+          </button>
+          <button
+            type="button"
+            id="soshiki-form-save-pdf"
+            class="btn btn-secondary"
+            disabled
+            aria-disabled="true"
+          >
+            保 存
+          </button>
+          <button
+            type="button"
+            id="soshiki-form-send"
+            class="btn btn-primary"
+            disabled
+            aria-disabled="true"
+          >
+            送 信
+          </button>
+        </div>
       </form>
     </div>
-
-    <p class="soshiki-form-enter-note">
-      ※ 押印が必要な場合は、入力後に印刷してご捺印ください。
-    </p>
   </section>
 </section>
 

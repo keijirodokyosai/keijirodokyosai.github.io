@@ -1940,13 +1940,56 @@ a:focus-visible {
   vertical-align: top;
 }
 
-.soshiki-form-enter-note {
+.soshiki-form-actions {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
   width: 297mm;
   max-width: 100%;
-  margin: 12px auto 0;
-  font-size: 16px;
-  color: #456;
-  text-align: center;
+  margin: 16px auto 0;
+  padding: 16px 20px;
+  box-sizing: border-box;
+  border: 1px solid #e0e6ee;
+  border-radius: 18px;
+  background: #fffaf0;
+  box-shadow: 0 6px 18px rgba(15, 35, 60, 0.05);
+}
+
+.soshiki-form-actions .btn {
+  min-width: 7.5em;
+  min-height: 44px;
+  padding: 0 20px;
+  font-size: 1rem;
+  border-width: 2px;
+  box-shadow: 0 6px 16px rgba(18, 54, 96, 0.1);
+}
+
+.soshiki-form-actions .btn-secondary,
+.soshiki-form-actions .btn-primary {
+  background: #fff8d8;
+  color: #123660;
+  border-color: #123660;
+}
+
+.soshiki-form-actions .btn-secondary:hover:not(:disabled),
+.soshiki-form-actions .btn-secondary:focus-visible:not(:disabled),
+.soshiki-form-actions .btn-primary:hover:not(:disabled),
+.soshiki-form-actions .btn-primary:focus-visible:not(:disabled) {
+  background: #123660;
+  color: #fff8d8;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(18, 54, 96, 0.18);
+}
+
+.soshiki-form-actions .btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+  box-shadow: none;
+  transform: none;
 }
 
 /* --- 組合員入力（最大5名） --- */
@@ -2636,6 +2679,10 @@ a:focus-visible {
   }
 
   .soshiki-form-dev-marker {
+    display: none !important;
+  }
+
+  .soshiki-form-actions {
     display: none !important;
   }
 }

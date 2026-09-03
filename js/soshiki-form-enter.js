@@ -4,7 +4,49 @@ document.addEventListener("DOMContentLoaded", function () {
   initUnionMaster();
   initMemberRows();
   initSoshikiFormLayout();
+  initSoshikiFormActions();
 });
+
+var SOSHIKI_FORM_FOOTER_CLEAR_FIELD_IDS = [
+  "page-count-current",
+  "page-count-total",
+  "zengetsu-zan-count",
+  "tsuki-kei-count",
+  "biko-remarks",
+];
+
+function initSoshikiFormActions() {
+  var clearButton = document.getElementById("soshiki-form-clear");
+  if (!clearButton) return;
+
+  clearButton.addEventListener("click", function () {
+    if (!soshikiFormHasClearableInput()) return;
+    if (!window.confirm("入力内容をクリアします。よろしいですか？")) return;
+    clearAllMemberRows();
+    clearSoshikiFormFooterFields();
+  });
+}
+
+function soshikiFormFooterFieldsHaveInput() {
+  for (var i = 0; i < SOSHIKI_FORM_FOOTER_CLEAR_FIELD_IDS.length; i += 1) {
+    var field = document.getElementById(SOSHIKI_FORM_FOOTER_CLEAR_FIELD_IDS[i]);
+    if (field && field.value.trim()) return true;
+  }
+  return false;
+}
+
+function soshikiFormHasClearableInput() {
+  return memberRowsHaveAnyInput() || soshikiFormFooterFieldsHaveInput();
+}
+
+function clearSoshikiFormFooterFields() {
+  SOSHIKI_FORM_FOOTER_CLEAR_FIELD_IDS.forEach(function (id) {
+    var field = document.getElementById(id);
+    if (!field) return;
+    field.value = "";
+    field.classList.remove("soshiki-form-field--error");
+  });
+}
 
 function initSoshikiFormLayout() {
   var wrap = document.querySelector(".soshiki-form-enter-wrap");
