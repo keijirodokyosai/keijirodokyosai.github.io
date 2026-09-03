@@ -74,7 +74,7 @@
 
 ```text
 soshiki-form-enter.html      … 入力ページ
-js/soshiki-form-enter.js     … 日付初期値・申込月の翌月を当月枠へ反映・マスタ連携・横フィット（§9.0.1）・操作ボタン（§5.9）
+js/soshiki-form-enter.js     … 日付初期値・申込月の翌月を当月枠へ反映・マスタ連携・横フィット（§9.0.1）・操作ボタン（§5.9・クリア・保 存印刷）
 js/soshiki-form-members.js   … 組合員5行・異動トグル・半角制限・郵便番号検索・町村域正規化（§9.9）・表示同期（updateZipView）・組合員欄クリア
 _includes/soshiki-form-member-rows.html … 組合員行マークアップ
 css/style.css                … .soshiki-form-* オーバーレイ用
@@ -265,8 +265,10 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | 順（左→右） | id | ラベル | 状態 |
 |-------------|-----|--------|------|
 | 1 | `soshiki-form-clear` | クリア | **実装済み** |
-| 2 | `soshiki-form-save-pdf` | 保 存 | 未実装（`disabled`） |
+| 2 | `soshiki-form-save-pdf` | 保 存 | **実装済み**（印刷→PDF 保存） |
 | 3 | `soshiki-form-send` | 送 信 | 未実装（`disabled`） |
+
+ボタン行の下に `.soshiki-form-actions-hint`（右寄せ・14px）:「※ 保 存を押し、印刷画面で『PDF に保存』を選んでください。」印刷時は非表示。
 
 **クリア**（`js/soshiki-form-enter.js` + `js/soshiki-form-members.js`）:
 
@@ -277,6 +279,12 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 * **当月**（`tougetsu-count`）は **変更しない**（申込月からの自動表示のまま）
 * **残す**: 申込日・組合名・産別/支部/分会・口欄7・掛金
 * クリア後: 1行目の開発用 `placeholder` を復元（`restoreMemberRowOneDevHints()`）
+
+**保 存**（`printSoshikiFormSheet()`・`initSoshikiFormActions()`）:
+
+* クリック → フォーカス解除 → `body.soshiki-form-printing` 付与 → `window.print()` → `afterprint` でクラス除去
+* ユーザーはブラウザの印刷ダイアログで **「PDF に保存」** を選択（PDF の自動ダウンロードはしない）
+* 印字対象は **`.soshiki-form-sheet` のみ**（パンくず・ヒーロー・操作ボタン・ヒントは `@media print` で非表示）。詳細は §9.0.2
 
 ---
 
@@ -429,14 +437,20 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 
 ### 9.0.2 印刷・PDF
 
-ブラウザの **印刷** および **PDF 保存**（`@media print`）では、画面上の入力ガイド用 **緑枠線を印字しない**。
+**保 存** ボタンは `window.print()` でブラウザ印刷を開く。`@media print`（`body.soshiki-form-enter-page`）で **申込書シートだけ** を A4 横・余白 0 で印字する。
 
 | 項目 | 内容 |
 |------|------|
-| 対象 | `.soshiki-form-sheet` 内の `.soshiki-form-field`、組合員欄 `.soshiki-form-member-box` 等 |
-| CSS | `border-color: transparent`、`box-shadow: none`、`outline: none` |
+| `@page` | `size: A4 landscape`、`margin: 0` |
+| 非印字 | `.breadcrumb`、`.hero`、`.soshiki-form-actions`、`.soshiki-form-actions-hint` |
+| シート | `transform: none`（§9.0.1 の scale 解除）、`297mm × 210mm`、影なし |
+| 背景 PNG | `.soshiki-form-sheet-bg` に `print-color-adjust: exact` |
+| プレースホルダ | シート内 `::placeholder` は透明（開発用薄字を印字しない） |
+| 入力ガイド | 画面上の **緑枠線は印字しない**（下表） |
 | 印字されるもの | 背景 PNG・入力した **文字**・性別・異動の **選択枠**（実線楕円） |
-| 非印字 | 入力欄の緑枠、開発用マーカー（`.soshiki-form-dev-marker`） |
+| 非印字（シート内） | 入力欄の緑枠、開発用マーカー（`.soshiki-form-dev-marker`） |
+
+緑枠の対象: `.soshiki-form-sheet` 内の `.soshiki-form-field`、組合員欄 `.soshiki-form-member-box` 等（`border-color: transparent`、`box-shadow: none`、`outline: none`）。
 
 ### 9.1 異動内容
 
@@ -969,9 +983,9 @@ Subbranch（KyosaikaiName, industry, branch, subbranch, CollectiveKyosaiId）
 8e. ~~備考入力枠~~ → **完了**（§5.8・2026-09-02 実測）
 9. ~~組合員欄 CSS（住所2〜3行目横位置・郵便番号文字縦位置）~~ → **完了**（2026-09-02）
 9b. 開発用仮表示の本番前削除（§14・1行目 placeholder 等）
-9c. ~~操作ボタン・クリア~~ → **クリア完了**（§5.9）。保 存・送 信は未実装
+9c. ~~操作ボタン・クリア~~ → **クリア完了**（§5.9）。~~保 存~~ → **完了**（§5.9・§9.0.2）。送 信は未実装
 10. 組合名プルダウン（localStorage）・マスタからのデータ引き出し・追加確認・削除 UI
-11. **保 存**（PDF）・**送 信**（mailto）ボタンの実装
+11. **送 信**（mailto）ボタンの実装
 12. `validateSoshikiForm()` の配線（送信前チェック等）
 
 ---

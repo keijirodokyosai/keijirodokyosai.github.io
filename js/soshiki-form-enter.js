@@ -17,14 +17,45 @@ var SOSHIKI_FORM_FOOTER_CLEAR_FIELD_IDS = [
 
 function initSoshikiFormActions() {
   var clearButton = document.getElementById("soshiki-form-clear");
-  if (!clearButton) return;
+  var saveButton = document.getElementById("soshiki-form-save-pdf");
 
-  clearButton.addEventListener("click", function () {
-    if (!soshikiFormHasClearableInput()) return;
-    if (!window.confirm("入力内容をクリアします。よろしいですか？")) return;
-    clearAllMemberRows();
-    clearSoshikiFormFooterFields();
-  });
+  if (clearButton) {
+    clearButton.addEventListener("click", function () {
+      if (!soshikiFormHasClearableInput()) return;
+      if (!window.confirm("入力内容をクリアします。よろしいですか？")) return;
+      clearAllMemberRows();
+      clearSoshikiFormFooterFields();
+    });
+  }
+
+  if (saveButton) {
+    saveButton.addEventListener("click", printSoshikiFormSheet);
+  }
+}
+
+function printSoshikiFormSheet() {
+  var body = document.body;
+  var active = document.activeElement;
+  if (active && typeof active.blur === "function") {
+    active.blur();
+  }
+
+  body.classList.add("soshiki-form-printing");
+
+  function cleanup() {
+    body.classList.remove("soshiki-form-printing");
+  }
+
+  window.addEventListener(
+    "afterprint",
+    function onAfterPrint() {
+      cleanup();
+      window.removeEventListener("afterprint", onAfterPrint);
+    },
+    { once: true }
+  );
+
+  window.print();
 }
 
 function soshikiFormFooterFieldsHaveInput() {

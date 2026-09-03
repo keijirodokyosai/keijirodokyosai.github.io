@@ -1992,6 +1992,17 @@ a:focus-visible {
   transform: none;
 }
 
+.soshiki-form-actions-hint {
+  width: 297mm;
+  max-width: 100%;
+  margin: 8px auto 0;
+  padding: 0 20px;
+  box-sizing: border-box;
+  font-size: 14px;
+  color: #456;
+  text-align: right;
+}
+
 /* --- 組合員入力（最大5名） --- */
 .soshiki-form-sheet {
   /* PNG 実測: 1行目 top 37.45%, 行間 7.66%, 行高 7.55% */
@@ -2662,6 +2673,57 @@ a:focus-visible {
 }
 
 @media print {
+  @page {
+    size: A4 landscape;
+    margin: 0;
+  }
+
+  body.soshiki-form-enter-page {
+    margin: 0;
+    padding: 0;
+    background: #fff !important;
+  }
+
+  body.soshiki-form-enter-page .breadcrumb,
+  body.soshiki-form-enter-page .hero,
+  body.soshiki-form-enter-page .soshiki-form-actions,
+  body.soshiki-form-enter-page .soshiki-form-actions-hint {
+    display: none !important;
+  }
+
+  body.soshiki-form-enter-page .kyosai-page.soshiki-form-enter-section,
+  body.soshiki-form-enter-page .soshiki-form-enter-section .detail-section,
+  body.soshiki-form-enter-page .soshiki-form-enter-wrap,
+  body.soshiki-form-enter-page .soshiki-form-enter {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: auto !important;
+    max-width: none !important;
+    overflow: visible !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  body.soshiki-form-enter-page .soshiki-form-sheet {
+    transform: none !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    width: 297mm !important;
+    height: 210mm !important;
+    page-break-after: avoid;
+    page-break-inside: avoid;
+  }
+
+  body.soshiki-form-enter-page .soshiki-form-sheet-bg {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  body.soshiki-form-enter-page .soshiki-form-sheet ::placeholder {
+    color: transparent !important;
+    opacity: 0 !important;
+  }
+
   .soshiki-form-idou-btn.is-selected,
   .soshiki-form-gender-btn.is-selected {
     border-color: #000 !important;
@@ -2679,10 +2741,6 @@ a:focus-visible {
   }
 
   .soshiki-form-dev-marker {
-    display: none !important;
-  }
-
-  .soshiki-form-actions {
     display: none !important;
   }
 }
