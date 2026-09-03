@@ -1,35 +1,2004 @@
-{
-  "updatedAt": "2026-08-28",
-  "note": "開発・プレビュー用サンプル。KyosaikaiName は Subbranch.KyosaikaiName。本番は kyosai-system が出力して置き換える。",
-  "unions": [
-    {
-      "KyosaikaiCode": "001034056",
-      "KyosaikaiName": "サンプル労働組合",
-      "IndustryCode": "001",
-      "BranchCode": "034",
-      "SubbranchCode": "056",
-      "CollectiveKyosaiId": 42,
-      "KakekinPerPerson": 3200,
-      "Kyosai": [
-        { "KyosaiId": 1, "KyosaiName": "団結共済", "Units": 10, "Premi": 50 },
-        { "KyosaiId": 3, "KyosaiName": "組織医療", "Units": 8, "Premi": 100 },
-        { "KyosaiId": 4, "KyosaiName": "慶弔", "Units": 8, "Premi": 25 }
-      ]
-    },
-    {
-      "KyosaikaiCode": "002001001",
-      "KyosaikaiName": "総合共済サンプル組合",
-      "IndustryCode": "002",
-      "BranchCode": "001",
-      "SubbranchCode": "001",
-      "CollectiveKyosaiId": 19,
-      "KakekinPerPerson": 1800,
-      "Kyosai": [
-        { "KyosaiId": 5, "KyosaiName": "組織火災", "Units": 1, "Premi": 200 },
-        { "KyosaiId": 40, "KyosaiName": "慶弔", "Units": 2, "Premi": 50 },
-        { "KyosaiId": 44, "KyosaiName": "組織火災", "Units": 9, "Premi": 30 },
-        { "KyosaiId": 46, "KyosaiName": "組織交通", "Units": 1, "Premi": 100 }
-      ]
-    }
-  ]
+﻿{
+"updatedAt": "2026-09-03",
+"note": "kyosai-system export",
+"unions": [
+  {
+    "KyosaikaiCode": "010000001",
+    "KyosaikaiName": "京都友禅一般労働組合 70歳未満",
+    "IndustryCode": "010",
+    "BranchCode": "000",
+    "SubbranchCode": "001",
+    "CollectiveKyosaiId": 1,
+    "KakekinPerPerson": 596,
+    "Kyosai": [
+      {"KyosaiId": 6, "KyosaiName": "中央組織生命", "Units": 8, "Premi": 37},
+      {"KyosaiId": 3, "KyosaiName": "組織医療", "Units": 2, "Premi": 100},
+      {"KyosaiId": 7, "KyosaiName": "中央組織交通", "Units": 1, "Premi": 50},
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 10, "Premi": 5}
+    ]
+  },
+  {
+    "KyosaikaiCode": "010000002",
+    "KyosaikaiName": "京都友禅一般労働組合 70～74歳",
+    "IndustryCode": "010",
+    "BranchCode": "000",
+    "SubbranchCode": "002",
+    "CollectiveKyosaiId": 2,
+    "KakekinPerPerson": 700,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 10, "Premi": 5},
+      {"KyosaiId": 7, "KyosaiName": "中央組織交通", "Units": 1, "Premi": 50},
+      {"KyosaiId": 8, "KyosaiName": "シニア生命", "Units": 5, "Premi": 60},
+      {"KyosaiId": 47, "KyosaiName": "京滋組織高齢医療", "Units": 2, "Premi": 150}
+    ]
+  },
+  {
+    "KyosaikaiCode": "010000003",
+    "KyosaikaiName": "京都友禅一般労働組合 75～84歳",
+    "IndustryCode": "010",
+    "BranchCode": "000",
+    "SubbranchCode": "003",
+    "CollectiveKyosaiId": 3,
+    "KakekinPerPerson": 400,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 10, "Premi": 5},
+      {"KyosaiId": 7, "KyosaiName": "中央組織交通", "Units": 1, "Premi": 50},
+      {"KyosaiId": 47, "KyosaiName": "京滋組織高齢医療", "Units": 2, "Premi": 150}
+    ]
+  },
+  {
+    "KyosaikaiCode": "010000004",
+    "KyosaikaiName": "京都友禅一般労働組合 85歳以上",
+    "IndustryCode": "010",
+    "BranchCode": "000",
+    "SubbranchCode": "004",
+    "CollectiveKyosaiId": 4,
+    "KakekinPerPerson": 100,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 10, "Premi": 5},
+      {"KyosaiId": 7, "KyosaiName": "中央組織交通", "Units": 1, "Premi": 50}
+    ]
+  },
+  {
+    "KyosaikaiCode": "010001001",
+    "KyosaikaiName": "京都友禅一般労働組合　OB会",
+    "IndustryCode": "010",
+    "BranchCode": "001",
+    "SubbranchCode": "001",
+    "CollectiveKyosaiId": 5,
+    "KakekinPerPerson": 5,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 1, "Premi": 5}
+    ]
+  },
+  {
+    "KyosaikaiCode": "010002001",
+    "KyosaikaiName": "京都友禅一般労働組合　水谷分会",
+    "IndustryCode": "010",
+    "BranchCode": "002",
+    "SubbranchCode": "001",
+    "CollectiveKyosaiId": 6,
+    "KakekinPerPerson": 450,
+    "Kyosai": [
+      {"KyosaiId": 47, "KyosaiName": "京滋組織高齢医療", "Units": 3, "Premi": 150}
+    ]
+  },
+  {
+    "KyosaikaiCode": "010003001",
+    "KyosaikaiName": "京都友禅一般労働組合　大同エクセル分会",
+    "IndustryCode": "010",
+    "BranchCode": "003",
+    "SubbranchCode": "001",
+    "CollectiveKyosaiId": 7,
+    "KakekinPerPerson": 750,
+    "Kyosai": [
+      {"KyosaiId": 47, "KyosaiName": "京滋組織高齢医療", "Units": 5, "Premi": 150}
+    ]
+  },
+  {
+    "KyosaikaiCode": "012000000",
+    "KyosaikaiName": "合同繊維労働組合 役員",
+    "IndustryCode": "012",
+    "BranchCode": "000",
+    "SubbranchCode": "000",
+    "CollectiveKyosaiId": 8,
+    "KakekinPerPerson": 100,
+    "Kyosai": [
+      {"KyosaiId": 1, "KyosaiName": "労組見舞（全）", "Units": 10, "Premi": 10}
+    ]
+  },
+  {
+    "KyosaikaiCode": "012000001",
+    "KyosaikaiName": "合同繊維労働組合 光洋",
+    "IndustryCode": "012",
+    "BranchCode": "000",
+    "SubbranchCode": "001",
+    "CollectiveKyosaiId": 9,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "012000002",
+    "KyosaikaiName": "合同繊維労働組合 ユニオン",
+    "IndustryCode": "012",
+    "BranchCode": "000",
+    "SubbranchCode": "002",
+    "CollectiveKyosaiId": 10,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "012000003",
+    "KyosaikaiName": "合同繊維労働組合 ダイニチ",
+    "IndustryCode": "012",
+    "BranchCode": "000",
+    "SubbranchCode": "003",
+    "CollectiveKyosaiId": 11,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "012000004",
+    "KyosaikaiName": "合同繊維労働組合 浜口",
+    "IndustryCode": "012",
+    "BranchCode": "000",
+    "SubbranchCode": "004",
+    "CollectiveKyosaiId": 12,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "012000005",
+    "KyosaikaiName": "合同繊維労働組合 阪練︁",
+    "IndustryCode": "012",
+    "BranchCode": "000",
+    "SubbranchCode": "005",
+    "CollectiveKyosaiId": 13,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "012000006",
+    "KyosaikaiName": "合同繊維労働組合 東レ",
+    "IndustryCode": "012",
+    "BranchCode": "000",
+    "SubbranchCode": "006",
+    "CollectiveKyosaiId": 14,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "012000007",
+    "KyosaikaiName": "合同繊維労働組合 杉本",
+    "IndustryCode": "012",
+    "BranchCode": "000",
+    "SubbranchCode": "007",
+    "CollectiveKyosaiId": 15,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "012000008",
+    "KyosaikaiName": "合同繊維労働組合 綾織",
+    "IndustryCode": "012",
+    "BranchCode": "000",
+    "SubbranchCode": "008",
+    "CollectiveKyosaiId": 16,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "012001001",
+    "KyosaikaiName": "合同繊維 ユニオン絆 70歳未満",
+    "IndustryCode": "012",
+    "BranchCode": "001",
+    "SubbranchCode": "001",
+    "CollectiveKyosaiId": 17,
+    "KakekinPerPerson": 500,
+    "Kyosai": [
+      {"KyosaiId": 3, "KyosaiName": "組織医療", "Units": 5, "Premi": 100}
+    ]
+  },
+  {
+    "KyosaikaiCode": "012001002",
+    "KyosaikaiName": "合同繊維 ユニオン絆 70歳以上",
+    "IndustryCode": "012",
+    "BranchCode": "001",
+    "SubbranchCode": "002",
+    "CollectiveKyosaiId": 18,
+    "KakekinPerPerson": 750,
+    "Kyosai": [
+      {"KyosaiId": 47, "KyosaiName": "京滋組織高齢医療", "Units": 5, "Premi": 150}
+    ]
+  },
+  {
+    "KyosaikaiCode": "015000001",
+    "KyosaikaiName": "全西陣織物労働組合",
+    "IndustryCode": "015",
+    "BranchCode": "000",
+    "SubbranchCode": "001",
+    "CollectiveKyosaiId": 19,
+    "KakekinPerPerson": 300,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 1, "Premi": 5},
+      {"KyosaiId": 40, "KyosaiName": "京滋慶弔②", "Units": 2, "Premi": 100},
+      {"KyosaiId": 44, "KyosaiName": "京滋慶弔火災型", "Units": 9, "Premi": 5},
+      {"KyosaiId": 46, "KyosaiName": "京滋組織交通", "Units": 1, "Premi": 50}
+    ]
+  },
+  {
+    "KyosaikaiCode": "015001001",
+    "KyosaikaiName": "全西陣織物労働組合 地域支部",
+    "IndustryCode": "015",
+    "BranchCode": "001",
+    "SubbranchCode": "001",
+    "CollectiveKyosaiId": 20,
+    "KakekinPerPerson": 5,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 1, "Premi": 5}
+    ]
+  },
+  {
+    "KyosaikaiCode": "020000000",
+    "KyosaikaiName": "JMITU京滋地方本部",
+    "IndustryCode": "020",
+    "BranchCode": "000",
+    "SubbranchCode": "000",
+    "CollectiveKyosaiId": 21,
+    "KakekinPerPerson": 100,
+    "Kyosai": [
+      {"KyosaiId": 1, "KyosaiName": "労組見舞（全）", "Units": 10, "Premi": 10}
+    ]
+  },
+  {
+    "KyosaikaiCode": "020001000",
+    "KyosaikaiName": "JMITU機械金属支部 役員",
+    "IndustryCode": "020",
+    "BranchCode": "001",
+    "SubbranchCode": "000",
+    "CollectiveKyosaiId": 22,
+    "KakekinPerPerson": 100,
+    "Kyosai": [
+      {"KyosaiId": 2, "KyosaiName": "労組見舞（役）", "Units": 10, "Premi": 10}
+    ]
+  },
+  {
+    "KyosaikaiCode": "020001001",
+    "KyosaikaiName": "JMITU機械金属支部",
+    "IndustryCode": "020",
+    "BranchCode": "001",
+    "SubbranchCode": "001",
+    "CollectiveKyosaiId": 23,
+    "KakekinPerPerson": 100,
+    "Kyosai": [
+      {"KyosaiId": 40, "KyosaiName": "京滋慶弔②", "Units": 1, "Premi": 100}
+    ]
+  },
+  {
+    "KyosaikaiCode": "020001002",
+    "KyosaikaiName": "JMITU機械金属支部 日本電産",
+    "IndustryCode": "020",
+    "BranchCode": "001",
+    "SubbranchCode": "002",
+    "CollectiveKyosaiId": 24,
+    "KakekinPerPerson": 300,
+    "Kyosai": [
+      {"KyosaiId": 1, "KyosaiName": "労組見舞（全）", "Units": 10, "Premi": 10},
+      {"KyosaiId": 4, "KyosaiName": "中央慶弔②", "Units": 1, "Premi": 100},
+      {"KyosaiId": 7, "KyosaiName": "中央組織交通", "Units": 2, "Premi": 50}
+    ]
+  },
+  {
+    "KyosaikaiCode": "020001003",
+    "KyosaikaiName": "JMITU機械金属支部 畑鐵工",
+    "IndustryCode": "020",
+    "BranchCode": "001",
+    "SubbranchCode": "003",
+    "CollectiveKyosaiId": 25,
+    "KakekinPerPerson": 100,
+    "Kyosai": [
+      {"KyosaiId": 2, "KyosaiName": "労組見舞（役）", "Units": 10, "Premi": 10}
+    ]
+  },
+  {
+    "KyosaikaiCode": "020001005",
+    "KyosaikaiName": "JMITU機械金属支部 通信",
+    "IndustryCode": "020",
+    "BranchCode": "001",
+    "SubbranchCode": "005",
+    "CollectiveKyosaiId": 36,
+    "KakekinPerPerson": 300,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 1, "Premi": 5},
+      {"KyosaiId": 40, "KyosaiName": "京滋慶弔②", "Units": 2, "Premi": 100},
+      {"KyosaiId": 44, "KyosaiName": "京滋慶弔火災型", "Units": 9, "Premi": 5},
+      {"KyosaiId": 46, "KyosaiName": "京滋組織交通", "Units": 1, "Premi": 50}
+    ]
+  },
+  {
+    "KyosaikaiCode": "020002001",
+    "KyosaikaiName": "JMITU千曲支部",
+    "IndustryCode": "020",
+    "BranchCode": "002",
+    "SubbranchCode": "001",
+    "CollectiveKyosaiId": 27,
+    "KakekinPerPerson": 5,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 1, "Premi": 5}
+    ]
+  },
+  {
+    "KyosaikaiCode": "020003001",
+    "KyosaikaiName": "JMITUカシフジ支部",
+    "IndustryCode": "020",
+    "BranchCode": "003",
+    "SubbranchCode": "001",
+    "CollectiveKyosaiId": 28,
+    "KakekinPerPerson": 370,
+    "Kyosai": [
+      {"KyosaiId": 6, "KyosaiName": "中央組織生命", "Units": 10, "Premi": 37}
+    ]
+  },
+  {
+    "KyosaikaiCode": "020003002",
+    "KyosaikaiName": "JMITUカシフジ共済会",
+    "IndustryCode": "020",
+    "BranchCode": "003",
+    "SubbranchCode": "002",
+    "CollectiveKyosaiId": 29,
+    "KakekinPerPerson": 200,
+    "Kyosai": [
+      {"KyosaiId": 1, "KyosaiName": "労組見舞（全）", "Units": 10, "Premi": 10},
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 10, "Premi": 5},
+      {"KyosaiId": 7, "KyosaiName": "中央組織交通", "Units": 1, "Premi": 50}
+    ]
+  },
+  {
+    "KyosaikaiCode": "020004001",
+    "KyosaikaiName": "JMITU神港精機支部",
+    "IndustryCode": "020",
+    "BranchCode": "004",
+    "SubbranchCode": "001",
+    "CollectiveKyosaiId": 30,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "020006001",
+    "KyosaikaiName": "JMITUアオイヒートテック支部",
+    "IndustryCode": "020",
+    "BranchCode": "006",
+    "SubbranchCode": "001",
+    "CollectiveKyosaiId": 33,
+    "KakekinPerPerson": 150,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 10, "Premi": 5},
+      {"KyosaiId": 40, "KyosaiName": "京滋慶弔②", "Units": 1, "Premi": 100}
+    ]
+  },
+  {
+    "KyosaikaiCode": "020008001",
+    "KyosaikaiName": "JMITU　IBM西日本分会",
+    "IndustryCode": "020",
+    "BranchCode": "008",
+    "SubbranchCode": "001",
+    "CollectiveKyosaiId": 35,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "025000000",
+    "KyosaikaiName": "開明伸銅労働組合 役員",
+    "IndustryCode": "025",
+    "BranchCode": "000",
+    "SubbranchCode": "000",
+    "CollectiveKyosaiId": 38,
+    "KakekinPerPerson": 200,
+    "Kyosai": [
+      {"KyosaiId": 1, "KyosaiName": "労組見舞（全）", "Units": 10, "Premi": 10},
+      {"KyosaiId": 2, "KyosaiName": "労組見舞（役）", "Units": 10, "Premi": 10}
+    ]
+  },
+  {
+    "KyosaikaiCode": "025000001",
+    "KyosaikaiName": "開明伸銅労働組合",
+    "IndustryCode": "025",
+    "BranchCode": "000",
+    "SubbranchCode": "001",
+    "CollectiveKyosaiId": 39,
+    "KakekinPerPerson": 740,
+    "Kyosai": [
+      {"KyosaiId": 6, "KyosaiName": "中央組織生命", "Units": 20, "Premi": 37}
+    ]
+  },
+  {
+    "KyosaikaiCode": "026000001",
+    "KyosaikaiName": "とらのこ共済会",
+    "IndustryCode": "026",
+    "BranchCode": "000",
+    "SubbranchCode": "001",
+    "CollectiveKyosaiId": 40,
+    "KakekinPerPerson": 5,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 1, "Premi": 5}
+    ]
+  },
+  {
+    "KyosaikaiCode": "030001001",
+    "KyosaikaiName": "全印総連京都地連 ユニオン京",
+    "IndustryCode": "030",
+    "BranchCode": "001",
+    "SubbranchCode": "001",
+    "CollectiveKyosaiId": 41,
+    "KakekinPerPerson": 300,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 1, "Premi": 5},
+      {"KyosaiId": 40, "KyosaiName": "京滋慶弔②", "Units": 2, "Premi": 100},
+      {"KyosaiId": 44, "KyosaiName": "京滋慶弔火災型", "Units": 9, "Premi": 5},
+      {"KyosaiId": 46, "KyosaiName": "京滋組織交通", "Units": 1, "Premi": 50}
+    ]
+  },
+  {
+    "KyosaikaiCode": "030003001",
+    "KyosaikaiName": "全印総連京都地連 繊研",
+    "IndustryCode": "030",
+    "BranchCode": "003",
+    "SubbranchCode": "001",
+    "CollectiveKyosaiId": 42,
+    "KakekinPerPerson": 5,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 1, "Premi": 5}
+    ]
+  },
+  {
+    "KyosaikaiCode": "030004000",
+    "KyosaikaiName": "全印総連京都地連 機関紙 役員",
+    "IndustryCode": "030",
+    "BranchCode": "004",
+    "SubbranchCode": "000",
+    "CollectiveKyosaiId": 43,
+    "KakekinPerPerson": 100,
+    "Kyosai": [
+      {"KyosaiId": 2, "KyosaiName": "労組見舞（役）", "Units": 10, "Premi": 10}
+    ]
+  },
+  {
+    "KyosaikaiCode": "030004001",
+    "KyosaikaiName": "全印総連京都地連 機関紙",
+    "IndustryCode": "030",
+    "BranchCode": "004",
+    "SubbranchCode": "001",
+    "CollectiveKyosaiId": 44,
+    "KakekinPerPerson": 300,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 1, "Premi": 5},
+      {"KyosaiId": 40, "KyosaiName": "京滋慶弔②", "Units": 2, "Premi": 100},
+      {"KyosaiId": 44, "KyosaiName": "京滋慶弔火災型", "Units": 9, "Premi": 5},
+      {"KyosaiId": 46, "KyosaiName": "京滋組織交通", "Units": 1, "Premi": 50}
+    ]
+  },
+  {
+    "KyosaikaiCode": "030006001",
+    "KyosaikaiName": "全印総連京都地連 大光",
+    "IndustryCode": "030",
+    "BranchCode": "006",
+    "SubbranchCode": "001",
+    "CollectiveKyosaiId": 45,
+    "KakekinPerPerson": 5,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 1, "Premi": 5}
+    ]
+  },
+  {
+    "KyosaikaiCode": "031000001",
+    "KyosaikaiName": "印刷出版OB友の会",
+    "IndustryCode": "031",
+    "BranchCode": "000",
+    "SubbranchCode": "001",
+    "CollectiveKyosaiId": 46,
+    "KakekinPerPerson": 5,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 1, "Premi": 5}
+    ]
+  },
+  {
+    "KyosaikaiCode": "040000000",
+    "KyosaikaiName": "全国一般京都地本 役員",
+    "IndustryCode": "040",
+    "BranchCode": "000",
+    "SubbranchCode": "000",
+    "CollectiveKyosaiId": 47,
+    "KakekinPerPerson": 50,
+    "Kyosai": [
+      {"KyosaiId": 7, "KyosaiName": "中央組織交通", "Units": 1, "Premi": 50}
+    ]
+  },
+  {
+    "KyosaikaiCode": "040000001",
+    "KyosaikaiName": "全国一般京都地本 書記局",
+    "IndustryCode": "040",
+    "BranchCode": "000",
+    "SubbranchCode": "001",
+    "CollectiveKyosaiId": 48,
+    "KakekinPerPerson": 100,
+    "Kyosai": [
+      {"KyosaiId": 2, "KyosaiName": "労組見舞（役）", "Units": 10, "Premi": 10}
+    ]
+  },
+  {
+    "KyosaikaiCode": "040000002",
+    "KyosaikaiName": "全国一般京都地本 大久保分会",
+    "IndustryCode": "040",
+    "BranchCode": "000",
+    "SubbranchCode": "002",
+    "CollectiveKyosaiId": 49,
+    "KakekinPerPerson": 50,
+    "Kyosai": [
+      {"KyosaiId": 7, "KyosaiName": "中央組織交通", "Units": 1, "Premi": 50}
+    ]
+  },
+  {
+    "KyosaikaiCode": "040000003",
+    "KyosaikaiName": "全国一般京都地本 光悦分会",
+    "IndustryCode": "040",
+    "BranchCode": "000",
+    "SubbranchCode": "003",
+    "CollectiveKyosaiId": 50,
+    "KakekinPerPerson": 50,
+    "Kyosai": [
+      {"KyosaiId": 7, "KyosaiName": "中央組織交通", "Units": 1, "Premi": 50}
+    ]
+  },
+  {
+    "KyosaikaiCode": "040000004",
+    "KyosaikaiName": "全国一般京都地本 東山企業組合",
+    "IndustryCode": "040",
+    "BranchCode": "000",
+    "SubbranchCode": "004",
+    "CollectiveKyosaiId": 51,
+    "KakekinPerPerson": 50,
+    "Kyosai": [
+      {"KyosaiId": 7, "KyosaiName": "中央組織交通", "Units": 1, "Premi": 50}
+    ]
+  },
+  {
+    "KyosaikaiCode": "040000008",
+    "KyosaikaiName": "全国一般京都地本 しんまち労組",
+    "IndustryCode": "040",
+    "BranchCode": "000",
+    "SubbranchCode": "008",
+    "CollectiveKyosaiId": 52,
+    "KakekinPerPerson": 50,
+    "Kyosai": [
+      {"KyosaiId": 7, "KyosaiName": "中央組織交通", "Units": 1, "Premi": 50}
+    ]
+  },
+  {
+    "KyosaikaiCode": "040000009",
+    "KyosaikaiName": "全国一般京都地本 一般合同",
+    "IndustryCode": "040",
+    "BranchCode": "000",
+    "SubbranchCode": "009",
+    "CollectiveKyosaiId": 53,
+    "KakekinPerPerson": 50,
+    "Kyosai": [
+      {"KyosaiId": 7, "KyosaiName": "中央組織交通", "Units": 1, "Premi": 50}
+    ]
+  },
+  {
+    "KyosaikaiCode": "040001000",
+    "KyosaikaiName": "流通サービス労働組合 役員",
+    "IndustryCode": "040",
+    "BranchCode": "001",
+    "SubbranchCode": "000",
+    "CollectiveKyosaiId": 54,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "040001001",
+    "KyosaikaiName": "流通サービス労働組合",
+    "IndustryCode": "040",
+    "BranchCode": "001",
+    "SubbranchCode": "001",
+    "CollectiveKyosaiId": 55,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "040001002",
+    "KyosaikaiName": "流通サービス労働組合 小川",
+    "IndustryCode": "040",
+    "BranchCode": "001",
+    "SubbranchCode": "002",
+    "CollectiveKyosaiId": 56,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "040002001",
+    "KyosaikaiName": "全国一般京都地方本部 合同分会",
+    "IndustryCode": "040",
+    "BranchCode": "002",
+    "SubbranchCode": "001",
+    "CollectiveKyosaiId": 57,
+    "KakekinPerPerson": 300,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 1, "Premi": 5},
+      {"KyosaiId": 40, "KyosaiName": "京滋慶弔②", "Units": 2, "Premi": 100},
+      {"KyosaiId": 44, "KyosaiName": "京滋慶弔火災型", "Units": 9, "Premi": 5},
+      {"KyosaiId": 46, "KyosaiName": "京滋組織交通", "Units": 1, "Premi": 50}
+    ]
+  },
+  {
+    "KyosaikaiCode": "041000001",
+    "KyosaikaiName": "京都法律関連労働組合",
+    "IndustryCode": "041",
+    "BranchCode": "000",
+    "SubbranchCode": "001",
+    "CollectiveKyosaiId": 58,
+    "KakekinPerPerson": 330,
+    "Kyosai": [
+      {"KyosaiId": 1, "KyosaiName": "労組見舞（全）", "Units": 3, "Premi": 10},
+      {"KyosaiId": 40, "KyosaiName": "京滋慶弔②", "Units": 2, "Premi": 100},
+      {"KyosaiId": 44, "KyosaiName": "京滋慶弔火災型", "Units": 10, "Premi": 5},
+      {"KyosaiId": 46, "KyosaiName": "京滋組織交通", "Units": 1, "Premi": 50}
+    ]
+  },
+  {
+    "KyosaikaiCode": "042000001",
+    "KyosaikaiName": "教職員互助組合職員労働組合",
+    "IndustryCode": "042",
+    "BranchCode": "000",
+    "SubbranchCode": "001",
+    "CollectiveKyosaiId": 59,
+    "KakekinPerPerson": 140,
+    "Kyosai": [
+      {"KyosaiId": 1, "KyosaiName": "労組見舞（全）", "Units": 4, "Premi": 10},
+      {"KyosaiId": 7, "KyosaiName": "中央組織交通", "Units": 2, "Premi": 50}
+    ]
+  },
+  {
+    "KyosaikaiCode": "051000000",
+    "KyosaikaiName": "建交労京都府本部 役員",
+    "IndustryCode": "051",
+    "BranchCode": "000",
+    "SubbranchCode": "000",
+    "CollectiveKyosaiId": 60,
+    "KakekinPerPerson": 100,
+    "Kyosai": [
+      {"KyosaiId": 1, "KyosaiName": "労組見舞（全）", "Units": 10, "Premi": 10}
+    ]
+  },
+  {
+    "KyosaikaiCode": "051000001",
+    "KyosaikaiName": "建交労京都府本部",
+    "IndustryCode": "051",
+    "BranchCode": "000",
+    "SubbranchCode": "001",
+    "CollectiveKyosaiId": 61,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "051001001",
+    "KyosaikaiName": "建交労 建設関連部会",
+    "IndustryCode": "051",
+    "BranchCode": "001",
+    "SubbranchCode": "001",
+    "CollectiveKyosaiId": 62,
+    "KakekinPerPerson": 200,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 2, "Premi": 5},
+      {"KyosaiId": 41, "KyosaiName": "京滋慶弔②’", "Units": 2, "Premi": 95}
+    ]
+  },
+  {
+    "KyosaikaiCode": "051002000",
+    "KyosaikaiName": "建交労 関西合同支部",
+    "IndustryCode": "051",
+    "BranchCode": "002",
+    "SubbranchCode": "000",
+    "CollectiveKyosaiId": 63,
+    "KakekinPerPerson": 200,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 2, "Premi": 5},
+      {"KyosaiId": 41, "KyosaiName": "京滋慶弔②’", "Units": 2, "Premi": 95}
+    ]
+  },
+  {
+    "KyosaikaiCode": "051002001",
+    "KyosaikaiName": "建交労 関西合同支部 CSS大阪",
+    "IndustryCode": "051",
+    "BranchCode": "002",
+    "SubbranchCode": "001",
+    "CollectiveKyosaiId": 64,
+    "KakekinPerPerson": 200,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 2, "Premi": 5},
+      {"KyosaiId": 41, "KyosaiName": "京滋慶弔②’", "Units": 2, "Premi": 95}
+    ]
+  },
+  {
+    "KyosaikaiCode": "051002002",
+    "KyosaikaiName": "建交労 関西合同支部 姫路",
+    "IndustryCode": "051",
+    "BranchCode": "002",
+    "SubbranchCode": "002",
+    "CollectiveKyosaiId": 65,
+    "KakekinPerPerson": 200,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 2, "Premi": 5},
+      {"KyosaiId": 41, "KyosaiName": "京滋慶弔②’", "Units": 2, "Premi": 95}
+    ]
+  },
+  {
+    "KyosaikaiCode": "051002003",
+    "KyosaikaiName": "建交労 関西合同支部 その他",
+    "IndustryCode": "051",
+    "BranchCode": "002",
+    "SubbranchCode": "003",
+    "CollectiveKyosaiId": 66,
+    "KakekinPerPerson": 200,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 2, "Premi": 5},
+      {"KyosaiId": 41, "KyosaiName": "京滋慶弔②’", "Units": 2, "Premi": 95}
+    ]
+  },
+  {
+    "KyosaikaiCode": "051002004",
+    "KyosaikaiName": "建交労 関西合同支部 福知山",
+    "IndustryCode": "051",
+    "BranchCode": "002",
+    "SubbranchCode": "004",
+    "CollectiveKyosaiId": 67,
+    "KakekinPerPerson": 200,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 2, "Premi": 5},
+      {"KyosaiId": 41, "KyosaiName": "京滋慶弔②’", "Units": 2, "Premi": 95}
+    ]
+  },
+  {
+    "KyosaikaiCode": "051002005",
+    "KyosaikaiName": "建交労 関西合同支部 城陽",
+    "IndustryCode": "051",
+    "BranchCode": "002",
+    "SubbranchCode": "005",
+    "CollectiveKyosaiId": 68,
+    "KakekinPerPerson": 200,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 2, "Premi": 5},
+      {"KyosaiId": 41, "KyosaiName": "京滋慶弔②’", "Units": 2, "Premi": 95}
+    ]
+  },
+  {
+    "KyosaikaiCode": "051002007",
+    "KyosaikaiName": "建交労 関西合同支部 CSS京都",
+    "IndustryCode": "051",
+    "BranchCode": "002",
+    "SubbranchCode": "007",
+    "CollectiveKyosaiId": 69,
+    "KakekinPerPerson": 200,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 2, "Premi": 5},
+      {"KyosaiId": 41, "KyosaiName": "京滋慶弔②’", "Units": 2, "Premi": 95}
+    ]
+  },
+  {
+    "KyosaikaiCode": "051003001",
+    "KyosaikaiName": "建交労 ひまわり共済会 正935",
+    "IndustryCode": "051",
+    "BranchCode": "003",
+    "SubbranchCode": "001",
+    "CollectiveKyosaiId": 71,
+    "KakekinPerPerson": 935,
+    "Kyosai": [
+      {"KyosaiId": 3, "KyosaiName": "組織医療", "Units": 2, "Premi": 100},
+      {"KyosaiId": 4, "KyosaiName": "中央慶弔②", "Units": 5, "Premi": 100},
+      {"KyosaiId": 6, "KyosaiName": "中央組織生命", "Units": 5, "Premi": 37},
+      {"KyosaiId": 7, "KyosaiName": "中央組織交通", "Units": 1, "Premi": 50}
+    ]
+  },
+  {
+    "KyosaikaiCode": "051003002",
+    "KyosaikaiName": "建交労 ひまわり共済会 準935",
+    "IndustryCode": "051",
+    "BranchCode": "003",
+    "SubbranchCode": "002",
+    "CollectiveKyosaiId": 72,
+    "KakekinPerPerson": 735,
+    "Kyosai": [
+      {"KyosaiId": 3, "KyosaiName": "組織医療", "Units": 2, "Premi": 100},
+      {"KyosaiId": 4, "KyosaiName": "中央慶弔②", "Units": 3, "Premi": 100},
+      {"KyosaiId": 6, "KyosaiName": "中央組織生命", "Units": 5, "Premi": 37},
+      {"KyosaiId": 7, "KyosaiName": "中央組織交通", "Units": 1, "Premi": 50}
+    ]
+  },
+  {
+    "KyosaikaiCode": "051003003",
+    "KyosaikaiName": "建交労 ひまわり共済会 特935",
+    "IndustryCode": "051",
+    "BranchCode": "003",
+    "SubbranchCode": "003",
+    "CollectiveKyosaiId": 73,
+    "KakekinPerPerson": 535,
+    "Kyosai": [
+      {"KyosaiId": 3, "KyosaiName": "組織医療", "Units": 1, "Premi": 100},
+      {"KyosaiId": 4, "KyosaiName": "中央慶弔②", "Units": 2, "Premi": 100},
+      {"KyosaiId": 6, "KyosaiName": "中央組織生命", "Units": 5, "Premi": 37},
+      {"KyosaiId": 7, "KyosaiName": "中央組織交通", "Units": 1, "Premi": 50}
+    ]
+  },
+  {
+    "KyosaikaiCode": "051003004",
+    "KyosaikaiName": "建交労 ひまわり共済会 高正935",
+    "IndustryCode": "051",
+    "BranchCode": "003",
+    "SubbranchCode": "004",
+    "CollectiveKyosaiId": 74,
+    "KakekinPerPerson": 935,
+    "Kyosai": [
+      {"KyosaiId": 3, "KyosaiName": "組織医療", "Units": 2, "Premi": 100},
+      {"KyosaiId": 6, "KyosaiName": "中央組織生命", "Units": 5, "Premi": 37},
+      {"KyosaiId": 7, "KyosaiName": "中央組織交通", "Units": 1, "Premi": 50},
+      {"KyosaiId": 40, "KyosaiName": "京滋慶弔②", "Units": 5, "Premi": 100}
+    ]
+  },
+  {
+    "KyosaikaiCode": "051003005",
+    "KyosaikaiName": "建交労 ひまわり共済会 高準935",
+    "IndustryCode": "051",
+    "BranchCode": "003",
+    "SubbranchCode": "005",
+    "CollectiveKyosaiId": 75,
+    "KakekinPerPerson": 735,
+    "Kyosai": [
+      {"KyosaiId": 3, "KyosaiName": "組織医療", "Units": 2, "Premi": 100},
+      {"KyosaiId": 6, "KyosaiName": "中央組織生命", "Units": 5, "Premi": 37},
+      {"KyosaiId": 7, "KyosaiName": "中央組織交通", "Units": 1, "Premi": 50},
+      {"KyosaiId": 40, "KyosaiName": "京滋慶弔②", "Units": 3, "Premi": 100}
+    ]
+  },
+  {
+    "KyosaikaiCode": "051003006",
+    "KyosaikaiName": "建交労 ひまわり共済会 高特935",
+    "IndustryCode": "051",
+    "BranchCode": "003",
+    "SubbranchCode": "006",
+    "CollectiveKyosaiId": 76,
+    "KakekinPerPerson": 535,
+    "Kyosai": [
+      {"KyosaiId": 3, "KyosaiName": "組織医療", "Units": 1, "Premi": 100},
+      {"KyosaiId": 6, "KyosaiName": "中央組織生命", "Units": 5, "Premi": 37},
+      {"KyosaiId": 7, "KyosaiName": "中央組織交通", "Units": 1, "Premi": 50},
+      {"KyosaiId": 40, "KyosaiName": "京滋慶弔②", "Units": 2, "Premi": 100}
+    ]
+  },
+  {
+    "KyosaikaiCode": "051003007",
+    "KyosaikaiName": "建交労 ひまわり共済会 高正900",
+    "IndustryCode": "051",
+    "BranchCode": "003",
+    "SubbranchCode": "007",
+    "CollectiveKyosaiId": 77,
+    "KakekinPerPerson": 900,
+    "Kyosai": [
+      {"KyosaiId": 7, "KyosaiName": "中央組織交通", "Units": 5, "Premi": 50},
+      {"KyosaiId": 40, "KyosaiName": "京滋慶弔②", "Units": 6, "Premi": 100},
+      {"KyosaiId": 46, "KyosaiName": "京滋組織交通", "Units": 1, "Premi": 50}
+    ]
+  },
+  {
+    "KyosaikaiCode": "051003008",
+    "KyosaikaiName": "建交労 ひまわり共済会 高準700",
+    "IndustryCode": "051",
+    "BranchCode": "003",
+    "SubbranchCode": "008",
+    "CollectiveKyosaiId": 79,
+    "KakekinPerPerson": 1200,
+    "Kyosai": [
+      {"KyosaiId": 7, "KyosaiName": "中央組織交通", "Units": 2, "Premi": 50},
+      {"KyosaiId": 7, "KyosaiName": "中央組織交通", "Units": 3, "Premi": 50},
+      {"KyosaiId": 40, "KyosaiName": "京滋慶弔②", "Units": 5, "Premi": 100},
+      {"KyosaiId": 40, "KyosaiName": "京滋慶弔②", "Units": 4, "Premi": 100},
+      {"KyosaiId": 46, "KyosaiName": "京滋組織交通", "Units": 1, "Premi": 50}
+    ]
+  },
+  {
+    "KyosaikaiCode": "051003009",
+    "KyosaikaiName": "建交労 ひまわり共済会 高特700",
+    "IndustryCode": "051",
+    "BranchCode": "003",
+    "SubbranchCode": "009",
+    "CollectiveKyosaiId": 79,
+    "KakekinPerPerson": 1200,
+    "Kyosai": [
+      {"KyosaiId": 7, "KyosaiName": "中央組織交通", "Units": 2, "Premi": 50},
+      {"KyosaiId": 7, "KyosaiName": "中央組織交通", "Units": 3, "Premi": 50},
+      {"KyosaiId": 40, "KyosaiName": "京滋慶弔②", "Units": 5, "Premi": 100},
+      {"KyosaiId": 40, "KyosaiName": "京滋慶弔②", "Units": 4, "Premi": 100},
+      {"KyosaiId": 46, "KyosaiName": "京滋組織交通", "Units": 1, "Premi": 50}
+    ]
+  },
+  {
+    "KyosaikaiCode": "051004001",
+    "KyosaikaiName": "建交労 ユタカ運送",
+    "IndustryCode": "051",
+    "BranchCode": "004",
+    "SubbranchCode": "001",
+    "CollectiveKyosaiId": 80,
+    "KakekinPerPerson": 1070,
+    "Kyosai": [
+      {"KyosaiId": 1, "KyosaiName": "労組見舞（全）", "Units": 20, "Premi": 10},
+      {"KyosaiId": 4, "KyosaiName": "中央慶弔②", "Units": 5, "Premi": 100},
+      {"KyosaiId": 6, "KyosaiName": "中央組織生命", "Units": 10, "Premi": 37}
+    ]
+  },
+  {
+    "KyosaikaiCode": "051005001",
+    "KyosaikaiName": "建交労 京滋重量",
+    "IndustryCode": "051",
+    "BranchCode": "005",
+    "SubbranchCode": "001",
+    "CollectiveKyosaiId": 82,
+    "KakekinPerPerson": 1035,
+    "Kyosai": [
+      {"KyosaiId": 1, "KyosaiName": "労組見舞（全）", "Units": 5, "Premi": 10},
+      {"KyosaiId": 3, "KyosaiName": "組織医療", "Units": 5, "Premi": 100},
+      {"KyosaiId": 4, "KyosaiName": "中央慶弔②", "Units": 3, "Premi": 100},
+      {"KyosaiId": 6, "KyosaiName": "中央組織生命", "Units": 5, "Premi": 37}
+    ]
+  },
+  {
+    "KyosaikaiCode": "052001001",
+    "KyosaikaiName": "建交労 滋賀ダンプ支部",
+    "IndustryCode": "052",
+    "BranchCode": "001",
+    "SubbranchCode": "001",
+    "CollectiveKyosaiId": 85,
+    "KakekinPerPerson": 70,
+    "Kyosai": [
+      {"KyosaiId": 1, "KyosaiName": "労組見舞（全）", "Units": 2, "Premi": 10},
+      {"KyosaiId": 42, "KyosaiName": "京滋慶弔0.5口", "Units": 1, "Premi": 50}
+    ]
+  },
+  {
+    "KyosaikaiCode": "052002001",
+    "KyosaikaiName": "建交労 近江支部",
+    "IndustryCode": "052",
+    "BranchCode": "002",
+    "SubbranchCode": "001",
+    "CollectiveKyosaiId": 86,
+    "KakekinPerPerson": 50,
+    "Kyosai": [
+      {"KyosaiId": 7, "KyosaiName": "中央組織交通", "Units": 1, "Premi": 50}
+    ]
+  },
+  {
+    "KyosaikaiCode": "052003001",
+    "KyosaikaiName": "建交労 バス産業支部",
+    "IndustryCode": "052",
+    "BranchCode": "003",
+    "SubbranchCode": "001",
+    "CollectiveKyosaiId": 87,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "060000001",
+    "KyosaikaiName": "合同互助会",
+    "IndustryCode": "060",
+    "BranchCode": "000",
+    "SubbranchCode": "001",
+    "CollectiveKyosaiId": 88,
+    "KakekinPerPerson": 300,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 1, "Premi": 5},
+      {"KyosaiId": 40, "KyosaiName": "京滋慶弔②", "Units": 2, "Premi": 100},
+      {"KyosaiId": 44, "KyosaiName": "京滋慶弔火災型", "Units": 9, "Premi": 5},
+      {"KyosaiId": 46, "KyosaiName": "京滋組織交通", "Units": 1, "Premi": 50}
+    ]
+  },
+  {
+    "KyosaikaiCode": "062000001",
+    "KyosaikaiName": "みやこユニオン",
+    "IndustryCode": "062",
+    "BranchCode": "000",
+    "SubbranchCode": "001",
+    "CollectiveKyosaiId": 92,
+    "KakekinPerPerson": 80,
+    "Kyosai": [
+      {"KyosaiId": 1, "KyosaiName": "労組見舞（全）", "Units": 3, "Premi": 10},
+      {"KyosaiId": 7, "KyosaiName": "中央組織交通", "Units": 1, "Premi": 50}
+    ]
+  },
+  {
+    "KyosaikaiCode": "063000001",
+    "KyosaikaiName": "ユニオン南の風",
+    "IndustryCode": "063",
+    "BranchCode": "000",
+    "SubbranchCode": "001",
+    "CollectiveKyosaiId": 93,
+    "KakekinPerPerson": 10,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 2, "Premi": 5}
+    ]
+  },
+  {
+    "KyosaikaiCode": "065000001",
+    "KyosaikaiName": "なかよし共済会",
+    "IndustryCode": "065",
+    "BranchCode": "000",
+    "SubbranchCode": "001",
+    "CollectiveKyosaiId": 94,
+    "KakekinPerPerson": 100,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 1, "Premi": 5},
+      {"KyosaiId": 41, "KyosaiName": "京滋慶弔②’", "Units": 1, "Premi": 95}
+    ]
+  },
+  {
+    "KyosaikaiCode": "069000001",
+    "KyosaikaiName": "京都地域労組連絡会",
+    "IndustryCode": "069",
+    "BranchCode": "000",
+    "SubbranchCode": "001",
+    "CollectiveKyosaiId": 95,
+    "KakekinPerPerson": 300,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 1, "Premi": 5},
+      {"KyosaiId": 40, "KyosaiName": "京滋慶弔②", "Units": 2, "Premi": 100},
+      {"KyosaiId": 44, "KyosaiName": "京滋慶弔火災型", "Units": 9, "Premi": 5},
+      {"KyosaiId": 46, "KyosaiName": "京滋組織交通", "Units": 1, "Premi": 50}
+    ]
+  },
+  {
+    "KyosaikaiCode": "070000000",
+    "KyosaikaiName": "自交総連京都地連",
+    "IndustryCode": "070",
+    "BranchCode": "000",
+    "SubbranchCode": "000",
+    "CollectiveKyosaiId": 96,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "070005001",
+    "KyosaikaiName": "自交総連京都地連 個タク",
+    "IndustryCode": "070",
+    "BranchCode": "005",
+    "SubbranchCode": "001",
+    "CollectiveKyosaiId": 97,
+    "KakekinPerPerson": 300,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 1, "Premi": 5},
+      {"KyosaiId": 40, "KyosaiName": "京滋慶弔②", "Units": 2, "Premi": 100},
+      {"KyosaiId": 44, "KyosaiName": "京滋慶弔火災型", "Units": 9, "Premi": 5},
+      {"KyosaiId": 46, "KyosaiName": "京滋組織交通", "Units": 1, "Premi": 50}
+    ]
+  },
+  {
+    "KyosaikaiCode": "080000001",
+    "KyosaikaiName": "光正・互助会",
+    "IndustryCode": "080",
+    "BranchCode": "000",
+    "SubbranchCode": "001",
+    "CollectiveKyosaiId": 98,
+    "KakekinPerPerson": 300,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 1, "Premi": 5},
+      {"KyosaiId": 40, "KyosaiName": "京滋慶弔②", "Units": 2, "Premi": 100},
+      {"KyosaiId": 44, "KyosaiName": "京滋慶弔火災型", "Units": 9, "Premi": 5},
+      {"KyosaiId": 46, "KyosaiName": "京滋組織交通", "Units": 1, "Premi": 50}
+    ]
+  },
+  {
+    "KyosaikaiCode": "081000000",
+    "KyosaikaiName": "全企連共済会",
+    "IndustryCode": "081",
+    "BranchCode": "000",
+    "SubbranchCode": "000",
+    "CollectiveKyosaiId": 99,
+    "KakekinPerPerson": 100,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 1, "Premi": 5},
+      {"KyosaiId": 41, "KyosaiName": "京滋慶弔②’", "Units": 1, "Premi": 95}
+    ]
+  },
+  {
+    "KyosaikaiCode": "081000010",
+    "KyosaikaiName": "全企連共済会 事務局",
+    "IndustryCode": "081",
+    "BranchCode": "000",
+    "SubbranchCode": "010",
+    "CollectiveKyosaiId": 100,
+    "KakekinPerPerson": 100,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 1, "Premi": 5},
+      {"KyosaiId": 41, "KyosaiName": "京滋慶弔②’", "Units": 1, "Premi": 95}
+    ]
+  },
+  {
+    "KyosaikaiCode": "081000020",
+    "KyosaikaiName": "全企連共済会 商栄企業組合",
+    "IndustryCode": "081",
+    "BranchCode": "000",
+    "SubbranchCode": "020",
+    "CollectiveKyosaiId": 101,
+    "KakekinPerPerson": 100,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 1, "Premi": 5},
+      {"KyosaiId": 41, "KyosaiName": "京滋慶弔②’", "Units": 1, "Premi": 95}
+    ]
+  },
+  {
+    "KyosaikaiCode": "081000042",
+    "KyosaikaiName": "全企連共済会 共栄企業組合",
+    "IndustryCode": "081",
+    "BranchCode": "000",
+    "SubbranchCode": "042",
+    "CollectiveKyosaiId": 102,
+    "KakekinPerPerson": 100,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 1, "Premi": 5},
+      {"KyosaiId": 41, "KyosaiName": "京滋慶弔②’", "Units": 1, "Premi": 95}
+    ]
+  },
+  {
+    "KyosaikaiCode": "081000057",
+    "KyosaikaiName": "全企連共済会 平安部会",
+    "IndustryCode": "081",
+    "BranchCode": "000",
+    "SubbranchCode": "057",
+    "CollectiveKyosaiId": 105,
+    "KakekinPerPerson": 100,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 1, "Premi": 5},
+      {"KyosaiId": 41, "KyosaiName": "京滋慶弔②’", "Units": 1, "Premi": 95}
+    ]
+  },
+  {
+    "KyosaikaiCode": "081000058",
+    "KyosaikaiName": "全企連共済会 建設部会",
+    "IndustryCode": "081",
+    "BranchCode": "000",
+    "SubbranchCode": "058",
+    "CollectiveKyosaiId": 106,
+    "KakekinPerPerson": 100,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 1, "Premi": 5},
+      {"KyosaiId": 41, "KyosaiName": "京滋慶弔②’", "Units": 1, "Premi": 95}
+    ]
+  },
+  {
+    "KyosaikaiCode": "081000059",
+    "KyosaikaiName": "全企連共済会 友和部会",
+    "IndustryCode": "081",
+    "BranchCode": "000",
+    "SubbranchCode": "059",
+    "CollectiveKyosaiId": 107,
+    "KakekinPerPerson": 100,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 1, "Premi": 5},
+      {"KyosaiId": 41, "KyosaiName": "京滋慶弔②’", "Units": 1, "Premi": 95}
+    ]
+  },
+  {
+    "KyosaikaiCode": "081000060",
+    "KyosaikaiName": "全企連共済会 東和企業組合",
+    "IndustryCode": "081",
+    "BranchCode": "000",
+    "SubbranchCode": "060",
+    "CollectiveKyosaiId": 108,
+    "KakekinPerPerson": 100,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 1, "Premi": 5},
+      {"KyosaiId": 41, "KyosaiName": "京滋慶弔②’", "Units": 1, "Premi": 95}
+    ]
+  },
+  {
+    "KyosaikaiCode": "081000061",
+    "KyosaikaiName": "全企連共済会 東和織物企業組合",
+    "IndustryCode": "081",
+    "BranchCode": "000",
+    "SubbranchCode": "061",
+    "CollectiveKyosaiId": 109,
+    "KakekinPerPerson": 100,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 1, "Premi": 5},
+      {"KyosaiId": 41, "KyosaiName": "京滋慶弔②’", "Units": 1, "Premi": 95}
+    ]
+  },
+  {
+    "KyosaikaiCode": "081000062",
+    "KyosaikaiName": "全企連共済会 東和整経企業組合",
+    "IndustryCode": "081",
+    "BranchCode": "000",
+    "SubbranchCode": "062",
+    "CollectiveKyosaiId": 110,
+    "KakekinPerPerson": 100,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 1, "Premi": 5},
+      {"KyosaiId": 41, "KyosaiName": "京滋慶弔②’", "Units": 1, "Premi": 95}
+    ]
+  },
+  {
+    "KyosaikaiCode": "081000063",
+    "KyosaikaiName": "全企連共済会 東和染色企業組合",
+    "IndustryCode": "081",
+    "BranchCode": "000",
+    "SubbranchCode": "063",
+    "CollectiveKyosaiId": 111,
+    "KakekinPerPerson": 100,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 1, "Premi": 5},
+      {"KyosaiId": 41, "KyosaiName": "京滋慶弔②’", "Units": 1, "Premi": 95}
+    ]
+  },
+  {
+    "KyosaikaiCode": "081000140",
+    "KyosaikaiName": "全企連共済会 大和企業組合",
+    "IndustryCode": "081",
+    "BranchCode": "000",
+    "SubbranchCode": "140",
+    "CollectiveKyosaiId": 112,
+    "KakekinPerPerson": 100,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 1, "Premi": 5},
+      {"KyosaiId": 41, "KyosaiName": "京滋慶弔②’", "Units": 1, "Premi": 95}
+    ]
+  },
+  {
+    "KyosaikaiCode": "081000150",
+    "KyosaikaiName": "全企連共済会 大和第二企業組合",
+    "IndustryCode": "081",
+    "BranchCode": "000",
+    "SubbranchCode": "150",
+    "CollectiveKyosaiId": 113,
+    "KakekinPerPerson": 100,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 1, "Premi": 5},
+      {"KyosaiId": 41, "KyosaiName": "京滋慶弔②’", "Units": 1, "Premi": 95}
+    ]
+  },
+  {
+    "KyosaikaiCode": "081000160",
+    "KyosaikaiName": "全企連共済会 大和第三企業組合",
+    "IndustryCode": "081",
+    "BranchCode": "000",
+    "SubbranchCode": "160",
+    "CollectiveKyosaiId": 114,
+    "KakekinPerPerson": 100,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 1, "Premi": 5},
+      {"KyosaiId": 41, "KyosaiName": "京滋慶弔②’", "Units": 1, "Premi": 95}
+    ]
+  },
+  {
+    "KyosaikaiCode": "081000170",
+    "KyosaikaiName": "全企連共済会 富士企業組合",
+    "IndustryCode": "081",
+    "BranchCode": "000",
+    "SubbranchCode": "170",
+    "CollectiveKyosaiId": 115,
+    "KakekinPerPerson": 100,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 1, "Premi": 5},
+      {"KyosaiId": 41, "KyosaiName": "京滋慶弔②’", "Units": 1, "Premi": 95}
+    ]
+  },
+  {
+    "KyosaikaiCode": "081000180",
+    "KyosaikaiName": "全企連共済会 前進企業組合",
+    "IndustryCode": "081",
+    "BranchCode": "000",
+    "SubbranchCode": "180",
+    "CollectiveKyosaiId": 116,
+    "KakekinPerPerson": 100,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 1, "Premi": 5},
+      {"KyosaiId": 41, "KyosaiName": "京滋慶弔②’", "Units": 1, "Premi": 95}
+    ]
+  },
+  {
+    "KyosaikaiCode": "081000191",
+    "KyosaikaiName": "全企連共済会 協同組合しんまち",
+    "IndustryCode": "081",
+    "BranchCode": "000",
+    "SubbranchCode": "191",
+    "CollectiveKyosaiId": 117,
+    "KakekinPerPerson": 100,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 1, "Premi": 5},
+      {"KyosaiId": 41, "KyosaiName": "京滋慶弔②’", "Units": 1, "Premi": 95}
+    ]
+  },
+  {
+    "KyosaikaiCode": "081000200",
+    "KyosaikaiName": "全企連共済会 平和企業組合",
+    "IndustryCode": "081",
+    "BranchCode": "000",
+    "SubbranchCode": "200",
+    "CollectiveKyosaiId": 118,
+    "KakekinPerPerson": 100,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 1, "Premi": 5},
+      {"KyosaiId": 41, "KyosaiName": "京滋慶弔②’", "Units": 1, "Premi": 95}
+    ]
+  },
+  {
+    "KyosaikaiCode": "081000210",
+    "KyosaikaiName": "全企連共済会 昭和企業組合",
+    "IndustryCode": "081",
+    "BranchCode": "000",
+    "SubbranchCode": "210",
+    "CollectiveKyosaiId": 119,
+    "KakekinPerPerson": 100,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 1, "Premi": 5},
+      {"KyosaiId": 41, "KyosaiName": "京滋慶弔②’", "Units": 1, "Premi": 95}
+    ]
+  },
+  {
+    "KyosaikaiCode": "081000230",
+    "KyosaikaiName": "全企連共済会 都企業組合",
+    "IndustryCode": "081",
+    "BranchCode": "000",
+    "SubbranchCode": "230",
+    "CollectiveKyosaiId": 120,
+    "KakekinPerPerson": 100,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 1, "Premi": 5},
+      {"KyosaiId": 41, "KyosaiName": "京滋慶弔②’", "Units": 1, "Premi": 95}
+    ]
+  },
+  {
+    "KyosaikaiCode": "081000240",
+    "KyosaikaiName": "全企連共済会 東山企業組合",
+    "IndustryCode": "081",
+    "BranchCode": "000",
+    "SubbranchCode": "240",
+    "CollectiveKyosaiId": 121,
+    "KakekinPerPerson": 100,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 1, "Premi": 5},
+      {"KyosaiId": 41, "KyosaiName": "京滋慶弔②’", "Units": 1, "Premi": 95}
+    ]
+  },
+  {
+    "KyosaikaiCode": "091000000",
+    "KyosaikaiName": "年金者組合京都共済会",
+    "IndustryCode": "091",
+    "BranchCode": "000",
+    "SubbranchCode": "000",
+    "CollectiveKyosaiId": 122,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "091000001",
+    "KyosaikaiName": "年金者組合京都共済会 丹後",
+    "IndustryCode": "091",
+    "BranchCode": "000",
+    "SubbranchCode": "001",
+    "CollectiveKyosaiId": 123,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "091000002",
+    "KyosaikaiName": "年金者組合京都共済会 与謝",
+    "IndustryCode": "091",
+    "BranchCode": "000",
+    "SubbranchCode": "002",
+    "CollectiveKyosaiId": 124,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "091000003",
+    "KyosaikaiName": "年金者組合京都共済会 舞鶴",
+    "IndustryCode": "091",
+    "BranchCode": "000",
+    "SubbranchCode": "003",
+    "CollectiveKyosaiId": 125,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "091000004",
+    "KyosaikaiName": "年金者組合京都共済会 福知山",
+    "IndustryCode": "091",
+    "BranchCode": "000",
+    "SubbranchCode": "004",
+    "CollectiveKyosaiId": 126,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "091000005",
+    "KyosaikaiName": "年金者組合京都共済会 綾部",
+    "IndustryCode": "091",
+    "BranchCode": "000",
+    "SubbranchCode": "005",
+    "CollectiveKyosaiId": 127,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "091000006",
+    "KyosaikaiName": "年金者組合京都共済会 船井",
+    "IndustryCode": "091",
+    "BranchCode": "000",
+    "SubbranchCode": "006",
+    "CollectiveKyosaiId": 128,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "091000007",
+    "KyosaikaiName": "年金者組合京都共済会 北桑田",
+    "IndustryCode": "091",
+    "BranchCode": "000",
+    "SubbranchCode": "007",
+    "CollectiveKyosaiId": 129,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "091000008",
+    "KyosaikaiName": "年金者組合京都共済会 亀岡",
+    "IndustryCode": "091",
+    "BranchCode": "000",
+    "SubbranchCode": "008",
+    "CollectiveKyosaiId": 130,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "091000009",
+    "KyosaikaiName": "年金者組合京都共済会 北上",
+    "IndustryCode": "091",
+    "BranchCode": "000",
+    "SubbranchCode": "009",
+    "CollectiveKyosaiId": 131,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "091000010",
+    "KyosaikaiName": "年金者組合京都共済会 左京",
+    "IndustryCode": "091",
+    "BranchCode": "000",
+    "SubbranchCode": "010",
+    "CollectiveKyosaiId": 132,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "091000011",
+    "KyosaikaiName": "年金者組合京都共済会 中京",
+    "IndustryCode": "091",
+    "BranchCode": "000",
+    "SubbranchCode": "011",
+    "CollectiveKyosaiId": 133,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "091000012",
+    "KyosaikaiName": "年金者組合京都共済会 下京",
+    "IndustryCode": "091",
+    "BranchCode": "000",
+    "SubbranchCode": "012",
+    "CollectiveKyosaiId": 134,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "091000013",
+    "KyosaikaiName": "年金者組合京都共済会 南",
+    "IndustryCode": "091",
+    "BranchCode": "000",
+    "SubbranchCode": "013",
+    "CollectiveKyosaiId": 135,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "091000014",
+    "KyosaikaiName": "年金者組合京都共済会 東山",
+    "IndustryCode": "091",
+    "BranchCode": "000",
+    "SubbranchCode": "014",
+    "CollectiveKyosaiId": 136,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "091000015",
+    "KyosaikaiName": "年金者組合京都共済会 山科",
+    "IndustryCode": "091",
+    "BranchCode": "000",
+    "SubbranchCode": "015",
+    "CollectiveKyosaiId": 137,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "091000016",
+    "KyosaikaiName": "年金者組合京都共済会 右京",
+    "IndustryCode": "091",
+    "BranchCode": "000",
+    "SubbranchCode": "016",
+    "CollectiveKyosaiId": 138,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "091000017",
+    "KyosaikaiName": "年金者組合京都共済会 西京",
+    "IndustryCode": "091",
+    "BranchCode": "000",
+    "SubbranchCode": "017",
+    "CollectiveKyosaiId": 139,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "091000018",
+    "KyosaikaiName": "年金者組合京都共済会 伏見",
+    "IndustryCode": "091",
+    "BranchCode": "000",
+    "SubbranchCode": "018",
+    "CollectiveKyosaiId": 140,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "091000020",
+    "KyosaikaiName": "年金者組合京都共済会 宇治久御山",
+    "IndustryCode": "091",
+    "BranchCode": "000",
+    "SubbranchCode": "020",
+    "CollectiveKyosaiId": 141,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "091000021",
+    "KyosaikaiName": "年金者組合京都共済会 城陽",
+    "IndustryCode": "091",
+    "BranchCode": "000",
+    "SubbranchCode": "021",
+    "CollectiveKyosaiId": 142,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "091000022",
+    "KyosaikaiName": "年金者組合京都共済会 八幡",
+    "IndustryCode": "091",
+    "BranchCode": "000",
+    "SubbranchCode": "022",
+    "CollectiveKyosaiId": 143,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "091000023",
+    "KyosaikaiName": "年金者組合京都共済会 綴喜",
+    "IndustryCode": "091",
+    "BranchCode": "000",
+    "SubbranchCode": "023",
+    "CollectiveKyosaiId": 144,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "091000024",
+    "KyosaikaiName": "年金者組合京都共済会 相楽",
+    "IndustryCode": "091",
+    "BranchCode": "000",
+    "SubbranchCode": "024",
+    "CollectiveKyosaiId": 145,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "091000031",
+    "KyosaikaiName": "年金者組合京都共済会 向日",
+    "IndustryCode": "091",
+    "BranchCode": "000",
+    "SubbranchCode": "031",
+    "CollectiveKyosaiId": 146,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "091000032",
+    "KyosaikaiName": "年金者組合京都共済会 長岡",
+    "IndustryCode": "091",
+    "BranchCode": "000",
+    "SubbranchCode": "032",
+    "CollectiveKyosaiId": 147,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "091000033",
+    "KyosaikaiName": "年金者組合京都共済会 大山崎",
+    "IndustryCode": "091",
+    "BranchCode": "000",
+    "SubbranchCode": "033",
+    "CollectiveKyosaiId": 148,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "092000000",
+    "KyosaikaiName": "年金者組合滋賀県本部",
+    "IndustryCode": "092",
+    "BranchCode": "000",
+    "SubbranchCode": "000",
+    "CollectiveKyosaiId": 149,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "092000001",
+    "KyosaikaiName": "年金者組合滋賀 大津",
+    "IndustryCode": "092",
+    "BranchCode": "000",
+    "SubbranchCode": "001",
+    "CollectiveKyosaiId": 150,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "092000002",
+    "KyosaikaiName": "年金者組合滋賀 南大津",
+    "IndustryCode": "092",
+    "BranchCode": "000",
+    "SubbranchCode": "002",
+    "CollectiveKyosaiId": 151,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "092000003",
+    "KyosaikaiName": "年金者組合滋賀 志賀",
+    "IndustryCode": "092",
+    "BranchCode": "000",
+    "SubbranchCode": "003",
+    "CollectiveKyosaiId": 152,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "092000006",
+    "KyosaikaiName": "年金者組合滋賀 湖南",
+    "IndustryCode": "092",
+    "BranchCode": "000",
+    "SubbranchCode": "006",
+    "CollectiveKyosaiId": 153,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "092000008",
+    "KyosaikaiName": "年金者組合滋賀 近江八幡",
+    "IndustryCode": "092",
+    "BranchCode": "000",
+    "SubbranchCode": "008",
+    "CollectiveKyosaiId": 154,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "092000009",
+    "KyosaikaiName": "年金者組合滋賀 東近江",
+    "IndustryCode": "092",
+    "BranchCode": "000",
+    "SubbranchCode": "009",
+    "CollectiveKyosaiId": 155,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "100000002",
+    "KyosaikaiName": "京都府農村労働組合 綾部",
+    "IndustryCode": "100",
+    "BranchCode": "000",
+    "SubbranchCode": "002",
+    "CollectiveKyosaiId": 157,
+    "KakekinPerPerson": 50,
+    "Kyosai": [
+      {"KyosaiId": 7, "KyosaiName": "中央組織交通", "Units": 1, "Premi": 50}
+    ]
+  },
+  {
+    "KyosaikaiCode": "100000003",
+    "KyosaikaiName": "京都府農村労働組合 舞鶴",
+    "IndustryCode": "100",
+    "BranchCode": "000",
+    "SubbranchCode": "003",
+    "CollectiveKyosaiId": 158,
+    "KakekinPerPerson": 50,
+    "Kyosai": [
+      {"KyosaiId": 7, "KyosaiName": "中央組織交通", "Units": 1, "Premi": 50}
+    ]
+  },
+  {
+    "KyosaikaiCode": "100000004",
+    "KyosaikaiName": "京都府農村労働組合 福知山",
+    "IndustryCode": "100",
+    "BranchCode": "000",
+    "SubbranchCode": "004",
+    "CollectiveKyosaiId": 159,
+    "KakekinPerPerson": 50,
+    "Kyosai": [
+      {"KyosaiId": 7, "KyosaiName": "中央組織交通", "Units": 1, "Premi": 50}
+    ]
+  },
+  {
+    "KyosaikaiCode": "100000005",
+    "KyosaikaiName": "京都府農村労働組合 和知",
+    "IndustryCode": "100",
+    "BranchCode": "000",
+    "SubbranchCode": "005",
+    "CollectiveKyosaiId": 160,
+    "KakekinPerPerson": 50,
+    "Kyosai": [
+      {"KyosaiId": 7, "KyosaiName": "中央組織交通", "Units": 1, "Premi": 50}
+    ]
+  },
+  {
+    "KyosaikaiCode": "100000006",
+    "KyosaikaiName": "京都府農村労働組合 美山",
+    "IndustryCode": "100",
+    "BranchCode": "000",
+    "SubbranchCode": "006",
+    "CollectiveKyosaiId": 161,
+    "KakekinPerPerson": 50,
+    "Kyosai": [
+      {"KyosaiId": 7, "KyosaiName": "中央組織交通", "Units": 1, "Premi": 50}
+    ]
+  },
+  {
+    "KyosaikaiCode": "100000007",
+    "KyosaikaiName": "京都府農村労働組合 京北",
+    "IndustryCode": "100",
+    "BranchCode": "000",
+    "SubbranchCode": "007",
+    "CollectiveKyosaiId": 162,
+    "KakekinPerPerson": 50,
+    "Kyosai": [
+      {"KyosaiId": 7, "KyosaiName": "中央組織交通", "Units": 1, "Premi": 50}
+    ]
+  },
+  {
+    "KyosaikaiCode": "100000014",
+    "KyosaikaiName": "京都府農村労働組合 若狭",
+    "IndustryCode": "100",
+    "BranchCode": "000",
+    "SubbranchCode": "014",
+    "CollectiveKyosaiId": 163,
+    "KakekinPerPerson": 50,
+    "Kyosai": [
+      {"KyosaiId": 7, "KyosaiName": "中央組織交通", "Units": 1, "Premi": 50}
+    ]
+  },
+  {
+    "KyosaikaiCode": "100000015",
+    "KyosaikaiName": "京都府農村労働組合 丹後",
+    "IndustryCode": "100",
+    "BranchCode": "000",
+    "SubbranchCode": "015",
+    "CollectiveKyosaiId": 164,
+    "KakekinPerPerson": 50,
+    "Kyosai": [
+      {"KyosaiId": 7, "KyosaiName": "中央組織交通", "Units": 1, "Premi": 50}
+    ]
+  },
+  {
+    "KyosaikaiCode": "100000021",
+    "KyosaikaiName": "京都府農村労働組合 組織外",
+    "IndustryCode": "100",
+    "BranchCode": "000",
+    "SubbranchCode": "021",
+    "CollectiveKyosaiId": 165,
+    "KakekinPerPerson": 50,
+    "Kyosai": [
+      {"KyosaiId": 7, "KyosaiName": "中央組織交通", "Units": 1, "Premi": 50}
+    ]
+  },
+  {
+    "KyosaikaiCode": "100000050",
+    "KyosaikaiName": "京都府農村労働組合 高齢者大学",
+    "IndustryCode": "100",
+    "BranchCode": "000",
+    "SubbranchCode": "050",
+    "CollectiveKyosaiId": 166,
+    "KakekinPerPerson": 50,
+    "Kyosai": [
+      {"KyosaiId": 7, "KyosaiName": "中央組織交通", "Units": 1, "Premi": 50}
+    ]
+  },
+  {
+    "KyosaikaiCode": "100001001",
+    "KyosaikaiName": "京都府農村労働組合 セット",
+    "IndustryCode": "100",
+    "BranchCode": "001",
+    "SubbranchCode": "001",
+    "CollectiveKyosaiId": 167,
+    "KakekinPerPerson": 0,
+    "Kyosai": [
+]
+  },
+  {
+    "KyosaikaiCode": "100015000",
+    "KyosaikaiName": "京都府農村労働組合　丹後団結",
+    "IndustryCode": "100",
+    "BranchCode": "015",
+    "SubbranchCode": "000",
+    "CollectiveKyosaiId": 168,
+    "KakekinPerPerson": 10,
+    "Kyosai": [
+      {"KyosaiId": 1, "KyosaiName": "労組見舞（全）", "Units": 1, "Premi": 10}
+    ]
+  },
+  {
+    "KyosaikaiCode": "240000000",
+    "KyosaikaiName": "全京都建築労働組合",
+    "IndustryCode": "240",
+    "BranchCode": "000",
+    "SubbranchCode": "000",
+    "CollectiveKyosaiId": 169,
+    "KakekinPerPerson": 100,
+    "Kyosai": [
+      {"KyosaiId": 1, "KyosaiName": "労組見舞（全）", "Units": 10, "Premi": 10}
+    ]
+  },
+  {
+    "KyosaikaiCode": "250001001",
+    "KyosaikaiName": "たんぽぽ共済会",
+    "IndustryCode": "250",
+    "BranchCode": "001",
+    "SubbranchCode": "001",
+    "CollectiveKyosaiId": 170,
+    "KakekinPerPerson": 100,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 1, "Premi": 5},
+      {"KyosaiId": 41, "KyosaiName": "京滋慶弔②’", "Units": 1, "Premi": 95}
+    ]
+  },
+  {
+    "KyosaikaiCode": "999999999",
+    "KyosaikaiName": "テスト共済会",
+    "IndustryCode": "999",
+    "BranchCode": "999",
+    "SubbranchCode": "999",
+    "CollectiveKyosaiId": 171,
+    "KakekinPerPerson": 100,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 1, "Premi": 5},
+      {"KyosaiId": 41, "KyosaiName": "京滋慶弔②’", "Units": 1, "Premi": 95}
+    ]
+  },
+  {
+    "KyosaikaiCode": "051002008",
+    "KyosaikaiName": "建交労 関西合同支部 福知山",
+    "IndustryCode": "051",
+    "BranchCode": "002",
+    "SubbranchCode": "008",
+    "CollectiveKyosaiId": 70,
+    "KakekinPerPerson": 200,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 2, "Premi": 5},
+      {"KyosaiId": 41, "KyosaiName": "京滋慶弔②’", "Units": 2, "Premi": 95}
+    ]
+  },
+  {
+    "KyosaikaiCode": "051004002",
+    "KyosaikaiName": "建交労 ユタカ運送 70歳以上",
+    "IndustryCode": "051",
+    "BranchCode": "004",
+    "SubbranchCode": "002",
+    "CollectiveKyosaiId": 81,
+    "KakekinPerPerson": 700,
+    "Kyosai": [
+      {"KyosaiId": 1, "KyosaiName": "労組見舞（全）", "Units": 20, "Premi": 10},
+      {"KyosaiId": 4, "KyosaiName": "中央慶弔②", "Units": 5, "Premi": 100}
+    ]
+  },
+  {
+    "KyosaikaiCode": "051005002",
+    "KyosaikaiName": "建交労 京滋重量 70歳以上",
+    "IndustryCode": "051",
+    "BranchCode": "005",
+    "SubbranchCode": "002",
+    "CollectiveKyosaiId": 83,
+    "KakekinPerPerson": 350,
+    "Kyosai": [
+      {"KyosaiId": 1, "KyosaiName": "労組見舞（全）", "Units": 5, "Premi": 10},
+      {"KyosaiId": 40, "KyosaiName": "京滋慶弔②", "Units": 3, "Premi": 100}
+    ]
+  },
+  {
+    "KyosaikaiCode": "081000052",
+    "KyosaikaiName": "全企連共済会 光正 西陣部会",
+    "IndustryCode": "081",
+    "BranchCode": "000",
+    "SubbranchCode": "052",
+    "CollectiveKyosaiId": 172,
+    "KakekinPerPerson": 100,
+    "Kyosai": [
+      {"KyosaiId": 5, "KyosaiName": "中央慶弔火災型", "Units": 1, "Premi": 5},
+      {"KyosaiId": 41, "KyosaiName": "京滋慶弔②’", "Units": 1, "Premi": 95}
+    ]
+  },
+  {
+    "KyosaikaiCode": "063000000",
+    "KyosaikaiName": "ユニオン南の風 役員",
+    "IndustryCode": "063",
+    "BranchCode": "000",
+    "SubbranchCode": "000",
+    "CollectiveKyosaiId": 173,
+    "KakekinPerPerson": 10,
+    "Kyosai": [
+      {"KyosaiId": 2, "KyosaiName": "労組見舞（役）", "Units": 1, "Premi": 10}
+    ]
+  }
+]
 }
