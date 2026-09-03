@@ -431,10 +431,29 @@ function applyZipFieldValue(input) {
   updateZipView(input);
 }
 
+function commitZipFieldAndLookup(input) {
+  applyZipFieldValue(input);
+  lookupAddressFromZip(getRowFromField(input));
+}
+
 function initZipLookup() {
   document.querySelectorAll("[data-zip-lookup]").forEach(function (input) {
     input.addEventListener("blur", function () {
-      lookupAddressFromZip(getRowFromField(input));
+      commitZipFieldAndLookup(input);
+    });
+
+    input.addEventListener("keydown", function (event) {
+      if (event.isComposing) return;
+
+      if (event.key === "Enter") {
+        event.preventDefault();
+        commitZipFieldAndLookup(input);
+        return;
+      }
+
+      if (event.key === "Tab") {
+        applyZipFieldValue(input);
+      }
     });
   });
 }

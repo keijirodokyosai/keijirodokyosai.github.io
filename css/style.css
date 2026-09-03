@@ -2178,7 +2178,6 @@ a:focus-visible {
   --soshiki-form-member-building-gap-from-town: 2px;
   /* 郵便番号枠：文字数に加えて px で幅を微調整（5文字 + extra が目安） */
   --soshiki-form-member-zip-width-extra: 6px;
-  --soshiki-form-member-zip-view-offset-y: 1px;
   /* 異動内容（新規・解約・変更）— 行内 left（2026-08-30: 16.2% から −10%） */
   --soshiki-form-member-idou-left: 6.2%;
   --soshiki-form-member-idou-left-nudge: 5px;
@@ -2632,26 +2631,27 @@ a:focus-visible {
       var(--soshiki-form-member-zip-width-extra)
   );
   overflow-x: visible;
-  overflow-y: hidden;
+  overflow-y: visible;
   pointer-events: auto;
 }
 
 .soshiki-form-member-zip-view {
+  position: absolute;
+  inset: 0;
+  box-sizing: border-box;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
+  padding: var(--soshiki-form-member-box-padding-top)
+    var(--soshiki-form-member-box-padding-inline)
+    var(--soshiki-form-member-box-padding-bottom);
   pointer-events: none;
   white-space: nowrap;
   font-family: "Meiryo", "Hiragino Sans", sans-serif;
   font-size: var(--soshiki-form-member-box-font-size);
   font-variant-numeric: tabular-nums;
-  line-height: calc(
-    var(--soshiki-form-member-box-height) -
-      var(--soshiki-form-member-box-padding-top) -
-      var(--soshiki-form-member-box-padding-bottom)
-  );
+  line-height: 1;
   color: var(--soshiki-form-member-box-color);
-  transform: translateY(var(--soshiki-form-member-zip-view-offset-y));
 }
 
 .soshiki-form-member-zip-part {
@@ -2670,7 +2670,9 @@ a:focus-visible {
   width: 100%;
   height: 100%;
   margin: 0;
-  padding: var(--soshiki-form-member-zip-view-offset-y) 0 0;
+  padding: var(--soshiki-form-member-box-padding-top)
+    var(--soshiki-form-member-box-padding-inline)
+    var(--soshiki-form-member-box-padding-bottom);
   border: none;
   border-radius: 0;
   background: transparent;
@@ -2682,7 +2684,12 @@ a:focus-visible {
   font-family: "Meiryo", "Hiragino Sans", sans-serif;
   font-size: var(--soshiki-form-member-box-font-size);
   font-variant-numeric: tabular-nums;
-  line-height: 1;
+  line-height: calc(
+    var(--soshiki-form-member-box-height) -
+      var(--soshiki-form-member-box-padding-top) -
+      var(--soshiki-form-member-box-padding-bottom) -
+      2 * var(--soshiki-form-member-box-border-width)
+  );
 }
 
 .soshiki-form-member-zip::placeholder {

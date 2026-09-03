@@ -107,6 +107,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 
 * 初回: **手入力**
 * 2 回目以降: **datalist プルダウン**（localStorage に保存した `KyosaikaiName` のみ）。選択後も **Enter で確定**（§5.3）
+* 組合名が入力済みでも **▼ を押せば保存候補をすべて表示**（ブラウザ datalist は入力値で候補を絞るため、`js/soshiki-form-union-storage.js` で ▼ クリック時に一時的に欄を空にしてから一覧を開く）
 * 誤って記憶した名前は **1 件削除 / すべて削除** できる UI を付ける（操作ボタン・ヒントの**下**の「保存した組合名」パネル）
 
 ### 5.3 Enter キー確定時の動作
@@ -610,12 +611,12 @@ PA 通知専用。Web・GitHub には載せない。kyosai-system が `Subbranch
 | カナ姓・名 | 半角カナのみ（全角カナ・ひらがな・漢字は除去） | — |
 | 組合員コード | 半角数字、最大6桁（**1枠**） | 6桁未満は左0埋めで6桁表示。7桁以上はエラー（枠線赤・`validateSoshikiForm`） |
 | 生年月日 | 半角数字。全角数字は半角に変換 | 月・日は2桁化。年・月・日が揃えば実在日チェック |
-| 郵便番号 | 半角数字7桁、表示は `123-4567` | 7桁そろえば zipcloud で都道府県・市区町村・町村域を自動入力（町村域は §9.9 正規化） |
+| 郵便番号 | 半角数字7桁、表示は `123-4567` | 7桁そろえば zipcloud で都道府県・市区町村・町村域を自動入力（**blur / Enter / Tab**・町村域は §9.9 正規化） |
 
 ### 9.4 性別・郵便番号
 
 * 性別: 男（`1`）/ 女（`2`）。再クリックで解除可。各ボタン枠は **紺 `#123456`・点線 1.5px**（`.soshiki-form-gender-btn`）。選択時は **実線 2.4px** 同色系。幅 **2.4%**。横位置は **性別列（PNG x1028–1088）内で中央**（`--soshiki-form-member-gender-column-left` 61.08%）。縦は枠高 **33%**、男 **10%** / 女 **57%** 起点（`--soshiki-form-member-gender-male-top` / `--soshiki-form-member-gender-female-top`）。表示文字（`.soshiki-form-dev-marker`）は **13px**・上余白 **3px**
-* 郵便番号: **1枠**・値は `123-4567` 形式。7桁連続入力可
+* 郵便番号: **1枠**・値は `123-4567` 形式。7桁連続入力可。**Enter** で確定・住所検索（**Tab** は次欄へ移る前に整形＋検索）
 * 郵便番号 API: `https://zipcloud.ibsnet.co.jp/api/search?zipcode=`（方式1・外部API。API には数字7桁のみ渡す）
 * **表示**: 枠は `.soshiki-form-member-zip-inner.soshiki-form-member-box`（§9.11）。文字は透明 `input` + `.soshiki-form-member-zip-view` に `updateZipView()` で同期
 * **字間**: 数字 `.soshiki-form-member-zip-part` → `letter-spacing: 0.06em`。ハイフン前後 `.soshiki-form-member-zip-hyphen` → `margin: 0.12em`
@@ -832,8 +833,7 @@ x は全行共通。**1.男** x **1045–1080**、**2.女** x **1044–1081**。
 | 縦微調整 | `--soshiki-form-member-zip-text-nudge: -1px` | 文字中心の px 補正 |
 | 1行目 flex | `align-items: flex-start` | 郵便・都道府県・市区町村の **枠上端** を揃える |
 | 郵便番号ラッパ | `.soshiki-form-member-zip-wrap` 高さ 18px・`zip-inner` は **`display: flex`（`inline-flex` 不可）** | インライン行ボックスの余白で縦ズレするため |
-| 枠内文字の縦位置 | `zip-inner` **`align-items: flex-start`**・`zip-view` の `line-height` を §9.11 標準枠と同じ | 都道府県 `input` と同じ上 padding 3px + line-height 15px の並び |
-| 枠内文字の縦微調整 | `--soshiki-form-member-zip-view-offset-y: 1px` | `zip-view` の `translateY` と透明 `input` の上 padding（キャレット・placeholder 同期） |
+| 枠内文字の縦位置 | `zip-view` を枠内に **absolute + flex 中央**（§9.11 と同じ padding） | 都道府県 `input` と揃え、`overflow-y: hidden` による上欠けを防止 |
 | 枠サイズ | §9.11 `.soshiki-form-member-box` on `.soshiki-form-member-zip-inner` | 高さ 18px・15px・上 padding 3px |
 | 郵便番号幅 | `--soshiki-form-member-box-chars: 5` + `--soshiki-form-member-zip-width-extra: 6px` | px で微調整 |
 | 字間（数字） | `0.06em` | `.soshiki-form-member-zip-part` |
@@ -866,7 +866,7 @@ HTML の `id` / `name` は Access 列名の **kebab-case**（`member-{行}-` + �
 
 **郵便番号変更時の自動入力ルール**
 
-* 7桁確定（blur）で zipcloud 検索
+* 7桁確定（**blur**・**Enter**・**Tab**）で zipcloud 検索
 * **郵便番号が前回と異なる** 場合: 都道府県・市区町村・町村域を上書きし、**番地・建物名をクリア**
 * 複数候補: アラート「入力の郵便番号には、複数の住所候補があります。表示された住所が異なる場合は手入力でお願いします。」→ 先頭候補を反映
 

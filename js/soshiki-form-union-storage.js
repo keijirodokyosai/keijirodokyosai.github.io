@@ -4,6 +4,12 @@
  */
 
 var SOSHIKI_FORM_SAVED_UNIONS_KEY = "soshiki-form-saved-unions";
+/** datalist ▼ 付近のクリック幅（px） */
+var SOSHIKI_FORM_UNION_NAME_DATALIST_ARROW_WIDTH = 28;
+
+var unionNameDatalistRestoreValue = null;
+var unionNameDatalistPickerOpening = false;
+var unionNameDatalistPickerInitialized = false;
 
 function loadSavedUnionNames() {
   try {
@@ -82,7 +88,52 @@ function promptAddSavedUnionName(kyosaikaiName) {
   refreshSavedUnionUi();
 }
 
+function initUnionNameDatalistShowAll() {
+  var unionNameInput = document.getElementById("union-name");
+  if (!unionNameInput || unionNameDatalistPickerInitialized) return;
+  unionNameDatalistPickerInitialized = true;
+
+  unionNameInput.addEventListener("mousedown", function (event) {
+    if (!unionNameInput.getAttribute("list") || !unionNameInput.value) return;
+
+    var arrowZoneStart =
+      unionNameInput.clientWidth - SOSHIKI_FORM_UNION_NAME_DATALIST_ARROW_WIDTH;
+    if (event.offsetX < arrowZoneStart) return;
+
+    unionNameDatalistRestoreValue = unionNameInput.value;
+    unionNameDatalistPickerOpening = true;
+    unionNameInput.value = "";
+  });
+
+  unionNameInput.addEventListener("blur", function () {
+    if (!unionNameDatalistPickerOpening) return;
+    window.setTimeout(function () {
+      if (
+        unionNameDatalistPickerOpening &&
+        unionNameDatalistRestoreValue !== null &&
+        !unionNameInput.value
+      ) {
+        unionNameInput.value = unionNameDatalistRestoreValue;
+      }
+      unionNameDatalistRestoreValue = null;
+      unionNameDatalistPickerOpening = false;
+    }, 0);
+  });
+
+  function clearUnionNameDatalistRestoreState() {
+    unionNameDatalistRestoreValue = null;
+    unionNameDatalistPickerOpening = false;
+  }
+
+  unionNameInput.addEventListener("input", function () {
+    if (unionNameInput.value) clearUnionNameDatalistRestoreState();
+  });
+  unionNameInput.addEventListener("change", clearUnionNameDatalistRestoreState);
+}
+
 function initSoshikiFormUnionStorage() {
+  initUnionNameDatalistShowAll();
+
   var clearAllButton = document.getElementById(
     "soshiki-form-saved-unions-clear-all"
   );
