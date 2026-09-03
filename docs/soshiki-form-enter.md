@@ -1064,7 +1064,11 @@ Subbranch（KyosaikaiName, IndustryCode, BranchCode, SubbranchCode, CollectiveKy
 | # | 内容 |
 |---|------|
 | 1 | `Subbranch.CollectiveKyosaiId` 起点で内訳を取得するエクスポート実装 |
+<<<<<<< HEAD
 | 2 | `Kyosai[]` に `KyosaiId`, `Units`, `Premi` を出力 → **`docs/WEB_FORM_EXPORT.md`** |
+=======
+| 2 | `Kyosai[]` に `KyosaiId`, `Units`, `Premi` を出力 |
+>>>>>>> 9925dcf8775a4cf31da84f5d337362fa3494f367
 | 3 | `KakekinPerPerson = Σ(Premi×Units)` をエクスポート時に計算 |
 | 4 | `union-contacts.json` に `KyosaikaiCode`, `ManagerFamilyName`, `ManagerEmail` を export |
 | 5 | ~~総合扱いの `CollectiveKyosaiId` を確定し、`sogoCollectiveKyosaiIds` に連携~~ → **確定済み**（Web 側 `form-kyosai-map.json` に反映） |
