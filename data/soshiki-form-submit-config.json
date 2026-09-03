@@ -1,0 +1,4 @@
+{
+  "submitEndpointUrl": "",
+  "note": "Power Automate の HTTP 受信トリガー URL を submitEndpointUrl に設定してください。空のままでは送 信できません。"
+}

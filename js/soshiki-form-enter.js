@@ -128,6 +128,12 @@ var KUCHI_FIELD_IDS = {
 
 var KAKEKIN_FIELD_ID = "kakekin-per-person";
 
+var soshikiFormVerifiedUnion = null;
+
+function getSoshikiFormVerifiedUnion() {
+  return soshikiFormVerifiedUnion;
+}
+
 function initApplicationDate() {
   var yearInput = document.getElementById("application-year");
   var monthInput = document.getElementById("application-month");
@@ -233,6 +239,7 @@ function handleUnionNameEnter(rawName, masterState) {
 }
 
 function clearUnionRelatedFields() {
+  soshikiFormVerifiedUnion = null;
   setFieldValue("union-name", "");
   setFieldValue("industry-code", "");
   setFieldValue("branch-code", "");
@@ -248,6 +255,13 @@ function clearKuchiFields() {
 }
 
 function applyUnionData(union, kyosaiMap) {
+  soshikiFormVerifiedUnion = {
+    code: union.code || "",
+    name: union.name || "",
+    industry: union.industry || "",
+    branch: union.branch || "",
+    subbranch: union.subbranch || "",
+  };
   setFieldValue("union-name", union.name);
   setFieldValue("industry-code", union.industry || "");
   setFieldValue("branch-code", union.branch || "");

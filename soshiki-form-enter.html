@@ -369,10 +369,24 @@ breadcrumb_json_ld: >
         <p class="soshiki-form-actions-hint" id="soshiki-form-save-hint">
           ※ 保 存を押し、印刷画面で「PDF に保存」を選んでください。
         </p>
+        <p class="soshiki-form-actions-hint" id="soshiki-form-send-hint">
+          送信後の取り消しはできません。<br>
+          内容を誤って送信した場合は、受付 ID を控えて京滋労働共済までご連絡ください。<br>
+          もしデータベースに反映させた後に判明した場合は、お手数ですが「変更」で再送信してください。
+        </p>
+        <p
+          class="soshiki-form-send-result"
+          id="soshiki-form-send-result"
+          role="status"
+          hidden
+        ></p>
       </form>
     </div>
   </section>
 </section>
 
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js" crossorigin="anonymous"></script>
 <script src="{{ '/js/soshiki-form-members.js' | relative_url }}"></script>
 <script src="{{ '/js/soshiki-form-enter.js' | relative_url }}"></script>
+<script src="{{ '/js/soshiki-form-submit.js' | relative_url }}"></script>

@@ -2003,6 +2003,31 @@ a:focus-visible {
   text-align: right;
 }
 
+.soshiki-form-send-result {
+  width: 297mm;
+  max-width: 100%;
+  margin: 12px auto 0;
+  padding: 12px 20px;
+  box-sizing: border-box;
+  font-size: 14px;
+  line-height: 1.5;
+  text-align: right;
+  white-space: pre-line;
+  border-radius: 4px;
+}
+
+.soshiki-form-send-result--success {
+  color: #1a4d2e;
+  background: #eef8f0;
+  border: 1px solid #b8dcc4;
+}
+
+.soshiki-form-send-result--error {
+  color: #6b1a1a;
+  background: #fdf0f0;
+  border: 1px solid #e8b4b4;
+}
+
 /* --- 組合員入力（最大5名） --- */
 .soshiki-form-sheet {
   /* PNG 実測: 1行目 top 37.45%, 行間 7.66%, 行高 7.55% */
@@ -2687,7 +2712,8 @@ a:focus-visible {
   body.soshiki-form-enter-page .breadcrumb,
   body.soshiki-form-enter-page .hero,
   body.soshiki-form-enter-page .soshiki-form-actions,
-  body.soshiki-form-enter-page .soshiki-form-actions-hint {
+  body.soshiki-form-enter-page .soshiki-form-actions-hint,
+  body.soshiki-form-enter-page .soshiki-form-send-result {
     display: none !important;
   }
 
@@ -2743,4 +2769,43 @@ a:focus-visible {
   .soshiki-form-dev-marker {
     display: none !important;
   }
+}
+
+/* 送 信時 PDF キャプチャ（§9.0.2 印刷に近似） */
+body.soshiki-form-capturing .soshiki-form-sheet {
+  transform: none !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+  width: 297mm !important;
+  height: 210mm !important;
+}
+
+body.soshiki-form-capturing .soshiki-form-sheet-bg {
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+body.soshiki-form-capturing .soshiki-form-sheet ::placeholder {
+  color: transparent !important;
+  opacity: 0 !important;
+}
+
+body.soshiki-form-capturing .soshiki-form-idou-btn.is-selected,
+body.soshiki-form-capturing .soshiki-form-gender-btn.is-selected {
+  border-color: #000 !important;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+body.soshiki-form-capturing .soshiki-form-sheet .soshiki-form-field,
+body.soshiki-form-capturing .soshiki-form-member-field,
+body.soshiki-form-capturing .soshiki-form-member-union-member-code,
+body.soshiki-form-capturing .soshiki-form-member-box {
+  border-color: transparent !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+body.soshiki-form-capturing .soshiki-form-dev-marker {
+  display: none !important;
 }
