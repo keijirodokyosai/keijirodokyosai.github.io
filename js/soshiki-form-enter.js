@@ -197,9 +197,8 @@ function initUnionMaster() {
       var kyosaiMap = results[1];
 
       (unionMaster.unions || []).forEach(function (union) {
-        if (!union || !union.name) return;
-        // union.name = Subbranch.KyosaikaiName（完全一致キー）
-        masterState.unionsByName.set(union.name, union);
+        if (!union || !union.KyosaikaiName) return;
+        masterState.unionsByName.set(union.KyosaikaiName, union);
       });
 
       masterState.kyosaiMap = kyosaiMap;
@@ -227,7 +226,7 @@ function handleUnionNameEnter(rawName, masterState) {
     return;
   }
 
-  // Subbranch.KyosaikaiName（union-master.json の name）と完全一致
+  // Subbranch.KyosaikaiName（union-master.json）と完全一致
   var union = masterState.unionsByName.get(name);
   if (!union) {
     window.alert("その組合名は京滋労働共済に登録されていません");
@@ -256,16 +255,16 @@ function clearKuchiFields() {
 
 function applyUnionData(union, kyosaiMap) {
   soshikiFormVerifiedUnion = {
-    code: union.code || "",
-    name: union.name || "",
-    industry: union.industry || "",
-    branch: union.branch || "",
-    subbranch: union.subbranch || "",
+    KyosaikaiCode: union.KyosaikaiCode || "",
+    KyosaikaiName: union.KyosaikaiName || "",
+    IndustryCode: union.IndustryCode || "",
+    BranchCode: union.BranchCode || "",
+    SubbranchCode: union.SubbranchCode || "",
   };
-  setFieldValue("union-name", union.name);
-  setFieldValue("industry-code", union.industry || "");
-  setFieldValue("branch-code", union.branch || "");
-  setFieldValue("subbranch-code", union.subbranch || "");
+  setFieldValue("union-name", union.KyosaikaiName);
+  setFieldValue("industry-code", union.IndustryCode || "");
+  setFieldValue("branch-code", union.BranchCode || "");
+  setFieldValue("subbranch-code", union.SubbranchCode || "");
   applyFormKuchiToDom(computeFormKuchi(union, kyosaiMap));
 }
 
@@ -281,7 +280,7 @@ function applyFormKuchiToDom(result) {
     setFieldValue(KUCHI_FIELD_IDS[formKey], value || "");
   });
 
-  var kakekin = result.kakekinPerPerson;
+  var kakekin = result.KakekinPerPerson;
   setFieldValue(
     KAKEKIN_FIELD_ID,
     kakekin != null && kakekin !== "" ? String(kakekin) : ""
@@ -296,10 +295,10 @@ function setFieldValue(id, value) {
 function computeFormKuchi(union, kyosaiMap) {
   if (!union || !kyosaiMap) return null;
 
-  var rows = (union.kyosai || []).map(function (item) {
+  var rows = (union.Kyosai || []).map(function (item) {
     return {
-      kyosaiId: item.kyosaiId,
-      units: Number(item.kuchi),
+      kyosaiId: item.KyosaiId,
+      units: Number(item.Units),
     };
   });
 
@@ -317,7 +316,7 @@ function computeFormKuchi(union, kyosaiMap) {
   applySuppressRules(displayUnitsByKyosaiId, kyosaiMap.suppressKyosaiWhenPresent);
 
   var isSogoPackage = (kyosaiMap.sogoCollectiveKyosaiIds || []).indexOf(
-    union.collectiveKyosaiId
+    union.CollectiveKyosaiId
   ) !== -1;
 
   if (isSogoPackage) {
@@ -345,7 +344,7 @@ function computeFormKuchi(union, kyosaiMap) {
 
   return {
     formKuchi: formKuchi,
-    kakekinPerPerson: union.kakekinPerPerson,
+    KakekinPerPerson: union.KakekinPerPerson,
   };
 }
 
