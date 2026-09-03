@@ -1426,6 +1426,17 @@ a:focus-visible {
   max-width: none;
 }
 
+/* 操作ボタン行と保存組合名パネルの横位置合わせ */
+.soshiki-form-enter-page {
+  --soshiki-form-actions-btn-width: 7.5em;
+  --soshiki-form-actions-gap: 12px;
+  --soshiki-form-actions-pad-inline: 20px;
+  --soshiki-form-saved-unions-name-gap: 12px;
+  --soshiki-form-saved-unions-btn-col-spacer: calc(
+    100% - 2.5 * var(--soshiki-form-actions-btn-width) - 2 * var(--soshiki-form-actions-gap)
+  );
+}
+
 /* 入力ページのみ: 横スクロールなし・画面幅をほぼ使う（§9.0.1） */
 .soshiki-form-enter-page .kyosai-page.soshiki-form-enter-section {
   max-width: none;
@@ -1946,11 +1957,11 @@ a:focus-visible {
   flex-wrap: wrap;
   justify-content: flex-end;
   align-items: center;
-  gap: 12px;
+  gap: var(--soshiki-form-actions-gap);
   width: 297mm;
   max-width: 100%;
   margin: 16px auto 0;
-  padding: 16px 20px;
+  padding: 16px var(--soshiki-form-actions-pad-inline);
   box-sizing: border-box;
   border: 1px solid #e0e6ee;
   border-radius: 18px;
@@ -1959,7 +1970,7 @@ a:focus-visible {
 }
 
 .soshiki-form-actions .btn {
-  min-width: 7.5em;
+  min-width: var(--soshiki-form-actions-btn-width);
   min-height: 44px;
   padding: 0 20px;
   font-size: 1rem;
@@ -2004,46 +2015,99 @@ a:focus-visible {
 }
 
 .soshiki-form-saved-unions-panel {
+  display: grid;
+  grid-template-columns:
+    var(--soshiki-form-saved-unions-btn-col-spacer)
+    auto
+    minmax(0, 1fr);
+  column-gap: var(--soshiki-form-saved-unions-name-gap);
+  align-items: center;
   width: 297mm;
   max-width: 100%;
-  margin: 12px auto 0;
-  padding: 0 20px;
+  margin: 10px auto 0;
+  padding: 8px var(--soshiki-form-actions-pad-inline);
   box-sizing: border-box;
+  border: 1px solid #e0e6ee;
+  border-radius: 12px;
+  background: #fffaf0;
+  box-shadow: 0 4px 12px rgba(15, 35, 60, 0.05);
+}
+
+.soshiki-form-saved-unions-header,
+.soshiki-form-saved-unions-list,
+.soshiki-form-saved-unions-item {
+  display: contents;
 }
 
 .soshiki-form-saved-unions-title {
-  margin: 0 0 8px;
-  font-size: 14px;
+  grid-column: 3;
+  margin: 0 0 4px;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.2;
   color: #234;
 }
 
 .soshiki-form-saved-unions-list {
   list-style: none;
-  margin: 0 0 8px;
-  padding: 0;
-}
-
-.soshiki-form-saved-unions-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 6px 0;
-  border-bottom: 1px solid #dde3ea;
 }
 
 .soshiki-form-saved-unions-name {
-  flex: 1 1 auto;
+  grid-column: 3;
+  display: flex;
+  align-items: center;
   min-width: 0;
-  font-size: 14px;
-  word-break: break-all;
+  min-height: 27px;
+  height: 27px;
+  font-size: 13px;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-bottom: 1px solid #e8dfd0;
 }
 
-.soshiki-form-saved-unions-remove,
+.soshiki-form-saved-unions-list .soshiki-form-saved-unions-name:last-of-type {
+  border-bottom: none;
+}
+
+.soshiki-form-saved-unions-panel .btn {
+  min-width: 0;
+  min-height: 0;
+  height: 22px;
+  padding: 0 8px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  border-radius: 4px;
+  border-width: 1px;
+  box-shadow: none;
+  transform: none;
+}
+
+.soshiki-form-saved-unions-panel .btn-secondary {
+  background: #fff8d8;
+  color: #123660;
+  border-color: #123660;
+}
+
+.soshiki-form-saved-unions-panel .btn-secondary:hover,
+.soshiki-form-saved-unions-panel .btn-secondary:focus-visible {
+  background: #123660;
+  color: #fff8d8;
+  transform: none;
+  box-shadow: none;
+}
+
+.soshiki-form-saved-unions-clear-all,
+.soshiki-form-saved-unions-remove {
+  grid-column: 2;
+  justify-self: stretch;
+  align-self: center;
+}
+
 .soshiki-form-saved-unions-clear-all {
-  flex: 0 0 auto;
-  font-size: 13px;
-  padding: 4px 10px;
+  margin-bottom: 4px;
 }
 
 .soshiki-form-send-result {
@@ -2752,6 +2816,9 @@ a:focus-visible {
     background: #fff !important;
   }
 
+  body.soshiki-form-enter-page .skip-link,
+  body.soshiki-form-enter-page .site-header,
+  body.soshiki-form-enter-page .site-footer,
   body.soshiki-form-enter-page .breadcrumb,
   body.soshiki-form-enter-page .hero,
   body.soshiki-form-enter-page .soshiki-form-actions,
@@ -2759,6 +2826,11 @@ a:focus-visible {
   body.soshiki-form-enter-page .soshiki-form-saved-unions-panel,
   body.soshiki-form-enter-page .soshiki-form-send-result {
     display: none !important;
+  }
+
+  body.soshiki-form-enter-page #main-content {
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
   body.soshiki-form-enter-page .kyosai-page.soshiki-form-enter-section,
@@ -2780,6 +2852,7 @@ a:focus-visible {
     box-shadow: none !important;
     width: 297mm !important;
     height: 210mm !important;
+    page-break-before: avoid;
     page-break-after: avoid;
     page-break-inside: avoid;
   }

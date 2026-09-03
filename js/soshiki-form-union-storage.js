@@ -154,8 +154,8 @@ function refreshSavedUnionUi() {
       refreshSavedUnionUi();
     });
 
-    item.appendChild(label);
     item.appendChild(removeButton);
+    item.appendChild(label);
     list.appendChild(item);
   });
 }

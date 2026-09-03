@@ -351,25 +351,6 @@ breadcrumb_json_ld: >
           </div>
         </div>
 
-        <div
-          class="soshiki-form-saved-unions-panel"
-          id="soshiki-form-saved-unions-panel"
-          hidden
-        >
-          <p class="soshiki-form-saved-unions-title">保存した組合名</p>
-          <ul
-            class="soshiki-form-saved-unions-list"
-            id="soshiki-form-saved-unions-list"
-          ></ul>
-          <button
-            type="button"
-            id="soshiki-form-saved-unions-clear-all"
-            class="btn btn-secondary soshiki-form-saved-unions-clear-all"
-          >
-            すべて削除
-          </button>
-        </div>
-
         <div class="soshiki-form-actions" role="group" aria-label="申込書の操作">
           <button type="button" id="soshiki-form-clear" class="btn btn-secondary">
             クリア
@@ -401,6 +382,27 @@ breadcrumb_json_ld: >
           role="status"
           hidden
         ></p>
+
+        <div
+          class="soshiki-form-saved-unions-panel"
+          id="soshiki-form-saved-unions-panel"
+          hidden
+        >
+          <div class="soshiki-form-saved-unions-header">
+            <button
+              type="button"
+              id="soshiki-form-saved-unions-clear-all"
+              class="btn btn-secondary soshiki-form-saved-unions-clear-all"
+            >
+              すべて削除
+            </button>
+            <p class="soshiki-form-saved-unions-title">保存した組合名</p>
+          </div>
+          <ul
+            class="soshiki-form-saved-unions-list"
+            id="soshiki-form-saved-unions-list"
+          ></ul>
+        </div>
       </form>
     </div>
   </section>

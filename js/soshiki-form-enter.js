@@ -36,15 +36,22 @@ function initSoshikiFormActions() {
 
 function printSoshikiFormSheet() {
   var body = document.body;
+  var sheet = document.querySelector(".soshiki-form-sheet");
   var active = document.activeElement;
   if (active && typeof active.blur === "function") {
     active.blur();
+  }
+
+  if (sheet) {
+    sheet.style.setProperty("--soshiki-form-scale", "1");
+    sheet.style.marginBottom = "0";
   }
 
   body.classList.add("soshiki-form-printing");
 
   function cleanup() {
     body.classList.remove("soshiki-form-printing");
+    window.dispatchEvent(new Event("resize"));
   }
 
   window.addEventListener(

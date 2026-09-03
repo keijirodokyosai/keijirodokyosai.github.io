@@ -107,7 +107,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 
 * 初回: **手入力**
 * 2 回目以降: **datalist プルダウン**（localStorage に保存した `KyosaikaiName` のみ）。選択後も **Enter で確定**（§5.3）
-* 誤って記憶した名前は **1 件削除 / すべて削除** できる UI を付ける（申込書下の「保存した組合名」）
+* 誤って記憶した名前は **1 件削除 / すべて削除** できる UI を付ける（操作ボタン・ヒントの**下**の「保存した組合名」パネル）
 
 ### 5.3 Enter キー確定時の動作
 
@@ -271,6 +271,18 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | 3 | `soshiki-form-send` | 送 信 | **実装済み**（§5.10・PA URL 設定要） |
 
 ボタン行の下に `.soshiki-form-actions-hint`（右寄せ・14px）:「※ 保 存を押し、印刷画面で『PDF に保存』を選んでください。」印刷時は非表示。
+
+その下（ヒント・送 信結果の後）に **保存した組合名**（`.soshiki-form-saved-unions-panel`）:
+
+| 項目 | 内容 |
+|------|------|
+| 配置 | 操作ボタンより**下**（クリア・保 存・送 信 → ヒント → 本パネル） |
+| 見た目 | 背景 **#fffaf0**・枠線・角丸（操作ボタン行と同系） |
+| 行高 | **27px**（組合名＋小さな「削除」ボタン） |
+| ヘッダ | 「すべて削除」の**左端**を上段の**クリア**ボタン中心付近に合わせ、タイトル・組合名は削除ボタン列の**右 12px** から表示（3 列グリッド・`display: contents`） |
+| 削除列 | 「すべて削除」と各行の「削除」は**右辺揃え**（同一グリッド列） |
+
+印刷時は非表示。
 
 送 信の注意（`#soshiki-form-send-hint`）:
 
@@ -549,7 +561,8 @@ PA 通知専用。Web・GitHub には載せない。kyosai-system が `Subbranch
 | 項目 | 内容 |
 |------|------|
 | `@page` | `size: A4 landscape`、`margin: 0` |
-| 非印字 | `.breadcrumb`、`.hero`、`.soshiki-form-actions`、`.soshiki-form-actions-hint` |
+| 非印字 | `.site-header`、`.site-footer`、`.breadcrumb`、`.hero`、`.soshiki-form-actions`、`.soshiki-form-actions-hint`、保存組合パネル・送信結果 |
+| ページ数 | **1 ページ**（シートのみ。共通ヘッダー／フッターを印刷対象外） |
 | シート | `transform: none`（§9.0.1 の scale 解除）、`297mm × 210mm`、影なし |
 | 背景 PNG | `.soshiki-form-sheet-bg` に `print-color-adjust: exact` |
 | プレースホルダ | シート内 `::placeholder` は透明（開発用薄字を印字しない） |
