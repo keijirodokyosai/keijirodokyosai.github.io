@@ -68,7 +68,7 @@ var MEMBER_ROW_ONE_DEV_HINTS = [
   { suffix: "family-name", placeholder: "姓" },
   { suffix: "given-name", placeholder: "名" },
   { suffix: "postal-code", placeholder: "郵便番号" },
-  { suffix: "prefecture", placeholder: "都道府県" },
+  { suffix: "prefecture", placeholder: "府県" },
   { suffix: "city", placeholder: "行政区" },
   { suffix: "town-area", placeholder: "町村域" },
   { suffix: "area-number", placeholder: "丁、番地" },
