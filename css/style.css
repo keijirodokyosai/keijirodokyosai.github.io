@@ -1189,6 +1189,9 @@ a:focus-visible {
   --soshiki-form-biko-padding-top: 2px;
   --soshiki-form-biko-padding-inline: 4px;
   --soshiki-form-biko-padding-bottom: 2px;
+  /* 申込日（年・月・日） */
+  --soshiki-form-date-group-top-base: 5.2%;
+  --soshiki-form-date-group-top-nudge: 2px;
 }
 
 .soshiki-form-sheet-bg {
@@ -1236,7 +1239,9 @@ a:focus-visible {
 .soshiki-form-date-group {
   position: absolute;
   left: calc(66.2% + 0.4cm);
-  top: 5.2%;
+  top: calc(
+    var(--soshiki-form-date-group-top-base) + var(--soshiki-form-date-group-top-nudge)
+  );
   width: 30.6%;
   height: 5.4%;
   display: flex;
@@ -1794,6 +1799,7 @@ a:focus-visible {
   --soshiki-form-member-name-sei-left: 24.5%;
   --soshiki-form-member-name-mei-left: 36%;
   --soshiki-form-member-name-field-width: 8.5%;
+  --soshiki-form-member-name-top-nudge: 10px;
   --soshiki-form-member-kanji-name-font-size: 16px;
   --soshiki-form-member-kanji-name-height-extra: 5px;
   --soshiki-form-member-kanji-name-top-offset: -5px;
@@ -2104,7 +2110,10 @@ a:focus-visible {
 
 .soshiki-form-member-kana-sei,
 .soshiki-form-member-kana-mei {
-  top: var(--soshiki-form-member-zip-address-row-top);
+  top: calc(
+    var(--soshiki-form-member-zip-address-row-top) +
+      var(--soshiki-form-member-name-top-nudge)
+  );
 }
 
 .soshiki-form-member-kanji-sei,
@@ -2112,7 +2121,8 @@ a:focus-visible {
   top: calc(
     var(--soshiki-form-member-birth-text-center) -
       var(--soshiki-form-member-box-height) / 2 +
-      var(--soshiki-form-member-kanji-name-top-offset)
+      var(--soshiki-form-member-kanji-name-top-offset) +
+      var(--soshiki-form-member-name-top-nudge)
   );
 }
 
