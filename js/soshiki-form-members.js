@@ -1,5 +1,5 @@
 /**
- * 組合員入力欄（最大5名）: 異動内容トグル・半角制限・blur 正規化・郵便番号検索
+ * 組合員入力欄（最大5名）: 異動内容トグル・半角制限・blur 正規化・郵便番号検索・氏名カナ入力補助
  */
 
 var MEMBER_ROW_COUNT = 5;
@@ -38,6 +38,7 @@ function initMemberRows() {
   initGenderButtons();
   initUnionMemberCodeFields();
   initHalfWidthInputs();
+  initKanjiToKanaAssist();
   initZipFields();
   initZipLookup();
   initTownAreaFields();
@@ -285,6 +286,167 @@ function filterHalfWidthKana(input) {
   if (filtered !== before) {
     input.value = filtered;
   }
+}
+
+var KANJI_TO_KANA_ASSIST_PAIRS = [
+  { kanji: "family-name", kana: "family-name-kana" },
+  { kanji: "given-name", kana: "given-name-kana" },
+];
+
+var KANA_READING_PATTERN = /^[\u3041-\u3096\u30a1-\u30fc\u30fbー]+$/;
+
+var FULLWIDTH_KANA_TO_HALF = {
+  ァ: "ｧ",
+  ア: "ｱ",
+  ィ: "ｨ",
+  イ: "ｲ",
+  ゥ: "ｩ",
+  ウ: "ｳ",
+  ェ: "ｪ",
+  エ: "ｴ",
+  ォ: "ｫ",
+  オ: "ｵ",
+  カ: "ｶ",
+  ガ: "ｶﾞ",
+  キ: "ｷ",
+  ギ: "ｷﾞ",
+  ク: "ｸ",
+  グ: "ｸﾞ",
+  ケ: "ｹ",
+  ゲ: "ｹﾞ",
+  コ: "ｺ",
+  ゴ: "ｺﾞ",
+  サ: "ｻ",
+  ザ: "ｻﾞ",
+  シ: "ｼ",
+  ジ: "ｼﾞ",
+  ス: "ｽ",
+  ズ: "ｽﾞ",
+  セ: "ｾ",
+  ゼ: "ｾﾞ",
+  ソ: "ｿ",
+  ゾ: "ｿﾞ",
+  タ: "ﾀ",
+  ダ: "ﾀﾞ",
+  チ: "ﾁ",
+  ヂ: "ﾁﾞ",
+  ツ: "ﾂ",
+  ヅ: "ﾂﾞ",
+  テ: "ﾃ",
+  デ: "ﾃﾞ",
+  ト: "ﾄ",
+  ド: "ﾄﾞ",
+  ナ: "ﾅ",
+  ニ: "ﾆ",
+  ヌ: "ﾇ",
+  ネ: "ﾈ",
+  ノ: "ﾉ",
+  ハ: "ﾊ",
+  バ: "ﾊﾞ",
+  パ: "ﾊﾟ",
+  ヒ: "ﾋ",
+  ビ: "ﾋﾞ",
+  ピ: "ﾋﾟ",
+  フ: "ﾌ",
+  ブ: "ﾌﾞ",
+  プ: "ﾌﾟ",
+  ヘ: "ﾍ",
+  ベ: "ﾍﾞ",
+  ペ: "ﾍﾟ",
+  ホ: "ﾎ",
+  ボ: "ﾎﾞ",
+  ポ: "ﾎﾟ",
+  マ: "ﾏ",
+  ミ: "ﾐ",
+  ム: "ﾑ",
+  メ: "ﾒ",
+  モ: "ﾓ",
+  ャ: "ｬ",
+  ヤ: "ﾔ",
+  ュ: "ｭ",
+  ユ: "ﾕ",
+  ョ: "ｮ",
+  ヨ: "ﾖ",
+  ラ: "ﾗ",
+  リ: "ﾘ",
+  ル: "ﾙ",
+  レ: "ﾚ",
+  ロ: "ﾛ",
+  ワ: "ﾜ",
+  ヲ: "ｦ",
+  ン: "ﾝ",
+  ヴ: "ｳﾞ",
+  ヵ: "ｶ",
+  ヶ: "ｹ",
+  ッ: "ｯ",
+  ー: "ｰ",
+  ゛: "ﾞ",
+  ゜: "ﾟ",
+};
+
+function isKanaReadingText(text) {
+  return KANA_READING_PATTERN.test(text);
+}
+
+function toHalfWidthKana(text) {
+  if (!text) return "";
+
+  var fullWidthKatakana = String(text).replace(/[\u3041-\u3096]/g, function (char) {
+    return String.fromCharCode(char.charCodeAt(0) + 0x60);
+  });
+
+  var result = "";
+  for (var i = 0; i < fullWidthKatakana.length; i += 1) {
+    var ch = fullWidthKatakana.charAt(i);
+    if (FULLWIDTH_KANA_TO_HALF[ch]) {
+      result += FULLWIDTH_KANA_TO_HALF[ch];
+    }
+  }
+  return result;
+}
+
+function setKanaAssistValue(kanaInput, value) {
+  kanaInput.value = value;
+  setFieldError(kanaInput, false);
+}
+
+function initKanjiToKanaAssist() {
+  for (var row = 1; row <= MEMBER_ROW_COUNT; row += 1) {
+    KANJI_TO_KANA_ASSIST_PAIRS.forEach(function (pair) {
+      var kanjiInput = getMemberField(row, pair.kanji);
+      var kanaInput = getMemberField(row, pair.kana);
+      if (!kanjiInput || !kanaInput) return;
+
+      attachKanjiToKanaAssist(kanjiInput, kanaInput);
+    });
+  }
+}
+
+function attachKanjiToKanaAssist(kanjiInput, kanaInput) {
+  var composingReading = "";
+
+  kanjiInput.addEventListener("compositionstart", function () {
+    composingReading = "";
+  });
+
+  kanjiInput.addEventListener("compositionupdate", function (event) {
+    if (!event.data || !isKanaReadingText(event.data)) return;
+    composingReading = event.data;
+  });
+
+  kanjiInput.addEventListener("compositionend", function () {
+    if (!composingReading) return;
+    if (kanaInput.value.trim()) {
+      composingReading = "";
+      return;
+    }
+
+    var halfWidthKana = toHalfWidthKana(composingReading);
+    if (halfWidthKana) {
+      setKanaAssistValue(kanaInput, halfWidthKana);
+    }
+    composingReading = "";
+  });
 }
 
 function filterHalfWidthNumeric(input, maxDigits) {

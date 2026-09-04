@@ -38,7 +38,7 @@
 | 項目 | 内容 |
 |------|------|
 | 申込日 | 年（4 桁）・月・日。ページ読込時に今日の日付を JS でセット。枠位置は `--soshiki-form-date-group-top-base`（5.2%）+ `--soshiki-form-date-group-top-nudge`（2px） |
-| 組合名 | 背景上に入力枠配置（日付欄と同系統の枠線・サイズ） |
+| 組合名 | 背景上に入力枠配置（日付欄と同系統の枠線・サイズ）。枠位置は `--soshiki-form-union-name-top-base`（13.01%）+ `--soshiki-form-union-name-top-nudge`（10px） |
 | 背景 PNG | `pdf/soshiki-form-enter.pdf` から生成。㊞除去済み。組合員欄の郵便番号用 **背景ハイフン** 除去済み（§9.7）。性別欄の **1.男 / 2.女** 印刷除去済み（§9.7.1）。組合員氏名欄の背景 **カナ** 除去済み（§9.7.2）。異動内容列の背景 **新規 / 解約 / 変更** と **点線楕円枠** 除去済み（§9.7.3） |
 | `.gitignore` | `_site/` 等の Jekyll 生成物を除外 |
 | ローカルプレビュー | `scripts/serve-open.ps1`（Jekyll 起動・URL 表示） |
@@ -76,7 +76,7 @@ soshiki-form-enter.html      … 入力ページ
 js/soshiki-form-enter.js     … 日付初期値・申込月の翌月を当月枠へ反映・マスタ連携・横フィット（§9.0.1）・操作ボタン（§5.9・クリア・保 存印刷）・組合確定状態
 js/soshiki-form-union-storage.js … 保存組合名 localStorage・datalist・削除 UI（§5.2）
 js/soshiki-form-submit.js    … WEB 受付（§5.10・JSON/PDF 生成・PA POST）
-js/soshiki-form-members.js   … 組合員5行・異動トグル・半角制限・郵便番号検索・町村域正規化（§9.9）・表示同期（updateZipView）・組合員欄クリア
+js/soshiki-form-members.js   … 組合員5行・異動トグル・半角制限・氏名カナ入力補助（§9.13.1）・郵便番号検索・町村域正規化（§9.9）・表示同期（updateZipView）・組合員欄クリア
 _includes/soshiki-form-member-rows.html … 組合員行マークアップ
 css/style.css                … .soshiki-form-* オーバーレイ用
 images/soshiki-form-enter.png
@@ -108,7 +108,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 * 初回: **手入力**
 * 2 回目以降: **datalist プルダウン**（localStorage に保存した `KyosaikaiName` のみ）。**リストから選んだ時点で Enter 確定と同じ**（コード・口欄・掛金を反映）。手入力の場合は **Enter で確定**（§5.3）
 * 組合名が入力済みでも **▼ を押せば保存候補をすべて表示**（ブラウザ datalist は入力値で候補を絞るため、`js/soshiki-form-union-storage.js` で ▼ クリック時に一時的に欄を空にしてから一覧を開く）
-* 誤って記憶した名前は **1 件削除 / すべて削除** できる UI を付ける（操作ボタン・ヒントの**下**の「保存した組合名」パネル）
+* 誤って記憶した名前は **1 件削除 / すべて削除** できる UI を付ける（操作ボタン・ヒントの**下**の「保存した組合」パネル）
 
 ### 5.3 Enter キー確定時の動作
 
@@ -274,7 +274,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 
 ボタン行の下に `.soshiki-form-actions-hint`（右寄せ・14px）:「※ 保 存を押し、印刷画面で『PDF に保存』を選んでください。」印刷時は非表示。
 
-その下（ヒント・送 信結果の後）に **保存した組合名**（`.soshiki-form-saved-unions-panel`）:
+その下（ヒント・送 信結果の後）に **保存した組合**（`.soshiki-form-saved-unions-panel`）:
 
 | 項目 | 内容 |
 |------|------|
@@ -604,7 +604,6 @@ PA 通知専用。Web・GitHub には載せない。kyosai-system が `Subbranch
 |------|------|
 | 選択肢 | **新規** / **解約** / **変更**（1行につき0または1つ） |
 | 操作 | クリックで選択（**実線 2.4px** の楕円枠）。別の選択肢で切替。同じ選択肢の再クリックで解除。未選択時は **点線 1.5px**（紺 `#123456`・性別欄と同値） |
-| 新規・選択時 | 実線枠のみ `::after` で **1px 下**（`--soshiki-form-member-idou-shinki-selected-ring-offset-y`）。文字位置は変えない |
 | 値 | `shinki` / `kaiyaku` / `henkou`（hidden input） |
 | 配置（行内%） | `left` **6.2% + 5px**（確定）。幅 **5% − 6px**。高さ **26% + 2px**。新規 `top` **5%** / 解約 **37%** / 変更 **69%**（`top-nudge` 0px） |
 | 表示文字 | **新 規** / **解 約** / **変 更**（半角スペース区切り。`.soshiki-form-dev-marker`・**12px**・`padding-top` 2px・紺 `#123456`） |
@@ -635,6 +634,7 @@ PA 通知専用。Web・GitHub には載せない。kyosai-system が `Subbranch
 | 欄 | 入力制限 | blur 時 |
 |----|----------|---------|
 | カナ姓・名 | 半角カナのみ（全角カナ・ひらがな・漢字は除去） | — |
+| 漢字姓・名 | — | —（**入力補助**: IME 確定時に読みを半角カナへ。§9.13.1） |
 | 組合員コード | 半角数字、最大6桁（**1枠**） | 6桁未満は左0埋めで6桁表示。7桁以上はエラー（枠線赤・`validateSoshikiForm`） |
 | 生年月日 | 半角数字。全角数字は半角に変換 | 月・日は2桁化。年・月・日が揃えば実在日チェック |
 | 郵便番号 | 半角数字7桁、表示は `123-4567` | 7桁そろえば zipcloud で都道府県・市区町村・町村域を自動入力（**blur / Enter / Tab**・町村域は §9.9 正規化） |
@@ -996,6 +996,19 @@ HTML: `input.soshiki-form-member-box.soshiki-form-member-birth-*`（`.soshiki-fo
 | `.soshiki-form-member-kanji-mei` | `36%` | `8.5%` | 同上 |
 
 漢字氏名2枠のみ: フォント `16px`（`--soshiki-form-member-kanji-name-font-size`）、高さ + `5px`、上へ `5px` 拡大（`kanji-name-top-offset: -5px`）。カナ姓・名は §9.11 標準枠のまま。
+
+### 9.13.1 氏名カナ入力補助（IME 読み → 半角カナ）
+
+| 項目 | 内容 |
+|------|------|
+| 対象 | 漢字姓 → カナ姓、漢字名 → カナ名（5 行共通） |
+| タイミング | 漢字欄で IME 変換を **確定** したとき（`compositionend`） |
+| 読みの取得 | 変換中の `compositionupdate` の `data`（ひらがな・全角カナ） |
+| 出力 | `toHalfWidthKana()` で半角カナに変換して対応するカナ欄へセット |
+| 上書き | **カナ欄が空のときのみ**（手入力済みのカナは変更しない） |
+| 非対応 | 漢字のコピペ、漢字モードでの直接入力（読みが取れない場合） |
+
+実装: `js/soshiki-form-members.js` の `initKanjiToKanaAssist()`。
 
 HTML: `input.soshiki-form-member-box` + `kana-*` / `kanji-*`。背景 PNG のカナラベル除去は §9.7.2。
 

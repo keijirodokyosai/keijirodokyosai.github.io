@@ -1192,6 +1192,9 @@ a:focus-visible {
   /* 申込日（年・月・日） */
   --soshiki-form-date-group-top-base: 5.2%;
   --soshiki-form-date-group-top-nudge: 2px;
+  /* 組合名 */
+  --soshiki-form-union-name-top-base: 13.01%;
+  --soshiki-form-union-name-top-nudge: 10px;
 }
 
 .soshiki-form-sheet-bg {
@@ -1298,7 +1301,9 @@ a:focus-visible {
   left: calc(58.2% - 0.1cm);
   right: calc(8.73% + 0.1cm);
   width: auto;
-  top: 13.01%;
+  top: calc(
+    var(--soshiki-form-union-name-top-base) + var(--soshiki-form-union-name-top-nudge)
+  );
   height: 5.4%;
   display: flex;
   align-items: flex-end;
@@ -1799,7 +1804,6 @@ a:focus-visible {
   --soshiki-form-member-name-sei-left: 24.5%;
   --soshiki-form-member-name-mei-left: 36%;
   --soshiki-form-member-name-field-width: 8.5%;
-  --soshiki-form-member-name-top-nudge: 10px;
   --soshiki-form-member-kanji-name-font-size: 16px;
   --soshiki-form-member-kanji-name-height-extra: 5px;
   --soshiki-form-member-kanji-name-top-offset: -5px;
@@ -1834,7 +1838,6 @@ a:focus-visible {
   --soshiki-form-member-idou-btn-height: 26%;
   --soshiki-form-member-idou-height-nudge: 2px;
   --soshiki-form-member-idou-top-nudge: 0px;
-  --soshiki-form-member-idou-shinki-selected-ring-offset-y: 1px;
   /* 性別（男/女ボタン）— 列位置は PNG 実測 §9.7.1（x1028–1088 / 1683px 基準） */
   --soshiki-form-member-gender-column-left: 61.08%;
   --soshiki-form-member-gender-column-width: 3.63%;
@@ -1971,23 +1974,6 @@ a:focus-visible {
   border-color: var(--soshiki-form-member-gender-border-color-selected);
 }
 
-/* 新規: 選択時の実線は文字位置を変えず枠だけ 1px 下（::after） */
-.soshiki-form-idou-btn--shinki.is-selected {
-  border-color: transparent;
-}
-
-.soshiki-form-idou-btn--shinki.is-selected::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  box-sizing: border-box;
-  border: var(--soshiki-form-member-gender-border-width-selected) solid
-    var(--soshiki-form-member-gender-border-color-selected);
-  border-radius: 999px;
-  transform: translateY(var(--soshiki-form-member-idou-shinki-selected-ring-offset-y));
-  pointer-events: none;
-}
-
 .soshiki-form-idou-btn--shinki,
 .soshiki-form-idou-btn--kaiyaku,
 .soshiki-form-idou-btn--henkou {
@@ -2110,10 +2096,7 @@ a:focus-visible {
 
 .soshiki-form-member-kana-sei,
 .soshiki-form-member-kana-mei {
-  top: calc(
-    var(--soshiki-form-member-zip-address-row-top) +
-      var(--soshiki-form-member-name-top-nudge)
-  );
+  top: var(--soshiki-form-member-zip-address-row-top);
 }
 
 .soshiki-form-member-kanji-sei,
@@ -2121,8 +2104,7 @@ a:focus-visible {
   top: calc(
     var(--soshiki-form-member-birth-text-center) -
       var(--soshiki-form-member-box-height) / 2 +
-      var(--soshiki-form-member-kanji-name-top-offset) +
-      var(--soshiki-form-member-name-top-nudge)
+      var(--soshiki-form-member-kanji-name-top-offset)
   );
 }
 
@@ -2555,16 +2537,6 @@ a:focus-visible {
     -webkit-print-color-adjust: exact;
   }
 
-  .soshiki-form-idou-btn--shinki.is-selected {
-    border-color: transparent !important;
-  }
-
-  .soshiki-form-idou-btn--shinki.is-selected::after {
-    border-color: #000 !important;
-    print-color-adjust: exact;
-    -webkit-print-color-adjust: exact;
-  }
-
   .soshiki-form-sheet .soshiki-form-field,
   .soshiki-form-member-field,
   .soshiki-form-member-union-member-code,
@@ -2606,16 +2578,6 @@ body.soshiki-form-capturing .soshiki-form-sheet ::placeholder {
 
 body.soshiki-form-capturing .soshiki-form-idou-btn.is-selected,
 body.soshiki-form-capturing .soshiki-form-gender-btn.is-selected {
-  border-color: #000 !important;
-  print-color-adjust: exact;
-  -webkit-print-color-adjust: exact;
-}
-
-body.soshiki-form-capturing .soshiki-form-idou-btn--shinki.is-selected {
-  border-color: transparent !important;
-}
-
-body.soshiki-form-capturing .soshiki-form-idou-btn--shinki.is-selected::after {
   border-color: #000 !important;
   print-color-adjust: exact;
   -webkit-print-color-adjust: exact;
