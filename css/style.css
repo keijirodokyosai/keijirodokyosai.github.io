@@ -1838,6 +1838,7 @@ a:focus-visible {
   --soshiki-form-member-idou-btn-height: 26%;
   --soshiki-form-member-idou-height-nudge: 2px;
   --soshiki-form-member-idou-top-nudge: 0px;
+  --soshiki-form-member-idou-shinki-first-row-marker-padding-top: 1px;
   /* 性別（男/女ボタン）— 列位置は PNG 実測 §9.7.1（x1028–1088 / 1683px 基準） */
   --soshiki-form-member-gender-column-left: 61.08%;
   --soshiki-form-member-gender-column-width: 3.63%;
@@ -2459,6 +2460,10 @@ a:focus-visible {
   font-size: 12px;
   padding-top: 2px;
   color: #123456;
+}
+
+.soshiki-form-member-row:first-child .soshiki-form-idou-btn--shinki .soshiki-form-dev-marker {
+  padding-top: var(--soshiki-form-member-idou-shinki-first-row-marker-padding-top);
 }
 
 .soshiki-form-gender-btn .soshiki-form-dev-marker {
