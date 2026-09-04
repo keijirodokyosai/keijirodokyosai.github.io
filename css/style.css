@@ -1214,7 +1214,7 @@ a:focus-visible {
   border-radius: 2px;
   background: transparent;
   box-shadow: none;
-  color: #123456;
+  color: #000;
   font-family: "Meiryo", "Hiragino Sans", sans-serif;
   font-size: 16px;
   line-height: 1.2;
@@ -1282,7 +1282,7 @@ a:focus-visible {
   font-family: "Meiryo", "Hiragino Sans", sans-serif;
   font-size: 19px;
   line-height: 1;
-  color: #123456;
+  color: #000;
   padding: 0 0 4px 0;
   pointer-events: none;
   user-select: none;
@@ -1360,7 +1360,7 @@ a:focus-visible {
 .soshiki-form-kakekin-field[readonly] {
   background: transparent;
   border-color: transparent;
-  color: #123456;
+  color: #000;
 }
 
 .soshiki-form-code-field[readonly]:hover,
@@ -1863,7 +1863,7 @@ a:focus-visible {
   --soshiki-form-member-box-border-color-hover: rgba(54, 168, 114, 0.65);
   --soshiki-form-member-box-border-color-focus: #36a872;
   --soshiki-form-member-box-focus-ring: 0 0 0 2px rgba(54, 168, 114, 0.25);
-  --soshiki-form-member-box-color: #123456;
+  --soshiki-form-member-box-color: #000;
 }
 
 .soshiki-form-member-rows {
@@ -2017,7 +2017,7 @@ a:focus-visible {
   font-family: "Meiryo", "Hiragino Sans", sans-serif;
   font-size: 15px;
   line-height: 1.2;
-  color: #123456;
+  color: #000;
 }
 
 .soshiki-form-member-field:focus {
@@ -2322,7 +2322,7 @@ a:focus-visible {
   box-shadow: none;
   color: transparent;
   -webkit-text-fill-color: transparent;
-  caret-color: #123456;
+  caret-color: #000;
   text-align: center;
   font-family: "Meiryo", "Hiragino Sans", sans-serif;
   font-size: var(--soshiki-form-member-box-font-size);

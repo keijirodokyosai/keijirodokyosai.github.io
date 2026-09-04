@@ -569,6 +569,17 @@ PA 通知専用。Web・GitHub には載せない。kyosai-system が `Subbranch
 | JS | `initSoshikiFormLayout()`（`resize` + `ResizeObserver`）。`margin-bottom` で scale 後の縦余白を補正 |
 | 縦 | ページ全体の縦スクロールはそのまま |
 
+#### 文字色
+
+| 種別 | 色 |
+|------|-----|
+| 入力文字・マスタ自動表示（口数・コード・氏名・住所・備考など） | `#000`（黒） |
+| 異動・性別ボタン内の表示文字（`.soshiki-form-dev-marker`） | `#123456`（紺） |
+| 異動・性別の枠線 | `#123456`（紺） |
+| placeholder（開発用薄字） | `rgba(18, 52, 86, 0.32)` |
+
+印刷・PDF キャプチャ時は、選択中の異動・性別表示も **黒**（§9.0.2）。
+
 ### 9.0.2 印刷・PDF
 
 **保 存** ボタンは `window.print()` でブラウザ印刷を開く。`@media print`（`body.soshiki-form-enter-page`）で **申込書シートだけ** を A4 横・余白 0 で印字する。
@@ -945,6 +956,7 @@ HTML の `id` / `name` は Access 列名の **kebab-case**（`member-{行}-` + �
 | `--soshiki-form-member-zip-width-extra` | `6px` | 郵便番号枠のみ。5文字幅に px で追加（微調整用） |
 | `--soshiki-form-member-box-border-width` | `1px` | 枠線 |
 | `--soshiki-form-member-box-border-radius` | `2px` | 角丸 |
+| `--soshiki-form-member-box-color` | `#000` | 枠内の入力・表示文字（黒） |
 
 **使い方**
 
