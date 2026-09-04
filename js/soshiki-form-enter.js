@@ -189,11 +189,20 @@ function initUnionMaster() {
   unionNameInput.addEventListener("keydown", function (event) {
     if (event.key !== "Enter") return;
     event.preventDefault();
-    if (!masterState.ready) {
-      window.alert("組合マスタを読み込み中です。しばらくしてから再度 Enter してください。");
-      return;
-    }
-    handleUnionNameEnter(unionNameInput.value, masterState);
+    tryConfirmUnionNameFromInput(unionNameInput.value, masterState);
+  });
+
+  unionNameInput.addEventListener("input", function (event) {
+    if (event.inputType !== "insertReplacementText") return;
+    tryConfirmUnionNameFromInput(unionNameInput.value, masterState);
+  });
+
+  unionNameInput.addEventListener("change", function () {
+    var name = unionNameInput.value.trim();
+    if (!name || isUnionNameAlreadyVerified(name)) return;
+    if (!masterState.ready) return;
+    if (!masterState.unionsByName.has(name) && !isSavedUnionName(name)) return;
+    tryConfirmUnionNameFromInput(name, masterState);
   });
 
   Promise.all([
@@ -225,6 +234,25 @@ function fetchJson(url) {
     }
     return response.json();
   });
+}
+
+function isUnionNameAlreadyVerified(name) {
+  var verified = getSoshikiFormVerifiedUnion();
+  return Boolean(verified && verified.KyosaikaiName === name);
+}
+
+function tryConfirmUnionNameFromInput(rawName, masterState) {
+  var name = String(rawName).trim();
+  if (!name) {
+    clearUnionRelatedFields();
+    return;
+  }
+  if (!masterState.ready) {
+    window.alert("組合マスタを読み込み中です。しばらくしてから再度 Enter してください。");
+    return;
+  }
+  if (isUnionNameAlreadyVerified(name)) return;
+  handleUnionNameEnter(name, masterState);
 }
 
 function handleUnionNameEnter(rawName, masterState) {

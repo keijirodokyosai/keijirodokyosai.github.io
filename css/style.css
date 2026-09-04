@@ -2029,6 +2029,9 @@ a:focus-visible {
 .soshiki-form-member-union-member-code.soshiki-form-member-field {
   font-size: 18px;
   padding-left: var(--soshiki-form-member-union-member-code-padding-left);
+}
+
+.soshiki-form-member-union-member-code.soshiki-form-member-field:focus {
   background: #fff;
 }
 

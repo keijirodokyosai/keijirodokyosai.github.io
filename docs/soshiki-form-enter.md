@@ -106,7 +106,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 ### 5.2 組合名の入力 UI
 
 * 初回: **手入力**
-* 2 回目以降: **datalist プルダウン**（localStorage に保存した `KyosaikaiName` のみ）。選択後も **Enter で確定**（§5.3）
+* 2 回目以降: **datalist プルダウン**（localStorage に保存した `KyosaikaiName` のみ）。**リストから選んだ時点で Enter 確定と同じ**（コード・口欄・掛金を反映）。手入力の場合は **Enter で確定**（§5.3）
 * 組合名が入力済みでも **▼ を押せば保存候補をすべて表示**（ブラウザ datalist は入力値で候補を絞るため、`js/soshiki-form-union-storage.js` で ▼ クリック時に一時的に欄を空にしてから一覧を開く）
 * 誤って記憶した名前は **1 件削除 / すべて削除** できる UI を付ける（操作ボタン・ヒントの**下**の「保存した組合名」パネル）
 
@@ -140,7 +140,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
                 組合名＋関連項目をすべてクリア
 ```
 
-* 判定タイミングは **Enter のみ**（blur では行わない）
+* 判定タイミングは **Enter**（手入力）および **datalist からの選択**（`input` の `insertReplacementText` / `change`）。**blur だけでは確定しない**
 * localStorage に保存する組合名も **`KyosaikaiName`** を使う
 
 ### 5.4 産別・支部・分会コード
@@ -921,7 +921,7 @@ HTML の `id` / `name` は Access 列名の **kebab-case**（`member-{行}-` + �
 | 字間 | `0.56em`・`text-indent: 0.14em`（分会 `0.52em` / `0.27em` から 6 マス用に微調整） |
 | 文字揃え | 中央（`text-align: center`） |
 | 左 padding | `4px`（共通 3px + 1px） |
-| 背景 | `#fff`（入力時に PNG 下の文字が透けない） |
+| 背景 | **透明**（通常）。**フォーカス中** `#fff`（PNG 下の文字が透けない） |
 
 **住所（5分割）** — すべて §9.11 標準枠
 
