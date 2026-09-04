@@ -54,6 +54,18 @@
       aria-label="{{ row }}行目・組合員コード（6桁）"
     >
 
+    <label class="sr-only" for="member-{{ row }}-family-name">{{ row }}行目・漢字姓</label>
+    <input
+      type="text"
+      id="member-{{ row }}-family-name"
+      name="member-{{ row }}-family-name"
+      class="soshiki-form-member-box soshiki-form-member-kanji-sei{% if row == 1 %} soshiki-form-member-dev-hint{% endif %}"
+      data-access-field="FamilyName"
+      autocomplete="off"
+      {% if row == 1 %}placeholder="姓"{% endif %}
+      aria-label="{{ row }}行目・漢字姓"
+    >
+
     <label class="sr-only" for="member-{{ row }}-family-name-kana">{{ row }}行目・カナ姓</label>
     <input
       type="text"
@@ -67,6 +79,18 @@
       aria-label="{{ row }}行目・カナ姓"
     >
 
+    <label class="sr-only" for="member-{{ row }}-given-name">{{ row }}行目・漢字名</label>
+    <input
+      type="text"
+      id="member-{{ row }}-given-name"
+      name="member-{{ row }}-given-name"
+      class="soshiki-form-member-box soshiki-form-member-kanji-mei{% if row == 1 %} soshiki-form-member-dev-hint{% endif %}"
+      data-access-field="GivenName"
+      autocomplete="off"
+      {% if row == 1 %}placeholder="名"{% endif %}
+      aria-label="{{ row }}行目・漢字名"
+    >
+
     <label class="sr-only" for="member-{{ row }}-given-name-kana">{{ row }}行目・カナ名</label>
     <input
       type="text"
@@ -78,30 +102,6 @@
       autocomplete="off"
       {% if row == 1 %}placeholder="ﾒｲ"{% endif %}
       aria-label="{{ row }}行目・カナ名"
-    >
-
-    <label class="sr-only" for="member-{{ row }}-family-name">{{ row }}行目・漢字姓</label>
-    <input
-      type="text"
-      id="member-{{ row }}-family-name"
-      name="member-{{ row }}-family-name"
-      class="soshiki-form-member-box soshiki-form-member-kanji-sei{% if row == 1 %} soshiki-form-member-dev-hint{% endif %}"
-      data-access-field="FamilyName"
-      autocomplete="off"
-      {% if row == 1 %}placeholder="姓"{% endif %}
-      aria-label="{{ row }}行目・漢字姓"
-    >
-
-    <label class="sr-only" for="member-{{ row }}-given-name">{{ row }}行目・漢字名</label>
-    <input
-      type="text"
-      id="member-{{ row }}-given-name"
-      name="member-{{ row }}-given-name"
-      class="soshiki-form-member-box soshiki-form-member-kanji-mei{% if row == 1 %} soshiki-form-member-dev-hint{% endif %}"
-      data-access-field="GivenName"
-      autocomplete="off"
-      {% if row == 1 %}placeholder="名"{% endif %}
-      aria-label="{{ row }}行目・漢字名"
     >
 
     <label class="sr-only" for="member-{{ row }}-birth-year">{{ row }}行目・生年月日・年</label>

@@ -257,6 +257,8 @@ breadcrumb_json_ld: >
               aria-label="掛金（1人あたり）"
             >
 
+            {% include soshiki-form-member-rows.html %}
+
             <div class="soshiki-form-page-count-group" role="group" aria-label="ページ枚数">
               <label class="sr-only" for="page-count-current">ページ枚数（現在のページ）</label>
               <input
@@ -283,23 +285,6 @@ breadcrumb_json_ld: >
             </div>
 
             <div
-              class="soshiki-form-zengetsu-group soshiki-form-zengetsu-group--zan"
-              role="group"
-              aria-label="前月残（人数）"
-            >
-              <label class="sr-only" for="zengetsu-zan-count">前月残（人数）</label>
-              <input
-                type="text"
-                id="zengetsu-zan-count"
-                name="zengetsu-zan-count"
-                class="soshiki-form-field soshiki-form-zengetsu-field"
-                inputmode="numeric"
-                autocomplete="off"
-                maxlength="3"
-                aria-label="前月残（人数）"
-              >
-            </div>
-            <div
               class="soshiki-form-zengetsu-group soshiki-form-zengetsu-group--tougetsu"
               role="group"
               aria-label="当月（月）"
@@ -315,6 +300,23 @@ breadcrumb_json_ld: >
                 maxlength="2"
                 readonly
                 aria-label="当月（月）"
+              >
+            </div>
+            <div
+              class="soshiki-form-zengetsu-group soshiki-form-zengetsu-group--zan"
+              role="group"
+              aria-label="前月残（人数）"
+            >
+              <label class="sr-only" for="zengetsu-zan-count">前月残（人数）</label>
+              <input
+                type="text"
+                id="zengetsu-zan-count"
+                name="zengetsu-zan-count"
+                class="soshiki-form-field soshiki-form-zengetsu-field"
+                inputmode="numeric"
+                autocomplete="off"
+                maxlength="3"
+                aria-label="前月残（人数）"
               >
             </div>
             <div
@@ -346,8 +348,6 @@ breadcrumb_json_ld: >
                 aria-label="備考"
               ></textarea>
             </div>
-
-            {% include soshiki-form-member-rows.html %}
           </div>
         </div>
 

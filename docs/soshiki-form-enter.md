@@ -218,6 +218,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | 項目 | 値 |
 |------|-----|
 | HTML id | `zengetsu-zan-count`（前月残） / `tougetsu-count`（当月） / `tsuki-kei-count`（月計） |
+| Tab 順（DOM） | 当月 → 前月残 → 月計（§5.9.1） |
 | レイアウト | `.soshiki-form-zengetsu-group--zan` / `--tsuki-kei` を absolute 配置（§5.6 ページ枚数と同型）。input は `width/height: 100%` |
 | 入力 | 手入力可。`inputmode="numeric"`、`maxlength="3"` |
 | PNG 枠（外側・黒罫線） | 前月残 x508–556 y958–996（**49×39px**）/ 月計 x680–728 y958–996（**49×39px**） |
@@ -256,7 +257,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | PNG 枠（外側・黒罫線） | x898–1601 y934–1120（**704×187px**） |
 | 入力オーバーレイ | グループを外枠に合わせ、`padding: 2px`（内側 700×183px） |
 | 配置 | `left 53.325%` / `top 78.421%` / `width 41.805%` / `height 15.701%` / offset `3px` / `30px` / width-extra `-6px` / height-extra `-33px` |
-| 文字開始位置 | `--soshiki-form-biko-padding-top: 40px`（印刷ラベル「備考」下） |
+| 文字開始位置 | `--soshiki-form-biko-padding-top: 2px`（枠上端から上揃え） |
 | 位置・サイズ微調整 | `--soshiki-form-biko-*-offset-x/y`、`*-width-extra` / `height-extra`（px） |
 | フォント | 14px、左揃え、`line-height: 1.3` |
 | 実測スクリプト | `scripts/measure-soshiki-form-png-biko.py` → `measure/biko/` |
@@ -308,6 +309,19 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 * クリック → フォーカス解除 → `body.soshiki-form-printing` 付与 → `window.print()` → `afterprint` でクラス除去
 * ユーザーはブラウザの印刷ダイアログで **「PDF に保存」** を選択（PDF の自動ダウンロードはしない）
 * 印字対象は **`.soshiki-form-sheet` のみ**（パンくず・ヒーロー・操作ボタン・ヒントは `@media print` で非表示）。詳細は §9.0.2
+
+### 5.9.1 Tab 移動順（DOM 順）
+
+配置は CSS の absolute のまま。**Tab 順は HTML の出現順**（`tabindex` はマスタ自動入力の readonly 欄のみ `-1`）。
+
+| 区間 | 順序 |
+|------|------|
+| ヘッダ | 申込日（年→月→日）→ 組合名 |
+| 組合員（1〜5 行・各行） | 異動（新規→解約→変更）→ 組合員コード → 漢字姓 → カナ姓 → 漢字名 → カナ名 → 生年月日（年→月→日）→ 性別（男→女）→ 郵便番号 → 都道府県 → 市区町村 → 町村域 → 番地 → 建物名 |
+| フッター | ページ枚数（現在→総数）→ **当月** → **前月残** → **月計** → 備考 |
+| 操作 | クリア → 保 存 → 送 信 |
+
+組合員欄の HTML は `soshiki-form-enter.html` 内で口数・掛金の直後（フッター欄より前）に include する。
 
 ### 5.10 WEB 受付（送 信）
 
@@ -896,6 +910,7 @@ HTML の `id` / `name` は Access 列名の **kebab-case**（`member-{行}-` + �
 | 字間 | `0.56em`・`text-indent: 0.14em`（分会 `0.52em` / `0.27em` から 6 マス用に微調整） |
 | 文字揃え | 中央（`text-align: center`） |
 | 左 padding | `4px`（共通 3px + 1px） |
+| 背景 | `#fff`（入力時に PNG 下の文字が透けない） |
 
 **住所（5分割）** — すべて §9.11 標準枠
 

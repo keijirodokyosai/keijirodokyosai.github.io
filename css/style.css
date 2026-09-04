@@ -1186,7 +1186,7 @@ a:focus-visible {
   --soshiki-form-biko-width-extra: -6px;
   --soshiki-form-biko-height-extra: -33px;
   --soshiki-form-biko-font-size: 14px;
-  --soshiki-form-biko-padding-top: 40px;
+  --soshiki-form-biko-padding-top: 2px;
   --soshiki-form-biko-padding-inline: 4px;
   --soshiki-form-biko-padding-bottom: 2px;
 }
@@ -2029,6 +2029,7 @@ a:focus-visible {
 .soshiki-form-member-union-member-code.soshiki-form-member-field {
   font-size: 18px;
   padding-left: var(--soshiki-form-member-union-member-code-padding-left);
+  background: #fff;
 }
 
 .soshiki-form-member-field.soshiki-form-field--error,
