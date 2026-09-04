@@ -1828,6 +1828,7 @@ a:focus-visible {
   --soshiki-form-member-idou-btn-height: 26%;
   --soshiki-form-member-idou-height-nudge: 2px;
   --soshiki-form-member-idou-top-nudge: 0px;
+  --soshiki-form-member-idou-shinki-selected-ring-offset-y: 1px;
   /* 性別（男/女ボタン）— 列位置は PNG 実測 §9.7.1（x1028–1088 / 1683px 基準） */
   --soshiki-form-member-gender-column-left: 61.08%;
   --soshiki-form-member-gender-column-width: 3.63%;
@@ -1962,6 +1963,23 @@ a:focus-visible {
   border-style: solid;
   border-width: var(--soshiki-form-member-gender-border-width-selected);
   border-color: var(--soshiki-form-member-gender-border-color-selected);
+}
+
+/* 新規: 選択時の実線は文字位置を変えず枠だけ 1px 下（::after） */
+.soshiki-form-idou-btn--shinki.is-selected {
+  border-color: transparent;
+}
+
+.soshiki-form-idou-btn--shinki.is-selected::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  box-sizing: border-box;
+  border: var(--soshiki-form-member-gender-border-width-selected) solid
+    var(--soshiki-form-member-gender-border-color-selected);
+  border-radius: 999px;
+  transform: translateY(var(--soshiki-form-member-idou-shinki-selected-ring-offset-y));
+  pointer-events: none;
 }
 
 .soshiki-form-idou-btn--shinki,
@@ -2527,6 +2545,16 @@ a:focus-visible {
     -webkit-print-color-adjust: exact;
   }
 
+  .soshiki-form-idou-btn--shinki.is-selected {
+    border-color: transparent !important;
+  }
+
+  .soshiki-form-idou-btn--shinki.is-selected::after {
+    border-color: #000 !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
   .soshiki-form-sheet .soshiki-form-field,
   .soshiki-form-member-field,
   .soshiki-form-member-union-member-code,
@@ -2568,6 +2596,16 @@ body.soshiki-form-capturing .soshiki-form-sheet ::placeholder {
 
 body.soshiki-form-capturing .soshiki-form-idou-btn.is-selected,
 body.soshiki-form-capturing .soshiki-form-gender-btn.is-selected {
+  border-color: #000 !important;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+body.soshiki-form-capturing .soshiki-form-idou-btn--shinki.is-selected {
+  border-color: transparent !important;
+}
+
+body.soshiki-form-capturing .soshiki-form-idou-btn--shinki.is-selected::after {
   border-color: #000 !important;
   print-color-adjust: exact;
   -webkit-print-color-adjust: exact;

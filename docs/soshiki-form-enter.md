@@ -604,6 +604,7 @@ PA 通知専用。Web・GitHub には載せない。kyosai-system が `Subbranch
 |------|------|
 | 選択肢 | **新規** / **解約** / **変更**（1行につき0または1つ） |
 | 操作 | クリックで選択（**実線 2.4px** の楕円枠）。別の選択肢で切替。同じ選択肢の再クリックで解除。未選択時は **点線 1.5px**（紺 `#123456`・性別欄と同値） |
+| 新規・選択時 | 実線枠のみ `::after` で **1px 下**（`--soshiki-form-member-idou-shinki-selected-ring-offset-y`）。文字位置は変えない |
 | 値 | `shinki` / `kaiyaku` / `henkou`（hidden input） |
 | 配置（行内%） | `left` **6.2% + 5px**（確定）。幅 **5% − 6px**。高さ **26% + 2px**。新規 `top` **5%** / 解約 **37%** / 変更 **69%**（`top-nudge` 0px） |
 | 表示文字 | **新 規** / **解 約** / **変 更**（半角スペース区切り。`.soshiki-form-dev-marker`・**12px**・`padding-top` 2px・紺 `#123456`） |
