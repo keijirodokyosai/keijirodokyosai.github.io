@@ -568,8 +568,8 @@ PA 通知専用。Web・GitHub には載せない。kyosai-system が `Subbranch
 | 背景 PNG | `.soshiki-form-sheet-bg` に `print-color-adjust: exact` |
 | プレースホルダ | シート内 `::placeholder` は透明（開発用薄字を印字しない） |
 | 入力ガイド | 画面上の **緑枠線は印字しない**（下表） |
-| 印字されるもの | 背景 PNG・入力した **文字**・性別・異動の **選択枠**（実線楕円） |
-| 非印字（シート内） | 入力欄の緑枠、開発用マーカー（`.soshiki-form-dev-marker`） |
+| 印字されるもの | 背景 PNG・入力した **文字**・性別・異動の **選択枠**（実線楕円）と **選択中の表示文字**（新 規 / 解 約 / 変 更・男 / 女） |
+| 非印字（シート内） | 入力欄の緑枠、未選択の異動・性別マーカー、開発用 placeholder |
 
 緑枠の対象: `.soshiki-form-sheet` 内の `.soshiki-form-field`、組合員欄 `.soshiki-form-member-box` 等（`border-color: transparent`、`box-shadow: none`、`outline: none`）。
 
