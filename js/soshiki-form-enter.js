@@ -103,6 +103,8 @@ function initSoshikiFormLayout() {
   var resizeTimer;
 
   function updateScale() {
+    if (window.SOSHIKI_FORM_CAPTURE_LOCKED) return;
+
     sheet.style.setProperty("--soshiki-form-scale", "1");
     sheet.style.marginBottom = "";
 

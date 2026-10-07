@@ -2570,6 +2570,22 @@ body.soshiki-form-capturing .soshiki-form-sheet {
   box-shadow: none !important;
   width: 297mm !important;
   height: 210mm !important;
+  overflow: visible !important;
+}
+
+body.soshiki-form-capturing .soshiki-form-member-rows,
+body.soshiki-form-capturing .soshiki-form-member-row {
+  overflow: visible !important;
+}
+
+body.soshiki-form-capturing .soshiki-form-sheet .soshiki-form-field,
+body.soshiki-form-capturing .soshiki-form-sheet .soshiki-form-member-box {
+  line-height: normal !important;
+  overflow: visible !important;
+}
+
+body.soshiki-form-capturing .soshiki-form-capture-value {
+  z-index: 2;
 }
 
 body.soshiki-form-capturing .soshiki-form-sheet-bg {

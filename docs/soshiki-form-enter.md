@@ -605,7 +605,7 @@ PA 通知専用。Web・GitHub には載せない。kyosai-system が `Subbranch
 | `@page` | `size: A4 landscape`、`margin: 0` |
 | 非印字 | `.site-header`、`.site-footer`、`.breadcrumb`、`.hero`、`.soshiki-form-actions`、`.soshiki-form-actions-hint`、保存組合パネル・送信結果 |
 | ページ数 | **1 ページ**（シートのみ。共通ヘッダー／フッターを印刷対象外） |
-| シート | `transform: none`（§9.0.1 の scale 解除）、`297mm × 210mm`、影なし |
+| シート | `transform: none`（§9.0.1 の scale 解除）、`297mm × 210mm`、影なし。キャプチャ中は `ResizeObserver` による scale 再適用を止め、描画待ち（`requestAnimationFrame`×2）後に html2canvas。クローン側で住所2〜3行目の `overflow: visible`・入力値ミラー（`soshiki-form-capture-value`） |
 | 背景 PNG | `.soshiki-form-sheet-bg` に `print-color-adjust: exact` |
 | プレースホルダ | シート内 `::placeholder` は透明（開発用薄字を印字しない） |
 | 入力ガイド | 画面上の **緑枠線は印字しない**（下表） |

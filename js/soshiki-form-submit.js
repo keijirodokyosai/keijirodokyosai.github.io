@@ -376,6 +376,88 @@ function collectSoshikiFormPdfLibraryErrors() {
   return errors;
 }
 
+function setSoshikiFormCaptureLock(isLocked) {
+  window.SOSHIKI_FORM_CAPTURE_LOCKED = Boolean(isLocked);
+}
+
+function waitForSoshikiFormCapturePaint() {
+  return new Promise(function (resolve) {
+    requestAnimationFrame(function () {
+      requestAnimationFrame(resolve);
+    });
+  });
+}
+
+function ensureSoshikiFormCaptureParentPosition(element) {
+  if (!element || !element.parentElement) return;
+  var position = element.parentElement.style.position;
+  if (!position || position === "static") {
+    element.parentElement.style.position = "relative";
+  }
+}
+
+function enhanceSoshikiFormCloneForPdfCapture(clonedDocument) {
+  var sheet = clonedDocument.querySelector(".soshiki-form-sheet");
+  if (!sheet) return;
+
+  sheet.style.setProperty("--soshiki-form-scale", "1");
+  sheet.style.transform = "none";
+  sheet.style.margin = "0";
+  sheet.style.overflow = "visible";
+
+  clonedDocument.querySelectorAll(".soshiki-form-member-row").forEach(function (row) {
+    row.style.overflow = "visible";
+  });
+
+  clonedDocument
+    .querySelectorAll(".soshiki-form-sheet input, .soshiki-form-sheet textarea")
+    .forEach(function (element) {
+      if (element.type === "hidden") return;
+      if (element.classList.contains("soshiki-form-member-zip")) {
+        element.style.opacity = "0";
+        return;
+      }
+
+      var value = element.value;
+      if (!value || !String(value).trim()) return;
+
+      var view = clonedDocument.defaultView;
+      if (!view) return;
+
+      var styles = view.getComputedStyle(element);
+      ensureSoshikiFormCaptureParentPosition(element);
+
+      var mirror = clonedDocument.createElement("span");
+      mirror.className = "soshiki-form-capture-value";
+      mirror.setAttribute("aria-hidden", "true");
+      mirror.textContent = value;
+      mirror.style.position = "absolute";
+      mirror.style.inset = "0";
+      mirror.style.display = "flex";
+      mirror.style.alignItems = "center";
+      mirror.style.overflow = "visible";
+      mirror.style.pointerEvents = "none";
+      mirror.style.boxSizing = "border-box";
+      mirror.style.padding = styles.padding;
+      mirror.style.font = styles.font;
+      mirror.style.letterSpacing = styles.letterSpacing;
+      mirror.style.textIndent = styles.textIndent;
+      mirror.style.color = "#000";
+      mirror.style.whiteSpace = "pre";
+
+      if (styles.textAlign === "center") {
+        mirror.style.justifyContent = "center";
+      } else if (styles.textAlign === "right") {
+        mirror.style.justifyContent = "flex-end";
+      } else {
+        mirror.style.justifyContent = "flex-start";
+      }
+
+      element.style.opacity = "0";
+      element.parentElement.appendChild(mirror);
+    });
+}
+
 function buildSoshikiFormPdfDocument() {
   var sheet = document.querySelector(".soshiki-form-sheet");
   if (!sheet) {
@@ -386,16 +468,29 @@ function buildSoshikiFormPdfDocument() {
   var previousScale = sheet.style.getPropertyValue("--soshiki-form-scale");
   var previousMarginBottom = sheet.style.marginBottom;
 
+  setSoshikiFormCaptureLock(true);
   body.classList.add("soshiki-form-capturing");
   sheet.style.setProperty("--soshiki-form-scale", "1");
   sheet.style.marginBottom = "0";
 
-  return html2canvas(sheet, {
-    scale: SOSHIKI_FORM_CAPTURE_SCALE,
-    useCORS: true,
-    backgroundColor: "#ffffff",
-    logging: false,
-  })
+  if (typeof sheet.scrollIntoView === "function") {
+    sheet.scrollIntoView({ block: "center", inline: "nearest" });
+  }
+
+  return waitForSoshikiFormCapturePaint()
+    .then(function () {
+      return html2canvas(sheet, {
+        scale: SOSHIKI_FORM_CAPTURE_SCALE,
+        useCORS: true,
+        backgroundColor: "#ffffff",
+        logging: false,
+        scrollX: 0,
+        scrollY: -window.scrollY,
+        onclone: function (clonedDocument) {
+          enhanceSoshikiFormCloneForPdfCapture(clonedDocument);
+        },
+      });
+    })
     .then(function (canvas) {
       var imgData = canvas.toDataURL("image/jpeg", 0.92);
       var pdf = new window.jspdf.jsPDF({
@@ -414,6 +509,7 @@ function buildSoshikiFormPdfDocument() {
         sheet.style.removeProperty("--soshiki-form-scale");
       }
       sheet.style.marginBottom = previousMarginBottom;
+      setSoshikiFormCaptureLock(false);
     });
 }
 
