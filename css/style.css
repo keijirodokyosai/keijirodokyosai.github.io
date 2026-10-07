@@ -2567,6 +2567,16 @@ a:focus-visible {
     display: block !important;
     color: #000 !important;
   }
+
+  .soshiki-form-member-town-area-number-row--print-joined
+    .soshiki-form-member-area-number.is-soshiki-print-area-joined-hidden {
+    display: none !important;
+  }
+
+  .soshiki-form-member-town-area-number-row--print-joined
+    .soshiki-form-member-town-area.is-soshiki-print-town-joined {
+    --soshiki-form-member-box-chars: 20;
+  }
 }
 
 /* 送 信時 PDF キャプチャ（§9.0.2 印刷に近似） */

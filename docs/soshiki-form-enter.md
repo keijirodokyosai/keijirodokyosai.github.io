@@ -326,7 +326,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 * クリック → フォーカス解除 → **月計スナップショット記録**（§5.7.2）→ シート scale 解除 → **`window.print()`**（Chrome メニュー「印刷」と同じ UI）
 * 利用想定: 印刷ダイアログの送信先を **「PDF に保存」**（ユーザー設定）。物理プリンタ（例 RICOH）には送らない
 * ファイル名のヒント: 印刷前に `document.title` を `{組合名}_{申込日 yyyyMMdd}` に一時変更（`.pdf` なし）。組合未確定時は `組織共済申込書`、申込日未入力時は当日
-* 印字内容: `@media print`（§9.0.2）の HTML シート（画面上の入力どおり）
+* 印字内容: `@media print`（§9.0.2）の HTML シート。町村域が短いとき **番地を続けて印字**は §9.11 住所表の印刷行
 * **送 信**の PDF は別経路（§9.0.3・pdf-lib）。保 存と送 信で PDF 生成方式が異なる点に注意
 
 ### 5.9.1 Tab 移動順（DOM 順）
@@ -973,6 +973,8 @@ HTML の `id` / `name` は Access 列名の **kebab-case**（`member-{行}-` + �
 **1行目:** `.soshiki-form-member-zip-address-row` — 郵便番号・都道府県・市区町村。
 
 **2行目:** `.soshiki-form-member-town-area-number-row` — 町村域・番地（1行目枠下 + `--soshiki-form-member-town-gap-from-zip`: **2px**）。`left`: `66.6%` + `--soshiki-form-member-town-area-row-left-nudge`（**-10px**）。
+
+**印刷・保 存（`beforeprint`）:** 町村域が **12 文字未満**で番地ありの行は、**町村域＋番地**を町村域枠に続けて1行表示（番地枠は非表示・枠幅 20 文字相当）。`computeTownAreaPrintJoin`・`js/soshiki-form-members.js`。`afterprint` で復元。編集値・送 信 JSON は変えない。
 
 **3行目:** 建物名 — 2行目枠下 + `--soshiki-form-member-building-gap-from-town`: **2px**。`left`: `66.6%` + `--soshiki-form-member-building-left-nudge`（**-5px**）。
 

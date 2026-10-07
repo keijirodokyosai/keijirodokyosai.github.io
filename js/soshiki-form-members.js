@@ -50,6 +50,7 @@ function initMemberRows() {
   initZipLookup();
   initTownAreaFields();
   initAddressFieldFontFit();
+  initAddressPrintTownOverflow();
   initMemberRowDevHintCleanup();
   fitAllAddressFieldFonts();
 }
@@ -755,6 +756,97 @@ function initAddressFieldFontFit() {
       fitAddressFieldFont(input);
     });
   });
+}
+
+var addressPrintTownJoinRestore = [];
+
+function getMemberBoxCharLimit(input, fallback) {
+  if (!input) return fallback;
+  var chars = parseInt(
+    getComputedStyle(input).getPropertyValue("--soshiki-form-member-box-chars"),
+    10
+  );
+  return chars > 0 ? chars : fallback;
+}
+
+/**
+ * 印刷時: 町村域が枠いっぱい未満（短い）とき、町村域の直後に番地を続けて1行表示。
+ */
+function computeTownAreaPrintJoin(town, area, townLimit) {
+  var townText = town || "";
+  var areaText = area || "";
+  if (!townText || !areaText) {
+    return { join: false, townDisplay: townText, areaDisplay: areaText };
+  }
+  if (townText.length >= townLimit) {
+    return { join: false, townDisplay: townText, areaDisplay: areaText };
+  }
+  return {
+    join: true,
+    townDisplay: townText + areaText,
+    areaDisplay: "",
+  };
+}
+
+function applyAddressPrintTownJoinForRow(row) {
+  var townInput = getMemberField(row, "town-area");
+  var areaInput = getMemberField(row, "area-number");
+  if (!townInput || !areaInput) return;
+
+  var originalTown = townInput.value;
+  var originalArea = areaInput.value;
+  var townLimit = getMemberBoxCharLimit(townInput, 12);
+  var joinPlan = computeTownAreaPrintJoin(originalTown, originalArea, townLimit);
+
+  if (!joinPlan.join) return;
+
+  var rowEl = townInput.closest(".soshiki-form-member-town-area-number-row");
+
+  addressPrintTownJoinRestore.push({
+    townInput: townInput,
+    areaInput: areaInput,
+    rowEl: rowEl,
+    originalTown: originalTown,
+    originalArea: originalArea,
+  });
+
+  townInput.value = joinPlan.townDisplay;
+  areaInput.value = joinPlan.areaDisplay;
+  townInput.classList.add("is-soshiki-print-town-joined");
+  areaInput.classList.add("is-soshiki-print-area-joined-hidden");
+  if (rowEl) {
+    rowEl.classList.add("soshiki-form-member-town-area-number-row--print-joined");
+  }
+  fitAddressFieldFont(townInput);
+}
+
+function applyAddressPrintTownJoinAllRows() {
+  restoreAddressPrintTownJoin();
+  for (var row = 1; row <= MEMBER_ROW_COUNT; row += 1) {
+    applyAddressPrintTownJoinForRow(row);
+  }
+}
+
+function restoreAddressPrintTownJoin() {
+  addressPrintTownJoinRestore.forEach(function (entry) {
+    entry.townInput.value = entry.originalTown;
+    entry.areaInput.value = entry.originalArea;
+    entry.townInput.classList.remove("is-soshiki-print-town-joined");
+    entry.areaInput.classList.remove("is-soshiki-print-area-joined-hidden");
+    if (entry.rowEl) {
+      entry.rowEl.classList.remove(
+        "soshiki-form-member-town-area-number-row--print-joined"
+      );
+    }
+    fitAddressFieldFont(entry.townInput);
+    fitAddressFieldFont(entry.areaInput);
+  });
+  addressPrintTownJoinRestore = [];
+}
+
+function initAddressPrintTownOverflow() {
+  window.addEventListener("beforeprint", applyAddressPrintTownJoinAllRows);
+  window.addEventListener("afterprint", restoreAddressPrintTownJoin);
 }
 
 function initTownAreaFields() {
