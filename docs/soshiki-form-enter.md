@@ -76,7 +76,9 @@ soshiki-form-enter.html      … 入力ページ
 js/soshiki-form-enter.js     … 日付初期値・申込月の翌月を当月枠へ反映・マスタ連携・横フィット（§9.0.1）・操作ボタン（§5.9・クリア・保 存 PDF）・組合確定状態
 js/soshiki-form-footer-counts.js … 前月残持ち越し・月計自動計算・月計 localStorage（§5.7.2）
 js/soshiki-form-union-storage.js … 保存組合名 localStorage・datalist・削除 UI（§5.2）
-js/soshiki-form-submit.js    … WEB 受付（§5.10・JSON/PDF 生成・PA POST）
+js/soshiki-form-submit.js    … WEB 受付（§5.10・JSON・PA POST）
+js/soshiki-form-pdf-fill.js  … PDF 生成（§9.0.3・pdf-lib・原本＋座標 JSON）
+data/soshiki-form-pdf-layout.json … PDF 文字配置（pt・左下原点）
 js/soshiki-form-members.js   … 組合員5行・異動トグル・半角制限・氏名カナ入力補助（§9.13.1）・郵便番号検索・町村域正規化（§9.9）・表示同期（updateZipView）・組合員欄クリア
 _includes/soshiki-form-member-rows.html … 組合員行マークアップ
 css/style.css                … .soshiki-form-* オーバーレイ用
@@ -321,9 +323,10 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 
 **保 存**（`saveSoshikiFormPdf()`・`initSoshikiFormActions()`）:
 
-* クリック → フォーカス解除 → **月計スナップショット記録**（§5.7.2）→ `downloadSoshikiFormPdfFile()`（`js/soshiki-form-submit.js`・送 信と同型の html2canvas + jsPDF・§9.0.2）
+* クリック → フォーカス解除 → **月計スナップショット記録**（§5.7.2）→ `downloadSoshikiFormPdfFile()` → `js/soshiki-form-pdf-fill.js`（§9.0.3）
 * ファイル名: `{組合名}_{申込日 yyyyMMdd}.pdf`（組合未確定時は `組織共済申込書`、申込日未入力時は当日）。Blob + `<a download>` で保存
 * プリンタ／印刷ダイアログは **出さない**
+* **進行中:** フェーズ1＝原本 PDF のみ出力。フェーズ2以降で `data/soshiki-form-pdf-layout.json` に座標を追加して文字を載せる
 
 ### 5.9.1 Tab 移動順（DOM 順）
 
@@ -345,11 +348,11 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | 項目 | 内容 |
 |------|------|
 | 設定 | `data/soshiki-form-submit-config.json` の `submitEndpointUrl`（PA HTTP 受信 URL） |
-| JS | `js/soshiki-form-submit.js` |
-| ライブラリ | html2canvas 1.4.1・jsPDF 2.5.2（CDN） |
+| JS | `js/soshiki-form-submit.js`・`js/soshiki-form-pdf-fill.js` |
+| ライブラリ | pdf-lib 1.17.1（CDN）。日本語はフェーズ2以降でフォント埋め込み（fontkit） |
 | 送 信条件 | `validateSoshikiForm()` OK・組合名 Enter 確定（`getSoshikiFormVerifiedUnion()`）・組合員1名以上・パスワード入力 |
 | POST | **1 リクエスト**（JSON + PDF Base64 + パスワード + ファイル名用メタ） |
-| PDF | 送 信・保 存で `.soshiki-form-sheet` をキャプチャ（`body.soshiki-form-capturing`・§9.0.2・scale 3）。html2canvas 向けにキャプチャ直前だけ `installSheetPdfTextSwaps()` で入力を画面上の矩形に合わせたテキスト層へ差し替え（撮影後復元） |
+| PDF | 送 信・保 存とも §9.0.3（`pdf/soshiki-form-enter.pdf` ＋ 座標 JSON）。Azure 不要 |
 | 月計記録 | 送 信 **成功後** に §5.7.2 の localStorage へ上書き（保 存と同じ） |
 | 取込 | **リアルタイム自動なし**（事務側の取込処理で json 削除・二重チェック） |
 
@@ -598,7 +601,20 @@ PA 通知専用。Web・GitHub には載せない。kyosai-system が `Subbranch
 
 ### 9.0.2 印刷・PDF
 
-**保 存** ボタンは jsPDF で PDF をダウンロードする（§5.9）。メニューからの **印刷** は `@media print`（`body.soshiki-form-enter-page`）。
+**保 存**・**送 信**の PDF は §9.0.3（pdf-lib）。メニューからの **印刷** は `@media print`（`body.soshiki-form-enter-page`）。
+
+### 9.0.3 PDF 生成（原本＋座標・pdf-lib）
+
+| 項目 | 内容 |
+|------|------|
+| 原本 | `pdf/soshiki-form-enter.pdf`（A4 横） |
+| 座標 | `data/soshiki-form-pdf-layout.json`（`fields[]`・x/y は **pt**・**左下原点**） |
+| データ | `buildSoshikiFormPdfPayload()`（画面上の項目。`submission` を含む） |
+| 実装 | `js/soshiki-form-pdf-fill.js` の `buildSoshikiFormPdfBytes()` |
+| フェーズ1 | 原本を読み込みそのまま保存（配線確認）。`fields` は空 |
+| フェーズ2以降 | `fields` に項目を追加・日本語フォント埋め込み・組合員行の `memberRow.stepPt` |
+
+### 9.0.2 印刷（ブラウザメニュー）
 
 | 項目 | 内容 |
 |------|------|
@@ -1165,7 +1181,7 @@ Subbranch（KyosaikaiName, IndustryCode, BranchCode, SubbranchCode, CollectiveKy
 8e. ~~備考入力枠~~ → **完了**（§5.8・2026-09-02 実測）
 9. ~~組合員欄 CSS（住所2〜3行目横位置・郵便番号文字縦位置）~~ → **完了**（2026-09-02）
 9b. 開発用仮表示の本番前削除（§14・1行目 placeholder 等）
-9c. ~~操作ボタン・クリア~~ → **クリア完了**（§5.9）。~~保 存~~ → **完了**（§5.9・§9.0.2）。~~送 信~~ → **Web 実装完了**（§5.10）。**PA フロー・union-contacts エクスポート**は未構築
+9c. ~~操作ボタン・クリア~~ → **クリア完了**（§5.9）。保 存・送 信 PDF → **§9.0.3 移行中**（フェーズ1 配線済み・座標合わせは継続）。~~送 信 POST~~ → **Web 実装完了**（§5.10）。**PA フロー・union-contacts エクスポート**は未構築
 10. ~~組合名プルダウン（localStorage）・マスタからのデータ引き出し・追加確認・削除 UI~~ → **完了**（§5.2・`js/soshiki-form-union-storage.js`）
 11. ~~**送 信**（OneDrive アップロード）~~ → **Web 完了**（§5.10）。Power Automate・`union-contacts.json`・Access 取込は未構築
 12. ~~`validateSoshikiForm()` の配線（送信前チェック等）~~ → **完了**（§5.10）

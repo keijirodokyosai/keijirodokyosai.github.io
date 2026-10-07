@@ -1,14 +1,12 @@
 /**
  * 組織共済申込書 — WEB 受付（送 信）
- * JSON 組み立て・PDF 生成（html2canvas + jsPDF）・Power Automate へ POST
+ * JSON 組み立て・PDF（js/soshiki-form-pdf-fill.js）・Power Automate へ POST
  */
 
 var SOSHIKI_FORM_SUBMIT_CONFIG = {
   submitEndpointUrl: "",
   ready: false,
 };
-
-var SOSHIKI_FORM_CAPTURE_SCALE = 3;
 
 function initSoshikiFormSubmit() {
   var sendButton = document.getElementById("soshiki-form-send");
@@ -365,226 +363,12 @@ function getSoshikiFormPdfDownloadFileName() {
   return unionName + "_" + fileNameDate + ".pdf";
 }
 
-function collectSoshikiFormPdfLibraryErrors() {
-  var errors = [];
-  if (typeof html2canvas !== "function") {
-    errors.push("PDF 生成ライブラリ（html2canvas）が読み込まれていません。");
-  }
-  if (!window.jspdf || !window.jspdf.jsPDF) {
-    errors.push("PDF 生成ライブラリ（jsPDF）が読み込まれていません。");
-  }
-  return errors;
-}
-
-function setSoshikiFormCaptureLock(isLocked) {
-  window.SOSHIKI_FORM_CAPTURE_LOCKED = Boolean(isLocked);
-}
-
-function waitForSoshikiFormCapturePaint() {
-  return new Promise(function (resolve) {
-    requestAnimationFrame(function () {
-      requestAnimationFrame(resolve);
-    });
-  });
-}
-
-function syncSoshikiFormZipViewsForCapture() {
-  if (typeof updateZipView !== "function") return;
-  document.querySelectorAll("[data-zip-field]").forEach(function (input) {
-    updateZipView(input);
-  });
-}
-
-function applyPdfTextSwapLayerStyles(source, layer, view) {
-  var styles = view.getComputedStyle(source);
-  layer.style.boxSizing = styles.boxSizing;
-  layer.style.padding = styles.padding;
-  layer.style.font = styles.font;
-  layer.style.letterSpacing = styles.letterSpacing;
-  layer.style.textIndent = styles.textIndent;
-  layer.style.lineHeight = styles.lineHeight;
-  layer.style.color = "#000";
-  layer.style.background = "transparent";
-  layer.style.border = "none";
-  layer.style.overflow = "visible";
-  layer.style.display = "flex";
-  layer.style.pointerEvents = "none";
-
-  if (source.tagName === "TEXTAREA") {
-    layer.style.alignItems = "flex-start";
-    layer.style.whiteSpace = "pre-wrap";
-  } else {
-    layer.style.alignItems = "center";
-    layer.style.whiteSpace = "pre";
-  }
-
-  if (styles.textAlign === "center") {
-    layer.style.justifyContent = "center";
-  } else if (styles.textAlign === "right") {
-    layer.style.justifyContent = "flex-end";
-  } else {
-    layer.style.justifyContent = "flex-start";
-  }
-}
-
-/**
- * html2canvas は input の文字を欠落・ずらすことがある。
- * キャプチャ直前だけ、画面上の矩形に合わせたテキスト層に差し替える（撮影後に復元）。
- */
-function installSheetPdfTextSwaps(sheet) {
-  var view = sheet.ownerDocument.defaultView;
-  if (!view) {
-    return function () {};
-  }
-
-  var sheetRect = sheet.getBoundingClientRect();
-  var installed = [];
-
-  sheet.querySelectorAll("input, textarea").forEach(function (element) {
-    if (element.type === "hidden") return;
-
-    if (element.classList.contains("soshiki-form-member-zip")) {
-      installed.push({
-        element: element,
-        previousDisplay: element.style.display,
-      });
-      element.style.display = "none";
-      return;
-    }
-
-    var value = element.value;
-    if (value == null || String(value) === "") return;
-
-    var rect = element.getBoundingClientRect();
-    if (rect.width < 0.5 || rect.height < 0.5) return;
-
-    var layer = document.createElement("div");
-    layer.className = "soshiki-form-pdf-text-swap";
-    layer.setAttribute("aria-hidden", "true");
-    layer.textContent = value;
-    layer.style.position = "absolute";
-    layer.style.left = rect.left - sheetRect.left + sheet.scrollLeft + "px";
-    layer.style.top = rect.top - sheetRect.top + sheet.scrollTop + "px";
-    layer.style.width = rect.width + "px";
-    layer.style.height = rect.height + "px";
-    layer.style.margin = "0";
-    layer.style.zIndex = "30";
-    applyPdfTextSwapLayerStyles(element, layer, view);
-
-    installed.push({
-      element: element,
-      layer: layer,
-      previousDisplay: element.style.display,
-    });
-    element.style.display = "none";
-    sheet.appendChild(layer);
-  });
-
-  return function uninstallSheetPdfTextSwaps() {
-    installed.forEach(function (item) {
-      item.element.style.display = item.previousDisplay || "";
-      if (item.layer) {
-        item.layer.remove();
-      }
-    });
-  };
-}
-
-function buildSoshikiFormPdfDocument() {
-  var sheet = document.querySelector(".soshiki-form-sheet");
-  if (!sheet) {
-    return Promise.reject(new Error("申込書シートが見つかりません。"));
-  }
-
-  var body = document.body;
-  var previousScale = sheet.style.getPropertyValue("--soshiki-form-scale");
-  var previousMarginBottom = sheet.style.marginBottom;
-  var uninstallPdfTextSwaps = function () {};
-
-  setSoshikiFormCaptureLock(true);
-  body.classList.add("soshiki-form-capturing");
-  sheet.style.setProperty("--soshiki-form-scale", "1");
-  sheet.style.marginBottom = "0";
-  syncSoshikiFormZipViewsForCapture();
-
-  if (typeof sheet.scrollIntoView === "function") {
-    sheet.scrollIntoView({ block: "center", inline: "nearest" });
-  }
-
-  return waitForSoshikiFormCapturePaint()
-    .then(function () {
-      uninstallPdfTextSwaps = installSheetPdfTextSwaps(sheet);
-      return waitForSoshikiFormCapturePaint();
-    })
-    .then(function () {
-      return html2canvas(sheet, {
-        scale: SOSHIKI_FORM_CAPTURE_SCALE,
-        useCORS: true,
-        backgroundColor: "#ffffff",
-        logging: false,
-      });
-    })
-    .then(function (canvas) {
-      var imgData = canvas.toDataURL("image/jpeg", 0.92);
-      var pdf = new window.jspdf.jsPDF({
-        orientation: "landscape",
-        unit: "mm",
-        format: "a4",
-      });
-      pdf.addImage(imgData, "JPEG", 0, 0, 297, 210);
-      return pdf;
-    })
-    .finally(function () {
-      uninstallPdfTextSwaps();
-      body.classList.remove("soshiki-form-capturing");
-      if (previousScale) {
-        sheet.style.setProperty("--soshiki-form-scale", previousScale);
-      } else {
-        sheet.style.removeProperty("--soshiki-form-scale");
-      }
-      sheet.style.marginBottom = previousMarginBottom;
-      setSoshikiFormCaptureLock(false);
-    });
-}
-
 function buildSoshikiFormSubmitPdfBase64() {
-  return buildSoshikiFormPdfDocument().then(function (pdf) {
-    var dataUri = pdf.output("datauristring");
-    var base64 = dataUri.split(",")[1] || "";
-    if (!base64) {
-      throw new Error("PDF の生成に失敗しました。");
-    }
-    return base64;
-  });
-}
-
-function triggerSoshikiFormPdfDownload(pdf) {
-  var fileName = getSoshikiFormPdfDownloadFileName();
-  var blob = pdf.output("blob");
-  var url = URL.createObjectURL(blob);
-  var link = document.createElement("a");
-  link.href = url;
-  link.download = fileName;
-  link.rel = "noopener";
-  link.style.display = "none";
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  window.setTimeout(function () {
-    URL.revokeObjectURL(url);
-  }, 0);
+  return buildSoshikiFormSubmitPdfBase64FromTemplate();
 }
 
 function downloadSoshikiFormPdfFile() {
-  var libraryErrors = collectSoshikiFormPdfLibraryErrors();
-  if (libraryErrors.length > 0) {
-    window.alert(libraryErrors.join("\n"));
-    return Promise.reject(new Error(libraryErrors[0]));
-  }
-
-  return buildSoshikiFormPdfDocument().then(function (pdf) {
-    triggerSoshikiFormPdfDownload(pdf);
-  });
+  return downloadSoshikiFormPdfFromTemplate();
 }
 
 function setSoshikiFormSendBusy(isBusy) {

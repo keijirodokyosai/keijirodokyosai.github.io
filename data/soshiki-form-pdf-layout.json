@@ -1,0 +1,14 @@
+{
+  "formVersion": "1",
+  "template": "/pdf/soshiki-form-enter.pdf",
+  "page": {
+    "widthPt": 841.68,
+    "heightPt": 595.2,
+    "comment": "A4 横・pdf/soshiki-form-enter.pdf と同寸（pt）。座標は左下原点。"
+  },
+  "memberRow": {
+    "stepPt": null,
+    "comment": "組合員行の縦オフセット（pt）。フェーズ2以降で実測値を入れる。"
+  },
+  "fields": []
+}
