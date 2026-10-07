@@ -32,12 +32,12 @@ function initSoshikiFormActions() {
   }
 
   if (saveButton) {
-    saveButton.addEventListener("click", printSoshikiFormSheet);
+    saveButton.addEventListener("click", saveSoshikiFormPdf);
   }
 }
 
-function printSoshikiFormSheet() {
-  var body = document.body;
+function saveSoshikiFormPdf() {
+  var saveButton = document.getElementById("soshiki-form-save-pdf");
   var sheet = document.querySelector(".soshiki-form-sheet");
   var active = document.activeElement;
   if (active && typeof active.blur === "function") {
@@ -51,23 +51,27 @@ function printSoshikiFormSheet() {
 
   recordSoshikiFormTsukiKeiSnapshot();
 
-  body.classList.add("soshiki-form-printing");
-
-  function cleanup() {
-    body.classList.remove("soshiki-form-printing");
-    window.dispatchEvent(new Event("resize"));
+  if (saveButton) {
+    saveButton.disabled = true;
+    saveButton.textContent = "保存中…";
   }
 
-  window.addEventListener(
-    "afterprint",
-    function onAfterPrint() {
-      cleanup();
-      window.removeEventListener("afterprint", onAfterPrint);
-    },
-    { once: true }
-  );
-
-  window.print();
+  downloadSoshikiFormPdfFile()
+    .catch(function (error) {
+      console.error("PDF の保存に失敗しました:", error);
+      window.alert(
+        error && error.message
+          ? error.message
+          : "PDF の保存に失敗しました。時間をおいて再度お試しください。"
+      );
+    })
+    .finally(function () {
+      if (saveButton) {
+        saveButton.disabled = false;
+        saveButton.textContent = "保 存";
+      }
+      window.dispatchEvent(new Event("resize"));
+    });
 }
 
 function soshikiFormFooterFieldsHaveInput() {

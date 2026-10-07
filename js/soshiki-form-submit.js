@@ -340,7 +340,43 @@ function normalizeSubmissionUnionMemberCode(rawValue) {
   return digits.padStart(6, "0").slice(0, 6);
 }
 
-function buildSoshikiFormSubmitPdfBase64() {
+function sanitizeSoshikiFormPdfFileNameSegment(value) {
+  return String(value).replace(/[\\/:*?"<>|]/g, "_").trim();
+}
+
+function getSoshikiFormPdfDownloadFileName() {
+  var verified = getSoshikiFormVerifiedUnion();
+  var unionName =
+    verified && verified.KyosaikaiName
+      ? sanitizeSoshikiFormPdfFileNameSegment(verified.KyosaikaiName)
+      : "組織共済申込書";
+  var applicationDate = readSoshikiApplicationDate();
+  var fileNameDate =
+    applicationDate.year && applicationDate.month && applicationDate.day
+      ? applicationDate.year + applicationDate.month + applicationDate.day
+      : "";
+  if (!fileNameDate) {
+    var today = new Date();
+    fileNameDate =
+      String(today.getFullYear()) +
+      pad2(String(today.getMonth() + 1)) +
+      pad2(String(today.getDate()));
+  }
+  return unionName + "_" + fileNameDate + ".pdf";
+}
+
+function collectSoshikiFormPdfLibraryErrors() {
+  var errors = [];
+  if (typeof html2canvas !== "function") {
+    errors.push("PDF 生成ライブラリ（html2canvas）が読み込まれていません。");
+  }
+  if (!window.jspdf || !window.jspdf.jsPDF) {
+    errors.push("PDF 生成ライブラリ（jsPDF）が読み込まれていません。");
+  }
+  return errors;
+}
+
+function buildSoshikiFormPdfDocument() {
   var sheet = document.querySelector(".soshiki-form-sheet");
   if (!sheet) {
     return Promise.reject(new Error("申込書シートが見つかりません。"));
@@ -368,12 +404,7 @@ function buildSoshikiFormSubmitPdfBase64() {
         format: "a4",
       });
       pdf.addImage(imgData, "JPEG", 0, 0, 297, 210);
-      var dataUri = pdf.output("datauristring");
-      var base64 = dataUri.split(",")[1] || "";
-      if (!base64) {
-        throw new Error("PDF の生成に失敗しました。");
-      }
-      return base64;
+      return pdf;
     })
     .finally(function () {
       body.classList.remove("soshiki-form-capturing");
@@ -384,6 +415,29 @@ function buildSoshikiFormSubmitPdfBase64() {
       }
       sheet.style.marginBottom = previousMarginBottom;
     });
+}
+
+function buildSoshikiFormSubmitPdfBase64() {
+  return buildSoshikiFormPdfDocument().then(function (pdf) {
+    var dataUri = pdf.output("datauristring");
+    var base64 = dataUri.split(",")[1] || "";
+    if (!base64) {
+      throw new Error("PDF の生成に失敗しました。");
+    }
+    return base64;
+  });
+}
+
+function downloadSoshikiFormPdfFile() {
+  var libraryErrors = collectSoshikiFormPdfLibraryErrors();
+  if (libraryErrors.length > 0) {
+    window.alert(libraryErrors.join("\n"));
+    return Promise.reject(new Error(libraryErrors[0]));
+  }
+
+  return buildSoshikiFormPdfDocument().then(function (pdf) {
+    pdf.save(getSoshikiFormPdfDownloadFileName());
+  });
 }
 
 function setSoshikiFormSendBusy(isBusy) {

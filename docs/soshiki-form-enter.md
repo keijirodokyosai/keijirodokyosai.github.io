@@ -73,7 +73,7 @@
 
 ```text
 soshiki-form-enter.html      … 入力ページ
-js/soshiki-form-enter.js     … 日付初期値・申込月の翌月を当月枠へ反映・マスタ連携・横フィット（§9.0.1）・操作ボタン（§5.9・クリア・保 存印刷）・組合確定状態
+js/soshiki-form-enter.js     … 日付初期値・申込月の翌月を当月枠へ反映・マスタ連携・横フィット（§9.0.1）・操作ボタン（§5.9・クリア・保 存 PDF）・組合確定状態
 js/soshiki-form-footer-counts.js … 前月残持ち越し・月計自動計算・月計 localStorage（§5.7.2）
 js/soshiki-form-union-storage.js … 保存組合名 localStorage・datalist・削除 UI（§5.2）
 js/soshiki-form-submit.js    … WEB 受付（§5.10・JSON/PDF 生成・PA POST）
@@ -283,10 +283,10 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | 順（左→右） | id | ラベル | 状態 |
 |-------------|-----|--------|------|
 | 1 | `soshiki-form-clear` | クリア | **実装済み** |
-| 2 | `soshiki-form-save-pdf` | 保 存 | **実装済み**（印刷→PDF 保存） |
+| 2 | `soshiki-form-save-pdf` | 保 存 | **実装済み**（PDF ダウンロード・§5.9） |
 | 3 | `soshiki-form-send` | 送 信 | **実装済み**（§5.10・PA URL 設定要） |
 
-ボタン行の下に `.soshiki-form-actions-hint`（右寄せ・14px）:「※ 保 存を押し、印刷画面で『PDF に保存』を選んでください。」印刷時は非表示。
+ボタン行の下に `.soshiki-form-actions-hint`（右寄せ・14px）:「※ 保 存を押すと、申込書の PDF がダウンロードされます。」
 
 その下（ヒント・送 信結果の後）に **保存した組合**（`.soshiki-form-saved-unions-panel`）:
 
@@ -319,11 +319,11 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 * **残す**: 申込日・組合名・産別/支部/分会・口欄7・掛金
 * クリア後: 1行目の開発用 `placeholder` を復元（`restoreMemberRowOneDevHints()`）
 
-**保 存**（`printSoshikiFormSheet()`・`initSoshikiFormActions()`）:
+**保 存**（`saveSoshikiFormPdf()`・`initSoshikiFormActions()`）:
 
-* クリック → フォーカス解除 → **月計スナップショット記録**（§5.7.2）→ `body.soshiki-form-printing` 付与 → `window.print()` → `afterprint` でクラス除去
-* ユーザーはブラウザの印刷ダイアログで **「PDF に保存」** を選択（PDF の自動ダウンロードはしない）
-* 印字対象は **`.soshiki-form-sheet` のみ**（パンくず・ヒーロー・操作ボタン・ヒントは `@media print` で非表示）。詳細は §9.0.2
+* クリック → フォーカス解除 → **月計スナップショット記録**（§5.7.2）→ `downloadSoshikiFormPdfFile()`（`js/soshiki-form-submit.js`・送 信と同型の html2canvas + jsPDF）
+* ファイル名: `{組合名}_{申込日 yyyyMMdd}.pdf`（組合未確定時は `組織共済申込書`、申込日未入力時は当日）
+* 見た目は **送 信 PDF と同じ**（`body.soshiki-form-capturing`・§9.0.2）。ブラウザの **ダウンロード** で保存（印刷ダイアログは出さない）
 
 ### 5.9.1 Tab 移動順（DOM 順）
 
@@ -340,7 +340,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 
 ### 5.10 WEB 受付（送 信）
 
-**保 存** は手動印刷 PDF。**送 信** は JSON + 自動生成 PDF を OneDrive（Power Automate 経由）へアップロードする。
+**保 存** は申込書 PDF の **ローカルダウンロード**。**送 信** は JSON + 同型 PDF を OneDrive（Power Automate 経由）へアップロードする。
 
 | 項目 | 内容 |
 |------|------|
@@ -598,7 +598,7 @@ PA 通知専用。Web・GitHub には載せない。kyosai-system が `Subbranch
 
 ### 9.0.2 印刷・PDF
 
-**保 存** ボタンは `window.print()` でブラウザ印刷を開く。`@media print`（`body.soshiki-form-enter-page`）で **申込書シートだけ** を A4 横・余白 0 で印字する。
+**保 存** ボタンは jsPDF で PDF を生成してダウンロードする（§5.9）。`@media print`（`body.soshiki-form-enter-page`）はブラウザから申込書を **印刷** する場合のスタイル（メニュー印刷等）。
 
 | 項目 | 内容 |
 |------|------|

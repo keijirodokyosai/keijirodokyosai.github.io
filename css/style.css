@@ -804,7 +804,6 @@ a:focus-visible {
     transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
     z-index: 1001;
     overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
   }
 
   .global-nav.is-open {
@@ -1204,6 +1203,7 @@ a:focus-visible {
   max-width: none;
   object-fit: fill;
   pointer-events: none;
+  -webkit-user-select: none;
   user-select: none;
 }
 
@@ -1293,6 +1293,7 @@ a:focus-visible {
   color: #000;
   padding: 0 0 4px 0;
   pointer-events: none;
+  -webkit-user-select: none;
   user-select: none;
 }
 
@@ -1921,8 +1922,8 @@ a:focus-visible {
   min-height: var(--soshiki-form-member-box-height);
   max-height: var(--soshiki-form-member-box-height);
   color: var(--soshiki-form-member-box-color);
-  appearance: none;
   -webkit-appearance: none;
+  appearance: none;
 }
 
 .soshiki-form-member-box:hover {
@@ -2526,8 +2527,8 @@ a:focus-visible {
   }
 
   body.soshiki-form-enter-page .soshiki-form-sheet-bg {
-    print-color-adjust: exact;
     -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
 
   body.soshiki-form-enter-page .soshiki-form-sheet ::placeholder {
@@ -2538,8 +2539,8 @@ a:focus-visible {
   .soshiki-form-idou-btn.is-selected,
   .soshiki-form-gender-btn.is-selected {
     border-color: #000 !important;
-    print-color-adjust: exact;
     -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
 
   .soshiki-form-sheet .soshiki-form-field,
@@ -2572,8 +2573,8 @@ body.soshiki-form-capturing .soshiki-form-sheet {
 }
 
 body.soshiki-form-capturing .soshiki-form-sheet-bg {
-  print-color-adjust: exact;
   -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
 }
 
 body.soshiki-form-capturing .soshiki-form-sheet ::placeholder {
@@ -2584,8 +2585,8 @@ body.soshiki-form-capturing .soshiki-form-sheet ::placeholder {
 body.soshiki-form-capturing .soshiki-form-idou-btn.is-selected,
 body.soshiki-form-capturing .soshiki-form-gender-btn.is-selected {
   border-color: #000 !important;
-  print-color-adjust: exact;
   -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
 }
 
 body.soshiki-form-capturing .soshiki-form-sheet .soshiki-form-field,
