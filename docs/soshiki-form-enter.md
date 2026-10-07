@@ -288,7 +288,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | 2 | `soshiki-form-save-pdf` | 保 存 | **実装済み**（PDF ダウンロード・§5.9） |
 | 3 | `soshiki-form-send` | 送 信 | **実装済み**（§5.10・PA URL 設定要） |
 
-ボタン行の下に `.soshiki-form-actions-hint`（右寄せ・14px）: 保存先の選択・上書き可・プリンタ非表示・未対応時はダウンロードフォルダ。**保存後はブラウザのタブで PDF を開かない**（Chrome の注意表示回避）。確認はエクスプローラーから PDF ビューアで開く。
+ボタン行の下に `.soshiki-form-actions-hint`（右寄せ・14px）:「※ 保 存を押すと、申込書の PDF がダウンロードされます（プリンタのダイアログは出ません）。保存場所の確認はブラウザ設定（ダウンロード前に保存場所の確認）で行う。」
 
 その下（ヒント・送 信結果の後）に **保存した組合**（`.soshiki-form-saved-unions-panel`）:
 
@@ -324,10 +324,9 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 **保 存**（`saveSoshikiFormPdf()`・`initSoshikiFormActions()`）:
 
 * クリック → フォーカス解除 → **月計スナップショット記録**（§5.7.2）→ `downloadSoshikiFormPdfFile()` → `js/soshiki-form-pdf-fill.js`（§9.0.3）
-* ファイル名（初期値）: `{組合名}_{申込日 yyyyMMdd}.pdf`（組合未確定時は `組織共済申込書`、申込日未入力時は当日）
-* 保存 UI: **Edge / Chrome 等**では `showSaveFilePicker`（名前を付けて保存・**上書き可**）。ダイアログはクリック直後（PDF 生成前）に表示。未対応ブラウザは Blob + `<a download>`（同名は OS が `(2)` 等にする場合あり）
+* ファイル名: `{組合名}_{申込日 yyyyMMdd}.pdf`（組合未確定時は `組織共済申込書`、申込日未入力時は当日）。Blob + `<a download>`（`triggerSoshikiFormPdfBytesDownload`）
+* 保存ダイアログ: **サイト側は出さない**。ブラウザの「ダウンロード前に保存場所の確認をする」がオンなら、OS の保存ダイアログが出る（上書きはそのダイアログで選択）。オフ時はダウンロードフォルダへ自動保存（同名は `(2)` 等になり得る）
 * プリンタ／印刷ダイアログは **出さない**
-* 保存後に **ブラウザの PDF ビューアで開く必要はない**（開くと Chrome 等がサイト連携の注意を出すことがある）。実装はファイル書き込みのみでタブは開かない
 * **進行中:** フェーズ1＝原本 PDF のみ出力。フェーズ2以降で `data/soshiki-form-pdf-layout.json` に座標を追加して文字を載せる
 
 ### 5.9.1 Tab 移動順（DOM 順）
@@ -613,7 +612,7 @@ PA 通知専用。Web・GitHub には載せない。kyosai-system が `Subbranch
 | 座標 | `data/soshiki-form-pdf-layout.json`（`fields[]`・x/y は **pt**・**左下原点**） |
 | データ | `buildSoshikiFormPdfPayload()`（画面上の項目。`submission` を含む） |
 | 実装 | `js/soshiki-form-pdf-fill.js` の `buildSoshikiFormPdfBytes()`（標準フォントは `pdfDoc.embedFont(StandardFonts.Helvetica)`。`fields` が空のときは描画・埋め込みを省略） |
-| 保 存の書き出し | `promptSoshikiFormPdfSaveFileHandle` → 生成 → `writeSoshikiFormPdfBytesToFileHandle`（対応ブラウザ）。未対応時は `<a download>` |
+| 保 存の書き出し | `buildSoshikiFormPdfBytes` → `triggerSoshikiFormPdfBytesDownload`（`<a download>`） |
 | フェーズ1 | 原本を読み込みそのまま保存（配線確認）。`fields` は空 |
 | フェーズ2以降 | `fields` に項目を追加・日本語フォント埋め込み・組合員行の `memberRow.stepPt` |
 
