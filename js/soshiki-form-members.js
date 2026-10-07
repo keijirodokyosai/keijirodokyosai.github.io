@@ -26,6 +26,8 @@ var UNION_MEMBER_CODE_OVERFLOW_MESSAGE =
   "組合員コードは6桁以内で入力してください";
 
 var lastPostalCodeLookupByRow = {};
+var zipLookupFailedDigitsByRow = {};
+var zipLookupPendingByRow = {};
 
 var ADDRESS_FONT_FIT_SUFFIXES = [
   "prefecture",
@@ -534,6 +536,7 @@ function initZipFields() {
       applyZipFieldValue(input);
     });
 
+    writeZipDigitCountState(input, extractZipDigits(input.value).length);
     updateZipView(input);
   });
 }
@@ -572,8 +575,21 @@ function formatZipCode(digits) {
   return digits.slice(0, 3) + "-" + digits.slice(3);
 }
 
+function readZipDigitCountState(input) {
+  var stored = input.getAttribute("data-zip-digit-count");
+  if (stored === null || stored === "") {
+    return extractZipDigits(input.value).length;
+  }
+  var parsed = parseInt(stored, 10);
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
+function writeZipDigitCountState(input, count) {
+  input.setAttribute("data-zip-digit-count", String(count));
+}
+
 function applyZipFieldValue(input) {
-  var digitsBeforeEdit = extractZipDigits(input.value);
+  var digitsBeforeEdit = readZipDigitCountState(input);
   var selectionStart = input.selectionStart;
   var digitsBeforeCursor = extractZipDigits(
     input.value.slice(0, selectionStart)
@@ -598,8 +614,9 @@ function applyZipFieldValue(input) {
   }
 
   updateZipView(input);
+  writeZipDigitCountState(input, digits.length);
 
-  if (digits.length === 7 && digitsBeforeEdit.length < 7) {
+  if (digits.length === 7 && digitsBeforeEdit < 7) {
     lookupAddressFromZip(getRowFromField(input), {
       focusAreaNumberAfterSuccess: true,
     });
@@ -810,6 +827,48 @@ function focusMemberAreaNumberField(row) {
   }
 }
 
+function clearPostalCodeInput(zipInput, row) {
+  if (!zipInput) return;
+  zipInput.value = "";
+  writeZipDigitCountState(zipInput, 0);
+  updateZipView(zipInput);
+  setFieldError(zipInput, false);
+  if (row) {
+    delete lastPostalCodeLookupByRow[row];
+    delete zipLookupFailedDigitsByRow[row];
+  }
+}
+
+function handlePostalCodeLookupFailure(row, zipInput, message, showFeedback) {
+  if (showFeedback) {
+    clearPostalCodeInput(zipInput, row);
+    window.alert(message);
+    if (zipInput && typeof zipInput.focus === "function") {
+      zipInput.focus();
+    }
+    return;
+  }
+
+  var digits = extractZipDigits(zipInput.value);
+  if (digits.length === 7) {
+    zipLookupFailedDigitsByRow[row] = digits;
+  }
+  delete lastPostalCodeLookupByRow[row];
+  setFieldError(zipInput, true);
+}
+
+function mergeZipLookupPendingRequest(row, digits, options) {
+  var pending = zipLookupPendingByRow[row];
+  if (!pending || pending.digits !== digits) {
+    return false;
+  }
+
+  pending.wantsFeedback = pending.wantsFeedback || Boolean(options.feedback);
+  pending.wantsFocusArea =
+    pending.wantsFocusArea || Boolean(options.focusAreaNumberAfterSuccess);
+  return true;
+}
+
 function lookupAddressFromZip(row, options) {
   options = options || {};
   var feedback = Boolean(options.feedback);
@@ -829,19 +888,41 @@ function lookupAddressFromZip(row, options) {
     setFieldError(zipInput, false);
     return;
   }
+
+  if (feedback && zipLookupFailedDigitsByRow[row] === digits) {
+    delete zipLookupFailedDigitsByRow[row];
+    handlePostalCodeLookupFailure(row, zipInput, ZIP_NOT_FOUND_MESSAGE, true);
+    return;
+  }
+
+  if (mergeZipLookupPendingRequest(row, digits, options)) {
+    return;
+  }
+
   var postalCodeChanged = previousDigits !== digits;
+  var pending = {
+    digits: digits,
+    inFlight: true,
+    wantsFeedback: feedback,
+    wantsFocusArea: focusAreaNumberAfterSuccess,
+  };
+  zipLookupPendingByRow[row] = pending;
 
   fetch(ZIPCLOUD_API + "?zipcode=" + encodeURIComponent(digits))
     .then(function (response) {
       return response.json();
     })
     .then(function (data) {
+      var showFeedback = pending.wantsFeedback;
+      var focusArea = pending.wantsFocusArea;
+
       if (!data || data.status !== 200 || !data.results || !data.results.length) {
-        delete lastPostalCodeLookupByRow[row];
-        setFieldError(zipInput, feedback);
-        if (feedback) {
-          window.alert(ZIP_NOT_FOUND_MESSAGE);
-        }
+        handlePostalCodeLookupFailure(
+          row,
+          zipInput,
+          ZIP_NOT_FOUND_MESSAGE,
+          showFeedback
+        );
         return;
       }
 
@@ -855,19 +936,26 @@ function lookupAddressFromZip(row, options) {
         clearManualAddressFields(row);
       }
 
+      delete zipLookupFailedDigitsByRow[row];
       setAddressFieldsFromZipcloud(row, chosen);
       lastPostalCodeLookupByRow[row] = digits;
       setFieldError(zipInput, false);
-      if (focusAreaNumberAfterSuccess) {
+      if (focusArea) {
         focusMemberAreaNumberField(row);
       }
     })
     .catch(function (error) {
       console.error("郵便番号検索に失敗しました:", error);
-      delete lastPostalCodeLookupByRow[row];
-      setFieldError(zipInput, feedback);
-      if (feedback) {
-        window.alert(ZIP_LOOKUP_FAILED_MESSAGE);
+      handlePostalCodeLookupFailure(
+        row,
+        zipInput,
+        ZIP_LOOKUP_FAILED_MESSAGE,
+        pending.wantsFeedback
+      );
+    })
+    .finally(function () {
+      if (zipLookupPendingByRow[row] === pending) {
+        delete zipLookupPendingByRow[row];
       }
     });
 }
@@ -1143,12 +1231,15 @@ function clearMemberRow(row) {
     field.value = "";
     setFieldError(field, false);
     if (suffix === "postal-code") {
+      writeZipDigitCountState(field, 0);
       updateZipView(field);
     }
   });
 
   fitAddressFieldsForRow(row);
   delete lastPostalCodeLookupByRow[row];
+  delete zipLookupFailedDigitsByRow[row];
+  delete zipLookupPendingByRow[row];
 }
 
 function restoreMemberRowOneDevHints() {

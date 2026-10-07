@@ -428,6 +428,23 @@ function buildSoshikiFormSubmitPdfBase64() {
   });
 }
 
+function triggerSoshikiFormPdfDownload(pdf) {
+  var fileName = getSoshikiFormPdfDownloadFileName();
+  var blob = pdf.output("blob");
+  var url = URL.createObjectURL(blob);
+  var link = document.createElement("a");
+  link.href = url;
+  link.download = fileName;
+  link.rel = "noopener";
+  link.style.display = "none";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  window.setTimeout(function () {
+    URL.revokeObjectURL(url);
+  }, 0);
+}
+
 function downloadSoshikiFormPdfFile() {
   var libraryErrors = collectSoshikiFormPdfLibraryErrors();
   if (libraryErrors.length > 0) {
@@ -436,7 +453,7 @@ function downloadSoshikiFormPdfFile() {
   }
 
   return buildSoshikiFormPdfDocument().then(function (pdf) {
-    pdf.save(getSoshikiFormPdfDownloadFileName());
+    triggerSoshikiFormPdfDownload(pdf);
   });
 }
 
