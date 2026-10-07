@@ -76,7 +76,7 @@ soshiki-form-enter.html      … 入力ページ
 js/soshiki-form-enter.js     … 日付初期値・申込月の翌月を当月枠へ反映・マスタ連携・横フィット（§9.0.1）・操作ボタン（§5.9・クリア・保 存 PDF）・組合確定状態
 js/soshiki-form-footer-counts.js … 前月残持ち越し・月計自動計算・月計 localStorage（§5.7.2）
 js/soshiki-form-union-storage.js … 保存組合名 localStorage・datalist・削除 UI（§5.2）
-js/soshiki-form-submit.js    … WEB 受付（§5.10・JSON・PA POST）
+js/soshiki-form-submit.js    … WEB 受付（§5.10・JSON・Worker POST）
 js/soshiki-form-pdf-fill.js  … PDF 生成（§9.0.3・pdf-lib・原本＋座標 JSON）
 data/soshiki-form-pdf-layout.json … PDF 文字配置（pt・左下原点）
 js/soshiki-form-members.js   … 組合員5行・異動トグル・半角制限・氏名カナ入力補助（§9.13.1）・郵便番号検索・町村域正規化（§9.9）・表示同期（updateZipView）・組合員欄クリア
@@ -85,7 +85,8 @@ css/style.css                … .soshiki-form-* オーバーレイ用
 images/soshiki-form-enter.png
 pdf/soshiki-form-enter.pdf   … 原本 PDF
 data/union-master.json       … 開発用サンプル（kyosai-system 本番出力で置換）
-data/soshiki-form-submit-config.json … WEB 受付 PA URL（§5.10）
+data/soshiki-form-submit-config.json … WEB 受付 API URL（§5.10）
+docs/soshiki-form-submit-worker-graph.md … 送 信本命（Worker + Graph）引き継ぎ
 data/form-kyosai-map.json    … 申込書口欄 ↔ KyosaiId 対応（確定）
 scripts/serve-open.ps1       … ローカルプレビュー（起動 / -Stop で停止）
 scripts/_jekyll-common.ps1   … serve-open 用ヘルパー
@@ -344,11 +345,13 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 
 ### 5.10 WEB 受付（送 信）
 
-**保 存** は申込書 PDF の **ローカルダウンロード**。**送 信** は JSON + 同型 PDF を OneDrive（Power Automate 経由）へアップロードする。
+**保 存** は申込書 PDF の **ブラウザ印刷によるローカル保存**（§5.9）。
+
+**送 信（本命・2026-10 決定）:** 自作フォーム → **Cloudflare Workers** → **Microsoft Graph**（アプリ権限）→ 事務局 OneDrive。Exchange・Power Automate（HTTP／メールトリガー）は使わない。実装・引き継ぎは **`docs/soshiki-form-submit-worker-graph.md`** を正とする。
 
 | 項目 | 内容 |
 |------|------|
-| 設定 | `data/soshiki-form-submit-config.json` の `submitEndpointUrl`（PA HTTP 受信 URL） |
+| 設定 | `data/soshiki-form-submit-config.json` の `submitEndpointUrl`（**Worker API URL**。未設定時は送 信不可） |
 | JS | `js/soshiki-form-submit.js`・`js/soshiki-form-pdf-fill.js` |
 | ライブラリ | pdf-lib 1.17.1（CDN）。日本語はフェーズ2以降でフォント埋め込み（fontkit） |
 | 送 信条件 | `validateSoshikiForm()` OK・組合名 Enter 確定（`getSoshikiFormVerifiedUnion()`）・組合員1名以上・パスワード入力 |
@@ -382,9 +385,9 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 |------|------|
 | 組合名 | POST の `unionName`（マスタ確定名・ファイル名用。submission 内には含めない） |
 | yyyyMMdd | POST の `fileNameDate`（申込日） |
-| 受付 ID | **PA が付与**し JSON レスポンス `receiptId` で Web に返す |
+| 受付 ID | **Worker が付与**し JSON レスポンス `receiptId` で Web に返す（旧案: PA） |
 
-#### POST ボディ（Web → PA）
+#### POST ボディ（Web → Worker）
 
 ```json
 {
@@ -416,18 +419,20 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | `PostalCode` | `600-0000` |
 | `UnionMemberCode` | 入力時のみ（6桁） |
 
-#### PA レスポンス（Web 期待）
+#### Worker レスポンス（Web 期待）
 
 ```json
 { "receiptId": "7f3a2b1c", "ok": true }
 ```
 
-#### PA 側（未実装・手動構築）
+#### Worker 側（未実装）
 
-1. HTTP 受信 → パスワード照合  
-2. `storageFolder` で `組織共済WEB受付/受付/{storageFolder}/json|pdf/` を作成  
-3. 受付 ID 生成 → ファイル保存  
-4. `union-contacts.json` で `KyosaikaiCode` 照合 → 担当者 + 共済会へ通知  
+1. POST 受信 → パスワード照合（Secret）  
+2. `storageFolder` で `組織共済WEB受付/受付/{storageFolder}/json|pdf/` に Graph で保存  
+3. 受付 ID 生成 → `{receiptId, ok}` を返却  
+4. （後回し）`union-contacts.json` 照合 → 担当者通知（旧 PA 案・Graph メール等）  
+
+**廃止:** PA HTTP 受信（Premium）、PA メール → OneDrive（REST／ライセンス）。詳細は `docs/soshiki-form-submit-worker-graph.md`。
 
 #### union-contacts.json（OneDrive・非公開）
 
