@@ -288,7 +288,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | 2 | `soshiki-form-save-pdf` | 保 存 | **実装済み**（PDF ダウンロード・§5.9） |
 | 3 | `soshiki-form-send` | 送 信 | **実装済み**（§5.10・PA URL 設定要） |
 
-ボタン行の下に `.soshiki-form-actions-hint`（右寄せ・14px）:「※ 保 存はブラウザの印刷画面（送信先 PDF に保存）。プリンタ本体には送らない。」
+ボタン行の下に `.soshiki-form-actions-hint`（右寄せ・14px）:「※ 保 存は、メニューの「印刷」と同じ画面。送信先を「PDF に保存」にして保存。ファイル名の初期値は組合名と申込日。」
 
 その下（ヒント・送 信結果の後）に **保存した組合**（`.soshiki-form-saved-unions-panel`）:
 
