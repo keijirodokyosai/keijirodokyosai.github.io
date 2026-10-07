@@ -7,6 +7,11 @@ var HALF_WIDTH_KANA_PATTERN = /[^ｦ-ﾟ]/g;
 var ZIPCLOUD_API = "https://zipcloud.ibsnet.co.jp/api/search";
 var ZIP_MULTIPLE_RESULTS_MESSAGE =
   "入力の郵便番号には、複数の住所候補があります。表示された住所が異なる場合は手入力でお願いします。";
+var ZIP_INVALID_LENGTH_MESSAGE = "郵便番号は7桁で入力してください。";
+var ZIP_NOT_FOUND_MESSAGE =
+  "該当する郵便番号が見つかりません。ご確認ください。";
+var ZIP_LOOKUP_FAILED_MESSAGE =
+  "郵便番号の確認に失敗しました。通信環境をご確認のうえ、再度お試しください。";
 
 var ADDRESS_GROUP_FIELD_SUFFIXES = [
   "postal-code",
@@ -568,6 +573,7 @@ function formatZipCode(digits) {
 }
 
 function applyZipFieldValue(input) {
+  var digitsBeforeEdit = extractZipDigits(input.value);
   var selectionStart = input.selectionStart;
   var digitsBeforeCursor = extractZipDigits(
     input.value.slice(0, selectionStart)
@@ -592,11 +598,39 @@ function applyZipFieldValue(input) {
   }
 
   updateZipView(input);
+
+  if (digits.length === 7 && digitsBeforeEdit.length < 7) {
+    lookupAddressFromZip(getRowFromField(input), {
+      focusAreaNumberAfterSuccess: true,
+    });
+  }
 }
 
 function commitZipFieldAndLookup(input) {
   applyZipFieldValue(input);
-  lookupAddressFromZip(getRowFromField(input));
+  validatePostalCodeOnCommit(input);
+}
+
+function validatePostalCodeOnCommit(input) {
+  var row = getRowFromField(input);
+  var zipInput = getMemberField(row, "postal-code");
+  if (!zipInput) return;
+
+  var digits = extractZipDigits(zipInput.value);
+  if (!digits) {
+    setFieldError(zipInput, false);
+    delete lastPostalCodeLookupByRow[row];
+    return;
+  }
+
+  if (digits.length !== 7) {
+    delete lastPostalCodeLookupByRow[row];
+    setFieldError(zipInput, true);
+    window.alert(ZIP_INVALID_LENGTH_MESSAGE);
+    return;
+  }
+
+  lookupAddressFromZip(row, { feedback: true });
 }
 
 function initZipLookup() {
@@ -766,7 +800,21 @@ function stripKyotoStreetNameFromTownArea(value) {
   return value.trim();
 }
 
-function lookupAddressFromZip(row) {
+function focusMemberAreaNumberField(row) {
+  var areaNumber = getMemberField(row, "area-number");
+  if (!areaNumber || typeof areaNumber.focus !== "function") return;
+  areaNumber.focus();
+  if (typeof areaNumber.setSelectionRange === "function") {
+    var length = areaNumber.value.length;
+    areaNumber.setSelectionRange(length, length);
+  }
+}
+
+function lookupAddressFromZip(row, options) {
+  options = options || {};
+  var feedback = Boolean(options.feedback);
+  var focusAreaNumberAfterSuccess = Boolean(options.focusAreaNumberAfterSuccess);
+
   var zipInput = getMemberField(row, "postal-code");
   if (!zipInput) return;
 
@@ -777,6 +825,10 @@ function lookupAddressFromZip(row) {
   updateZipView(zipInput);
 
   var previousDigits = lastPostalCodeLookupByRow[row] || "";
+  if (previousDigits === digits) {
+    setFieldError(zipInput, false);
+    return;
+  }
   var postalCodeChanged = previousDigits !== digits;
 
   fetch(ZIPCLOUD_API + "?zipcode=" + encodeURIComponent(digits))
@@ -785,6 +837,11 @@ function lookupAddressFromZip(row) {
     })
     .then(function (data) {
       if (!data || data.status !== 200 || !data.results || !data.results.length) {
+        delete lastPostalCodeLookupByRow[row];
+        setFieldError(zipInput, feedback);
+        if (feedback) {
+          window.alert(ZIP_NOT_FOUND_MESSAGE);
+        }
         return;
       }
 
@@ -800,9 +857,18 @@ function lookupAddressFromZip(row) {
 
       setAddressFieldsFromZipcloud(row, chosen);
       lastPostalCodeLookupByRow[row] = digits;
+      setFieldError(zipInput, false);
+      if (focusAreaNumberAfterSuccess) {
+        focusMemberAreaNumberField(row);
+      }
     })
     .catch(function (error) {
       console.error("郵便番号検索に失敗しました:", error);
+      delete lastPostalCodeLookupByRow[row];
+      setFieldError(zipInput, feedback);
+      if (feedback) {
+        window.alert(ZIP_LOOKUP_FAILED_MESSAGE);
+      }
     });
 }
 
