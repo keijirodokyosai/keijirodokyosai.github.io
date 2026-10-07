@@ -175,12 +175,10 @@ function collectSoshikiFormSendValidationErrors() {
     errors.push("組合員欄に1名以上入力してください。");
   }
 
-  if (typeof html2canvas !== "function") {
-    errors.push("PDF 生成ライブラリ（html2canvas）が読み込まれていません。");
-  }
-
-  if (!window.jspdf || !window.jspdf.jsPDF) {
-    errors.push("PDF 生成ライブラリ（jsPDF）が読み込まれていません。");
+  if (typeof collectSoshikiFormPdfLibErrors === "function") {
+    errors = errors.concat(collectSoshikiFormPdfLibErrors());
+  } else if (!window.PDFLib || !window.PDFLib.PDFDocument) {
+    errors.push("PDF 生成ライブラリ（pdf-lib）が読み込まれていません。");
   }
 
   return errors;
