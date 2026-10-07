@@ -611,7 +611,7 @@ PA 通知専用。Web・GitHub には載せない。kyosai-system が `Subbranch
 | 原本 | `pdf/soshiki-form-enter.pdf`（A4 横） |
 | 座標 | `data/soshiki-form-pdf-layout.json`（`fields[]`・x/y は **pt**・**左下原点**） |
 | データ | `buildSoshikiFormPdfPayload()`（画面上の項目。`submission` を含む） |
-| 実装 | `js/soshiki-form-pdf-fill.js` の `buildSoshikiFormPdfBytes()` |
+| 実装 | `js/soshiki-form-pdf-fill.js` の `buildSoshikiFormPdfBytes()`（標準フォントは `pdfDoc.embedFont(StandardFonts.Helvetica)`。`fields` が空のときは描画・埋め込みを省略） |
 | 保 存の書き出し | `promptSoshikiFormPdfSaveFileHandle` → 生成 → `writeSoshikiFormPdfBytesToFileHandle`（対応ブラウザ）。未対応時は `<a download>` |
 | フェーズ1 | 原本を読み込みそのまま保存（配線確認）。`fields` は空 |
 | フェーズ2以降 | `fields` に項目を追加・日本語フォント埋め込み・組合員行の `memberRow.stepPt` |

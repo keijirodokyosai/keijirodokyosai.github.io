@@ -109,10 +109,20 @@ function buildSoshikiFormPdfBytes() {
       });
     })
     .then(function (state) {
+      var fields = state.layout && state.layout.fields ? state.layout.fields : [];
+      if (!fields.length) {
+        return state.pdfDoc.save();
+      }
+
       var page = state.pdfDoc.getPages()[0];
-      var fonts = { default: state.pdfDoc.getFont(window.PDFLib.StandardFonts.Helvetica) };
-      drawSoshikiFormPdfFields(page, state.layout, state.payload, fonts);
-      return state.pdfDoc.save();
+      return Promise.resolve(
+        state.pdfDoc.embedFont(window.PDFLib.StandardFonts.Helvetica)
+      ).then(function (helvetica) {
+        drawSoshikiFormPdfFields(page, state.layout, state.payload, {
+          default: helvetica,
+        });
+        return state.pdfDoc.save();
+      });
     });
 }
 
