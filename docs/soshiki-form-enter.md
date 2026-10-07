@@ -74,6 +74,7 @@
 ```text
 soshiki-form-enter.html      … 入力ページ
 js/soshiki-form-enter.js     … 日付初期値・申込月の翌月を当月枠へ反映・マスタ連携・横フィット（§9.0.1）・操作ボタン（§5.9・クリア・保 存印刷）・組合確定状態
+js/soshiki-form-footer-counts.js … 前月残持ち越し・月計自動計算・月計 localStorage（§5.7.2）
 js/soshiki-form-union-storage.js … 保存組合名 localStorage・datalist・削除 UI（§5.2）
 js/soshiki-form-submit.js    … WEB 受付（§5.10・JSON/PDF 生成・PA POST）
 js/soshiki-form-members.js   … 組合員5行・異動トグル・半角制限・氏名カナ入力補助（§9.13.1）・郵便番号検索・町村域正規化（§9.9）・表示同期（updateZipView）・組合員欄クリア
@@ -220,7 +221,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | HTML id | `zengetsu-zan-count`（前月残） / `tougetsu-count`（当月） / `tsuki-kei-count`（月計） |
 | Tab 順（DOM） | 当月 → 前月残 → 月計（§5.9.1） |
 | レイアウト | `.soshiki-form-zengetsu-group--zan` / `--tsuki-kei` を absolute 配置（§5.6 ページ枚数と同型）。input は `width/height: 100%` |
-| 入力 | 手入力可。`inputmode="numeric"`、`maxlength="3"` |
+| 入力 | **前月残** … 手入力可（`inputmode="numeric"`、`maxlength="3"`）。**月計** … §5.7.2 で自動・`readonly` |
 | PNG 枠（外側・黒罫線） | 前月残 x508–556 y958–996（**49×39px**）/ 月計 x680–728 y958–996（**49×39px**） |
 | 入力オーバーレイ | グループを外枠に合わせ、`padding: 2px`（内側 45×35px） |
 | 前月残配置 | `left 30.166%` / `top 80.437%` / `width 2.91%` + `22px` / `height 3.275%` + `8px` / offset `-12px` / `29px` |
@@ -244,6 +245,19 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | 位置 | 月計の `top` から当月の `height` 分だけ上。`left` は月計幅の 1/4 だけ右（半分幅の中央揃え） / offset `-6px` / `-24px` |
 | 位置・サイズ微調整 | `--soshiki-form-zengetsu-tougetsu-offset-x/y`（px）、`width-extra` / `height-extra`（px） |
 | フォント | 16px、中央揃え、`tabular-nums`（`--soshiki-form-zengetsu-tougetsu-font-size`）。文字位置は input `padding` 上 `2px` / 下 `0` |
+
+#### 5.7.2 前月残・月計（人数の持ち越しと自動計算）
+
+| 項目 | 内容 |
+|------|------|
+| 実装 | `js/soshiki-form-footer-counts.js` |
+| **前月残** | 組合確定または申込日変更時、**直近1件**の記録月計を `zengetsu-zan-count` に自動入力。記録の `coverageMonth` が **今回より前** のときのみ（同月・未来は上書きしない） |
+| **月計** | **自動計算・`readonly`**。`前月残 + 新規行数 − 解約行数`（**変更**は人数に含めない）。結果は **0 未満にならない** |
+| 再計算 | 前月残の入力・異動トグル・組合員クリア |
+| **記録** | `localStorage` キー `soshiki-form-tsuki-kei-snapshots`。組合（`KyosaikaiCode`）ごと **直近1件** `{ tsukiKei, coverageMonth }` のみ（月ごとの履歴は持たない）。**保 存**・**送 信**成功で上書き |
+| 格納月 | 申込日からの `coverageMonth`（`js/soshiki-form-submit.js` と同型。申込 10 月 → `YYYY-11`） |
+| 持ち越し元 | 上記 **直近1件**の `tsukiKei`（中間月に未保存があっても、最後に記録した月計を使う） |
+| 注意 | ブラウザ・端末ごとの補助。送信 JSON には含めない（§5.10） |
 
 ### 5.8 備考（CSS 配置）
 
@@ -299,14 +313,15 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 * 対象欄に1文字でも入力があるときだけ確認ダイアログ → OK でクリア
 * **組合員5行**（異動・コード・氏名・生年月日・性別・住所）
 * **ページ枚数**（`page-count-current` / `page-count-total`）
-* **前月残**（`zengetsu-zan-count`）・**月計**（`tsuki-kei-count`）・**備考**（`biko-remarks`）
+* **前月残**（`zengetsu-zan-count`）・**備考**（`biko-remarks`）
+* **月計**（`tsuki-kei-count`）は **クリア対象**だが **readonly**（§5.7.2 の自動計算。クリア後は再計算で 0 または空）
 * **当月**（`tougetsu-count`）は **変更しない**（申込月からの自動表示のまま）
 * **残す**: 申込日・組合名・産別/支部/分会・口欄7・掛金
 * クリア後: 1行目の開発用 `placeholder` を復元（`restoreMemberRowOneDevHints()`）
 
 **保 存**（`printSoshikiFormSheet()`・`initSoshikiFormActions()`）:
 
-* クリック → フォーカス解除 → `body.soshiki-form-printing` 付与 → `window.print()` → `afterprint` でクラス除去
+* クリック → フォーカス解除 → **月計スナップショット記録**（§5.7.2）→ `body.soshiki-form-printing` 付与 → `window.print()` → `afterprint` でクラス除去
 * ユーザーはブラウザの印刷ダイアログで **「PDF に保存」** を選択（PDF の自動ダウンロードはしない）
 * 印字対象は **`.soshiki-form-sheet` のみ**（パンくず・ヒーロー・操作ボタン・ヒントは `@media print` で非表示）。詳細は §9.0.2
 
@@ -335,6 +350,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | 送 信条件 | `validateSoshikiForm()` OK・組合名 Enter 確定（`getSoshikiFormVerifiedUnion()`）・組合員1名以上・パスワード入力 |
 | POST | **1 リクエスト**（JSON + PDF Base64 + パスワード + ファイル名用メタ） |
 | PDF | 送 信時に `.soshiki-form-sheet` をキャプチャ（`body.soshiki-form-capturing`・§9.0.2 印刷に近似・scale 3≒OCR 想定 DPI） |
+| 月計記録 | 送 信 **成功後** に §5.7.2 の localStorage へ上書き（保 存と同じ） |
 | 取込 | **リアルタイム自動なし**（事務側の取込処理で json 削除・二重チェック） |
 
 #### OneDrive フォルダ（案C改）

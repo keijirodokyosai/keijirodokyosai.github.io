@@ -102,6 +102,7 @@ function initIdouButtons() {
       } else {
         hidden.value = "";
       }
+      recalcSoshikiFormTsukiKeiCount();
     });
   });
 }
@@ -1098,6 +1099,7 @@ function clearAllMemberRows() {
     clearMemberRow(row);
   }
   restoreMemberRowOneDevHints();
+  recalcSoshikiFormTsukiKeiCount();
 }
 
 function memberRowsHaveAnyInput() {

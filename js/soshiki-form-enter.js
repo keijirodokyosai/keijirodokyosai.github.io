@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
   initApplicationDate();
   initTougetsuMonth();
+  initSoshikiFormFooterCounts();
   initSoshikiFormUnionStorage();
   initUnionMaster();
   initMemberRows();
@@ -26,6 +27,7 @@ function initSoshikiFormActions() {
       if (!window.confirm("入力内容をクリアします。よろしいですか？")) return;
       clearAllMemberRows();
       clearSoshikiFormFooterFields();
+      recalcSoshikiFormTsukiKeiCount();
     });
   }
 
@@ -46,6 +48,8 @@ function printSoshikiFormSheet() {
     sheet.style.setProperty("--soshiki-form-scale", "1");
     sheet.style.marginBottom = "0";
   }
+
+  recordSoshikiFormTsukiKeiSnapshot();
 
   body.classList.add("soshiki-form-printing");
 
@@ -303,6 +307,7 @@ function applyUnionData(union, kyosaiMap) {
   setFieldValue("branch-code", union.BranchCode || "");
   setFieldValue("subbranch-code", union.SubbranchCode || "");
   applyFormKuchiToDom(computeFormKuchi(union, kyosaiMap));
+  applySoshikiFormZengetsuCarryForward();
 }
 
 function applyFormKuchiToDom(result) {

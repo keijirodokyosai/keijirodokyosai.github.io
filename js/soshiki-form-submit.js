@@ -141,6 +141,7 @@ function handleSoshikiFormSendClick() {
       });
     })
     .then(function (result) {
+      recordSoshikiFormTsukiKeiSnapshot();
       var receiptId =
         (result && (result.receiptId || result.receipt_id)) || "";
       showSoshikiFormSendSuccess(receiptId);
