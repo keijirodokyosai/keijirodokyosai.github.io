@@ -286,7 +286,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | 2 | `soshiki-form-save-pdf` | 保 存 | **実装済み**（PDF ダウンロード・§5.9） |
 | 3 | `soshiki-form-send` | 送 信 | **実装済み**（§5.10・PA URL 設定要） |
 
-ボタン行の下に `.soshiki-form-actions-hint`（右寄せ・14px）:「※ 保 存を押すと、申込書の PDF がダウンロードされます。」
+ボタン行の下に `.soshiki-form-actions-hint`（右寄せ・14px）:「※ 保 存を押すと印刷画面が開きます。「PDF に保存」を選んでください。」
 
 その下（ヒント・送 信結果の後）に **保存した組合**（`.soshiki-form-saved-unions-panel`）:
 
@@ -321,9 +321,9 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 
 **保 存**（`saveSoshikiFormPdf()`・`initSoshikiFormActions()`）:
 
-* クリック → フォーカス解除 → **月計スナップショット記録**（§5.7.2）→ `downloadSoshikiFormPdfFile()`（`js/soshiki-form-submit.js`・送 信と同型の html2canvas + jsPDF）
-* ファイル名: `{組合名}_{申込日 yyyyMMdd}.pdf`（組合未確定時は `組織共済申込書`、申込日未入力時は当日）
-* 見た目は **送 信 PDF と同じ**（`body.soshiki-form-capturing`・§9.0.2）。Blob + `<a download>` で保存（印刷ダイアログは出さない。ページ `<title>` 由来のファイル名にならないよう jsPDF の `pdf.save()` は使わない）
+* クリック → フォーカス解除 → **月計スナップショット記録**（§5.7.2）→ **`window.print()`**（§9.0.2 の `@media print`）。ユーザーは印刷ダイアログで **PDF に保存**する
+* 画面フィット用 scale を **1** にしてから印刷（`afterprint` で元の scale に戻す）
+* **送 信**用 PDF（html2canvas + jsPDF）とは経路が異なる。ローカル保存は **ブラウザの印刷エンジン**で入力・住所の位置を正確に出す
 
 ### 5.9.1 Tab 移動順（DOM 順）
 
@@ -598,14 +598,14 @@ PA 通知専用。Web・GitHub には載せない。kyosai-system が `Subbranch
 
 ### 9.0.2 印刷・PDF
 
-**保 存** ボタンは jsPDF で PDF を生成してダウンロードする（§5.9）。`@media print`（`body.soshiki-form-enter-page`）はブラウザから申込書を **印刷** する場合のスタイル（メニュー印刷等）。
+**保 存** ボタンは `window.print()` で §9.0.2 の印刷スタイルを使う（§5.9）。メニューからの印刷も同じ `@media print`（`body.soshiki-form-enter-page`）。
 
 | 項目 | 内容 |
 |------|------|
 | `@page` | `size: A4 landscape`、`margin: 0` |
 | 非印字 | `.site-header`、`.site-footer`、`.breadcrumb`、`.hero`、`.soshiki-form-actions`、`.soshiki-form-actions-hint`、保存組合パネル・送信結果 |
 | ページ数 | **1 ページ**（シートのみ。共通ヘッダー／フッターを印刷対象外） |
-| シート | `transform: none`（§9.0.1 の scale 解除）、`297mm × 210mm`、影なし。キャプチャ中は `ResizeObserver` による scale 再適用を止め、描画待ち後に **実 DOM** へ入力値オーバーレイ（`soshiki-form-capture-value`・郵便番号は `updateZipView`）を載せて html2canvas → 直後に除去 |
+| シート | `transform: none`（§9.0.1 の scale 解除）、`297mm × 210mm`、影なし。組合員行は `overflow: visible`（住所2〜3行目） |
 | 背景 PNG | `.soshiki-form-sheet-bg` に `print-color-adjust: exact` |
 | プレースホルダ | シート内 `::placeholder` は透明（開発用薄字を印字しない） |
 | 入力ガイド | 画面上の **緑枠線は印字しない**（下表） |

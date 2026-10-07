@@ -36,42 +36,58 @@ function initSoshikiFormActions() {
   }
 }
 
+function restoreSoshikiFormSheetViewportScale(sheet, previousScale, previousMarginBottom) {
+  if (!sheet) return;
+  if (previousScale) {
+    sheet.style.setProperty("--soshiki-form-scale", previousScale);
+  } else {
+    sheet.style.removeProperty("--soshiki-form-scale");
+  }
+  sheet.style.marginBottom = previousMarginBottom || "";
+}
+
 function saveSoshikiFormPdf() {
-  var saveButton = document.getElementById("soshiki-form-save-pdf");
   var sheet = document.querySelector(".soshiki-form-sheet");
   var active = document.activeElement;
   if (active && typeof active.blur === "function") {
     active.blur();
   }
 
+  recordSoshikiFormTsukiKeiSnapshot();
+
+  var previousScale = sheet
+    ? sheet.style.getPropertyValue("--soshiki-form-scale")
+    : "";
+  var previousMarginBottom = sheet ? sheet.style.marginBottom : "";
+
   if (sheet) {
     sheet.style.setProperty("--soshiki-form-scale", "1");
     sheet.style.marginBottom = "0";
   }
 
-  recordSoshikiFormTsukiKeiSnapshot();
+  window.SOSHIKI_FORM_CAPTURE_LOCKED = true;
 
-  if (saveButton) {
-    saveButton.disabled = true;
-    saveButton.textContent = "保存中…";
+  var printFinished = false;
+  function finishPrint() {
+    if (printFinished) return;
+    printFinished = true;
+    restoreSoshikiFormSheetViewportScale(
+      sheet,
+      previousScale,
+      previousMarginBottom
+    );
+    window.SOSHIKI_FORM_CAPTURE_LOCKED = false;
+    window.dispatchEvent(new Event("resize"));
   }
 
-  downloadSoshikiFormPdfFile()
-    .catch(function (error) {
-      console.error("PDF の保存に失敗しました:", error);
-      window.alert(
-        error && error.message
-          ? error.message
-          : "PDF の保存に失敗しました。時間をおいて再度お試しください。"
-      );
-    })
-    .finally(function () {
-      if (saveButton) {
-        saveButton.disabled = false;
-        saveButton.textContent = "保 存";
-      }
-      window.dispatchEvent(new Event("resize"));
-    });
+  window.addEventListener("afterprint", function onAfterPrint() {
+    window.removeEventListener("afterprint", onAfterPrint);
+    finishPrint();
+  });
+
+  window.setTimeout(function () {
+    window.print();
+  }, 0);
 }
 
 function soshikiFormFooterFieldsHaveInput() {
