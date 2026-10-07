@@ -349,7 +349,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | ライブラリ | html2canvas 1.4.1・jsPDF 2.5.2（CDN） |
 | 送 信条件 | `validateSoshikiForm()` OK・組合名 Enter 確定（`getSoshikiFormVerifiedUnion()`）・組合員1名以上・パスワード入力 |
 | POST | **1 リクエスト**（JSON + PDF Base64 + パスワード + ファイル名用メタ） |
-| PDF | 送 信時に `.soshiki-form-sheet` をキャプチャ（`body.soshiki-form-capturing`・§9.0.2 印刷に近似・scale 3≒OCR 想定 DPI） |
+| PDF | 送 信・保 存で `.soshiki-form-sheet` をキャプチャ（`body.soshiki-form-capturing`・§9.0.2・scale 3）。html2canvas 向けにキャプチャ直前だけ `installSheetPdfTextSwaps()` で入力を画面上の矩形に合わせたテキスト層へ差し替え（撮影後復元） |
 | 月計記録 | 送 信 **成功後** に §5.7.2 の localStorage へ上書き（保 存と同じ） |
 | 取込 | **リアルタイム自動なし**（事務側の取込処理で json 削除・二重チェック） |
 

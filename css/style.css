@@ -2610,12 +2610,8 @@ body.soshiki-form-capturing .soshiki-form-member-box {
   outline: none !important;
 }
 
-body.soshiki-form-capturing .soshiki-form-sheet input:not([type="hidden"]):not(
-    .soshiki-form-member-zip
-  ),
-body.soshiki-form-capturing .soshiki-form-sheet textarea {
-  color: #000 !important;
-  -webkit-text-fill-color: #000 !important;
+body.soshiki-form-capturing .soshiki-form-pdf-text-swap {
+  z-index: 30;
 }
 
 body.soshiki-form-capturing .soshiki-form-dev-marker {

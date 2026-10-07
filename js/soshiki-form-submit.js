@@ -395,6 +395,101 @@ function syncSoshikiFormZipViewsForCapture() {
   });
 }
 
+function applyPdfTextSwapLayerStyles(source, layer, view) {
+  var styles = view.getComputedStyle(source);
+  layer.style.boxSizing = styles.boxSizing;
+  layer.style.padding = styles.padding;
+  layer.style.font = styles.font;
+  layer.style.letterSpacing = styles.letterSpacing;
+  layer.style.textIndent = styles.textIndent;
+  layer.style.lineHeight = styles.lineHeight;
+  layer.style.color = "#000";
+  layer.style.background = "transparent";
+  layer.style.border = "none";
+  layer.style.overflow = "visible";
+  layer.style.display = "flex";
+  layer.style.pointerEvents = "none";
+
+  if (source.tagName === "TEXTAREA") {
+    layer.style.alignItems = "flex-start";
+    layer.style.whiteSpace = "pre-wrap";
+  } else {
+    layer.style.alignItems = "center";
+    layer.style.whiteSpace = "pre";
+  }
+
+  if (styles.textAlign === "center") {
+    layer.style.justifyContent = "center";
+  } else if (styles.textAlign === "right") {
+    layer.style.justifyContent = "flex-end";
+  } else {
+    layer.style.justifyContent = "flex-start";
+  }
+}
+
+/**
+ * html2canvas は input の文字を欠落・ずらすことがある。
+ * キャプチャ直前だけ、画面上の矩形に合わせたテキスト層に差し替える（撮影後に復元）。
+ */
+function installSheetPdfTextSwaps(sheet) {
+  var view = sheet.ownerDocument.defaultView;
+  if (!view) {
+    return function () {};
+  }
+
+  var sheetRect = sheet.getBoundingClientRect();
+  var installed = [];
+
+  sheet.querySelectorAll("input, textarea").forEach(function (element) {
+    if (element.type === "hidden") return;
+
+    if (element.classList.contains("soshiki-form-member-zip")) {
+      installed.push({
+        element: element,
+        previousDisplay: element.style.display,
+      });
+      element.style.display = "none";
+      return;
+    }
+
+    var value = element.value;
+    if (value == null || String(value) === "") return;
+
+    var rect = element.getBoundingClientRect();
+    if (rect.width < 0.5 || rect.height < 0.5) return;
+
+    var layer = document.createElement("div");
+    layer.className = "soshiki-form-pdf-text-swap";
+    layer.setAttribute("aria-hidden", "true");
+    layer.textContent = value;
+    layer.style.position = "absolute";
+    layer.style.left = rect.left - sheetRect.left + sheet.scrollLeft + "px";
+    layer.style.top = rect.top - sheetRect.top + sheet.scrollTop + "px";
+    layer.style.width = rect.width + "px";
+    layer.style.height = rect.height + "px";
+    layer.style.margin = "0";
+    layer.style.zIndex = "30";
+    applyPdfTextSwapLayerStyles(element, layer, view);
+
+    installed.push({
+      element: element,
+      layer: layer,
+      previousDisplay: element.style.display,
+    });
+    element.style.display = "none";
+    sheet.appendChild(layer);
+  });
+
+  return function uninstallSheetPdfTextSwaps() {
+    installed.forEach(function (item) {
+      item.element.style.display = item.previousDisplay || "";
+      if (item.layer) {
+        item.layer.remove();
+      }
+    });
+  };
+}
+
 function buildSoshikiFormPdfDocument() {
   var sheet = document.querySelector(".soshiki-form-sheet");
   if (!sheet) {
@@ -404,6 +499,7 @@ function buildSoshikiFormPdfDocument() {
   var body = document.body;
   var previousScale = sheet.style.getPropertyValue("--soshiki-form-scale");
   var previousMarginBottom = sheet.style.marginBottom;
+  var uninstallPdfTextSwaps = function () {};
 
   setSoshikiFormCaptureLock(true);
   body.classList.add("soshiki-form-capturing");
@@ -416,6 +512,10 @@ function buildSoshikiFormPdfDocument() {
   }
 
   return waitForSoshikiFormCapturePaint()
+    .then(function () {
+      uninstallPdfTextSwaps = installSheetPdfTextSwaps(sheet);
+      return waitForSoshikiFormCapturePaint();
+    })
     .then(function () {
       return html2canvas(sheet, {
         scale: SOSHIKI_FORM_CAPTURE_SCALE,
@@ -435,6 +535,7 @@ function buildSoshikiFormPdfDocument() {
       return pdf;
     })
     .finally(function () {
+      uninstallPdfTextSwaps();
       body.classList.remove("soshiki-form-capturing");
       if (previousScale) {
         sheet.style.setProperty("--soshiki-form-scale", previousScale);
