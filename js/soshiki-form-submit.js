@@ -388,74 +388,95 @@ function waitForSoshikiFormCapturePaint() {
   });
 }
 
-function ensureSoshikiFormCaptureParentPosition(element) {
-  if (!element || !element.parentElement) return;
-  var position = element.parentElement.style.position;
-  if (!position || position === "static") {
-    element.parentElement.style.position = "relative";
-  }
+function syncSoshikiFormZipViewsForCapture() {
+  if (typeof updateZipView !== "function") return;
+  document.querySelectorAll("[data-zip-field]").forEach(function (input) {
+    updateZipView(input);
+  });
 }
 
-function enhanceSoshikiFormCloneForPdfCapture(clonedDocument) {
-  var sheet = clonedDocument.querySelector(".soshiki-form-sheet");
-  if (!sheet) return;
+function installLiveCaptureTextLayers(sheet) {
+  var installed = [];
+  var view = sheet.ownerDocument.defaultView;
+  if (!view) {
+    return function () {};
+  }
 
-  sheet.style.setProperty("--soshiki-form-scale", "1");
-  sheet.style.transform = "none";
-  sheet.style.margin = "0";
-  sheet.style.overflow = "visible";
+  sheet.querySelectorAll("input, textarea").forEach(function (element) {
+    if (element.type === "hidden") return;
+    if (element.classList.contains("soshiki-form-member-zip")) return;
 
-  clonedDocument.querySelectorAll(".soshiki-form-member-row").forEach(function (row) {
-    row.style.overflow = "visible";
+    var value = element.value;
+    if (value == null || String(value) === "") return;
+
+    var styles = view.getComputedStyle(element);
+    var parent = element.parentElement;
+    if (!parent) return;
+
+    var parentPosition = parent.style.position;
+    if (view.getComputedStyle(parent).position === "static") {
+      parent.style.position = "relative";
+    }
+
+    var layer = document.createElement("span");
+    layer.className = "soshiki-form-capture-value";
+    layer.setAttribute("aria-hidden", "true");
+    layer.textContent = value;
+    layer.style.position = "absolute";
+    layer.style.left = "0";
+    layer.style.top = "0";
+    layer.style.width = "100%";
+    layer.style.height = "100%";
+    layer.style.display = "flex";
+    layer.style.boxSizing = "border-box";
+    layer.style.padding = styles.padding;
+    layer.style.font = styles.font;
+    layer.style.letterSpacing = styles.letterSpacing;
+    layer.style.textIndent = styles.textIndent;
+    layer.style.color = "#000";
+    layer.style.pointerEvents = "none";
+    layer.style.zIndex = "5";
+    layer.style.overflow = "visible";
+
+    if (element.tagName === "TEXTAREA") {
+      layer.style.alignItems = "flex-start";
+      layer.style.whiteSpace = "pre-wrap";
+      layer.style.lineHeight = styles.lineHeight;
+    } else {
+      layer.style.alignItems = "center";
+      layer.style.whiteSpace = "pre";
+    }
+
+    if (styles.textAlign === "center") {
+      layer.style.justifyContent = "center";
+    } else if (styles.textAlign === "right") {
+      layer.style.justifyContent = "flex-end";
+    } else {
+      layer.style.justifyContent = "flex-start";
+    }
+
+    var previousVisibility = element.style.visibility;
+    element.style.visibility = "hidden";
+    parent.appendChild(layer);
+
+    installed.push({
+      layer: layer,
+      element: element,
+      parent: parent,
+      parentPosition: parentPosition,
+      previousVisibility: previousVisibility,
+    });
   });
 
-  clonedDocument
-    .querySelectorAll(".soshiki-form-sheet input, .soshiki-form-sheet textarea")
-    .forEach(function (element) {
-      if (element.type === "hidden") return;
-      if (element.classList.contains("soshiki-form-member-zip")) {
-        element.style.opacity = "0";
-        return;
+  return function uninstallLiveCaptureTextLayers() {
+    installed.forEach(function (item) {
+      item.element.style.visibility = item.previousVisibility;
+      item.layer.remove();
+      if (item.parentPosition === "") {
+        item.parent.style.position = "";
       }
-
-      var value = element.value;
-      if (!value || !String(value).trim()) return;
-
-      var view = clonedDocument.defaultView;
-      if (!view) return;
-
-      var styles = view.getComputedStyle(element);
-      ensureSoshikiFormCaptureParentPosition(element);
-
-      var mirror = clonedDocument.createElement("span");
-      mirror.className = "soshiki-form-capture-value";
-      mirror.setAttribute("aria-hidden", "true");
-      mirror.textContent = value;
-      mirror.style.position = "absolute";
-      mirror.style.inset = "0";
-      mirror.style.display = "flex";
-      mirror.style.alignItems = "center";
-      mirror.style.overflow = "visible";
-      mirror.style.pointerEvents = "none";
-      mirror.style.boxSizing = "border-box";
-      mirror.style.padding = styles.padding;
-      mirror.style.font = styles.font;
-      mirror.style.letterSpacing = styles.letterSpacing;
-      mirror.style.textIndent = styles.textIndent;
-      mirror.style.color = "#000";
-      mirror.style.whiteSpace = "pre";
-
-      if (styles.textAlign === "center") {
-        mirror.style.justifyContent = "center";
-      } else if (styles.textAlign === "right") {
-        mirror.style.justifyContent = "flex-end";
-      } else {
-        mirror.style.justifyContent = "flex-start";
-      }
-
-      element.style.opacity = "0";
-      element.parentElement.appendChild(mirror);
     });
+  };
 }
 
 function buildSoshikiFormPdfDocument() {
@@ -467,11 +488,13 @@ function buildSoshikiFormPdfDocument() {
   var body = document.body;
   var previousScale = sheet.style.getPropertyValue("--soshiki-form-scale");
   var previousMarginBottom = sheet.style.marginBottom;
+  var uninstallCaptureLayers = function () {};
 
   setSoshikiFormCaptureLock(true);
   body.classList.add("soshiki-form-capturing");
   sheet.style.setProperty("--soshiki-form-scale", "1");
   sheet.style.marginBottom = "0";
+  syncSoshikiFormZipViewsForCapture();
 
   if (typeof sheet.scrollIntoView === "function") {
     sheet.scrollIntoView({ block: "center", inline: "nearest" });
@@ -479,16 +502,15 @@ function buildSoshikiFormPdfDocument() {
 
   return waitForSoshikiFormCapturePaint()
     .then(function () {
+      uninstallCaptureLayers = installLiveCaptureTextLayers(sheet);
+      return waitForSoshikiFormCapturePaint();
+    })
+    .then(function () {
       return html2canvas(sheet, {
         scale: SOSHIKI_FORM_CAPTURE_SCALE,
         useCORS: true,
         backgroundColor: "#ffffff",
         logging: false,
-        scrollX: 0,
-        scrollY: -window.scrollY,
-        onclone: function (clonedDocument) {
-          enhanceSoshikiFormCloneForPdfCapture(clonedDocument);
-        },
       });
     })
     .then(function (canvas) {
@@ -502,6 +524,7 @@ function buildSoshikiFormPdfDocument() {
       return pdf;
     })
     .finally(function () {
+      uninstallCaptureLayers();
       body.classList.remove("soshiki-form-capturing");
       if (previousScale) {
         sheet.style.setProperty("--soshiki-form-scale", previousScale);
