@@ -135,20 +135,39 @@ function soshikiFormPdfBytesToBase64(bytes) {
   return btoa(binary);
 }
 
-function triggerSoshikiFormPdfBytesDownload(bytes, fileName) {
-  var blob = new Blob([bytes], { type: "application/pdf" });
-  var url = URL.createObjectURL(blob);
-  var link = document.createElement("a");
-  link.href = url;
-  link.download = fileName;
-  link.rel = "noopener";
-  link.style.display = "none";
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  window.setTimeout(function () {
-    URL.revokeObjectURL(url);
-  }, 0);
+/**
+ * 「名前を付けて保存」（上書き可）。クリック直後に呼ぶ（user activation 用）。
+ * キャンセルは "cancelled"。
+ */
+function promptSoshikiFormPdfSaveFileHandle(fileName) {
+  if (typeof window.showSaveFilePicker !== "function") {
+    return Promise.resolve("unsupported");
+  }
+
+  return window
+    .showSaveFilePicker({
+      suggestedName: fileName,
+      types: [
+        {
+          description: "PDF",
+          accept: { "application/pdf": [".pdf"] },
+        },
+      ],
+    })
+    .catch(function (error) {
+      if (error && error.name === "AbortError") {
+        return "cancelled";
+      }
+      throw error;
+    });
+}
+
+function writeSoshikiFormPdfBytesToFileHandle(fileHandle, bytes) {
+  return fileHandle.createWritable().then(function (writable) {
+    return writable.write(bytes).then(function () {
+      return writable.close();
+    });
+  });
 }
 
 function downloadSoshikiFormPdfFromTemplate() {
@@ -159,8 +178,21 @@ function downloadSoshikiFormPdfFromTemplate() {
   }
 
   var fileName = getSoshikiFormPdfDownloadFileName();
-  return buildSoshikiFormPdfBytes().then(function (bytes) {
-    triggerSoshikiFormPdfBytesDownload(bytes, fileName);
+  return promptSoshikiFormPdfSaveFileHandle(fileName).then(function (handleOrStatus) {
+    if (handleOrStatus === "cancelled") {
+      return;
+    }
+    if (handleOrStatus === "unsupported") {
+      return Promise.reject(
+        new Error(
+          "このブラウザでは保存先を選べません。Microsoft Edge または Google Chrome で本サイトを開いてから保存してください。"
+        )
+      );
+    }
+
+    return buildSoshikiFormPdfBytes().then(function (bytes) {
+      return writeSoshikiFormPdfBytesToFileHandle(handleOrStatus, bytes);
+    });
   });
 }
 
