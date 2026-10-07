@@ -288,7 +288,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | 2 | `soshiki-form-save-pdf` | 保 存 | **実装済み**（PDF ダウンロード・§5.9） |
 | 3 | `soshiki-form-send` | 送 信 | **実装済み**（§5.10・PA URL 設定要） |
 
-ボタン行の下に `.soshiki-form-actions-hint`（右寄せ・14px）:「※ 保 存を押すと、申込書の PDF がダウンロードされます（プリンタのダイアログは出ません）。」
+ボタン行の下に `.soshiki-form-actions-hint`（右寄せ・14px）:「※ 保 存では申込書 PDF の保存先を選びます（上書き可）。プリンタのダイアログは出ません。保存先を選べないブラウザではダウンロードフォルダへ自動保存。」
 
 その下（ヒント・送 信結果の後）に **保存した組合**（`.soshiki-form-saved-unions-panel`）:
 
@@ -324,7 +324,8 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 **保 存**（`saveSoshikiFormPdf()`・`initSoshikiFormActions()`）:
 
 * クリック → フォーカス解除 → **月計スナップショット記録**（§5.7.2）→ `downloadSoshikiFormPdfFile()` → `js/soshiki-form-pdf-fill.js`（§9.0.3）
-* ファイル名: `{組合名}_{申込日 yyyyMMdd}.pdf`（組合未確定時は `組織共済申込書`、申込日未入力時は当日）。Blob + `<a download>` で保存
+* ファイル名（初期値）: `{組合名}_{申込日 yyyyMMdd}.pdf`（組合未確定時は `組織共済申込書`、申込日未入力時は当日）
+* 保存 UI: **Edge / Chrome 等**では `showSaveFilePicker`（名前を付けて保存・**上書き可**）。ダイアログはクリック直後（PDF 生成前）に表示。未対応ブラウザは Blob + `<a download>`（同名は OS が `(2)` 等にする場合あり）
 * プリンタ／印刷ダイアログは **出さない**
 * **進行中:** フェーズ1＝原本 PDF のみ出力。フェーズ2以降で `data/soshiki-form-pdf-layout.json` に座標を追加して文字を載せる
 
@@ -611,6 +612,7 @@ PA 通知専用。Web・GitHub には載せない。kyosai-system が `Subbranch
 | 座標 | `data/soshiki-form-pdf-layout.json`（`fields[]`・x/y は **pt**・**左下原点**） |
 | データ | `buildSoshikiFormPdfPayload()`（画面上の項目。`submission` を含む） |
 | 実装 | `js/soshiki-form-pdf-fill.js` の `buildSoshikiFormPdfBytes()` |
+| 保 存の書き出し | `promptSoshikiFormPdfSaveFileHandle` → 生成 → `writeSoshikiFormPdfBytesToFileHandle`（対応ブラウザ）。未対応時は `<a download>` |
 | フェーズ1 | 原本を読み込みそのまま保存（配線確認）。`fields` は空 |
 | フェーズ2以降 | `fields` に項目を追加・日本語フォント埋め込み・組合員行の `memberRow.stepPt` |
 

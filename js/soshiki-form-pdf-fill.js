@@ -141,6 +141,41 @@ function triggerSoshikiFormPdfBytesDownload(bytes, fileName) {
   }, 0);
 }
 
+/**
+ * 「名前を付けて保存」ダイアログ（上書き可）。クリック直後に呼ぶ（user activation 用）。
+ * 未対応ブラウザは null。キャンセルは "cancelled"。
+ */
+function promptSoshikiFormPdfSaveFileHandle(fileName) {
+  if (typeof window.showSaveFilePicker !== "function") {
+    return Promise.resolve(null);
+  }
+
+  return window
+    .showSaveFilePicker({
+      suggestedName: fileName,
+      types: [
+        {
+          description: "PDF",
+          accept: { "application/pdf": [".pdf"] },
+        },
+      ],
+    })
+    .catch(function (error) {
+      if (error && error.name === "AbortError") {
+        return "cancelled";
+      }
+      throw error;
+    });
+}
+
+function writeSoshikiFormPdfBytesToFileHandle(fileHandle, bytes) {
+  return fileHandle.createWritable().then(function (writable) {
+    return writable.write(bytes).then(function () {
+      return writable.close();
+    });
+  });
+}
+
 function downloadSoshikiFormPdfFromTemplate() {
   var libraryErrors = collectSoshikiFormPdfLibErrors();
   if (libraryErrors.length > 0) {
@@ -148,8 +183,18 @@ function downloadSoshikiFormPdfFromTemplate() {
     return Promise.reject(new Error(libraryErrors[0]));
   }
 
-  return buildSoshikiFormPdfBytes().then(function (bytes) {
-    triggerSoshikiFormPdfBytesDownload(bytes, getSoshikiFormPdfDownloadFileName());
+  var fileName = getSoshikiFormPdfDownloadFileName();
+  return promptSoshikiFormPdfSaveFileHandle(fileName).then(function (handleOrCancelled) {
+    if (handleOrCancelled === "cancelled") {
+      return;
+    }
+
+    return buildSoshikiFormPdfBytes().then(function (bytes) {
+      if (handleOrCancelled) {
+        return writeSoshikiFormPdfBytesToFileHandle(handleOrCancelled, bytes);
+      }
+      triggerSoshikiFormPdfBytesDownload(bytes, fileName);
+    });
   });
 }
 
