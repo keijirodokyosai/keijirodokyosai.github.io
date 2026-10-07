@@ -180,7 +180,7 @@ function downloadSoshikiFormPdfFromTemplate() {
   var fileName = getSoshikiFormPdfDownloadFileName();
   return promptSoshikiFormPdfSaveFileHandle(fileName).then(function (handleOrStatus) {
     if (handleOrStatus === "cancelled") {
-      return;
+      return { cancelled: true };
     }
     if (handleOrStatus === "unsupported") {
       return Promise.reject(
@@ -191,7 +191,9 @@ function downloadSoshikiFormPdfFromTemplate() {
     }
 
     return buildSoshikiFormPdfBytes().then(function (bytes) {
-      return writeSoshikiFormPdfBytesToFileHandle(handleOrStatus, bytes);
+      return writeSoshikiFormPdfBytesToFileHandle(handleOrStatus, bytes).then(function () {
+        return { saved: true, fileName: fileName };
+      });
     });
   });
 }

@@ -36,6 +36,46 @@ function initSoshikiFormActions() {
   }
 }
 
+/**
+ * 保 存 — ブラウザの「印刷」と同じ画面（送信先「PDF に保存」想定）。§5.9
+ */
+function printSoshikiFormForPdfSave() {
+  var saveButton = document.getElementById("soshiki-form-save-pdf");
+  var previousTitle = document.title;
+  var suggestedTitle = previousTitle;
+
+  if (typeof getSoshikiFormPdfDownloadFileName === "function") {
+    suggestedTitle = getSoshikiFormPdfDownloadFileName().replace(/\.pdf$/i, "");
+  }
+
+  document.title = suggestedTitle;
+
+  var cleanedUp = false;
+  var fallbackTimerId = null;
+
+  function finishPrintSave() {
+    if (cleanedUp) return;
+    cleanedUp = true;
+    if (fallbackTimerId !== null) {
+      window.clearTimeout(fallbackTimerId);
+      fallbackTimerId = null;
+    }
+    document.title = previousTitle;
+    if (saveButton) {
+      saveButton.disabled = false;
+      saveButton.textContent = "保 存";
+    }
+    window.dispatchEvent(new Event("resize"));
+    window.removeEventListener("afterprint", finishPrintSave);
+  }
+
+  window.addEventListener("afterprint", finishPrintSave);
+  fallbackTimerId = window.setTimeout(finishPrintSave, 60000);
+  window.setTimeout(function () {
+    window.print();
+  }, 0);
+}
+
 function saveSoshikiFormPdf() {
   var saveButton = document.getElementById("soshiki-form-save-pdf");
   var sheet = document.querySelector(".soshiki-form-sheet");
@@ -51,27 +91,16 @@ function saveSoshikiFormPdf() {
 
   recordSoshikiFormTsukiKeiSnapshot();
 
+  if (typeof clearSoshikiFormSendResult === "function") {
+    clearSoshikiFormSendResult();
+  }
+
   if (saveButton) {
     saveButton.disabled = true;
     saveButton.textContent = "保存中…";
   }
 
-  downloadSoshikiFormPdfFile()
-    .catch(function (error) {
-      console.error("PDF の保存に失敗しました:", error);
-      window.alert(
-        error && error.message
-          ? error.message
-          : "PDF の保存に失敗しました。時間をおいて再度お試しください。"
-      );
-    })
-    .finally(function () {
-      if (saveButton) {
-        saveButton.disabled = false;
-        saveButton.textContent = "保 存";
-      }
-      window.dispatchEvent(new Event("resize"));
-    });
+  printSoshikiFormForPdfSave();
 }
 
 function soshikiFormFooterFieldsHaveInput() {

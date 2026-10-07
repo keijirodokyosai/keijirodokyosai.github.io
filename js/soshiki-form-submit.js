@@ -365,6 +365,7 @@ function buildSoshikiFormSubmitPdfBase64() {
   return buildSoshikiFormSubmitPdfBase64FromTemplate();
 }
 
+/** 未使用（保 存は enter.js の window.print）。pdf-fill 経路の残置 */
 function downloadSoshikiFormPdfFile() {
   return downloadSoshikiFormPdfFromTemplate();
 }

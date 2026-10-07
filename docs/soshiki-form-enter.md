@@ -288,7 +288,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | 2 | `soshiki-form-save-pdf` | 保 存 | **実装済み**（PDF ダウンロード・§5.9） |
 | 3 | `soshiki-form-send` | 送 信 | **実装済み**（§5.10・PA URL 設定要） |
 
-ボタン行の下に `.soshiki-form-actions-hint`（右寄せ・14px）:「※ 保 存では名前を付けて保存（上書き可・ダウンロードフォルダ自動保存なし）。プリンタ非表示。Edge / Chrome 推奨。」
+ボタン行の下に `.soshiki-form-actions-hint`（右寄せ・14px）:「※ 保 存はブラウザの印刷画面（送信先 PDF に保存）。プリンタ本体には送らない。」
 
 その下（ヒント・送 信結果の後）に **保存した組合**（`.soshiki-form-saved-unions-panel`）:
 
@@ -321,13 +321,13 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 * **残す**: 申込日・組合名・産別/支部/分会・口欄7・掛金
 * クリア後: 1行目の開発用 `placeholder` を復元（`restoreMemberRowOneDevHints()`）
 
-**保 存**（`saveSoshikiFormPdf()`・`initSoshikiFormActions()`）:
+**保 存**（`saveSoshikiFormPdf()` → `printSoshikiFormForPdfSave()`・`initSoshikiFormActions()`）:
 
-* クリック → フォーカス解除 → **月計スナップショット記録**（§5.7.2）→ `downloadSoshikiFormPdfFile()` → `js/soshiki-form-pdf-fill.js`（§9.0.3）
-* ファイル名（初期値）: `{組合名}_{申込日 yyyyMMdd}.pdf`（組合未確定時は `組織共済申込書`、申込日未入力時は当日）
-* 保存 UI: `showSaveFilePicker` → PDF 生成 → 選択先へ書き込み（**ダウンロードフォルダ経路は使わない**。上書き可）。未対応ブラウザは案内のみ（`<a download>` フォールバックは行わない）
-* プリンタ／印刷ダイアログは **出さない**
-* **進行中:** フェーズ1＝原本 PDF のみ出力。フェーズ2以降で `data/soshiki-form-pdf-layout.json` に座標を追加して文字を載せる
+* クリック → フォーカス解除 → **月計スナップショット記録**（§5.7.2）→ シート scale 解除 → **`window.print()`**（Chrome メニュー「印刷」と同じ UI）
+* 利用想定: 印刷ダイアログの送信先を **「PDF に保存」**（ユーザー設定）。物理プリンタ（例 RICOH）には送らない
+* ファイル名のヒント: 印刷前に `document.title` を `{組合名}_{申込日 yyyyMMdd}` に一時変更（`.pdf` なし）。組合未確定時は `組織共済申込書`、申込日未入力時は当日
+* 印字内容: `@media print`（§9.0.2）の HTML シート（画面上の入力どおり）
+* **送 信**の PDF は別経路（§9.0.3・pdf-lib）。保 存と送 信で PDF 生成方式が異なる点に注意
 
 ### 5.9.1 Tab 移動順（DOM 順）
 
@@ -602,7 +602,7 @@ PA 通知専用。Web・GitHub には載せない。kyosai-system が `Subbranch
 
 ### 9.0.2 印刷・PDF
 
-**保 存**・**送 信**の PDF は §9.0.3（pdf-lib）。メニューからの **印刷** は `@media print`（`body.soshiki-form-enter-page`）。
+**保 存**は `window.print()`（§5.9・§9.0.2）。**送 信**の PDF は §9.0.3（pdf-lib）。
 
 ### 9.0.3 PDF 生成（原本＋座標・pdf-lib）
 
@@ -612,7 +612,8 @@ PA 通知専用。Web・GitHub には載せない。kyosai-system が `Subbranch
 | 座標 | `data/soshiki-form-pdf-layout.json`（`fields[]`・x/y は **pt**・**左下原点**） |
 | データ | `buildSoshikiFormPdfPayload()`（画面上の項目。`submission` を含む） |
 | 実装 | `js/soshiki-form-pdf-fill.js` の `buildSoshikiFormPdfBytes()`（標準フォントは `pdfDoc.embedFont(StandardFonts.Helvetica)`。`fields` が空のときは描画・埋め込みを省略） |
-| 保 存の書き出し | `promptSoshikiFormPdfSaveFileHandle` → `buildSoshikiFormPdfBytes` → `writeSoshikiFormPdfBytesToFileHandle` |
+| 保 存 | `printSoshikiFormForPdfSave`（`window.print`）。§9.0.2 |
+| 送 信の PDF | `buildSoshikiFormPdfBytes`（pdf-lib） |
 | フェーズ1 | 原本を読み込みそのまま保存（配線確認）。`fields` は空 |
 | フェーズ2以降 | `fields` に項目を追加・日本語フォント埋め込み・組合員行の `memberRow.stepPt` |
 
