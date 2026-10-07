@@ -286,7 +286,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | 2 | `soshiki-form-save-pdf` | 保 存 | **実装済み**（PDF ダウンロード・§5.9） |
 | 3 | `soshiki-form-send` | 送 信 | **実装済み**（§5.10・PA URL 設定要） |
 
-ボタン行の下に `.soshiki-form-actions-hint`（右寄せ・14px）:「※ 保 存を押すと印刷画面が開きます。「PDF に保存」を選んでください。」
+ボタン行の下に `.soshiki-form-actions-hint`（右寄せ・14px）:「※ 保 存を押すと、申込書の PDF がダウンロードされます（プリンタのダイアログは出ません）。」
 
 その下（ヒント・送 信結果の後）に **保存した組合**（`.soshiki-form-saved-unions-panel`）:
 
@@ -321,9 +321,9 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 
 **保 存**（`saveSoshikiFormPdf()`・`initSoshikiFormActions()`）:
 
-* クリック → フォーカス解除 → **月計スナップショット記録**（§5.7.2）→ **`window.print()`**（§9.0.2 の `@media print`）。ユーザーは印刷ダイアログで **PDF に保存**する
-* 画面フィット用 scale を **1** にしてから印刷（`afterprint` で元の scale に戻す）
-* **送 信**用 PDF（html2canvas + jsPDF）とは経路が異なる。ローカル保存は **ブラウザの印刷エンジン**で入力・住所の位置を正確に出す
+* クリック → フォーカス解除 → **月計スナップショット記録**（§5.7.2）→ `downloadSoshikiFormPdfFile()`（`js/soshiki-form-submit.js`・送 信と同型の html2canvas + jsPDF・§9.0.2）
+* ファイル名: `{組合名}_{申込日 yyyyMMdd}.pdf`（組合未確定時は `組織共済申込書`、申込日未入力時は当日）。Blob + `<a download>` で保存
+* プリンタ／印刷ダイアログは **出さない**
 
 ### 5.9.1 Tab 移動順（DOM 順）
 
@@ -598,7 +598,7 @@ PA 通知専用。Web・GitHub には載せない。kyosai-system が `Subbranch
 
 ### 9.0.2 印刷・PDF
 
-**保 存** ボタンは `window.print()` で §9.0.2 の印刷スタイルを使う（§5.9）。メニューからの印刷も同じ `@media print`（`body.soshiki-form-enter-page`）。
+**保 存** ボタンは jsPDF で PDF をダウンロードする（§5.9）。メニューからの **印刷** は `@media print`（`body.soshiki-form-enter-page`）。
 
 | 項目 | 内容 |
 |------|------|
