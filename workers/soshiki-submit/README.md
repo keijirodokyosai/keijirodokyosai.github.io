@@ -1,9 +1,9 @@
 # 組織共済 WEB 受付 Worker（`soshiki-submit`）
 
-Cloudflare Worker が GitHub Pages フォームからの POST を受け、Microsoft Graph で OneDrive に JSON / PDF を保存します。
+Cloudflare Worker が GitHub Pages フォームからの POST を受け、Microsoft Graph で OneDrive に **JSON のみ** 保存します。
 
 仕様の正: [`docs/soshiki-form-submit-worker-graph.md`](../../docs/soshiki-form-submit-worker-graph.md)  
-**事務用 PDF・返信メール**は Worker 外（同 doc **§13**・`docs/soshiki-form-enter.md` §5.10.1）。移行後は json 中心・`pdfBase64` 任意予定。
+**事務用 PDF・返信メール**は Worker 外（同 doc **§13**・`docs/soshiki-form-enter.md` §5.10.1）。`pdfBase64` は **受け付けません**。
 
 ## 前提
 

@@ -4,7 +4,7 @@
  */
 
 const ALLOWED_ORIGIN = "https://keijirodokyosai.github.io";
-const MAX_BODY_BYTES = 20 * 1024 * 1024;
+const MAX_BODY_BYTES = 2 * 1024 * 1024;
 
 export default {
   async fetch(request, env) {
@@ -77,11 +77,22 @@ export default {
     const unionName = String(payload.unionName || "").trim();
     const fileNameDate = String(payload.fileNameDate || "").trim();
     const submission = payload.submission;
-    const pdfBase64 = String(payload.pdfBase64 || "").trim();
 
-    if (!unionName || !fileNameDate || !submission || !pdfBase64) {
+    if (!unionName || !fileNameDate || !submission) {
       return jsonResponse(
         { ok: false, message: "Missing required fields" },
+        400,
+        corsHeaders
+      );
+    }
+
+    if (payload.pdfBase64 != null && String(payload.pdfBase64).trim()) {
+      return jsonResponse(
+        {
+          ok: false,
+          message:
+            "この受付口は JSON のみです。ブラウザを再読み込みしてから再度お試しください。",
+        },
         400,
         corsHeaders
       );
@@ -98,21 +109,9 @@ export default {
       );
     }
 
-    let pdfBytes;
-    try {
-      pdfBytes = base64ToBytes(stripDataUrlPrefix(pdfBase64));
-    } catch {
-      return jsonResponse(
-        { ok: false, message: "Invalid pdfBase64" },
-        400,
-        corsHeaders
-      );
-    }
-
     const receiptId = generateReceiptId();
     const fileStem = `${sanitizeFileNameSegment(unionName)}_${fileNameDate}_${receiptId}`;
     const jsonFileName = `${fileStem}.json`;
-    const pdfFileName = `${fileStem}.pdf`;
     const basePath = env.GRAPH_BASE_PATH.trim();
 
     const jsonPath = [
@@ -122,7 +121,6 @@ export default {
       "json",
       jsonFileName,
     ];
-    const pdfPath = [basePath, "受付", storageFolder, "pdf", pdfFileName];
 
     const jsonContent = JSON.stringify(submission, null, 2);
 
@@ -134,13 +132,6 @@ export default {
         jsonPath,
         jsonContent,
         "application/json; charset=utf-8"
-      );
-      await uploadDriveFile(
-        env.GRAPH_DRIVE_USER_ID,
-        token,
-        pdfPath,
-        pdfBytes,
-        "application/pdf"
       );
     } catch (error) {
       console.error("Graph upload failed:", error);
@@ -247,24 +238,6 @@ function generateReceiptId() {
 
 function sanitizeFileNameSegment(value) {
   return String(value).replace(/[\\/:*?"<>|]/g, "_").trim();
-}
-
-function stripDataUrlPrefix(base64) {
-  const comma = base64.indexOf(",");
-  if (base64.startsWith("data:") && comma !== -1) {
-    return base64.slice(comma + 1);
-  }
-  return base64;
-}
-
-function base64ToBytes(base64) {
-  const normalized = base64.replace(/\s/g, "");
-  const binary = atob(normalized);
-  const bytes = new Uint8Array(binary.length);
-  for (let i = 0; i < binary.length; i++) {
-    bytes[i] = binary.charCodeAt(i);
-  }
-  return bytes;
 }
 
 async function fetchGraphToken(env) {

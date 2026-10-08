@@ -10,7 +10,7 @@
 ```
 [ブラウザ] soshiki-form-enter.html（自作・GitHub Pages）
     │ 送 信ボタン
-    ▼ POST（password, unionName, fileNameDate, submission, pdfBase64 ※移行中）
+    ▼ POST（password, unionName, fileNameDate, submission）
 [Cloudflare Workers] 中継 API（秘密鍵・パスワードは環境変数のみ）
     │ Microsoft Graph（アプリケーション権限）
     ▼
@@ -64,23 +64,20 @@
 | 機能 | ファイル |
 |------|----------|
 | 入力フォーム | `soshiki-form-enter.html`、`_includes/soshiki-form-member-rows.html`、`css/style.css` |
-| 送 信 POST | `js/soshiki-form-submit.js` |
-| PDF（送信・移行中） | `js/soshiki-form-pdf-fill.js`（html2canvas）。**廃止予定**（§13） |
+| 送 信 POST | `js/soshiki-form-submit.js`（**JSON のみ**） |
 | **保 存** | ブラウザ **印刷 → PDF に保存**（`js/soshiki-form-enter.js`）。組合の手元用。**事務用 PDF の正本は Excel 経路** |
 | 設定 | `data/soshiki-form-submit-config.json` の `submitEndpointUrl` |
 
 ### POST ボディ（Worker が受け取る形）
 
-**現行実装:** `pdfBase64` **必須**。  
-**移行後（未実装）:** `pdfBase64` **任意**（省略時は json のみ保存）。submission は §5.10.1（`sheetFooter` 等）に拡張。
+**`pdfBase64` は受け付けない**（送ると 400）。OneDrive には **`.json` のみ** PUT。submission は §5.10.1（`SheetFooter` 等）。
 
 ```json
 {
   "password": "ユーザー入力",
   "unionName": "サンプル労働組合",
   "fileNameDate": "20260903",
-  "submission": { … },
-  "pdfBase64": "…"
+  "submission": { … }
 }
 ```
 
@@ -116,8 +113,9 @@
 
 ```text
 {組合名}_{yyyyMMdd}_{受付ID}.json
-{組合名}_{yyyyMMdd}_{受付ID}.pdf
 ```
+
+事務バッチが生成する PDF は同 stem で `pdf/` に保存（§13）。Worker は **pdf を書かない**。
 
 - `unionName`・`fileNameDate` は POST トップレベル  
 - **受付 ID** は **Worker が生成**（旧設計の PA 生成の代わり）
@@ -133,7 +131,7 @@
 
 ## 13. 事務側自動化（PDF・返信メール）— 2026-10 決定
 
-Web 送 信 PDF（html2canvas）での用紙再現は **打ち切り**。取込用 JSON を正とし、**共済会側**で PDF とメールを自動化する。
+Web では **送 信 PDF を作らない**（html2canvas 経路は削除済み）。取込用 JSON を正とし、**共済会側**で PDF とメールを自動化する。
 
 ### 13.1 処理順（1 json ＝ 1 ジョブ）
 
@@ -181,7 +179,7 @@ Web 送 信 PDF（html2canvas）での用紙再現は **打ち切り**。取込�
 - [ ] JSON → セルマップ・マスタ参照・月計再計算
 - [ ] フォルダ監視 or タスクスケジューラ・同期待ちリトライ
 - [ ] メール送信・処理済み管理
-- [ ] Web: `sheetFooter` 送付・Worker: `pdfBase64` 任意化（§8）
+- [x] Web: `SheetFooter` 送付・Worker: **JSON のみ**（`pdfBase64` 非対応）
 
 ---
 
@@ -192,7 +190,9 @@ Web 送 信 PDF（html2canvas）での用紙再現は **打ち切り**。取込�
 | 項目 | 実装 |
 |------|------|
 | POST・CORS | `https://keijirodokyosai.github.io` のみ。OPTIONS 対応 |
-| Body 上限 | 20MB |
+| Body 上限 | 2MB（JSON のみ） |
+| 保存 | `受付/{storageFolder}/json/` に **`.json` 1 件**のみ |
+| `pdfBase64` | **拒否**（旧クライアントは再読み込みを促す 400） |
 | パスワード | `SOSHIKI_SUBMIT_PASSWORD`（Secret） |
 | 受付 ID | `crypto.randomUUID()` の先頭 8 文字（16進） |
 | Graph | client_credentials → 所有者 drive に PUT（中間フォルダは Graph が作成） |
@@ -231,13 +231,13 @@ Web 送 信 PDF（html2canvas）での用紙再現は **打ち切り**。取込�
 |------|------|
 | **事務バッチ**（§13） | Excel PDF・返信メール |
 | ~~Web **`SheetFooter`** 送付~~ | **完了**（§5.10.1） |
-| Worker **`pdfBase64` 任意**・保存 JSON ラップ | 現行は pdf 必須・本文は submission のみ |
-| Web 送 信時の **html2canvas 削除** | 移行完了後 |
+| ~~Worker **JSON のみ**・Web **html2canvas 削除**~~ | **完了** |
+| Worker 保存 JSON ラップ | 未実装（本文は `submission` のみ） |
 | **union-contacts.json** export | kyosai-system → OneDrive `設定/` |
 | Access 取込 | kyosai-system 側 |
 | レート制限（Worker） | 後回し可 |
 
-**完了済み（参考）:** Entra・Graph 手動テスト・Worker deploy・`submitEndpointUrl`・json/pdf の OneDrive 保存（ブラウザ PDF 経路）。
+**完了済み（参考）:** Entra・Graph 手動テスト・Worker deploy・`submitEndpointUrl`・OneDrive **json のみ**保存。
 
 ---
 
@@ -246,7 +246,7 @@ Web 送 信 PDF（html2canvas）での用紙再現は **打ち切り**。取込�
 | フェーズ | 内容 |
 |----------|------|
 | **0〜3** | Entra・Worker・本番 json 受付 — **完了想定** |
-| **4** | Web: `sheetFooter`・submission 拡張。Worker: pdf 任意・json ラップ |
+| **4** | ~~Web: `SheetFooter`・Worker JSON のみ~~ **完了**。残: json ラップ（任意） |
 | **5** | 事務バッチ: メール → Excel PDF（§13） |
 | **6** | Access 取込・json 削除運用 |
 
@@ -257,7 +257,6 @@ Web 送 信 PDF（html2canvas）での用紙再現は **打ち切り**。取込�
 ```text
 soshiki-form-enter.html
 js/soshiki-form-submit.js
-js/soshiki-form-pdf-fill.js
 js/soshiki-form-enter.js          … 保 存＝印刷
 data/soshiki-form-submit-config.json
 data/soshiki-form-pdf-layout.json

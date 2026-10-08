@@ -1,6 +1,6 @@
 /**
  * 組織共済申込書 — WEB 受付（送 信）
- * JSON 組み立て・PDF（js/soshiki-form-pdf-fill.js）・Worker API へ POST
+ * JSON 組み立て・Worker API へ POST（JSON のみ）
  */
 
 var SOSHIKI_FORM_SUBMIT_CONFIG = {
@@ -100,46 +100,43 @@ function handleSoshikiFormSendClick() {
   setSoshikiFormSendBusy(true);
   clearSoshikiFormSendResult();
 
-  buildSoshikiFormSubmitPdfBase64()
-    .then(function (pdfBase64) {
-      var submission = buildSoshikiFormSubmission();
-      var applicationDate = submission.ApplicationDate;
-      var fileNameDate =
-        applicationDate.Year + applicationDate.Month + applicationDate.Day;
+  var submission = buildSoshikiFormSubmission();
+  var applicationDate = submission.ApplicationDate;
+  var fileNameDate =
+    applicationDate.Year + applicationDate.Month + applicationDate.Day;
 
-      var payload = {
-        password: String(password),
-        unionName: verifiedUnion.KyosaikaiName,
-        fileNameDate: fileNameDate,
-        submission: submission,
-        pdfBase64: pdfBase64,
-      };
+  var payload = {
+    password: String(password),
+    unionName: verifiedUnion.KyosaikaiName,
+    fileNameDate: fileNameDate,
+    submission: submission,
+  };
 
-      return fetch(SOSHIKI_FORM_SUBMIT_CONFIG.submitEndpointUrl, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      }).then(function (response) {
-        return response.text().then(function (text) {
-          var body = null;
-          if (text) {
-            try {
-              body = JSON.parse(text);
-            } catch (parseError) {
-              body = { raw: text };
-            }
+  fetch(SOSHIKI_FORM_SUBMIT_CONFIG.submitEndpointUrl, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  })
+    .then(function (response) {
+      return response.text().then(function (text) {
+        var body = null;
+        if (text) {
+          try {
+            body = JSON.parse(text);
+          } catch (parseError) {
+            body = { raw: text };
           }
-          if (!response.ok) {
-            var message =
-              (body && (body.message || body.error)) ||
-              "HTTP " + response.status;
-            throw new Error(message);
-          }
-          return body || {};
-        });
+        }
+        if (!response.ok) {
+          var message =
+            (body && (body.message || body.error)) ||
+            "HTTP " + response.status;
+          throw new Error(message);
+        }
+        return body || {};
       });
     })
     .then(function (result) {
@@ -180,12 +177,6 @@ function collectSoshikiFormSendValidationErrors() {
   }
 
   errors = errors.concat(collectSoshikiFormSheetFooterValidationErrors());
-
-  if (typeof collectSoshikiFormPdfLibErrors === "function") {
-    errors = errors.concat(collectSoshikiFormPdfLibErrors());
-  } else if (!window.PDFLib || !window.PDFLib.PDFDocument) {
-    errors.push("PDF 生成ライブラリ（pdf-lib）が読み込まれていません。");
-  }
 
   return errors;
 }
@@ -426,15 +417,6 @@ function getSoshikiFormPdfDownloadFileName() {
       pad2(String(today.getDate()));
   }
   return unionName + "_" + fileNameDate + ".pdf";
-}
-
-function buildSoshikiFormSubmitPdfBase64() {
-  return buildSoshikiFormSubmitPdfBase64FromTemplate();
-}
-
-/** 未使用（保 存は enter.js の window.print）。pdf-fill 経路の残置 */
-function downloadSoshikiFormPdfFile() {
-  return downloadSoshikiFormPdfFromTemplate();
 }
 
 function setSoshikiFormSendBusy(isBusy) {
