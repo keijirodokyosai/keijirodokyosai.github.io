@@ -1,4 +1,4 @@
-*,
+﻿*,
 *::before,
 *::after {
   box-sizing: border-box;
@@ -1153,41 +1153,41 @@ a:focus-visible {
   --soshiki-form-page-count-total-offset-x: -20px;
   --soshiki-form-page-count-total-offset-y: 6px;
   /* 前月残・月計（PNG 実測 §5.7: 左罫 x507 が y958–996。外枠 49×39 px、padding 2px） */
-  --soshiki-form-zengetsu-zan-left: 30.166%;
-  --soshiki-form-zengetsu-zan-top: 80.437%;
-  --soshiki-form-zengetsu-zan-width: 2.91%;
-  --soshiki-form-zengetsu-zan-height: 3.275%;
-  --soshiki-form-zengetsu-zan-width-extra: 22px;
-  --soshiki-form-zengetsu-zan-height-extra: 8px;
-  --soshiki-form-zengetsu-zan-offset-x: -12px;
-  --soshiki-form-zengetsu-zan-offset-y: 29px;
-  --soshiki-form-zengetsu-tsuki-kei-left: 40.381%;
-  --soshiki-form-zengetsu-tsuki-kei-top: 80.437%;
-  --soshiki-form-zengetsu-tsuki-kei-width: 2.91%;
-  --soshiki-form-zengetsu-tsuki-kei-height: 3.275%;
-  --soshiki-form-zengetsu-tsuki-kei-width-extra: 24px;
-  --soshiki-form-zengetsu-tsuki-kei-height-extra: 8px;
-  --soshiki-form-zengetsu-tsuki-kei-offset-x: 0px;
-  --soshiki-form-zengetsu-tsuki-kei-offset-y: 29px;
-  --soshiki-form-zengetsu-tougetsu-offset-x: -6px;
-  --soshiki-form-zengetsu-tougetsu-offset-y: -24px;
-  --soshiki-form-zengetsu-tougetsu-width-extra: 2px;
-  --soshiki-form-zengetsu-tougetsu-height-extra: 10px;
-  --soshiki-form-zengetsu-tougetsu-font-size: 16px;
-  --soshiki-form-zengetsu-font-size: 18px;
+  --soshiki-form-prior-month-headcount-left: 30.166%;
+  --soshiki-form-prior-month-headcount-top: 80.437%;
+  --soshiki-form-prior-month-headcount-width: 2.91%;
+  --soshiki-form-prior-month-headcount-height: 3.275%;
+  --soshiki-form-prior-month-headcount-width-extra: 22px;
+  --soshiki-form-prior-month-headcount-height-extra: 8px;
+  --soshiki-form-prior-month-headcount-offset-x: -12px;
+  --soshiki-form-prior-month-headcount-offset-y: 29px;
+  --soshiki-form-month-total-count-left: 40.381%;
+  --soshiki-form-month-total-count-top: 80.437%;
+  --soshiki-form-month-total-count-width: 2.91%;
+  --soshiki-form-month-total-count-height: 3.275%;
+  --soshiki-form-month-total-count-width-extra: 24px;
+  --soshiki-form-month-total-count-height-extra: 8px;
+  --soshiki-form-month-total-count-offset-x: 0px;
+  --soshiki-form-month-total-count-offset-y: 29px;
+  --soshiki-form-coverage-month-display-offset-x: -6px;
+  --soshiki-form-coverage-month-display-offset-y: -24px;
+  --soshiki-form-coverage-month-display-width-extra: 2px;
+  --soshiki-form-coverage-month-display-height-extra: 10px;
+  --soshiki-form-coverage-month-display-font-size: 16px;
+  --soshiki-form-footer-metric-font-size: 18px;
   /* 備考（PNG 実測 §5.8: 外枠 x898–1601 y934–1120。704×187 px、padding 2px） */
-  --soshiki-form-biko-left: 53.325%;
-  --soshiki-form-biko-top: 78.421%;
-  --soshiki-form-biko-width: 41.805%;
-  --soshiki-form-biko-height: 15.701%;
-  --soshiki-form-biko-offset-x: 3px;
-  --soshiki-form-biko-offset-y: 30px;
-  --soshiki-form-biko-width-extra: -6px;
-  --soshiki-form-biko-height-extra: -33px;
-  --soshiki-form-biko-font-size: 14px;
-  --soshiki-form-biko-padding-top: 2px;
-  --soshiki-form-biko-padding-inline: 4px;
-  --soshiki-form-biko-padding-bottom: 2px;
+  --soshiki-form-remarks-left: 53.325%;
+  --soshiki-form-remarks-top: 78.421%;
+  --soshiki-form-remarks-width: 41.805%;
+  --soshiki-form-remarks-height: 15.701%;
+  --soshiki-form-remarks-offset-x: 3px;
+  --soshiki-form-remarks-offset-y: 30px;
+  --soshiki-form-remarks-width-extra: -6px;
+  --soshiki-form-remarks-height-extra: -33px;
+  --soshiki-form-remarks-font-size: 14px;
+  --soshiki-form-remarks-padding-top: 2px;
+  --soshiki-form-remarks-padding-inline: 4px;
+  --soshiki-form-remarks-padding-bottom: 2px;
   /* 申込日（年・月・日） */
   --soshiki-form-date-group-top-base: 5.2%;
   --soshiki-form-date-group-top-nudge: 2px;
@@ -1367,8 +1367,8 @@ a:focus-visible {
 
 .soshiki-form-code-field[readonly],
 .soshiki-form-sheet-row-field[readonly],
-.soshiki-form-kuchi-field[readonly],
-.soshiki-form-kakekin-field[readonly] {
+.soshiki-form-unit-field[readonly],
+.soshiki-form-premium-field[readonly] {
   background: transparent;
   border-color: transparent;
   color: #000;
@@ -1378,10 +1378,10 @@ a:focus-visible {
 .soshiki-form-code-field[readonly]:focus,
 .soshiki-form-sheet-row-field[readonly]:hover,
 .soshiki-form-sheet-row-field[readonly]:focus,
-.soshiki-form-kuchi-field[readonly]:hover,
-.soshiki-form-kuchi-field[readonly]:focus,
-.soshiki-form-kakekin-field[readonly]:hover,
-.soshiki-form-kakekin-field[readonly]:focus {
+.soshiki-form-unit-field[readonly]:hover,
+.soshiki-form-unit-field[readonly]:focus,
+.soshiki-form-premium-field[readonly]:hover,
+.soshiki-form-premium-field[readonly]:focus {
   border-color: transparent;
   background: transparent;
   box-shadow: none;
@@ -1389,43 +1389,43 @@ a:focus-visible {
 }
 
 /* 共済口数欄（見出し下の行） */
-.soshiki-form-kuchi-field {
+.soshiki-form-unit-field {
   top: var(--soshiki-form-sheet-row-top);
   height: var(--soshiki-form-sheet-row-height);
   width: 3.1%;
   line-height: var(--soshiki-form-sheet-row-height);
 }
 
-.soshiki-form-kuchi-field--danketsu {
+.soshiki-form-unit-field--danketsu {
   left: 29.7%;
 }
 
-.soshiki-form-kuchi-field--soshiki-seimei {
+.soshiki-form-unit-field--soshiki-seimei {
   left: 35.4%;
 }
 
-.soshiki-form-kuchi-field--soshiki-iryo {
+.soshiki-form-unit-field--soshiki-iryo {
   left: 41.1%;
 }
 
-.soshiki-form-kuchi-field--soshiki-kotsu {
+.soshiki-form-unit-field--soshiki-kotsu {
   left: 46.8%;
 }
 
-.soshiki-form-kuchi-field--soshiki-kasai {
+.soshiki-form-unit-field--soshiki-kasai {
   left: 52.5%;
 }
 
-.soshiki-form-kuchi-field--keicho {
+.soshiki-form-unit-field--keicho {
   left: 58.2%;
 }
 
-.soshiki-form-kuchi-field--sogo-kyosai {
+.soshiki-form-unit-field--sogo-kyosai {
   left: 63.9%;
 }
 
 /* 掛金（団結枠幅 3.1% の 2.5 倍） */
-.soshiki-form-kakekin-field {
+.soshiki-form-premium-field {
   top: var(--soshiki-form-sheet-row-top);
   height: var(--soshiki-form-sheet-row-height);
   left: 81.9%;
@@ -1481,82 +1481,82 @@ a:focus-visible {
 }
 
 /* 前月残・月計（人数・PNG 実測 §5.7。外枠に合わせてグループ配置＋padding で内側 2px） */
-.soshiki-form-zengetsu-group {
+.soshiki-form-footer-metric-group {
   position: absolute;
   box-sizing: border-box;
   padding: 2px;
 }
 
-.soshiki-form-zengetsu-group--zan {
+.soshiki-form-footer-metric-group--prior-month-headcount {
   left: calc(
-    var(--soshiki-form-zengetsu-zan-left) + var(--soshiki-form-zengetsu-zan-offset-x)
+    var(--soshiki-form-prior-month-headcount-left) + var(--soshiki-form-prior-month-headcount-offset-x)
   );
   top: calc(
-    var(--soshiki-form-zengetsu-zan-top) + var(--soshiki-form-zengetsu-zan-offset-y)
+    var(--soshiki-form-prior-month-headcount-top) + var(--soshiki-form-prior-month-headcount-offset-y)
   );
   width: calc(
-    var(--soshiki-form-zengetsu-zan-width) + var(--soshiki-form-zengetsu-zan-width-extra)
+    var(--soshiki-form-prior-month-headcount-width) + var(--soshiki-form-prior-month-headcount-width-extra)
   );
   height: calc(
-    var(--soshiki-form-zengetsu-zan-height) + var(--soshiki-form-zengetsu-zan-height-extra)
+    var(--soshiki-form-prior-month-headcount-height) + var(--soshiki-form-prior-month-headcount-height-extra)
   );
 }
 
-.soshiki-form-zengetsu-group--tsuki-kei {
+.soshiki-form-footer-metric-group--month-total-count {
   left: calc(
-    var(--soshiki-form-zengetsu-tsuki-kei-left) +
-      var(--soshiki-form-zengetsu-tsuki-kei-offset-x)
+    var(--soshiki-form-month-total-count-left) +
+      var(--soshiki-form-month-total-count-offset-x)
   );
   top: calc(
-    var(--soshiki-form-zengetsu-tsuki-kei-top) +
-      var(--soshiki-form-zengetsu-tsuki-kei-offset-y)
+    var(--soshiki-form-month-total-count-top) +
+      var(--soshiki-form-month-total-count-offset-y)
   );
   width: calc(
-    var(--soshiki-form-zengetsu-tsuki-kei-width) +
-      var(--soshiki-form-zengetsu-tsuki-kei-width-extra)
+    var(--soshiki-form-month-total-count-width) +
+      var(--soshiki-form-month-total-count-width-extra)
   );
   height: calc(
-    var(--soshiki-form-zengetsu-tsuki-kei-height) +
-      var(--soshiki-form-zengetsu-tsuki-kei-height-extra)
+    var(--soshiki-form-month-total-count-height) +
+      var(--soshiki-form-month-total-count-height-extra)
   );
 }
 
-.soshiki-form-zengetsu-group--tougetsu {
+.soshiki-form-footer-metric-group--coverage-month-display {
   padding: 1px;
   left: calc(
-    var(--soshiki-form-zengetsu-tsuki-kei-left) +
-      var(--soshiki-form-zengetsu-tsuki-kei-offset-x) +
+    var(--soshiki-form-month-total-count-left) +
+      var(--soshiki-form-month-total-count-offset-x) +
       (
-        var(--soshiki-form-zengetsu-tsuki-kei-width) +
-          var(--soshiki-form-zengetsu-tsuki-kei-width-extra)
+        var(--soshiki-form-month-total-count-width) +
+          var(--soshiki-form-month-total-count-width-extra)
       ) / 4 +
-      var(--soshiki-form-zengetsu-tougetsu-offset-x)
+      var(--soshiki-form-coverage-month-display-offset-x)
   );
   top: calc(
-    var(--soshiki-form-zengetsu-tsuki-kei-top) +
-      var(--soshiki-form-zengetsu-tsuki-kei-offset-y) -
+    var(--soshiki-form-month-total-count-top) +
+      var(--soshiki-form-month-total-count-offset-y) -
       (
-        var(--soshiki-form-zengetsu-tsuki-kei-height) +
-          var(--soshiki-form-zengetsu-tsuki-kei-height-extra)
+        var(--soshiki-form-month-total-count-height) +
+          var(--soshiki-form-month-total-count-height-extra)
       ) / 2 +
-      var(--soshiki-form-zengetsu-tougetsu-offset-y)
+      var(--soshiki-form-coverage-month-display-offset-y)
   );
   width: calc(
     (
-      var(--soshiki-form-zengetsu-tsuki-kei-width) +
-        var(--soshiki-form-zengetsu-tsuki-kei-width-extra)
-    ) / 2 + var(--soshiki-form-zengetsu-tougetsu-width-extra)
+      var(--soshiki-form-month-total-count-width) +
+        var(--soshiki-form-month-total-count-width-extra)
+    ) / 2 + var(--soshiki-form-coverage-month-display-width-extra)
   );
   height: calc(
     (
-      var(--soshiki-form-zengetsu-tsuki-kei-height) +
-        var(--soshiki-form-zengetsu-tsuki-kei-height-extra)
-    ) / 2 + var(--soshiki-form-zengetsu-tougetsu-height-extra)
+      var(--soshiki-form-month-total-count-height) +
+        var(--soshiki-form-month-total-count-height-extra)
+    ) / 2 + var(--soshiki-form-coverage-month-display-height-extra)
   );
 }
 
 
-.soshiki-form-zengetsu-field {
+.soshiki-form-footer-metric-field {
   position: absolute;
   inset: 0;
   width: auto;
@@ -1564,41 +1564,41 @@ a:focus-visible {
   margin: 0;
   padding: 0 1px;
   box-sizing: border-box;
-  font-size: var(--soshiki-form-zengetsu-font-size);
+  font-size: var(--soshiki-form-footer-metric-font-size);
   line-height: 1;
   text-align: center;
   font-variant-numeric: tabular-nums;
 }
 
-.soshiki-form-zengetsu-group--tougetsu .soshiki-form-field.soshiki-form-zengetsu-field {
-  font-size: var(--soshiki-form-zengetsu-tougetsu-font-size);
+.soshiki-form-footer-metric-group--coverage-month-display .soshiki-form-field.soshiki-form-footer-metric-field {
+  font-size: var(--soshiki-form-coverage-month-display-font-size);
   padding: 2px 1px 0;
 }
 
 /* 備考（PNG 実測 §5.8。外枠に合わせてグループ配置＋padding で内側 2px） */
-.soshiki-form-biko-group {
+.soshiki-form-remarks-group {
   position: absolute;
   box-sizing: border-box;
   padding: 2px;
-  left: calc(var(--soshiki-form-biko-left) + var(--soshiki-form-biko-offset-x));
-  top: calc(var(--soshiki-form-biko-top) + var(--soshiki-form-biko-offset-y));
-  width: calc(var(--soshiki-form-biko-width) + var(--soshiki-form-biko-width-extra));
-  height: calc(var(--soshiki-form-biko-height) + var(--soshiki-form-biko-height-extra));
+  left: calc(var(--soshiki-form-remarks-left) + var(--soshiki-form-remarks-offset-x));
+  top: calc(var(--soshiki-form-remarks-top) + var(--soshiki-form-remarks-offset-y));
+  width: calc(var(--soshiki-form-remarks-width) + var(--soshiki-form-remarks-width-extra));
+  height: calc(var(--soshiki-form-remarks-height) + var(--soshiki-form-remarks-height-extra));
 }
 
-.soshiki-form-biko-field {
+.soshiki-form-remarks-field {
   position: absolute;
   inset: 0;
   width: auto;
   height: auto;
   margin: 0;
-  padding: var(--soshiki-form-biko-padding-top)
-    var(--soshiki-form-biko-padding-inline)
-    var(--soshiki-form-biko-padding-bottom);
+  padding: var(--soshiki-form-remarks-padding-top)
+    var(--soshiki-form-remarks-padding-inline)
+    var(--soshiki-form-remarks-padding-bottom);
   box-sizing: border-box;
   resize: none;
   overflow: hidden;
-  font-size: var(--soshiki-form-biko-font-size);
+  font-size: var(--soshiki-form-remarks-font-size);
   line-height: 1.3;
   text-align: left;
   vertical-align: top;
@@ -1832,14 +1832,14 @@ a:focus-visible {
   /* 郵便番号枠：文字数に加えて px で幅を微調整（5文字 + extra が目安） */
   --soshiki-form-member-zip-width-extra: 6px;
   /* 異動内容（新規・解約・変更）— 行内 left（2026-08-30: 16.2% から −10%） */
-  --soshiki-form-member-idou-left: 6.2%;
-  --soshiki-form-member-idou-left-nudge: 5px;
-  --soshiki-form-member-idou-btn-width: 5%;
-  --soshiki-form-member-idou-width-nudge: -6px;
-  --soshiki-form-member-idou-btn-height: 26%;
-  --soshiki-form-member-idou-height-nudge: 2px;
-  --soshiki-form-member-idou-top-nudge: 0px;
-  --soshiki-form-member-idou-shinki-first-row-marker-padding-top: 1px;
+  --soshiki-form-member-transfer-left: 6.2%;
+  --soshiki-form-member-transfer-left-nudge: 5px;
+  --soshiki-form-member-transfer-btn-width: 5%;
+  --soshiki-form-member-transfer-width-nudge: -6px;
+  --soshiki-form-member-transfer-btn-height: 26%;
+  --soshiki-form-member-transfer-height-nudge: 2px;
+  --soshiki-form-member-transfer-top-nudge: 0px;
+  --soshiki-form-member-transfer-new-first-row-marker-padding-top: 1px;
   /* 性別（男/女ボタン）— 列位置は PNG 実測 §9.7.1（x1028–1088 / 1683px 基準） */
   --soshiki-form-member-gender-column-left: 61.08%;
   --soshiki-form-member-gender-column-width: 3.63%;
@@ -1944,7 +1944,7 @@ a:focus-visible {
 }
 
 /* 異動内容（新規・解約・変更） */
-.soshiki-form-idou-btn {
+.soshiki-form-transfer-btn {
   position: absolute;
   margin: 0;
   padding: 0;
@@ -1960,48 +1960,48 @@ a:focus-visible {
   justify-content: center;
 }
 
-.soshiki-form-idou-btn:hover {
+.soshiki-form-transfer-btn:hover {
   border-color: var(--soshiki-form-member-gender-border-color);
 }
 
-.soshiki-form-idou-btn:focus {
+.soshiki-form-transfer-btn:focus {
   outline: none;
   border-color: var(--soshiki-form-member-gender-border-color);
   box-shadow: 0 0 0 2px rgba(18, 52, 86, 0.25);
 }
 
-.soshiki-form-idou-btn.is-selected {
+.soshiki-form-transfer-btn.is-selected {
   border-style: solid;
   border-width: var(--soshiki-form-member-gender-border-width-selected);
   border-color: var(--soshiki-form-member-gender-border-color-selected);
 }
 
-.soshiki-form-idou-btn--shinki,
-.soshiki-form-idou-btn--kaiyaku,
-.soshiki-form-idou-btn--henkou {
+.soshiki-form-transfer-btn--new,
+.soshiki-form-transfer-btn--cancel,
+.soshiki-form-transfer-btn--change {
   left: calc(
-    var(--soshiki-form-member-idou-left) + var(--soshiki-form-member-idou-left-nudge)
+    var(--soshiki-form-member-transfer-left) + var(--soshiki-form-member-transfer-left-nudge)
   );
   width: calc(
-    var(--soshiki-form-member-idou-btn-width) +
-      var(--soshiki-form-member-idou-width-nudge)
+    var(--soshiki-form-member-transfer-btn-width) +
+      var(--soshiki-form-member-transfer-width-nudge)
   );
   height: calc(
-    var(--soshiki-form-member-idou-btn-height) +
-      var(--soshiki-form-member-idou-height-nudge)
+    var(--soshiki-form-member-transfer-btn-height) +
+      var(--soshiki-form-member-transfer-height-nudge)
   );
 }
 
-.soshiki-form-idou-btn--shinki {
-  top: calc(5% + var(--soshiki-form-member-idou-top-nudge));
+.soshiki-form-transfer-btn--new {
+  top: calc(5% + var(--soshiki-form-member-transfer-top-nudge));
 }
 
-.soshiki-form-idou-btn--kaiyaku {
-  top: calc(37% + var(--soshiki-form-member-idou-top-nudge));
+.soshiki-form-transfer-btn--cancel {
+  top: calc(37% + var(--soshiki-form-member-transfer-top-nudge));
 }
 
-.soshiki-form-idou-btn--henkou {
-  top: calc(69% + var(--soshiki-form-member-idou-top-nudge));
+.soshiki-form-transfer-btn--change {
+  top: calc(69% + var(--soshiki-form-member-transfer-top-nudge));
 }
 
 /* 組合員コード（UnionMemberCode・6桁1枠）— 字間・フォントは分会コード（.soshiki-form-code-field）と同系 */
@@ -2457,14 +2457,14 @@ a:focus-visible {
   pointer-events: none;
 }
 
-.soshiki-form-idou-btn .soshiki-form-dev-marker {
+.soshiki-form-transfer-btn .soshiki-form-dev-marker {
   font-size: 12px;
   padding-top: 2px;
   color: #123456;
 }
 
-.soshiki-form-member-row:first-child .soshiki-form-idou-btn--shinki .soshiki-form-dev-marker {
-  padding-top: var(--soshiki-form-member-idou-shinki-first-row-marker-padding-top);
+.soshiki-form-member-row:first-child .soshiki-form-transfer-btn--new .soshiki-form-dev-marker {
+  padding-top: var(--soshiki-form-member-transfer-new-first-row-marker-padding-top);
 }
 
 .soshiki-form-gender-btn .soshiki-form-dev-marker {
@@ -2542,7 +2542,7 @@ a:focus-visible {
     opacity: 0 !important;
   }
 
-  .soshiki-form-idou-btn.is-selected,
+  .soshiki-form-transfer-btn.is-selected,
   .soshiki-form-gender-btn.is-selected {
     border-color: #000 !important;
     -webkit-print-color-adjust: exact;
@@ -2562,7 +2562,7 @@ a:focus-visible {
     display: none !important;
   }
 
-  .soshiki-form-idou-btn.is-selected .soshiki-form-dev-marker,
+  .soshiki-form-transfer-btn.is-selected .soshiki-form-dev-marker,
   .soshiki-form-gender-btn.is-selected .soshiki-form-dev-marker {
     display: block !important;
     color: #000 !important;
@@ -2604,7 +2604,7 @@ body.soshiki-form-capturing .soshiki-form-sheet ::placeholder {
   opacity: 0 !important;
 }
 
-body.soshiki-form-capturing .soshiki-form-idou-btn.is-selected,
+body.soshiki-form-capturing .soshiki-form-transfer-btn.is-selected,
 body.soshiki-form-capturing .soshiki-form-gender-btn.is-selected {
   border-color: #000 !important;
   -webkit-print-color-adjust: exact;
@@ -2628,7 +2628,7 @@ body.soshiki-form-capturing .soshiki-form-dev-marker {
   display: none !important;
 }
 
-body.soshiki-form-capturing .soshiki-form-idou-btn.is-selected .soshiki-form-dev-marker,
+body.soshiki-form-capturing .soshiki-form-transfer-btn.is-selected .soshiki-form-dev-marker,
 body.soshiki-form-capturing .soshiki-form-gender-btn.is-selected .soshiki-form-dev-marker {
   display: block !important;
   color: #000 !important;

@@ -87,10 +87,12 @@ export default {
       );
     }
 
-    const storageFolder = String(submission.storageFolder || "").trim();
+    const storageFolder = String(
+      submission.StorageFolder || submission.storageFolder || ""
+    ).trim();
     if (!storageFolder) {
       return jsonResponse(
-        { ok: false, message: "submission.storageFolder is required" },
+        { ok: false, message: "submission.StorageFolder is required" },
         400,
         corsHeaders
       );

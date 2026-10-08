@@ -1,6 +1,6 @@
 {% comment %}
   組合員入力欄（最大5名）。位置は css/style.css の .soshiki-form-member-* で調整。
-  HTML id/name は Access 列名の kebab-case（§9.9）。異動内容 idou のみ Web 専用。
+  HTML id/name は Access 列名の kebab-case（§9.9）。異動 transfer のみ Web 専用。
   DEV: 1行目のみ placeholder（配置確認用）。異動・性別の .soshiki-form-dev-marker は全5行。本番前に削除する。
 {% endcomment %}
 <div class="soshiki-form-member-rows" aria-label="組合員入力（最大5名）">
@@ -10,28 +10,28 @@
     data-row="{{ row }}"
     style="--member-row-index: {{ row | minus: 1 }};"
   >
-    <div class="soshiki-form-idou-group" role="group" aria-label="{{ row }}行目・異動内容">
-      <input type="hidden" id="member-{{ row }}-idou" name="member-{{ row }}-idou" value="">
+    <div class="soshiki-form-transfer-group" role="group" aria-label="{{ row }}行目・異動内容">
+      <input type="hidden" id="member-{{ row }}-transfer" name="member-{{ row }}-transfer" value="">
       <button
         type="button"
-        class="soshiki-form-idou-btn soshiki-form-idou-btn--shinki"
-        data-idou="shinki"
+        class="soshiki-form-transfer-btn soshiki-form-transfer-btn--new"
+        data-transfer="new"
         data-row="{{ row }}"
         aria-pressed="false"
         aria-label="{{ row }}行目・新規"
       ><span class="soshiki-form-dev-marker" aria-hidden="true">新 規</span><span class="sr-only">新規</span></button>
       <button
         type="button"
-        class="soshiki-form-idou-btn soshiki-form-idou-btn--kaiyaku"
-        data-idou="kaiyaku"
+        class="soshiki-form-transfer-btn soshiki-form-transfer-btn--cancel"
+        data-transfer="cancel"
         data-row="{{ row }}"
         aria-pressed="false"
         aria-label="{{ row }}行目・解約"
       ><span class="soshiki-form-dev-marker" aria-hidden="true">解 約</span><span class="sr-only">解約</span></button>
       <button
         type="button"
-        class="soshiki-form-idou-btn soshiki-form-idou-btn--henkou"
-        data-idou="henkou"
+        class="soshiki-form-transfer-btn soshiki-form-transfer-btn--change"
+        data-transfer="change"
         data-row="{{ row }}"
         aria-pressed="false"
         aria-label="{{ row }}行目・変更"

@@ -121,41 +121,52 @@ function parseZengetsuZanCountValue(raw) {
   return value;
 }
 
-function countMemberIdouDelta() {
-  var shinki = 0;
-  var kaiyaku = 0;
+function countMemberTransferDelta() {
+  var added = 0;
+  var removed = 0;
 
   for (var row = 1; row <= MEMBER_ROW_COUNT; row += 1) {
-    var field = getMemberField(row, "idou");
+    var field = getMemberField(row, "transfer");
     if (!field) continue;
-    var idou = field.value;
-    if (idou === "shinki") shinki += 1;
-    else if (idou === "kaiyaku") kaiyaku += 1;
+    var transfer = field.value;
+    if (transfer === "new") added += 1;
+    else if (transfer === "cancel") removed += 1;
   }
 
-  return shinki - kaiyaku;
+  return added - removed;
 }
 
 function recalcSoshikiFormTsukiKeiCount() {
-  var zengetsuInput = document.getElementById("zengetsu-zan-count");
-  var tsukiInput = document.getElementById("tsuki-kei-count");
-  if (!zengetsuInput || !tsukiInput) return;
+  var priorInput = document.getElementById("prior-month-headcount");
+  var monthTotalInput = document.getElementById("month-total-count");
+  if (!priorInput || !monthTotalInput) return;
 
-  var zengetsu = parseZengetsuZanCountValue(zengetsuInput.value);
-  if (Number.isNaN(zengetsu)) {
-    tsukiInput.value = "";
+  var prior = parsePriorMonthHeadcountValue(priorInput.value);
+  if (Number.isNaN(prior)) {
+    monthTotalInput.value = "";
     return;
   }
 
-  var total = zengetsu + countMemberIdouDelta();
+  var total = prior + countMemberTransferDelta();
   if (total < 0) total = 0;
-  tsukiInput.value = String(total);
+  monthTotalInput.value = String(total);
 }
 
-function applySoshikiFormZengetsuCarryForward() {
+function parsePriorMonthHeadcountValue(raw) {
+  return parseZengetsuZanCountValue(raw);
+}
+
+function ensurePriorMonthHeadcountDefault() {
+  var priorInput = document.getElementById("prior-month-headcount");
+  if (!priorInput) return;
+  if (String(priorInput.value).trim()) return;
+  priorInput.value = "0";
+}
+
+function applyPriorMonthHeadcountCarryForward() {
   var union = getSoshikiFormVerifiedUnion();
-  var zengetsuInput = document.getElementById("zengetsu-zan-count");
-  if (!union || !union.KyosaikaiCode || !zengetsuInput) return;
+  var priorInput = document.getElementById("prior-month-headcount");
+  if (!union || !union.KyosaikaiCode || !priorInput) return;
 
   var coverage = getSoshikiFormCoverageMonthFromApplicationDate();
   var coverageKey = formatSoshikiFormCoverageMonthKey(coverage);
@@ -165,7 +176,18 @@ function applySoshikiFormZengetsuCarryForward() {
   if (!snapshot || !snapshot.tsukiKei) return;
   if (snapshot.coverageMonth >= coverageKey) return;
 
-  zengetsuInput.value = snapshot.tsukiKei;
+  priorInput.value = snapshot.tsukiKei;
+  recalcSoshikiFormTsukiKeiCount();
+}
+
+/** @deprecated 呼び出し互換 */
+function applySoshikiFormZengetsuCarryForward() {
+  applyPriorMonthHeadcountCarryForward();
+}
+
+function finalizePriorMonthHeadcountAfterFooterReset() {
+  applyPriorMonthHeadcountCarryForward();
+  ensurePriorMonthHeadcountDefault();
   recalcSoshikiFormTsukiKeiCount();
 }
 
@@ -177,26 +199,41 @@ function recordSoshikiFormTsukiKeiSnapshot() {
   var coverageKey = formatSoshikiFormCoverageMonthKey(coverage);
   if (!coverageKey) return;
 
-  var tsukiInput = document.getElementById("tsuki-kei-count");
-  if (!tsukiInput) return;
+  var monthTotalInput = document.getElementById("month-total-count");
+  if (!monthTotalInput) return;
 
   saveTsukiKeiSnapshot(
     union.KyosaikaiCode,
     coverageKey,
-    tsukiInput.value
+    monthTotalInput.value
   );
 }
 
+function initSoshikiFormPageCountDefaults() {
+  var current = document.getElementById("page-count-current");
+  var total = document.getElementById("page-count-total");
+  if (!current || !total) return;
+  if (!String(current.value).trim()) current.value = "1";
+  if (!String(total.value).trim()) total.value = "1";
+}
+
+function applySoshikiFormPageCountDefaults() {
+  var current = document.getElementById("page-count-current");
+  var total = document.getElementById("page-count-total");
+  if (current) current.value = "1";
+  if (total) total.value = "1";
+}
+
 function initSoshikiFormFooterCounts() {
-  var tsukiInput = document.getElementById("tsuki-kei-count");
-  if (tsukiInput) {
-    tsukiInput.readOnly = true;
+  var monthTotalInput = document.getElementById("month-total-count");
+  if (monthTotalInput) {
+    monthTotalInput.readOnly = true;
   }
 
-  var zengetsuInput = document.getElementById("zengetsu-zan-count");
-  if (zengetsuInput) {
-    zengetsuInput.addEventListener("input", recalcSoshikiFormTsukiKeiCount);
-    zengetsuInput.addEventListener("change", recalcSoshikiFormTsukiKeiCount);
+  var priorInput = document.getElementById("prior-month-headcount");
+  if (priorInput) {
+    priorInput.addEventListener("input", recalcSoshikiFormTsukiKeiCount);
+    priorInput.addEventListener("change", recalcSoshikiFormTsukiKeiCount);
   }
 
   ["application-year", "application-month", "application-day"].forEach(function (
@@ -205,12 +242,19 @@ function initSoshikiFormFooterCounts() {
     var field = document.getElementById(id);
     if (!field) return;
     field.addEventListener("change", function () {
-      applySoshikiFormZengetsuCarryForward();
+      applyPriorMonthHeadcountCarryForward();
+      ensurePriorMonthHeadcountDefault();
+      recalcSoshikiFormTsukiKeiCount();
     });
     field.addEventListener("input", function () {
-      applySoshikiFormZengetsuCarryForward();
+      applyPriorMonthHeadcountCarryForward();
+      ensurePriorMonthHeadcountDefault();
+      recalcSoshikiFormTsukiKeiCount();
     });
   });
 
+  initSoshikiFormPageCountDefaults();
+  applyPriorMonthHeadcountCarryForward();
+  ensurePriorMonthHeadcountDefault();
   recalcSoshikiFormTsukiKeiCount();
 }

@@ -162,8 +162,8 @@ Web 送 信 PDF（html2canvas）での用紙再現は **打ち切り**。取込�
 |------------|----------|
 | 申込日・コード・組合員 | `submission`（現行どおり） |
 | 組合名・口欄7・1人あたり掛金 | **`union-master.json`** ＋ **`form-kyosai-map.json`**（Web の `computeFormKuchi` 相当をバッチで再現） |
-| フッター（ページ枚数・前月残・備考） | **`submission.sheetFooter`**（Web 送 信時に追加・**未実装**） |
-| 当月（月）・月計 | バッチで **再計算**（`applicationDate` / `coverageMonth`・`members[].idou`・`sheetFooter.zengetsuZan`） |
+| フッター（ページ枚数・前月残・備考） | **`submission.SheetFooter`**（Web 送 信時に含める・**実装済み**） |
+| 当月（月）・月計 | バッチで **再計算**（`ApplicationDate` / `CoverageMonth`・`Members[].Transfer`・`SheetFooter.PriorMonthHeadcount`） |
 | 住所の町村域結合印字 | バッチで Web の `computeTownAreaPrintJoin` 相当、または表示用フィールドを JSON に含める |
 
 ### 13.4 返信メール
@@ -230,7 +230,7 @@ Web 送 信 PDF（html2canvas）での用紙再現は **打ち切り**。取込�
 | 項目 | 備考 |
 |------|------|
 | **事務バッチ**（§13） | Excel PDF・返信メール |
-| Web **`sheetFooter`** 送付 | §5.10.1 |
+| ~~Web **`SheetFooter`** 送付~~ | **完了**（§5.10.1） |
 | Worker **`pdfBase64` 任意**・保存 JSON ラップ | 現行は pdf 必須・本文は submission のみ |
 | Web 送 信時の **html2canvas 削除** | 移行完了後 |
 | **union-contacts.json** export | kyosai-system → OneDrive `設定/` |
