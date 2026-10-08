@@ -7,7 +7,8 @@ Cloudflare Worker が GitHub Pages フォームからの POST を受け、Micros
 
 ## 前提
 
-- [Wrangler](https://developers.cloudflare.com/workers/wrangler/) が使える（`npm install -g wrangler` または本ディレクトリで `npm install`）
+- **Node.js LTS**（`node` / `npm` が PowerShell で通ること）。未導入例: `winget install OpenJS.NodeJS.LTS` → **ターミナルを開き直して** `node -v` を確認
+- Wrangler は **グローバル不要**（本ディレクトリの `npm install` で `node_modules` に入る）
 - Cloudflare API トークン: 環境変数 `CLOUDFLARE_API_TOKEN`（Windows ユーザー環境変数推奨）
 - Entra アプリ登録・`Files.ReadWrite.All` 管理者同意済み（手動 C で Graph 書き込み確認済み想定）
 
