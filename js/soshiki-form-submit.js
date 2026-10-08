@@ -1,6 +1,6 @@
 /**
  * 組織共済申込書 — WEB 受付（送 信）
- * JSON 組み立て・PDF（js/soshiki-form-pdf-fill.js）・Power Automate へ POST
+ * JSON 組み立て・PDF（js/soshiki-form-pdf-fill.js）・Worker API へ POST
  */
 
 var SOSHIKI_FORM_SUBMIT_CONFIG = {
@@ -53,7 +53,7 @@ function updateSoshikiFormSendButtonState() {
 function handleSoshikiFormSendClick() {
   if (!SOSHIKI_FORM_SUBMIT_CONFIG.submitEndpointUrl) {
     window.alert(
-      "送 信の設定がありません。\ndata/soshiki-form-submit-config.json に Power Automate の URL を設定してください。"
+      "送 信の設定がありません。\ndata/soshiki-form-submit-config.json に Worker の URL を設定してください。"
     );
     return;
   }

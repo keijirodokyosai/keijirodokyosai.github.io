@@ -87,6 +87,7 @@ pdf/soshiki-form-enter.pdf   … 原本 PDF
 data/union-master.json       … 開発用サンプル（kyosai-system 本番出力で置換）
 data/soshiki-form-submit-config.json … WEB 受付 API URL（§5.10）
 docs/soshiki-form-submit-worker-graph.md … 送 信本命（Worker + Graph）引き継ぎ
+workers/soshiki-submit/      … Cloudflare Worker（README・deploy.ps1）
 data/form-kyosai-map.json    … 申込書口欄 ↔ KyosaiId 対応（確定）
 scripts/serve-open.ps1       … ローカルプレビュー（起動 / -Stop で停止）
 scripts/_jekyll-common.ps1   … serve-open 用ヘルパー
@@ -425,12 +426,10 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 { "receiptId": "7f3a2b1c", "ok": true }
 ```
 
-#### Worker 側（未実装）
+#### Worker 側（`workers/soshiki-submit`）
 
-1. POST 受信 → パスワード照合（Secret）  
-2. `storageFolder` で `組織共済WEB受付/受付/{storageFolder}/json|pdf/` に Graph で保存  
-3. 受付 ID 生成 → `{receiptId, ok}` を返却  
-4. （後回し）`union-contacts.json` 照合 → 担当者通知（旧 PA 案・Graph メール等）  
+実装済み。デプロイ・Secrets は `workers/soshiki-submit/README.md`。  
+1〜3 は Worker が担当。4（`union-contacts.json` 通知）は後回し。  
 
 **廃止:** PA HTTP 受信（Premium）、PA メール → OneDrive（REST／ライセンス）。詳細は `docs/soshiki-form-submit-worker-graph.md`。
 

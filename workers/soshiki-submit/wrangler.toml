@@ -1,0 +1,7 @@
+name = "soshiki-submit"
+main = "src/index.js"
+compatibility_date = "2024-09-01"
+
+# Secrets（wrangler secret put）:
+# AZURE_TENANT_ID, AZURE_CLIENT_ID, AZURE_CLIENT_SECRET,
+# GRAPH_DRIVE_USER_ID, GRAPH_BASE_PATH, SOSHIKI_SUBMIT_PASSWORD

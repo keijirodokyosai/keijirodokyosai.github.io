@@ -22,7 +22,7 @@
 | 項目 | 内容 |
 |------|------|
 | フロント | **変更最小**。`js/soshiki-form-submit.js` は既存 POST 形式のまま。URL は `data/soshiki-form-submit-config.json` の `submitEndpointUrl` |
-| バックエンド | **新規** Cloudflare Worker（リポジトリ外でも可。URL を config に書く） |
+| バックエンド | Cloudflare Worker **`workers/soshiki-submit`**（URL を config に書く） |
 | 認証 | **Entra ID アプリ登録** + Client Secret（Worker Secrets）。**申込者の Microsoft ログインは不要** |
 | Exchange / メール | **不要**（メール → Power Automate 経路は採用しない） |
 | Power Automate | **送信用・保存用とも不要**（HTTP 受信は Premium。メールトリガーは REST／ライセンス問題） |
@@ -119,15 +119,19 @@
 
 ---
 
-## 6. Worker 実装タスク（未実装）
+## 6. Worker 実装（`workers/soshiki-submit`）
 
-1. **POST 受信** — CORS（GitHub Pages オリジン）、Body サイズ（PDF Base64）上限の確認  
-2. **パスワード照合** — Worker Secret（例: `SOSHIKI_SUBMIT_PASSWORD`）。GitHub に置かない  
-3. **受付 ID 生成** — 推測困難な短い ID（UUID 等）  
-4. **Graph 認証** — Client ID + Client Secret（または証明書）でトークン取得  
-5. **アップロード** — `json` と `pdf` を所定パスに PUT/CREATE（フォルダ無ければ作成）  
-6. **エラー** — 4xx/5xx と JSON `{ "ok": false, "message": "…" }` など（Web の挙動に合わせて調整）  
-7. **レート制限** — 任意だが推奨（公開 URL）
+リポジトリ内実装。手順は `workers/soshiki-submit/README.md`。
+
+| 項目 | 実装 |
+|------|------|
+| POST・CORS | `https://keijirodokyosai.github.io` のみ。OPTIONS 対応 |
+| Body 上限 | 20MB |
+| パスワード | `SOSHIKI_SUBMIT_PASSWORD`（Secret） |
+| 受付 ID | `crypto.randomUUID()` の先頭 8 文字（16進） |
+| Graph | client_credentials → 所有者 drive に PUT（中間フォルダは Graph が作成） |
+| エラー | `{ "ok": false, "message": "…" }`（Web は `message` を表示） |
+| レート制限 | 未実装（後回し可） |
 
 ### Worker 環境変数（例）
 
@@ -159,8 +163,8 @@
 
 | 項目 | 備考 |
 |------|------|
-| Cloudflare Worker 本体 | 別リポジトリでも可 |
-| `submitEndpointUrl` 設定 | デプロイ後 |
+| `submitEndpointUrl` 設定 | `wrangler deploy` 後の Worker URL |
+| Worker Secrets + 初回 deploy | `workers/soshiki-submit/README.md` |
 | 送 信 PDF と **保 存（印刷）** の見た目一致 | `soshiki-form-pdf-fill.js` / 座標調整（§9.0.3） |
 | **union-contacts.json** による担当者通知 | 旧 PA 案。Graph でメール送信 or 別バッチ |
 | Access 取込 | kyosai-system 側 |
@@ -173,9 +177,9 @@
 | フェーズ | 内容 |
 |----------|------|
 | **0** | 管理者: Entra アプリ + 保存先 OneDrive/SharePoint 決定 |
-| **1** | Worker: トークン取得 + テストファイル1つアップロード（手動 curl） |
-| **2** | Worker: POST 受信・パスワード・`receiptId`・json/pdf 保存 |
-| **3** | Web: `submitEndpointUrl` 設定・本番テスト |
+| **1** | Graph 手動テスト（PowerShell） — 完了想定 |
+| **2** | Worker コード — `workers/soshiki-submit` |
+| **3** | Secrets・deploy・`submitEndpointUrl`・本番送信テスト |
 | **4** | 送 信 PDF 品質・ドキュメント §5.10 整理・通知（任意） |
 
 ---
@@ -191,6 +195,7 @@ data/soshiki-form-submit-config.json
 data/soshiki-form-pdf-layout.json
 docs/soshiki-form-enter.md        … §5.10
 docs/soshiki-form-submit-worker-graph.md  … 本ファイル
+workers/soshiki-submit/                 … Worker（src/index.js, README, deploy.ps1）
 ```
 
 ---
@@ -208,4 +213,4 @@ PA メール経路を検討していた際の案: `組織共済WEB申込_{組合
 
 ---
 
-**最終更新:** 2026-10-07（本命ルート合意・引き継ぎ用初版）
+**最終更新:** 2026-10-08（`workers/soshiki-submit` 追加）
