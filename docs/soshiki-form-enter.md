@@ -1,6 +1,6 @@
 # 組織共済申込書（ブラウザ入力）設計書
 
-**最終更新:** 2026-09-03  
+**最終更新:** 2026-10-08  
 **関連リポジトリ:** [keijirodokyosai.github.io](https://github.com/keijirodokyosai/keijirodokyosai.github.io)（Web）、`kyosai-system`（Access・マスタ出力）
 
 ---
@@ -77,7 +77,7 @@ js/soshiki-form-enter.js     … 日付初期値・申込月の翌月を当月�
 js/soshiki-form-footer-counts.js … 前月残持ち越し・月計自動計算・月計 localStorage（§5.7.2）
 js/soshiki-form-union-storage.js … 保存組合名 localStorage・datalist・削除 UI（§5.2）
 js/soshiki-form-submit.js    … WEB 受付（§5.10・JSON・Worker POST）
-js/soshiki-form-pdf-fill.js  … PDF 生成（§9.0.3・pdf-lib・原本＋座標 JSON）
+js/soshiki-form-pdf-fill.js  … 送 信 PDF（§9.0.3・廃止予定）。事務 PDF は §5.10.1
 data/soshiki-form-pdf-layout.json … PDF 文字配置（pt・左下原点）
 js/soshiki-form-members.js   … 組合員5行・異動トグル・半角制限・氏名カナ入力補助（§9.13.1）・郵便番号検索・町村域正規化（§9.9）・表示同期（updateZipView）・組合員欄クリア
 _includes/soshiki-form-member-rows.html … 組合員行マークアップ
@@ -329,7 +329,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 * 利用想定: 印刷ダイアログの送信先を **「PDF に保存」**（ユーザー設定）。物理プリンタ（例 RICOH）には送らない
 * ファイル名のヒント: 印刷前に `document.title` を `{組合名}_{申込日 yyyyMMdd}` に一時変更（`.pdf` なし）。組合未確定時は `組織共済申込書`、申込日未入力時は当日
 * 印字内容: `@media print`（§9.0.2）の HTML シート。町村域が短いとき **番地を続けて印字**は §9.11 住所表の印刷行
-* **送 信**の PDF は別経路（§9.0.3・pdf-lib）。保 存と送 信で PDF 生成方式が異なる点に注意
+* **送 信**の事務用 PDF は共済会側（§5.10.1）。**保 存**は印刷（§5.9）。旧 §9.0.3（html2canvas）は廃止予定
 
 ### 5.9.1 Tab 移動順（DOM 順）
 
@@ -353,11 +353,11 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | 項目 | 内容 |
 |------|------|
 | 設定 | `data/soshiki-form-submit-config.json` の `submitEndpointUrl`（**Worker API URL**。未設定時は送 信不可） |
-| JS | `js/soshiki-form-submit.js`・`js/soshiki-form-pdf-fill.js` |
-| ライブラリ | pdf-lib 1.17.1（CDN）。日本語はフェーズ2以降でフォント埋め込み（fontkit） |
+| JS | `js/soshiki-form-submit.js`（送 信）・`js/soshiki-form-enter.js`（保 存＝印刷） |
+| 送 信 PDF（移行中） | `js/soshiki-form-pdf-fill.js`（html2canvas）。**廃止予定** → 事務側 Excel PDF（§5.10.1・`docs/soshiki-form-submit-worker-graph.md` §13） |
 | 送 信条件 | `validateSoshikiForm()` OK・組合名 Enter 確定（`getSoshikiFormVerifiedUnion()`）・組合員1名以上・パスワード入力 |
-| POST | **1 リクエスト**（JSON + PDF Base64 + パスワード + ファイル名用メタ） |
-| PDF | 送 信・保 存とも §9.0.3（`pdf/soshiki-form-enter.pdf` ＋ 座標 JSON）。Azure 不要 |
+| POST | **1 リクエスト**（submission + パスワード + ファイル名用メタ。現行は PDF Base64 必須・移行後は任意） |
+| 組合向け PDF | **保 存**のみ（§5.9・`window.print()`）。事務用 PDF は共済会バッチ |
 | 月計記録 | 送 信 **成功後** に §5.7.2 の localStorage へ上書き（保 存と同じ） |
 | 取込 | **リアルタイム自動なし**（事務側の取込処理で json 削除・二重チェック） |
 
@@ -400,13 +400,15 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 }
 ```
 
-#### submission JSON（確定）
+#### submission JSON（取込・現行）
 
-| 含める | 含めない |
-|--------|----------|
+Access 取込用の最小セット。**用紙 PDF 完全再現には §5.10.1 を追加する。**
+
+| 含める | 含めない（現行） |
+|--------|------------------|
 | `formType`, `formVersion`, `submittedAt` | 組合名（POST の `unionName`） |
-| `IndustryCode`, `BranchCode`, `SubbranchCode`, `KyosaikaiCode` | 口欄・掛金 |
-| `applicationDate`, `coverageMonth`, `storageFolder` | フッター・備考 |
+| `IndustryCode`, `BranchCode`, `SubbranchCode`, `KyosaikaiCode` | 口欄・掛金（マスタで再取得・§5.10.1） |
+| `applicationDate`, `coverageMonth`, `storageFolder` | フッター・備考（§5.10.1 で追加予定） |
 | `members[]`（入力行のみ・`UnionMember` 列名 PascalCase） | |
 
 **JSON 型（組織キー）:** `KyosaikaiCode`・`IndustryCode`・`BranchCode`・`SubbranchCode`・`UnionMemberCode` は **ゼロ埋め string**。`CollectiveKyosaiId`・`KyosaiId`・`Units`・`Premi` は **number**。
@@ -420,6 +422,35 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | `PostalCode` | `600-0000` |
 | `UnionMemberCode` | 入力時のみ（6桁） |
 
+#### 5.10.1 事務用 PDF・返信メール（2026-10 決定・未実装）
+
+**方針:** Web では **送 信 PDF を作らない**（html2canvas 廃止予定）。OneDrive に json が着信したら **事務 PC バッチ**が **返信メール（PDF 添付なし）→ Excel PDF** の順で処理。詳細は **`docs/soshiki-form-submit-worker-graph.md` §13**。
+
+| 用紙の領域 | データ源 |
+|------------|----------|
+| 申込日・産別/支部/分会・組合員 | 現行 `submission` |
+| 組合名（漢字） | `union-master.json` の `KyosaikaiName`（`KyosaikaiCode`）または POST `unionName` / ファイル名 |
+| 口欄7・1人あたり掛金 | `union-master.json` ＋ `data/form-kyosai-map.json`。集計は Web の `computeFormKuchi`（`js/soshiki-form-enter.js`）と **同じルール**をバッチで再現 |
+| フッター・備考 | 下記 **`sheetFooter`**（Web 送 信時に含める・**コード未実装**） |
+| 当月（月） | `applicationDate` から Web と同式（`tougetsu-count` 相当）。`coverageMonth` も参照可 |
+| 月計 | **再計算:** `zengetsuZan` +（新規人数 − 解約人数）。`henkou` は月計に含めない（`js/soshiki-form-footer-counts.js` の `countMemberIdouDelta` 同等） |
+| 住所・町村域結合 | バッチで `computeTownAreaPrintJoin`（`js/soshiki-form-members.js`）相当、または印字用1行を JSON に含める |
+
+**追加予定: `submission.sheetFooter`**
+
+| フィールド | 画面 id | 必須（PDF 完全再現） |
+|------------|---------|----------------------|
+| `pageCountCurrent` | `page-count-current` | はい |
+| `pageCountTotal` | `page-count-total` | はい |
+| `zengetsuZan` | `zengetsu-zan-count` | はい（送信時点の表示値。localStorage 自動入りはサーバーに来ない） |
+| `biko` | `biko-remarks` | はい |
+
+`tsukiKei`・当月表示は **バッチ再計算可**（送ってもよいが必須ではない）。
+
+**返信メール:** 宛先は OneDrive `設定/union-contacts.json` の `ManagerEmail`（`KyosaikaiCode` 照合）。受付 ID はファイル名 `{組合名}_{yyyyMMdd}_{受付ID}.json` または移行後の保存 JSON ラップから取得。
+
+**Worker 移行（未実装）:** `pdfBase64` 任意。OneDrive `.json` 本文を `{ receiptId, unionName, fileNameDate, submission }` で保存。
+
 #### Worker レスポンス（Web 期待）
 
 ```json
@@ -429,7 +460,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 #### Worker 側（`workers/soshiki-submit`）
 
 実装済み。デプロイ・Secrets は `workers/soshiki-submit/README.md`。  
-1〜3 は Worker が担当。4（`union-contacts.json` 通知）は後回し。  
+json/pdf の Graph 保存は Worker。返信メール・事務 PDF は **§5.10.1・worker-graph §13**（未実装）。  
 
 **廃止:** PA HTTP 受信（Premium）、PA メール → OneDrive（REST／ライセンス）。詳細は `docs/soshiki-form-submit-worker-graph.md`。
 
@@ -606,21 +637,17 @@ PA 通知専用。Web・GitHub には載せない。kyosai-system が `Subbranch
 
 ### 9.0.2 印刷・PDF
 
-**保 存**は `window.print()`（§5.9・§9.0.2）。**送 信**の PDF は §9.0.3（pdf-lib）。
+**保 存**は `window.print()`（§5.9・§9.0.2）。**事務用送 信 PDF** は §5.10.1（Excel・共済会側）。§9.0.3 は移行中の旧経路。
 
-### 9.0.3 PDF 生成（送 信・キャプチャ）
+### 9.0.3 PDF 生成（送 信・html2canvas）— 廃止予定
 
 | 項目 | 内容 |
 |------|------|
-| 方式 | **画面上の `.soshiki-form-sheet` を html2canvas で画像化** → pdf-lib で A4 横 1 ページに PNG 埋め込み（印刷・保 存と同じ見た目を目標） |
-| ライブラリ | `html2canvas` 1.4.1・`pdf-lib` 1.17.1（`soshiki-form-enter.html` CDN） |
-| 印字近似 CSS | `body.soshiki-form-capturing`（§9.0.2 と同等。緑枠非表示・選択中の異動・性別・町村域結合） |
-| 町村域結合 | キャプチャ前に `applyAddressPrintTownJoinAllRows()`（`beforeprint` と同じ） |
-| 入力表示 | クローン内で `input`/`textarea` を `.soshiki-form-pdf-text-swap` に置換（html2canvas の文字欠け対策） |
-| 実装 | `js/soshiki-form-pdf-fill.js` の `buildSoshikiFormPdfBytes()` |
-| 保 存 | `window.print()`（§5.9）。見た目はキャプチャとほぼ同じ想定 |
-| 送 信の PDF | 上記 `buildSoshikiFormPdfBytes` → Base64 → Worker |
-| 座標 JSON | `data/soshiki-form-pdf-layout.json` の `fields[]` は **未使用**（将来ベクター描画用に残置） |
+| 状態 | **本番に残存**（`js/soshiki-form-pdf-fill.js` v6）。位置合わせが用紙と合わず **採用打ち切り**（§5.10.1） |
+| 旧方式 | html2canvas → pdf-lib A4 横 PNG 埋め込み |
+| 保 存 | **引き続き** `window.print()`（§5.9）。組合の手元 PDF はこちら |
+| 送 信 PDF の正 | **事務 Excel バッチ**（`docs/soshiki-form-submit-worker-graph.md` §13） |
+| 座標 JSON | `data/soshiki-form-pdf-layout.json` の `fields[]` は未使用（Worker/Excel 用の参照用に残置可） |
 
 ### 9.0.2 印刷（ブラウザメニュー）
 
@@ -1191,10 +1218,14 @@ Subbranch（KyosaikaiName, IndustryCode, BranchCode, SubbranchCode, CollectiveKy
 8e. ~~備考入力枠~~ → **完了**（§5.8・2026-09-02 実測）
 9. ~~組合員欄 CSS（住所2〜3行目横位置・郵便番号文字縦位置）~~ → **完了**（2026-09-02）
 9b. 開発用仮表示の本番前削除（§14・1行目 placeholder 等）
-9c. ~~操作ボタン・クリア~~ → **クリア完了**（§5.9）。送 信 PDF → **§9.0.3 フェーズ2**（html2canvas）。~~送 信 POST~~ → **Web 実装完了**（§5.10）。**PA フロー・union-contacts エクスポート**は未構築
+9c. ~~操作ボタン・クリア~~ → **クリア完了**（§5.9）。~~送 信 POST~~ → **Web 完了**（§5.10）
 10. ~~組合名プルダウン（localStorage）・マスタからのデータ引き出し・追加確認・削除 UI~~ → **完了**（§5.2・`js/soshiki-form-union-storage.js`）
-11. ~~**送 信**（OneDrive アップロード）~~ → **Web 完了**（§5.10）。Power Automate・`union-contacts.json`・Access 取込は未構築
-12. ~~`validateSoshikiForm()` の配線（送信前チェック等）~~ → **完了**（§5.10）
+11. ~~**送 信**（Worker → OneDrive json）~~ → **完了**（§5.10）
+12. ~~`validateSoshikiForm()` の配線~~ → **完了**（§5.10）
+13. **送 信 PDF** — Web html2canvas **廃止**・事務 Excel PDF（§5.10.1・worker-graph §13）
+14. Web **`submission.sheetFooter`** 送付・Worker **pdf 任意**・json ラップ（§5.10.1）
+15. 事務バッチ: **返信メール**（PDF 添付なし）→ Excel PDF（§5.10.1）
+16. **union-contacts.json** export・Access 取込
 
 ---
 

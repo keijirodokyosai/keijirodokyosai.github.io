@@ -11,5 +11,5 @@
     "comment": "組合員行の縦オフセット（pt）。フェーズ2以降で実測値を入れる。"
   },
   "fields": [],
-  "commentFields": "送 信 PDF は html2canvas キャプチャ（§9.0.3）。fields は将来のベクター描画用。"
+  "commentFields": "送 信 PDF は事務 Excel（§5.10.1）。fields は Worker/Excel 座標用の将来枠。§9.0.3 html2canvas は廃止予定。"
 }
