@@ -608,18 +608,19 @@ PA 通知専用。Web・GitHub には載せない。kyosai-system が `Subbranch
 
 **保 存**は `window.print()`（§5.9・§9.0.2）。**送 信**の PDF は §9.0.3（pdf-lib）。
 
-### 9.0.3 PDF 生成（原本＋座標・pdf-lib）
+### 9.0.3 PDF 生成（送 信・キャプチャ）
 
 | 項目 | 内容 |
 |------|------|
-| 原本 | `pdf/soshiki-form-enter.pdf`（A4 横） |
-| 座標 | `data/soshiki-form-pdf-layout.json`（`fields[]`・x/y は **pt**・**左下原点**） |
-| データ | `buildSoshikiFormPdfPayload()`（画面上の項目。`submission` を含む） |
-| 実装 | `js/soshiki-form-pdf-fill.js` の `buildSoshikiFormPdfBytes()`（標準フォントは `pdfDoc.embedFont(StandardFonts.Helvetica)`。`fields` が空のときは描画・埋め込みを省略） |
-| 保 存 | `printSoshikiFormForPdfSave`（`window.print`）。§9.0.2 |
-| 送 信の PDF | `buildSoshikiFormPdfBytes`（pdf-lib） |
-| フェーズ1 | 原本を読み込みそのまま保存（配線確認）。`fields` は空 |
-| フェーズ2以降 | `fields` に項目を追加・日本語フォント埋め込み・組合員行の `memberRow.stepPt` |
+| 方式 | **画面上の `.soshiki-form-sheet` を html2canvas で画像化** → pdf-lib で A4 横 1 ページに PNG 埋め込み（印刷・保 存と同じ見た目を目標） |
+| ライブラリ | `html2canvas` 1.4.1・`pdf-lib` 1.17.1（`soshiki-form-enter.html` CDN） |
+| 印字近似 CSS | `body.soshiki-form-capturing`（§9.0.2 と同等。緑枠非表示・選択中の異動・性別・町村域結合） |
+| 町村域結合 | キャプチャ前に `applyAddressPrintTownJoinAllRows()`（`beforeprint` と同じ） |
+| 入力表示 | クローン内で `input`/`textarea` を `.soshiki-form-pdf-text-swap` に置換（html2canvas の文字欠け対策） |
+| 実装 | `js/soshiki-form-pdf-fill.js` の `buildSoshikiFormPdfBytes()` |
+| 保 存 | `window.print()`（§5.9）。見た目はキャプチャとほぼ同じ想定 |
+| 送 信の PDF | 上記 `buildSoshikiFormPdfBytes` → Base64 → Worker |
+| 座標 JSON | `data/soshiki-form-pdf-layout.json` の `fields[]` は **未使用**（将来ベクター描画用に残置） |
 
 ### 9.0.2 印刷（ブラウザメニュー）
 
@@ -1190,7 +1191,7 @@ Subbranch（KyosaikaiName, IndustryCode, BranchCode, SubbranchCode, CollectiveKy
 8e. ~~備考入力枠~~ → **完了**（§5.8・2026-09-02 実測）
 9. ~~組合員欄 CSS（住所2〜3行目横位置・郵便番号文字縦位置）~~ → **完了**（2026-09-02）
 9b. 開発用仮表示の本番前削除（§14・1行目 placeholder 等）
-9c. ~~操作ボタン・クリア~~ → **クリア完了**（§5.9）。保 存・送 信 PDF → **§9.0.3 移行中**（フェーズ1 配線済み・座標合わせは継続）。~~送 信 POST~~ → **Web 実装完了**（§5.10）。**PA フロー・union-contacts エクスポート**は未構築
+9c. ~~操作ボタン・クリア~~ → **クリア完了**（§5.9）。送 信 PDF → **§9.0.3 フェーズ2**（html2canvas）。~~送 信 POST~~ → **Web 実装完了**（§5.10）。**PA フロー・union-contacts エクスポート**は未構築
 10. ~~組合名プルダウン（localStorage）・マスタからのデータ引き出し・追加確認・削除 UI~~ → **完了**（§5.2・`js/soshiki-form-union-storage.js`）
 11. ~~**送 信**（OneDrive アップロード）~~ → **Web 完了**（§5.10）。Power Automate・`union-contacts.json`・Access 取込は未構築
 12. ~~`validateSoshikiForm()` の配線（送信前チェック等）~~ → **完了**（§5.10）

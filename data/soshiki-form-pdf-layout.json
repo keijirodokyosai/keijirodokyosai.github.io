@@ -10,5 +10,6 @@
     "stepPt": null,
     "comment": "組合員行の縦オフセット（pt）。フェーズ2以降で実測値を入れる。"
   },
-  "fields": []
+  "fields": [],
+  "commentFields": "送 信 PDF は html2canvas キャプチャ（§9.0.3）。fields は将来のベクター描画用。"
 }

@@ -165,7 +165,7 @@
 |------|------|
 | `submitEndpointUrl` 設定 | `wrangler deploy` 後の Worker URL |
 | Worker Secrets + 初回 deploy | `workers/soshiki-submit/README.md` |
-| 送 信 PDF と **保 存（印刷）** の見た目一致 | `soshiki-form-pdf-fill.js` / 座標調整（§9.0.3） |
+| 送 信 PDF と **保 存（印刷）** の見た目 | §9.0.3 フェーズ2（html2canvas キャプチャ）。微差はブラウザ依存 |
 | **union-contacts.json** による担当者通知 | 旧 PA 案。Graph でメール送信 or 別バッチ |
 | Access 取込 | kyosai-system 側 |
 | `docs/soshiki-form-enter.md` §5.10 本文の全面差し替え | 本 doc を正とし、§5.10 はリンク済み |

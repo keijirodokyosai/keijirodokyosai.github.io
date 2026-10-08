@@ -2633,3 +2633,15 @@ body.soshiki-form-capturing .soshiki-form-gender-btn.is-selected .soshiki-form-d
   display: block !important;
   color: #000 !important;
 }
+
+body.soshiki-form-capturing
+  .soshiki-form-member-town-area-number-row--print-joined
+  .soshiki-form-member-area-number.is-soshiki-print-area-joined-hidden {
+  display: none !important;
+}
+
+body.soshiki-form-capturing
+  .soshiki-form-member-town-area-number-row--print-joined
+  .soshiki-form-member-town-area.is-soshiki-print-town-joined {
+  --soshiki-form-member-box-chars: 20;
+}
