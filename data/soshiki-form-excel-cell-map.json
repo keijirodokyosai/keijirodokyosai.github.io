@@ -1,5 +1,5 @@
 {
-  "comment": "事務 Excel PDF テンプレへの流し込み。scripts/soshiki-form-office/Fill-SoshikiFormExcel.ps1",
+  "comment": "事務 Excel PDF テンプレへの流し込み。scripts/soshiki-form-office/csharp (SoshikiFormPdf)",
   "templateFileName": "組織共済申込書（PDF化テンプレ）.xlsx",
   "pathsComment": "json は 受付/{格納月}/json/*.json。テンプレは 受付 と同じ親（組織共済WEB受付）直下。PC 間は相対解決のみ（フルパス直書きしない）",
   "memberRowStep": 3,

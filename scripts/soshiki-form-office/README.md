@@ -7,6 +7,7 @@ OneDrive の受付 `.json` を **Excel テンプレ**に流し込み、**PDF** �
 
 - Windows + **Microsoft Excel**（デスクトップ）
 - PowerShell 5.1+
+- **.NET 8 SDK**（開発・`dotnet run`）または `dist\SoshikiFormPdf.exe`（`Build-SoshikiFormPdf.ps1` で作成）
 - テンプレ `.xlsx`（用紙レイアウト済み・未記入セルは空）
 
 ## フォルダ構成（OneDrive）
@@ -17,61 +18,65 @@ OneDrive の受付 `.json` を **Excel テンプレ**に流し込み、**PDF** �
   受付/
     2026年11月/
       json/   … Worker が保存
-      pdf/    … 本スクリプトの出力
+      pdf/    … 本ツールの出力
+      processed/  … 任意（Inbox で -MoveToProcessed 時のみ）
 ```
 
 テンプレ名は `data/soshiki-form-excel-cell-map.json` の `templateFileName`。  
-**フルパスはスクリプトに書かない**（PC ごとの OneDrive パス差を吸収）。
+**フルパスはリポに書かない**（json の位置から相対解決）。
 
-## 使い方（おすすめ）
+## 使い方
 
 ```powershell
 cd scripts\soshiki-form-office
+.\Verify-SoshikiOfficeScripts.ps1
 
-.\Export-SoshikiFormPdfFromJson.ps1 `
-  -JsonPath "..\..\..\..\OneDrive - …\組織共済WEB受付\受付\2026年11月\json\合同互助会_20261109_abc12345.json"
+.\Export-SoshikiFormPdfFromJson.ps1 -JsonPath "（json のフルパス）"
 ```
 
-`-TemplatePath` は **省略可**（json の位置からテンプレを自動解決）。  
-上の JsonPath は例です。実際は **json へのパスだけ**渡せばよいです。
+一括（pdf が無い json だけ処理）:
 
 ```powershell
-# 受付フォルダ内で実行する例
-cd "…\組織共済WEB受付\受付\2026年11月"
-..\..\..\..\path\to\repo\scripts\soshiki-form-office\Export-SoshikiFormPdfFromJson.ps1 -JsonPath ".\json\合同互助会_20261109_abc12345.json"
+.\Process-SoshikiFormJsonInbox.ps1 -ReceptionRoot "（受付 フォルダのフルパス）"
 ```
 
-手動でテンプレを指定する場合のみ `-TemplatePath` を付けます。
-
-### 低レベル API
+定期実行の例（5 分間隔・要管理者権限は環境による）:
 
 ```powershell
-.\Fill-SoshikiFormExcel.ps1 `
-  -JsonPath "…\json\xxx.json" `
-  -TemplatePath "…\組織共済申込書（PDF化テンプレ）.xlsx" `
-  -OutputPdfPath "…\pdf\xxx.pdf"
+.\Register-SoshikiFormJsonInboxTask.ps1 -ReceptionRoot "（受付 フォルダのフルパス）"
 ```
 
-`-UnionMasterPath` / `-KyosaiMapPath` を省略すると、リポジトリの `data/union-master.json` と `data/form-kyosai-map.json` を使います。  
-本番マスタに差し替える場合はパスを指定してください。
+SDK が無い事務 PC 向けに exe を置く場合:
 
-デバッグ: `-LeaveExcelOpen` で Excel を開いたままにします。
+```powershell
+.\Build-SoshikiFormPdf.ps1
+# → dist\SoshikiFormPdf.exe（Invoke は exe を優先）
+```
 
-## ファイル
+## アーキテクチャ
+
+| 層 | 役割 |
+|----|------|
+| `Export-*.ps1` / `Process-*.ps1` | パス解決・一括・タスク登録（薄い PS） |
+| `Invoke-SoshikiFormPdf.ps1` | `dist\*.exe` または `dotnet run` |
+| `csharp/` | json 読込・口数・Excel COM（dynamic）・PDF |
+
+C# は Office PIA に依存せず `dynamic` で Excel を操作します（GAC の古い Interop と Excel 16 の不一致を避ける）。
+
+## ファイル一覧
 
 | ファイル | 役割 |
 |----------|------|
-| `Fill-SoshikiFormExcel.ps1` | JSON 読込 → Excel COM → PDF |
-| `Export-SoshikiFormPdfFromJson.ps1` | json → 同 stem の pdf（テンプレ自動） |
-| `SoshikiFormOfficePaths.ps1` | 受付/json からテンプレ・pdf パス解決 |
-| `SoshikiFormKuchi.ps1` | 口数・掛金（Web `computeFormKuchi` 相当） |
+| `csharp/` | `SoshikiFormPdf` コンソール（本体） |
+| `Invoke-SoshikiFormPdf.ps1` | C# 起動の共通入口 |
+| `Export-SoshikiFormPdfFromJson.ps1` | 1 件 json → pdf |
+| `Process-SoshikiFormJsonInbox.ps1` | 受付配下をスキャン |
+| `Register-SoshikiFormJsonInboxTask.ps1` | スケジュールタスク登録例 |
+| `Build-SoshikiFormPdf.ps1` | `dist\SoshikiFormPdf.exe` を publish |
+| `SoshikiFormOfficePaths.ps1` | json からテンプレ・pdf パス（Inbox 用） |
+| `Verify-SoshikiOfficeScripts.ps1` | パース検証 + `dotnet build` |
 
 ## JSON
 
-Worker が保存する **submission オブジェクトのみ**（ファイル名から受付 ID を取る想定）。  
-組合名・口欄・掛金は `union-master` + `form-kyosai-map` から再取得します。
-
-## 未実装（今後）
-
-- フォルダ監視・未処理 json の一括処理
-- 処理済み json の移動・メール送信
+Worker が保存する **submission オブジェクトのみ**。  
+組合名・口欄・掛金は `data/union-master.json` + `data/form-kyosai-map.json` から再計算します。

@@ -1,4 +1,8 @@
-# 組織共済 WEB 受付 — OneDrive 上の相対パス解決（PC 間でフルパス直書きしない）
+# OneDrive layout: .../WEB_ROOT/受付/<month>/json|pdf
+
+function Get-SoshikiReceptionFolderName {
+    return -join @([char]0x53D7, [char]0x4ED8)
+}
 
 function Get-SoshikiFormRepoRoot {
     param([string]$ScriptRoot = $PSScriptRoot)
@@ -27,29 +31,28 @@ function Get-SoshikiFormWebRootFromJsonPath {
     }
 
     $jsonDir = Split-Path -Parent $jsonFull
-    $jsonFolderName = Split-Path -Leaf $jsonDir
-    if ($jsonFolderName -ne "json") {
-        throw "JSON は受付\{格納月}\json\ 配下を想定しています。実際: $jsonDir"
+    if ((Split-Path -Leaf $jsonDir) -ne "json") {
+        throw "JSON must be under .../MONTH/json/ (got: $jsonDir)"
     }
 
     $monthDir = Split-Path -Parent $jsonDir
     $receptionDir = Split-Path -Parent $monthDir
-    $receptionFolderName = Split-Path -Leaf $receptionDir
-    if ($receptionFolderName -ne "受付") {
-        throw "受付 フォルダが見つかりません（親が '$receptionFolderName'）。パス: $jsonFull"
+    $expected = Get-SoshikiReceptionFolderName
+    if ((Split-Path -Leaf $receptionDir) -ne $expected) {
+        throw "Expected parent folder $expected (got: $(Split-Path -Leaf $receptionDir)). Path: $jsonFull"
     }
 
     $webRoot = Split-Path -Parent $receptionDir
     if (-not $webRoot) {
-        throw "組織共済WEB受付（受付の親フォルダ）を解決できません: $jsonFull"
+        throw "Cannot resolve WEB root above reception folder: $jsonFull"
     }
 
     return @{
-        JsonFull      = $jsonFull
-        JsonDir       = $jsonDir
-        MonthDir      = $monthDir
-        ReceptionDir  = $receptionDir
-        WebRoot       = $webRoot
+        JsonFull     = $jsonFull
+        JsonDir      = $jsonDir
+        MonthDir     = $monthDir
+        ReceptionDir = $receptionDir
+        WebRoot      = $webRoot
     }
 }
 
@@ -69,12 +72,12 @@ function Get-SoshikiFormExcelTemplatePath {
         $TemplateFileName = $cellMap.templateFileName
     }
     if (-not $TemplateFileName) {
-        throw "templateFileName が未設定です（data/soshiki-form-excel-cell-map.json）。"
+        throw "templateFileName missing in data/soshiki-form-excel-cell-map.json"
     }
 
     $templatePath = Join-Path $layout.WebRoot $TemplateFileName
     if (-not (Test-Path -LiteralPath $templatePath)) {
-        throw "Excel テンプレが見つかりません: $templatePath"
+        throw "Excel template not found: $templatePath"
     }
 
     return (Resolve-Path -LiteralPath $templatePath).Path
