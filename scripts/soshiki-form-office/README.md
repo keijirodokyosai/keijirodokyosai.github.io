@@ -91,14 +91,35 @@ C# は Office PIA に依存せず `dynamic` で Excel を操作します。
 Worker が保存する **submission オブジェクトのみ**。  
 組合名・口欄・掛金は `data/union-master.json` + `data/form-kyosai-map.json` から再計算します。
 
-## 返信メール（プレビューのみ → Outlook 送信予定）
+## OneDrive 設定（リポジトリ外）
 
-**送信:** 事務 PC の **Microsoft Outlook**（Graph API は使わない）。現状は下書き表示のみ。  
-OneDrive に `設定/union-contacts.json` がある前提で文面を確認:
+| ファイル | 用途 |
+|----------|------|
+| `設定/union-contacts.json` | 受付確認メール To（`ManagerEmail`） |
+| `設定/soshiki-form-office-settings.json` | 管理者通知 To（`AdminEmail`） |
+
+例: `examples/soshiki-form-office-settings.example.json`  
+環境変数 `SOSHIKI_OFFICE_ADMIN_EMAIL` があれば `AdminEmail` より優先。
+
+## 返信メール（組合担当者）
 
 ```powershell
-.\Preview-SoshikiFormReceiptEmail.ps1 -JsonPath "（json のフルパス）"
+.\Preview-SoshikiFormReceiptEmail.ps1 -JsonPath '（json フルパス）'
 ```
+
+## 管理者アラート（PDF 失敗など）
+
+```powershell
+.\Preview-SoshikiFormAdminAlertEmail.ps1 -JsonPath '（json フルパス）' -ErrorMessage "（エラー内容）"
+
+# Outlook で下書き表示（送信しない）
+.\Send-SoshikiFormAdminAlertEmail.ps1 -JsonPath '…' -ErrorMessage '…'
+
+# 送信
+.\Send-SoshikiFormAdminAlertEmail.ps1 -JsonPath '…' -ErrorMessage '…' -Send
+```
+
+Outlook **Classic**（COM）が必要です。Inbox からの自動連携は別途実装予定。
 
 ## 開発（C#）
 

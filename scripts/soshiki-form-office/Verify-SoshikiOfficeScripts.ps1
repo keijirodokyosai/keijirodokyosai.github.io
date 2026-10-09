@@ -10,7 +10,11 @@ $scripts = @(
     "Register-SoshikiFormJsonInboxTask.ps1",
     "Build-SoshikiFormPdf.ps1",
     "Get-DotNetCli.ps1",
-    "Preview-SoshikiFormReceiptEmail.ps1"
+    "Preview-SoshikiFormReceiptEmail.ps1",
+    "SoshikiFormAdminMail.ps1",
+    "Invoke-SoshikiFormOutlook.ps1",
+    "Preview-SoshikiFormAdminAlertEmail.ps1",
+    "Send-SoshikiFormAdminAlertEmail.ps1"
 )
 
 foreach ($name in $scripts) {

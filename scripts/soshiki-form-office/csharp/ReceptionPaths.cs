@@ -5,14 +5,17 @@ internal sealed record LayoutPaths(string WebRoot, string PdfDir, string PdfPath
 internal static class ReceptionPaths
 {
     private const string ReceptionFolderName = "\u53D7\u4ED8";
+    private const string JsonFolderName = "json";
+    private const string ProcessedFolderName = "\u5904\u7406\u6E08\u307F";
 
     public static LayoutPaths FromSubmissionJson(string jsonFull)
     {
         var jsonDir = Path.GetDirectoryName(jsonFull) ?? "";
-        if (Path.GetFileName(jsonDir) != "json")
+        var leaf = Path.GetFileName(jsonDir);
+        if (leaf != JsonFolderName && leaf != ProcessedFolderName)
         {
             throw new InvalidOperationException(
-                "JSON must be under .../RECEPTION_MONTH/json/ (got: " + jsonDir + ")");
+                "JSON must be under .../RECEPTION_MONTH/json/ or .../処理済み/ (got: " + jsonDir + ")");
         }
 
         var monthDir = Path.GetDirectoryName(jsonDir) ?? "";

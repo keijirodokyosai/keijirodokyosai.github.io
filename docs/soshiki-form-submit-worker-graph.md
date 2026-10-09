@@ -169,7 +169,8 @@ Web では **送 信 PDF を作らない**（html2canvas 経路は削除済み�
 | 項目 | 内容 |
 |------|------|
 | 宛先 | **`union-contacts.json`** の `ManagerEmail`（`KyosaikaiCode` 照合）。Web フォームにメール欄は無い |
-| 送信 | **Outlook デスクトップ**（事務 PC・事務用アカウント）。`Preview-SoshikiFormReceiptEmail.ps1` の下書きを流し込み送信（実装予定）。Graph `Mail.Send` は採用しない |
+| 送信 | **Outlook デスクトップ**（事務 PC）。組合向け: `Preview-SoshikiFormReceiptEmail.ps1`（送信は未配線）。管理者向け PDF 失敗: `Send-SoshikiFormAdminAlertEmail.ps1`（`-Send` で送信） |
+| 管理者宛先 | OneDrive `設定/soshiki-form-office-settings.json` の **`AdminEmail`**（Graph は使わない） |
 | 本文 | 受付完了・**受付 ID**・組合名・申込日。OneDrive パスは記載しない |
 | 添付 | **なし**（PDF は `pdf/` にのみ保管） |
 

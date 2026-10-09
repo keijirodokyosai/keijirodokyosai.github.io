@@ -376,6 +376,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
       pdf/               … 残す
   設定/
     union-contacts.json  … 分会担当者メール（Web 非公開）
+    soshiki-form-office-settings.json  … 事務バッチ用 AdminEmail（PDF 失敗通知）
 ```
 
 `StorageFolder`（例 `2027年01月`）は Web が `CoverageMonth` から算出し submission に含める。

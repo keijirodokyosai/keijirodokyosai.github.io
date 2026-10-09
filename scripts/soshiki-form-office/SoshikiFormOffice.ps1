@@ -9,6 +9,45 @@ function Get-SoshikiFormSettingsFolderName {
     return -join @([char]0x8A2D, [char]0x5B9A)
 }
 
+function Get-SoshikiFormProcessedFolderName {
+    return -join @([char]0x5904, [char]0x7406, [char]0x6E08, [char]0x307F)
+}
+
+function Get-SoshikiFormOfficeSettingsPath {
+    param([Parameter(Mandatory = $true)][string]$WebRoot)
+
+    $settingsDir = Get-SoshikiFormSettingsFolderName
+    return Join-Path $WebRoot ($settingsDir + "\soshiki-form-office-settings.json")
+}
+
+function Get-SoshikiFormOfficeSettings {
+    param([Parameter(Mandatory = $true)][string]$WebRoot)
+
+    $envOverride = [Environment]::GetEnvironmentVariable("SOSHIKI_OFFICE_ADMIN_EMAIL")
+    if ($envOverride) {
+        return @{
+            AdminEmail   = [string]$envOverride
+            SettingsPath = "(environment:SOSHIKI_OFFICE_ADMIN_EMAIL)"
+        }
+    }
+
+    $path = Get-SoshikiFormOfficeSettingsPath -WebRoot $WebRoot
+    if (-not (Test-Path -LiteralPath $path)) {
+        throw "Office settings not found: $path"
+    }
+
+    $raw = Get-Content -LiteralPath $path -Raw -Encoding UTF8 | ConvertFrom-Json
+    $email = [string]$raw.AdminEmail
+    if (-not $email) {
+        throw "AdminEmail missing in: $path"
+    }
+
+    return @{
+        AdminEmail   = $email
+        SettingsPath = $path
+    }
+}
+
 function Parse-SoshikiFormJsonFileStem {
     param([Parameter(Mandatory = $true)][string]$Stem)
 
@@ -121,8 +160,10 @@ function Get-SoshikiFormWebRootFromJsonPath {
     }
 
     $jsonDir = Split-Path -Parent $jsonFull
-    if ((Split-Path -Leaf $jsonDir) -ne "json") {
-        throw "JSON must be under .../MONTH/json/ (got: $jsonDir)"
+    $leaf = Split-Path -Leaf $jsonDir
+    $allowed = @("json", (Get-SoshikiFormProcessedFolderName))
+    if ($allowed -notcontains $leaf) {
+        throw "JSON must be under .../MONTH/json/ or .../MONTH/処理済み/ (got: $jsonDir)"
     }
 
     $monthDir = Split-Path -Parent $jsonDir
