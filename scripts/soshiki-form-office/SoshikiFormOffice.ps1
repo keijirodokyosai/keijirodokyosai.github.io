@@ -23,28 +23,47 @@ function Get-SoshikiFormOfficeSettingsPath {
 function Get-SoshikiFormOfficeSettings {
     param([Parameter(Mandatory = $true)][string]$WebRoot)
 
-    $envOverride = [Environment]::GetEnvironmentVariable("SOSHIKI_OFFICE_ADMIN_EMAIL")
-    if ($envOverride) {
-        return @{
-            AdminEmail   = [string]$envOverride
-            SettingsPath = "(environment:SOSHIKI_OFFICE_ADMIN_EMAIL)"
-        }
+    $path = Get-SoshikiFormOfficeSettingsPath -WebRoot $WebRoot
+    $raw = $null
+    if (Test-Path -LiteralPath $path) {
+        $raw = Get-Content -LiteralPath $path -Raw -Encoding UTF8 | ConvertFrom-Json
     }
 
-    $path = Get-SoshikiFormOfficeSettingsPath -WebRoot $WebRoot
-    if (-not (Test-Path -LiteralPath $path)) {
+    $adminOverride = [Environment]::GetEnvironmentVariable("SOSHIKI_OFFICE_ADMIN_EMAIL")
+    $fromOverride = [Environment]::GetEnvironmentVariable("SOSHIKI_OFFICE_FROM_EMAIL")
+
+    if (-not $raw -and -not $adminOverride -and -not $fromOverride) {
         throw "Office settings not found: $path"
     }
 
-    $raw = Get-Content -LiteralPath $path -Raw -Encoding UTF8 | ConvertFrom-Json
-    $email = [string]$raw.AdminEmail
-    if (-not $email) {
-        throw "AdminEmail missing in: $path"
+    $adminEmail = $adminOverride
+    if (-not $adminEmail -and $raw) {
+        $adminEmail = [string]$raw.AdminEmail
+    }
+    if (-not $adminEmail) {
+        throw "AdminEmail missing (file: $path or SOSHIKI_OFFICE_ADMIN_EMAIL)"
+    }
+
+    $fromEmail = $fromOverride
+    if (-not $fromEmail -and $raw) {
+        $fromEmail = [string]$raw.FromEmail
+    }
+    if (-not $fromEmail) {
+        throw "FromEmail missing (file: $path or SOSHIKI_OFFICE_FROM_EMAIL)"
+    }
+
+    $settingsPath = $path
+    if ($adminOverride -or $fromOverride) {
+        $envKeys = @()
+        if ($adminOverride) { $envKeys += "SOSHIKI_OFFICE_ADMIN_EMAIL" }
+        if ($fromOverride) { $envKeys += "SOSHIKI_OFFICE_FROM_EMAIL" }
+        $settingsPath = "(environment:" + ($envKeys -join ",") + ")"
     }
 
     return @{
-        AdminEmail   = $email
-        SettingsPath = $path
+        AdminEmail   = $adminEmail
+        FromEmail    = $fromEmail
+        SettingsPath = $settingsPath
     }
 }
 
@@ -114,11 +133,11 @@ function Get-SoshikiFormUnionContact {
 
     $raw = Get-Content -LiteralPath $path -Raw -Encoding UTF8 | ConvertFrom-Json
     $list = @()
-    if ($null -ne $raw.contacts) {
-        $list = @($raw.contacts)
-    }
-    elseif ($raw -is [System.Array]) {
+    if ($raw -is [System.Array]) {
         $list = @($raw)
+    }
+    elseif (($raw.PSObject.Properties.Name -contains "contacts") -and $null -ne $raw.contacts) {
+        $list = @($raw.contacts)
     }
     elseif ($null -ne $raw) {
         $list = @($raw)

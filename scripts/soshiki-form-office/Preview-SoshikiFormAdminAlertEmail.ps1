@@ -1,7 +1,7 @@
 #Requires -Version 5.1
 <#
   Admin alert mail draft (e.g. PDF export failure). Does not send.
-  Requires 設定/soshiki-form-office-settings.json (AdminEmail).
+  Requires 設定/soshiki-form-office-settings.json (AdminEmail, FromEmail).
 #>
 [CmdletBinding()]
 param(
@@ -24,6 +24,7 @@ if (-not $draft.To) {
     Write-Warning "AdminEmail missing (settings: $($draft.SettingsPath))"
 }
 
+Write-Output "From: $($draft.FromEmail)"
 Write-Output "To: $($draft.To)"
 Write-Output "Subject: $($draft.Subject)"
 Write-Output "---"

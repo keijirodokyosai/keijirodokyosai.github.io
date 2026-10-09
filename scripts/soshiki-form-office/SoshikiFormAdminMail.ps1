@@ -5,13 +5,14 @@ function Get-SoshikiFormAdminMailLabel {
     switch ($Key) {
         "subjectPrefix" {
             return -join @(
-                [char]0x7D44, [char]0x7E54, [char]0x5171, [char]0x6E08, 0x57, 0x45, 0x42,
-                [char]0x7533, [char]0x8FBC, 0x5F, [char]0x30A8, [char]0x30E9, [char]0x30FC, 0x5F
+                [char]0x7D44, [char]0x7E54, [char]0x5171, [char]0x6E08, [char]0x57, [char]0x45, [char]0x42,
+                [char]0x7533, [char]0x8FBC, [char]0x5F, [char]0x30A8, [char]0x30E9, [char]0x30FC, [char]0x5F
             )
         }
         "headlinePdf" {
             return -join @(
-                [char]0x4E8B, [char]0x52D9, [char]0x7528, 0x20, 0x50, 0x44, 0x46, 0x20,
+                [char]0x7D44, [char]0x7E54, [char]0x5171, [char]0x6E08, [char]0x7533, [char]0x8FBC, [char]0x66F8,
+                [char]0x50, [char]0x44, [char]0x46, [char]0x20,
                 [char]0x306E, [char]0x4F5C, [char]0x6210, [char]0x306B, [char]0x5931, [char]0x6557, [char]0x3057, [char]0x307E, [char]0x3057, [char]0x305F, [char]0x3002
             )
         }
@@ -22,12 +23,12 @@ function Get-SoshikiFormAdminMailLabel {
                 [char]0xFF09
             )
         }
-        "labelReceiptId" { return -join @([char]0x53D7, [char]0x4ED8, 0x20, 0x49, 0x44, 0x3A) }
-        "labelUnion" { return -join @([char]0x7D44, [char]0x5408, 0x3A) }
-        "labelAppDate" { return -join @([char]0x7533, [char]0x8FBC, [char]0x65E5, 0x3A) }
-        "labelKyosaiCode" { return -join @([char]0x5354, [char]0x540C, [char]0x30B3, [char]0x30FC, [char]0x30C9, 0x3A) }
-        "labelError" { return -join @([char]0x30A8, [char]0x30E9, [char]0x30FC, 0x3A) }
-        "labelStage" { return -join @([char]0x51E6, [char]0x7406, 0x3A) }
+        "labelReceiptId" { return -join @([char]0x53D7, [char]0x4ED8, [char]0x20, [char]0x49, [char]0x44, [char]0x3A) }
+        "labelUnion" { return -join @([char]0x7D44, [char]0x5408, [char]0x3A) }
+        "labelAppDate" { return -join @([char]0x7533, [char]0x8FBC, [char]0x65E5, [char]0x3A) }
+        "labelKyosaiCode" { return -join @([char]0x5354, [char]0x540C, [char]0x30B3, [char]0x30FC, [char]0x30C9, [char]0x3A) }
+        "labelError" { return -join @([char]0x30A8, [char]0x30E9, [char]0x30FC, [char]0x3A) }
+        "labelStage" { return -join @([char]0x51E6, [char]0x7406, [char]0x3A) }
         default { throw "Unknown admin mail label: $Key" }
     }
 }
@@ -87,6 +88,7 @@ function New-SoshikiFormAdminAlertMailDraft {
 
     return @{
         To           = $officeSettings.AdminEmail
+        FromEmail    = $officeSettings.FromEmail
         Subject      = $subject
         Body         = $body
         ReceiptId    = $receiptId

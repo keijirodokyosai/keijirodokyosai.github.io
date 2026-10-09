@@ -12,6 +12,11 @@ function Send-SoshikiFormOutlookMessage {
         [Parameter(Mandatory = $true)]
         [string]$Body,
 
+        [Parameter(Mandatory = $true)]
+        [string]$FromEmail,
+
+        [string]$Bcc,
+
         [switch]$Send
     )
 
@@ -31,6 +36,22 @@ function Send-SoshikiFormOutlookMessage {
         $mail.To = $To
         $mail.Subject = $Subject
         $mail.Body = $Body
+
+        $account = $null
+        foreach ($acc in $outlook.Session.Accounts) {
+            if ([string]$acc.SmtpAddress -ieq $FromEmail) {
+                $account = $acc
+                break
+            }
+        }
+        if (-not $account) {
+            throw "Outlook account not found for FromEmail: $FromEmail"
+        }
+        $mail.SendUsingAccount = $account
+
+        if ($Bcc) {
+            $mail.BCC = $Bcc
+        }
 
         if ($Send) {
             $mail.Send()

@@ -56,7 +56,7 @@
 | **送 信**（Worker → OneDrive json） | **完了**（§5.10） |
 | 組合向け **保 存**（ブラウザ印刷 PDF） | **完了**（§5.9） |
 | 事務 Excel → PDF | **初版済**（§5.10.1・`scripts/soshiki-form-office/`） |
-| 返信メール **送信** | 未実装（**Outlook** 予定・文面プレビューは `Preview-SoshikiFormReceiptEmail.ps1`） |
+| 返信メール **送信** | **スクリプト済**（`Send-SoshikiFormReceiptEmail.ps1`・Inbox 自動連携は未） |
 | PA 通知・Access 取込 | 廃止／kyosai-system 側 |
 
 ### 完了（組合員入力・2026-08-28）
@@ -376,7 +376,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
       pdf/               … 残す
   設定/
     union-contacts.json  … 分会担当者メール（Web 非公開）
-    soshiki-form-office-settings.json  … 事務バッチ用 AdminEmail（PDF 失敗通知）
+    soshiki-form-office-settings.json  … AdminEmail（PDF 失敗 To）・FromEmail（送信元）
 ```
 
 `StorageFolder`（例 `2027年01月`）は Web が `CoverageMonth` から算出し submission に含める。
@@ -465,7 +465,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | 住所 | AG13, AG14 | 4項目連結・建物名 |
 | 申込月日 | AM1, AQ1 等 | 月日は 0 埋め解除 |
 
-**返信メール:** 宛先は OneDrive `設定/union-contacts.json` の `ManagerEmail`（`KyosaikaiCode` 照合）。受付 ID はファイル名 `{組合名}_{yyyyMMdd}_{受付ID}.json` または移行後の保存 JSON ラップから取得。文面プレビュー（送信なし）: `scripts/soshiki-form-office/Preview-SoshikiFormReceiptEmail.ps1`。
+**返信メール:** 宛先は `設定/union-contacts.json` の `ManagerEmail`（`KyosaikaiCode` 照合）。送信元・BCC は `設定/soshiki-form-office-settings.json` の **`FromEmail`**（BCC は送信者通知用・担当者には非表示）。件名 `組織共済WEB受付_{yyyyMMdd}`。本文の組織名行はラベル **共済会:**（ファイル名の組合名セグメント）。受付 ID はファイル名 stem から取得。本文末尾は「京滋労働組合共済会」「事務局」。プレビュー: `Preview-SoshikiFormReceiptEmail.ps1`、送信: `Send-SoshikiFormReceiptEmail.ps1`（`-Send`）。管理者 PDF 失敗メール先頭文は「組織共済申込書PDF の作成に失敗しました。」（`SoshikiFormAdminMail.ps1`）。
 
 **Worker:** `pdfBase64` は **非対応**（JSON のみ PUT）。OneDrive `.json` 本文は現行 **`submission` オブジェクトのみ**（ラップ `{ receiptId, unionName, fileNameDate, submission }` は未実装）。
 
@@ -485,6 +485,8 @@ json の Graph 保存は Worker（**pdf は書かない**）。**事務 PDF** �
 #### union-contacts.json（OneDrive・非公開）
 
 PA 通知専用。Web・GitHub には載せない。kyosai-system が `Subbranch` から export。
+
+**JSON 形:** ルートが **配列** `[{ … }, …]`（export 既定）または `{ "contacts": [ … ] }`。`Get-SoshikiFormUnionContact` は両方読む。
 
 | フィールド | 型 | 意味 |
 |------------|-----|------|

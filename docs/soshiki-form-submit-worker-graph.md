@@ -138,7 +138,7 @@ Web では **送 信 PDF を作らない**（html2canvas 経路は削除済み�
 | 順 | 処理 | 備考 |
 |----|------|------|
 | 1 | **トリガー** | OneDrive 同期後、`受付/{storageFolder}/json/` に **未処理**の `.json` を検出 |
-| 2 | **返信メール** | 受付確認（受付 ID・組合名・申込日など）。**PDF は添付しない** |
+| 2 | **返信メール** | 受付確認（受付 ID・共済会名・申込日など）。**PDF は添付しない** |
 | 3 | **PDF 生成** | Excel テンプレに値を書き込み → `pdf/` に `{組合名}_{yyyyMMdd}_{受付ID}.pdf` |
 | 4 | **処理済み** | 二重送信・二重 PDF 防止（`processed/` 移動・受付 ID 台帳など） |
 
@@ -169,9 +169,12 @@ Web では **送 信 PDF を作らない**（html2canvas 経路は削除済み�
 | 項目 | 内容 |
 |------|------|
 | 宛先 | **`union-contacts.json`** の `ManagerEmail`（`KyosaikaiCode` 照合）。Web フォームにメール欄は無い |
-| 送信 | **Outlook デスクトップ**（事務 PC）。組合向け: `Preview-SoshikiFormReceiptEmail.ps1`（送信は未配線）。管理者向け PDF 失敗: `Send-SoshikiFormAdminAlertEmail.ps1`（`-Send` で送信） |
-| 管理者宛先 | OneDrive `設定/soshiki-form-office-settings.json` の **`AdminEmail`**（Graph は使わない） |
-| 本文 | 受付完了・**受付 ID**・組合名・申込日。OneDrive パスは記載しない |
+| 送信 | **Outlook デスクトップ**（事務 PC）。組合向け: `Send-SoshikiFormReceiptEmail.ps1`（`-Send`）。管理者 PDF 失敗: `Send-SoshikiFormAdminAlertEmail.ps1`（`-Send`） |
+| 送信元 | `設定/soshiki-form-office-settings.json` の **`FromEmail`**（Outlook `SendUsingAccount`。環境変数 `SOSHIKI_OFFICE_FROM_EMAIL` で上書き可） |
+| 管理者宛先 | 同ファイルの **`AdminEmail`**（`SOSHIKI_OFFICE_ADMIN_EMAIL` で上書き可） |
+| BCC | 受付確認メールのみ **`FromEmail` と同一**（事務局への送信通知） |
+| 件名 | `組織共済WEB受付_{yyyyMMdd}`（共済会名は含めない） |
+| 本文 | 担当者姓・受付完了・**受付 ID**・**共済会**（ラベル）・申込日・署名（京滋労働組合共済会／事務局）。OneDrive パスは記載しない |
 | 添付 | **なし**（PDF は `pdf/` にのみ保管） |
 
 ### 13.5 事務バッチ実装チェックリスト
@@ -180,7 +183,7 @@ Web では **送 信 PDF を作らない**（html2canvas 経路は削除済み�
 - [x] JSON → セルマップ・マスタ参照・月計再計算 — `scripts/soshiki-form-office/csharp` + `data/soshiki-form-excel-cell-map.json`
 - [x] 手動・一括 PDF — `Export-SoshikiFormPdfFromJson.ps1` / `Process-SoshikiFormJsonInbox.ps1`（既存 pdf はスキップ）
 - [ ] タスクスケジューラ本番運用・同期待ちリトライの調整
-- [ ] 返信メール送信（下書き: `Preview-SoshikiFormReceiptEmail.ps1` → **Outlook** 送信は未配線）
+- [x] 返信メール送信スクリプト — `Send-SoshikiFormReceiptEmail.ps1`（Inbox からの自動送信は未）
 - [ ] 処理済み管理（`-MoveToProcessed` は任意・メール連携後に運用決定）
 - [x] Web: `SheetFooter` 送付・Worker: **JSON のみ**（`pdfBase64` 非対応）
 
@@ -232,7 +235,7 @@ Web では **送 信 PDF を作らない**（html2canvas 経路は削除済み�
 
 | 項目 | 備考 |
 |------|------|
-| **事務バッチ**（§13） | Excel PDF **初版済**（`scripts/soshiki-form-office/`）。**返信メール送信**は未実装（`Preview-SoshikiFormReceiptEmail.ps1` で文面確認のみ） |
+| **事務バッチ**（§13） | Excel PDF **初版済**。返信メール **送信スクリプト済**（Inbox 連携は未） |
 | ~~Web **`SheetFooter`** 送付~~ | **完了**（§5.10.1） |
 | ~~Worker **JSON のみ**・Web **html2canvas 削除**~~ | **完了** |
 | Worker 保存 JSON ラップ | 未実装（本文は `submission` のみ） |
@@ -272,7 +275,7 @@ workers/soshiki-submit/                 … Worker（src/index.js, README, deplo
 
 ## 11. 返信メール件名（事務バッチ・案）
 
-PA 検討時の案を流用可: `組織共済WEB申込_{組合名}_{yyyyMMdd}`。  
+確定: `組織共済WEB受付_{yyyyMMdd}`（旧案: `組織共済WEB申込_{組合名}_{yyyyMMdd}`）。  
 **Worker POST ではメールを送らない**。送信は §13 の事務 PC バッチ。
 
 ---

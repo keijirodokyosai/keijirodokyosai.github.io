@@ -82,7 +82,10 @@ C# は Office PIA に依存せず `dynamic` で Excel を操作します。
 | `Process-SoshikiFormJsonInbox.ps1` | 一括 |
 | `Register-SoshikiFormJsonInboxTask.ps1` | タスク登録例 |
 | `Build-SoshikiFormPdf.ps1` | publish → `dist/` |
-| `Preview-SoshikiFormReceiptEmail.ps1` | 受付確認メール下書き（送信なし） |
+| `SoshikiFormReceiptMail.ps1` | 受付確認メール文面 |
+| `Preview-SoshikiFormReceiptEmail.ps1` | 受付確認メールプレビュー（送信なし） |
+| `Send-SoshikiFormReceiptEmail.ps1` | 受付確認メール送信（`-Send`） |
+| `Invoke-SoshikiFormOutlook.ps1` | Outlook COM（`FromEmail`・任意 `Bcc`） |
 | `SoshikiFormPdf.sln` | C# + テストを一括ビルド |
 | `Verify-SoshikiOfficeScripts.ps1` | PS パース + `dotnet test` |
 
@@ -96,16 +99,24 @@ Worker が保存する **submission オブジェクトのみ**。
 | ファイル | 用途 |
 |----------|------|
 | `設定/union-contacts.json` | 受付確認メール To（`ManagerEmail`） |
-| `設定/soshiki-form-office-settings.json` | 管理者通知 To（`AdminEmail`） |
+| `設定/soshiki-form-office-settings.json` | `AdminEmail`（管理者 To）・`FromEmail`（送信元・受付 BCC） |
 
 例: `examples/soshiki-form-office-settings.example.json`  
-環境変数 `SOSHIKI_OFFICE_ADMIN_EMAIL` があれば `AdminEmail` より優先。
+環境変数: `SOSHIKI_OFFICE_ADMIN_EMAIL` / `SOSHIKI_OFFICE_FROM_EMAIL` があれば各キーより優先。
 
 ## 返信メール（組合担当者）
 
 ```powershell
 .\Preview-SoshikiFormReceiptEmail.ps1 -JsonPath '（json フルパス）'
+
+# Outlook で下書き表示（送信しない）
+.\Send-SoshikiFormReceiptEmail.ps1 -JsonPath '…'
+
+# 送信（BCC = FromEmail）
+.\Send-SoshikiFormReceiptEmail.ps1 -JsonPath '…' -Send
 ```
+
+`FromEmail` は Outlook に登録済みの SMTP アドレスと一致させる（`SendUsingAccount`）。
 
 ## 管理者アラート（PDF 失敗など）
 

@@ -1,3 +1,4 @@
 {
-  "AdminEmail": "sysadmin@example.co.jp"
+  "AdminEmail": "sysadmin@example.co.jp",
+  "FromEmail": "jimu@example.co.jp"
 }
