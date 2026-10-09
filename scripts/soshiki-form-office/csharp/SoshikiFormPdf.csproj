@@ -6,4 +6,7 @@
     <Nullable>enable</Nullable>
     <RootNamespace>Soshiki.Form.Pdf</RootNamespace>
   </PropertyGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="SoshikiFormPdf.Tests" />
+  </ItemGroup>
 </Project>

@@ -12,5 +12,5 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
-. (Join-Path $PSScriptRoot "Invoke-SoshikiFormPdf.ps1")
+. (Join-Path $PSScriptRoot "SoshikiFormOffice.ps1")
 Invoke-SoshikiFormPdf -JsonPath $JsonPath

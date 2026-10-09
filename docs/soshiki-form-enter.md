@@ -451,7 +451,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 
 当月・月計は **バッチ再計算可**（JSON に含めない）。
 
-**事務 Excel → PDF（実装済み・初版）:** 本体は `scripts/soshiki-form-office/csharp/`（`SoshikiFormPdf`・Excel は dynamic COM）。入口は `Export-SoshikiFormPdfFromJson.ps1`（1件）→ 内部で `Invoke-SoshikiFormPdf.ps1`（`dotnet run` または `dist\SoshikiFormPdf.exe`）。**発火:** `Process-SoshikiFormJsonInbox.ps1`（`受付` 直下の各月 `json\` をスキャン、既存 `pdf\{stem}.pdf` はスキップ）＋ `Register-SoshikiFormJsonInboxTask.ps1`（5分間隔タスク登録例）。テンプレは **受付の親**直下の `templateFileName`。詳細は `scripts/soshiki-form-office/README.md`。
+**事務 Excel → PDF（実装済み・初版）:** 本体は `scripts/soshiki-form-office/csharp/`（`SoshikiFormPdf`・Excel は dynamic COM）。入口は `Export-SoshikiFormPdfFromJson.ps1`（1件）→ `SoshikiFormOffice.ps1` の `Invoke-SoshikiFormPdf`（`dotnet run` または `dist\SoshikiFormPdf.exe`）。**発火:** `Process-SoshikiFormJsonInbox.ps1`（`受付` 直下の各月 `json\` をスキャン、既存 `pdf\{stem}.pdf` はスキップ）＋ `Register-SoshikiFormJsonInboxTask.ps1`（5分間隔タスク登録例）。テンプレは **受付の親**直下の `templateFileName`。詳細は `scripts/soshiki-form-office/README.md`。
 
 | 表示 | 例（1人目） | 備考 |
 |------|-------------|------|
@@ -473,7 +473,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 #### Worker 側（`workers/soshiki-submit`）
 
 実装済み。デプロイ・Secrets は `workers/soshiki-submit/README.md`。  
-json の Graph 保存は Worker（**pdf は書かない**）。返信メール・事務 PDF は **§5.10.1・worker-graph §13**（未実装）。  
+json の Graph 保存は Worker（**pdf は書かない**）。**事務 PDF** は §5.10.1・`scripts/soshiki-form-office/`（初版済）。**返信メール**は worker-graph §13 未実装。  
 
 **廃止:** PA HTTP 受信（Premium）、PA メール → OneDrive（REST／ライセンス）。詳細は `docs/soshiki-form-submit-worker-graph.md`。
 

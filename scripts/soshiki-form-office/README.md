@@ -7,7 +7,7 @@ OneDrive の受付 `.json` を **Excel テンプレ**に流し込み、**PDF** �
 
 - Windows + **Microsoft Excel**（デスクトップ）
 - PowerShell 5.1+
-- **.NET 8 SDK**（開発・`dotnet run`）または `dist\SoshikiFormPdf.exe`（`Build-SoshikiFormPdf.ps1` で作成）
+- **.NET 8 SDK**（開発・`dotnet run`・テスト）または `dist\SoshikiFormPdf.exe`（`Build-SoshikiFormPdf.ps1`・win-x64 単体 exe）
 - テンプレ `.xlsx`（用紙レイアウト済み・未記入セルは空）
 
 ## フォルダ構成（OneDrive）
@@ -15,6 +15,8 @@ OneDrive の受付 `.json` を **Excel テンプレ**に流し込み、**PDF** �
 ```text
 組織共済WEB受付/
   組織共済申込書（PDF化テンプレ）.xlsx   … テンプレ（受付 と同じ階層）
+  logs/
+    soshiki-form-pdf.log                 … Inbox で -LogToWebRoot 時
   受付/
     2026年11月/
       json/   … Worker が保存
@@ -37,44 +39,48 @@ cd scripts\soshiki-form-office
 一括（pdf が無い json だけ処理）:
 
 ```powershell
-.\Process-SoshikiFormJsonInbox.ps1 -ReceptionRoot "（受付 フォルダのフルパス）"
+.\Process-SoshikiFormJsonInbox.ps1 -ReceptionRoot "（受付 フォルダのフルパス）" -LogToWebRoot
 ```
 
-定期実行の例（5 分間隔・要管理者権限は環境による）:
+定期実行の例（5 分間隔）:
 
 ```powershell
 .\Register-SoshikiFormJsonInboxTask.ps1 -ReceptionRoot "（受付 フォルダのフルパス）"
 ```
 
-SDK が無い事務 PC 向けに exe を置く場合:
+（タスクからログを残す場合は `Register-*.ps1` の引数に `-LogToWebRoot` を足すか、タスクの引数を手で編集。）
+
+SDK が無い事務 PC:
 
 ```powershell
 .\Build-SoshikiFormPdf.ps1
-# → dist\SoshikiFormPdf.exe（Invoke は exe を優先）
+# → dist\SoshikiFormPdf.exe（SoshikiFormOffice.ps1 内の Invoke が exe を優先）
 ```
 
 ## アーキテクチャ
 
 | 層 | 役割 |
 |----|------|
-| `Export-*.ps1` / `Process-*.ps1` | パス解決・一括・タスク登録（薄い PS） |
-| `Invoke-SoshikiFormPdf.ps1` | `dist\*.exe` または `dotnet run` |
-| `csharp/` | json 読込・口数・Excel COM（dynamic）・PDF |
+| `Export-*.ps1` / `Process-*.ps1` | CLI 入口（薄い） |
+| `SoshikiFormOffice.ps1` | パス解決・ログ・C# 起動 |
+| `csharp/` | json・口数・Excel dynamic・PDF |
+| `tests/` | 口数の回帰テスト（Excel 不要） |
 
-C# は Office PIA に依存せず `dynamic` で Excel を操作します（GAC の古い Interop と Excel 16 の不一致を避ける）。
+C# は Office PIA に依存せず `dynamic` で Excel を操作します。
 
-## ファイル一覧
+## リポ内ファイル
 
-| ファイル | 役割 |
-|----------|------|
-| `csharp/` | `SoshikiFormPdf` コンソール（本体） |
-| `Invoke-SoshikiFormPdf.ps1` | C# 起動の共通入口 |
-| `Export-SoshikiFormPdfFromJson.ps1` | 1 件 json → pdf |
-| `Process-SoshikiFormJsonInbox.ps1` | 受付配下をスキャン |
-| `Register-SoshikiFormJsonInboxTask.ps1` | スケジュールタスク登録例 |
-| `Build-SoshikiFormPdf.ps1` | `dist\SoshikiFormPdf.exe` を publish |
-| `SoshikiFormOfficePaths.ps1` | json からテンプレ・pdf パス（Inbox 用） |
-| `Verify-SoshikiOfficeScripts.ps1` | パース検証 + `dotnet build` |
+| パス | 役割 |
+|------|------|
+| `SoshikiFormOffice.ps1` | 共有関数（本体） |
+| `SoshikiFormOfficePaths.ps1` | 上記への互換 dot-source |
+| `csharp/` | `SoshikiFormPdf` コンソール |
+| `tests/SoshikiFormPdf.Tests/` | xUnit（`KuchiCalculator`） |
+| `Export-SoshikiFormPdfFromJson.ps1` | 1 件 |
+| `Process-SoshikiFormJsonInbox.ps1` | 一括 |
+| `Register-SoshikiFormJsonInboxTask.ps1` | タスク登録例 |
+| `Build-SoshikiFormPdf.ps1` | publish → `dist/` |
+| `Verify-SoshikiOfficeScripts.ps1` | PS パース + `dotnet test` |
 
 ## JSON
 

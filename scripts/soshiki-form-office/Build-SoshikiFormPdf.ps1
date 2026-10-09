@@ -1,5 +1,5 @@
 #Requires -Version 5.1
-# Publish self-contained SoshikiFormPdf.exe to dist\ (no .NET runtime required on target PC).
+# Publish SoshikiFormPdf.exe to dist\ (win-x64, self-contained).
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
@@ -11,7 +11,7 @@ if (-not (Get-Command dotnet -ErrorAction SilentlyContinue)) {
 $csproj = Join-Path $PSScriptRoot "csharp\SoshikiFormPdf.csproj"
 $outDir = Join-Path $PSScriptRoot "dist"
 
-& dotnet publish $csproj -c Release -o $outDir
+& dotnet publish $csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o $outDir
 if ($LASTEXITCODE -ne 0) {
     throw "dotnet publish failed"
 }

@@ -13,3 +13,5 @@ _site/
 scripts/soshiki-form-office/dist/
 scripts/soshiki-form-office/csharp/bin/
 scripts/soshiki-form-office/csharp/obj/
+scripts/soshiki-form-office/tests/**/bin/
+scripts/soshiki-form-office/tests/**/obj/

@@ -7,19 +7,25 @@ param(
     [Parameter(Mandatory = $true)]
     [string]$ReceptionRoot,
 
-    [switch]$MoveToProcessed
+    [switch]$MoveToProcessed,
+
+    [switch]$LogToWebRoot
 )
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
-. (Join-Path $PSScriptRoot "SoshikiFormOfficePaths.ps1")
-. (Join-Path $PSScriptRoot "Invoke-SoshikiFormPdf.ps1")
+. (Join-Path $PSScriptRoot "SoshikiFormOffice.ps1")
 
 $receptionFull = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($ReceptionRoot)
 $expected = Get-SoshikiReceptionFolderName
 if ((Split-Path -Leaf $receptionFull) -ne $expected) {
     throw "ReceptionRoot must be the folder named $expected (got: $(Split-Path -Leaf $receptionFull))"
+}
+
+$webRoot = Split-Path -Parent $receptionFull
+if ($LogToWebRoot) {
+    Write-SoshikiFormOfficeLog -WebRoot $webRoot -Message "Inbox start: $receptionFull"
 }
 
 $stats = @{
@@ -44,6 +50,9 @@ foreach ($monthDir in Get-ChildItem -LiteralPath $receptionFull -Directory -Erro
         try {
             Invoke-SoshikiFormPdf -JsonPath $jsonFile.FullName
             $stats.exported++
+            if ($LogToWebRoot) {
+                Write-SoshikiFormOfficeLog -WebRoot $webRoot -Message ("OK " + $jsonFile.Name)
+            }
 
             if ($MoveToProcessed) {
                 $processedDir = Join-Path $monthDir.FullName "processed"
@@ -55,9 +64,17 @@ foreach ($monthDir in Get-ChildItem -LiteralPath $receptionFull -Directory -Erro
         }
         catch {
             $stats.failed++
-            Write-Warning ($jsonFile.Name + ": " + $_.Exception.Message)
+            $msg = $jsonFile.Name + ": " + $_.Exception.Message
+            Write-Warning $msg
+            if ($LogToWebRoot) {
+                Write-SoshikiFormOfficeLog -WebRoot $webRoot -Message ("FAIL " + $msg)
+            }
         }
     }
 }
 
-Write-Output ("exported={0} skipped={1} failed={2}" -f $stats.exported, $stats.skipped, $stats.failed)
+$summary = "exported={0} skipped={1} failed={2}" -f $stats.exported, $stats.skipped, $stats.failed
+if ($LogToWebRoot) {
+    Write-SoshikiFormOfficeLog -WebRoot $webRoot -Message ("Inbox done: " + $summary)
+}
+Write-Output $summary

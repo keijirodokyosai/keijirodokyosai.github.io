@@ -22,7 +22,7 @@ if (-not (Test-Path -LiteralPath $processScript)) {
 }
 
 $receptionFull = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($ReceptionRoot)
-$arg = "-NoProfile -ExecutionPolicy Bypass -File `"$processScript`" -ReceptionRoot `"$receptionFull`""
+$arg = "-NoProfile -ExecutionPolicy Bypass -File `"$processScript`" -ReceptionRoot `"$receptionFull`" -LogToWebRoot"
 
 $action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument $arg
 $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date) -RepetitionInterval (New-TimeSpan -Minutes $IntervalMinutes) -RepetitionDuration ([TimeSpan]::MaxValue)
