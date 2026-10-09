@@ -4,14 +4,16 @@
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
-if (-not (Get-Command dotnet -ErrorAction SilentlyContinue)) {
+. (Join-Path $PSScriptRoot "Get-DotNetCli.ps1")
+$dotnet = Get-DotNetCli
+if (-not $dotnet) {
     throw ".NET SDK required. https://dotnet.microsoft.com/download"
 }
 
 $csproj = Join-Path $PSScriptRoot "csharp\SoshikiFormPdf.csproj"
 $outDir = Join-Path $PSScriptRoot "dist"
 
-& dotnet publish $csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o $outDir
+& $dotnet publish $csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o $outDir
 if ($LASTEXITCODE -ne 0) {
     throw "dotnet publish failed"
 }

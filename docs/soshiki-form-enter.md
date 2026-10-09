@@ -1,6 +1,6 @@
 # 組織共済申込書（ブラウザ入力）設計書
 
-**最終更新:** 2026-10-08  
+**最終更新:** 2026-10-10  
 **関連リポジトリ:** [keijirodokyosai.github.io](https://github.com/keijirodokyosai/keijirodokyosai.github.io)（Web）、`kyosai-system`（Access・マスタ出力）
 
 ---
@@ -47,13 +47,17 @@
 | Enter 連携 | `union-master.json` 読込・組合名判定・コード・口欄（7）・掛金を自動反映 |
 | 共済口欄（7）・掛金 | HTML 配置完了。マスタ反映表示のみ（枠線なし・初期値空） |
 
-### 未実装
+### 残タスク（Web・事務）
 
-* 組合員各欄の **CSS 位置の最終調整**（現状は初期値・要微調整）
-* 組合名プルダウン（localStorage）・追加確認・削除 UI
-* `validateSoshikiForm()` の配線（送信前チェック等） → **送 信で実装済み**（§5.10）
-* 確認画面・PDF 出力・メール送信 → **送 信で JSON+PDF+PA 通知**（§5.10）。PA・取込は別途
-* 本番用 `union-master.json` の kyosai-system からの出力・配置
+| 項目 | 状態 |
+|------|------|
+| 組合員欄 CSS の微調整 | 随時（§9・§13） |
+| 本番 `union-master.json`（kyosai-system 出力） | 運用で差し替え |
+| **送 信**（Worker → OneDrive json） | **完了**（§5.10） |
+| 組合向け **保 存**（ブラウザ印刷 PDF） | **完了**（§5.9） |
+| 事務 Excel → PDF | **初版済**（§5.10.1・`scripts/soshiki-form-office/`） |
+| 返信メール **送信** | 未実装（文面プレビューのみ・§5.10.1） |
+| PA 通知・Access 取込 | 廃止／kyosai-system 側 |
 
 ### 完了（組合員入力・2026-08-28）
 
@@ -65,7 +69,7 @@
 | blur 処理 | コード左0埋め、月日2桁化、生年月日の実在日チェック |
 | 郵便番号 | zipcloud API で都道府県・市区町村・町村域を自動入力（任意） |
 | 住所 | 5分割（都道府県・市区町村・町村域・番地・建物名）。一部入力時は1〜5が必須 |
-| 必須チェック | `validateSoshikiForm()`（確認画面用・未配線） |
+| 必須チェック | `validateSoshikiForm()`（**送 信前に実行**・§5.10） |
 
 ---
 
@@ -77,7 +81,7 @@ js/soshiki-form-enter.js     … 日付初期値・申込月の翌月を当月�
 js/soshiki-form-footer-counts.js … 前月残持ち越し・月計自動計算・月計 localStorage（§5.7.2）
 js/soshiki-form-union-storage.js … 保存組合名 localStorage・datalist・削除 UI（§5.2）
 js/soshiki-form-submit.js    … WEB 受付（§5.10・JSON のみ・Worker POST）
-data/soshiki-form-pdf-layout.json … 事務 Excel 用座標参照（pt・左下原点）
+data/soshiki-form-pdf-layout.json … 旧座標メモ（**未配線**）。事務 PDF のセルは `data/soshiki-form-excel-cell-map.json`
 js/soshiki-form-members.js   … 組合員5行・異動トグル・半角制限・氏名カナ入力補助（§9.13.1）・郵便番号検索・町村域正規化（§9.9）・表示同期（updateZipView）・組合員欄クリア
 _includes/soshiki-form-member-rows.html … 組合員行マークアップ
 css/style.css                … .soshiki-form-* オーバーレイ用
@@ -438,7 +442,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | フッター・備考 | **`SheetFooter`**（Web 送 信時に含める・**実装済み**） |
 | 当月（月） | `ApplicationDate` から Web と同式（`coverage-month-display` 相当）。`CoverageMonth` も参照可 |
 | 月計 | **再計算可:** `PriorMonthHeadcount` +（`New` − `Cancel`）。`Change` は含めない（`countMemberTransferDelta` 同等） |
-| 住所・町村域結合 | バッチで `computeTownAreaPrintJoin`（`js/soshiki-form-members.js`）相当、または印字用1行を JSON に含める |
+| 住所・町村域結合 | C# `AddressPrintJoin`（Web `computeTownAreaPrintJoin` 同等・町村域12文字）で `addressLineCol` に1行印字 |
 
 **`submission.SheetFooter`**
 

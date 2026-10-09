@@ -9,7 +9,9 @@ param(
 
     [switch]$MoveToProcessed,
 
-    [switch]$LogToWebRoot
+    [switch]$LogToWebRoot,
+
+    [switch]$PreviewReceiptMail
 )
 
 Set-StrictMode -Version Latest
@@ -48,6 +50,11 @@ foreach ($monthDir in Get-ChildItem -LiteralPath $receptionFull -Directory -Erro
         }
 
         try {
+            if ($PreviewReceiptMail) {
+                $previewScript = Join-Path $PSScriptRoot "Preview-SoshikiFormReceiptEmail.ps1"
+                & $previewScript -JsonPath $jsonFile.FullName
+            }
+
             Invoke-SoshikiFormPdf -JsonPath $jsonFile.FullName
             $stats.exported++
             if ($LogToWebRoot) {

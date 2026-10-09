@@ -106,7 +106,7 @@
       json/              … 取込後削除（事務側）
       pdf/
   設定/
-    union-contacts.json  … 非公開・Web に載せない（通知は後述・未実装）
+    union-contacts.json  … 非公開・返信メール宛先（送信は未実装・Preview-SoshikiFormReceiptEmail.ps1 で文面確認）
 ```
 
 ### ファイル名

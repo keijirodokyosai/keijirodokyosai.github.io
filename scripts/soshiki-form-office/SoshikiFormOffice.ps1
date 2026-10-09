@@ -226,14 +226,22 @@ function Invoke-SoshikiFormPdf {
     $exe = Join-Path $officeDir "dist\SoshikiFormPdf.exe"
     $csproj = Join-Path $officeDir "csharp\SoshikiFormPdf.csproj"
     $toolArgs = @("--repo", $repoRoot, $jsonFull)
+    $ran = $false
 
     if (Test-Path -LiteralPath $exe) {
         & $exe @toolArgs
-    }
-    elseif (Get-Command dotnet -ErrorAction SilentlyContinue) {
-        & dotnet run --project $csproj -c Release -- @toolArgs
+        $ran = $true
     }
     else {
+        . (Join-Path $officeDir "Get-DotNetCli.ps1")
+        $dotnet = Get-DotNetCli
+        if ($dotnet) {
+            & $dotnet run --project $csproj -c Release -- @toolArgs
+            $ran = $true
+        }
+    }
+
+    if (-not $ran) {
         throw "Install .NET 8 SDK or run .\Build-SoshikiFormPdf.ps1 to create dist\SoshikiFormPdf.exe"
     }
 

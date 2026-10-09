@@ -9,6 +9,7 @@ $scripts = @(
     "Process-SoshikiFormJsonInbox.ps1",
     "Register-SoshikiFormJsonInboxTask.ps1",
     "Build-SoshikiFormPdf.ps1",
+    "Get-DotNetCli.ps1",
     "Preview-SoshikiFormReceiptEmail.ps1"
 )
 
@@ -39,13 +40,15 @@ if ($p.ReceiptId -ne "7a4bb6ce" -or $p.FileNameDate -ne "20261009") {
 }
 Write-Output "Json stem parse OK"
 
-if (-not (Get-Command dotnet -ErrorAction SilentlyContinue)) {
-    Write-Warning "dotnet not on PATH; skipping csharp build/test"
+. (Join-Path $dir "Get-DotNetCli.ps1")
+$dotnet = Get-DotNetCli
+if (-not $dotnet) {
+    Write-Warning "dotnet SDK not found; skipping csharp build/test"
     exit 0
 }
 
 $sln = Join-Path $dir "SoshikiFormPdf.sln"
-& dotnet test $sln -c Release
+& $dotnet test $sln -c Release
 if ($LASTEXITCODE -ne 0) {
     throw "dotnet test failed"
 }

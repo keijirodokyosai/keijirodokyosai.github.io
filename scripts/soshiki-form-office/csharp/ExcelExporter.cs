@@ -112,7 +112,7 @@ internal static class ExcelExporter
             Set(sheet, $"{m["postalCodeCol"]!.GetValue<string>()}{kanaRow}", member["PostalCode"]?.GetValue<string>());
             Set(sheet, $"{m["genderCol"]!.GetValue<string>()}{mainRow}", GenderLabel(member["Gender"]?.GetValue<string>()));
 
-            Set(sheet, $"{m["addressLineCol"]!.GetValue<string>()}{mainRow}", FormatAddress(member));
+            Set(sheet, $"{m["addressLineCol"]!.GetValue<string>()}{mainRow}", AddressPrintJoin.FormatMemberAddressLine(member));
             Set(sheet, $"{m["buildingCol"]!.GetValue<string>()}{buildingRow}", member["BuildingName"]?.GetValue<string>());
         }
     }
@@ -182,15 +182,6 @@ internal static class ExcelExporter
         var parts = (birth ?? "").Trim().Split('/');
         if (parts.Length < 3) return ("", "", "");
         return (parts[0].Trim(), IntNoPad(parts[1]) ?? "", IntNoPad(parts[2]) ?? "");
-    }
-
-    private static string FormatAddress(JsonNode member)
-    {
-        var pref = member["Prefecture"]?.GetValue<string>() ?? "";
-        var city = member["City"]?.GetValue<string>() ?? "";
-        var town = member["TownArea"]?.GetValue<string>() ?? "";
-        var area = member["AreaNumber"]?.GetValue<string>() ?? "";
-        return pref + city + town + area;
     }
 
     private static string CoverageMonth(JsonNode appDate)

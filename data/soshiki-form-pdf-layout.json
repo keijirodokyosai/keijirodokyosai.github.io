@@ -1,4 +1,5 @@
 {
+  "comment": "Legacy layout reference (Web PDF coords). Office Excel PDF uses data/soshiki-form-excel-cell-map.json only.",
   "formVersion": "1",
   "template": "/pdf/soshiki-form-enter.pdf",
   "page": {

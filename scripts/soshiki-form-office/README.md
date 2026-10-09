@@ -39,8 +39,10 @@ cd scripts\soshiki-form-office
 一括（pdf が無い json だけ処理）:
 
 ```powershell
-.\Process-SoshikiFormJsonInbox.ps1 -ReceptionRoot "（受付 フォルダのフルパス）" -LogToWebRoot
+.\Process-SoshikiFormJsonInbox.ps1 -ReceptionRoot "（受付 フォルダのフルパス）" -LogToWebRoot -PreviewReceiptMail
 ```
+
+`-PreviewReceiptMail` は PDF 出力の直前に受付確認メール下書きを表示（§13 のメール→PDF の順のリハーサル。送信はしない）。
 
 定期実行の例（5 分間隔）:
 
