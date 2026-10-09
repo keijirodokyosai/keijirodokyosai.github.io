@@ -56,7 +56,7 @@
 | **送 信**（Worker → OneDrive json） | **完了**（§5.10） |
 | 組合向け **保 存**（ブラウザ印刷 PDF） | **完了**（§5.9） |
 | 事務 Excel → PDF | **初版済**（§5.10.1・`scripts/soshiki-form-office/`） |
-| 返信メール **送信** | 未実装（文面プレビューのみ・§5.10.1） |
+| 返信メール **送信** | 未実装（**Outlook** 予定・文面プレビューは `Preview-SoshikiFormReceiptEmail.ps1`） |
 | PA 通知・Access 取込 | 廃止／kyosai-system 側 |
 
 ### 完了（組合員入力・2026-08-28）

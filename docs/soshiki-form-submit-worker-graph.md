@@ -169,7 +169,7 @@ Web では **送 信 PDF を作らない**（html2canvas 経路は削除済み�
 | 項目 | 内容 |
 |------|------|
 | 宛先 | **`union-contacts.json`** の `ManagerEmail`（`KyosaikaiCode` 照合）。Web フォームにメール欄は無い |
-| 送信 | Graph `Mail.Send`（共有メールボックス）等。**実装・ライセンスは事務側で決定** |
+| 送信 | **Outlook デスクトップ**（事務 PC・事務用アカウント）。`Preview-SoshikiFormReceiptEmail.ps1` の下書きを流し込み送信（実装予定）。Graph `Mail.Send` は採用しない |
 | 本文 | 受付完了・**受付 ID**・組合名・申込日。OneDrive パスは記載しない |
 | 添付 | **なし**（PDF は `pdf/` にのみ保管） |
 
@@ -179,7 +179,7 @@ Web では **送 信 PDF を作らない**（html2canvas 経路は削除済み�
 - [x] JSON → セルマップ・マスタ参照・月計再計算 — `scripts/soshiki-form-office/csharp` + `data/soshiki-form-excel-cell-map.json`
 - [x] 手動・一括 PDF — `Export-SoshikiFormPdfFromJson.ps1` / `Process-SoshikiFormJsonInbox.ps1`（既存 pdf はスキップ）
 - [ ] タスクスケジューラ本番運用・同期待ちリトライの調整
-- [ ] 返信メール送信（下書き: `Preview-SoshikiFormReceiptEmail.ps1` → Graph `Mail.Send` は未配線）
+- [ ] 返信メール送信（下書き: `Preview-SoshikiFormReceiptEmail.ps1` → **Outlook** 送信は未配線）
 - [ ] 処理済み管理（`-MoveToProcessed` は任意・メール連携後に運用決定）
 - [x] Web: `SheetFooter` 送付・Worker: **JSON のみ**（`pdfBase64` 非対応）
 

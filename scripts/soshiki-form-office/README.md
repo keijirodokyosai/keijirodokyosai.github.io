@@ -91,9 +91,10 @@ C# は Office PIA に依存せず `dynamic` で Excel を操作します。
 Worker が保存する **submission オブジェクトのみ**。  
 組合名・口欄・掛金は `data/union-master.json` + `data/form-kyosai-map.json` から再計算します。
 
-## 返信メール（プレビューのみ）
+## 返信メール（プレビューのみ → Outlook 送信予定）
 
-送信は未実装。OneDrive に `設定/union-contacts.json` がある前提で文面を確認:
+**送信:** 事務 PC の **Microsoft Outlook**（Graph API は使わない）。現状は下書き表示のみ。  
+OneDrive に `設定/union-contacts.json` がある前提で文面を確認:
 
 ```powershell
 .\Preview-SoshikiFormReceiptEmail.ps1 -JsonPath "（json のフルパス）"
