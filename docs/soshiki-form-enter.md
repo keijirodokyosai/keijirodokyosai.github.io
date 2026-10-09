@@ -54,7 +54,7 @@
 | 組合員欄 CSS の微調整 | 随時（§9・§13） |
 | 本番 `union-master.json`（kyosai-system 出力） | 運用で差し替え |
 | **送 信**（Worker → OneDrive json） | **完了**（§5.10） |
-| 組合向け PDF（送信後印刷） | **一部**（§5.9・保 存ボタン廃止・成功後 `print` 連携・受付 ID ファイル名は未） |
+| 組合向け PDF（送信後印刷） | **完了**（§5.9・`{組合名}_{yyyyMMdd}_{受付ID}.pdf`） |
 | 事務 Excel → PDF | **初版済**（§5.10.1・`scripts/soshiki-form-office/`） |
 | 返信メール **送信** | **スクリプト済**（`Send-SoshikiFormReceiptEmail.ps1`・Inbox 自動連携は未） |
 | PA 通知・Access 取込 | 廃止／kyosai-system 側 |
@@ -325,7 +325,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 * **残す**: 申込日・組合名・産別/支部/分会・口欄7・掛金
 * クリア後: 1行目の開発用 `placeholder` を復元（`restoreMemberRowOneDevHints()`）
 
-**組合向け PDF（§5.9）:** **保 存ボタンは廃止**（未送信 PDF の残存を防ぐ）。`printSoshikiFormForPdfSave()` / `prepareSoshikiFormSheetForPrint()` は **送 信成功後**に開く想定（未送信では印刷しない）。印刷ダイアログの送信先は **「PDF に保存」**。ファイル名ヒントは `getSoshikiFormPdfDownloadFileName()`（受付 ID 付与は未実装）。印字は `@media print`（§9.0.2）。**送 信** POST は JSON のみ（§5.10）。事務用 PDF は §5.10.1。
+**組合向け PDF（§5.9）:** **保 存ボタンは廃止**（未送信 PDF の残存を防ぐ）。**送 信成功後**に `prepareSoshikiFormSheetForPrint()` → `printSoshikiFormForPdfSave(receiptId)` で印刷ダイアログを開く。送信先は **「PDF に保存」**。ファイル名ヒント（`document.title`）は `getSoshikiFormPdfDownloadFileName(receiptId)` → **`{組合名}_{申込日 yyyyMMdd}_{受付ID}.pdf`**（OneDrive json の stem と同型）。印字は `@media print`（§9.0.2）。**送 信** POST は JSON のみ（§5.10）。事務用 PDF は §5.10.1。
 
 ### 5.9.1 Tab 移動順（DOM 順）
 

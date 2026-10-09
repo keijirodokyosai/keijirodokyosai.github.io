@@ -33,12 +33,15 @@ function initSoshikiFormActions() {
 /**
  * 送 信成功後の PDF 保存用印刷（送信先「PDF に保存」想定）。§5.9
  */
-function printSoshikiFormForPdfSave() {
+function printSoshikiFormForPdfSave(receiptId) {
   var previousTitle = document.title;
   var suggestedTitle = previousTitle;
 
   if (typeof getSoshikiFormPdfDownloadFileName === "function") {
-    suggestedTitle = getSoshikiFormPdfDownloadFileName().replace(/\.pdf$/i, "");
+    suggestedTitle = getSoshikiFormPdfDownloadFileName(receiptId).replace(
+      /\.pdf$/i,
+      ""
+    );
   }
 
   document.title = suggestedTitle;

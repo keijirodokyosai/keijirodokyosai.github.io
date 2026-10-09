@@ -65,7 +65,7 @@
 |------|----------|
 | 入力フォーム | `soshiki-form-enter.html`、`_includes/soshiki-form-member-rows.html`、`css/style.css` |
 | 送 信 POST | `js/soshiki-form-submit.js`（**JSON のみ**） |
-| **組合 PDF** | 送 信成功後 **印刷 → PDF に保存**（`printSoshikiFormForPdfSave`）。**事務用 PDF の正本は Excel 経路** |
+| **組合 PDF** | 送 信成功後 **印刷 → PDF に保存**（ファイル名 `{組合名}_{yyyyMMdd}_{受付ID}.pdf`）。**事務用 PDF の正本は Excel 経路** |
 | 設定 | `data/soshiki-form-submit-config.json` の `submitEndpointUrl` |
 
 ### POST ボディ（Worker が受け取る形）

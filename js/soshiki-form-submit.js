@@ -146,6 +146,12 @@ function handleSoshikiFormSendClick() {
       var receiptId =
         (result && (result.receiptId || result.receipt_id)) || "";
       showSoshikiFormSendSuccess(receiptId);
+      if (typeof prepareSoshikiFormSheetForPrint === "function") {
+        prepareSoshikiFormSheetForPrint();
+      }
+      if (typeof printSoshikiFormForPdfSave === "function") {
+        printSoshikiFormForPdfSave(receiptId);
+      }
     })
     .catch(function (error) {
       console.error("送 信に失敗しました:", error);
@@ -400,7 +406,7 @@ function sanitizeSoshikiFormPdfFileNameSegment(value) {
   return String(value).replace(/[\\/:*?"<>|]/g, "_").trim();
 }
 
-function getSoshikiFormPdfDownloadFileName() {
+function getSoshikiFormPdfDownloadFileName(receiptId) {
   var verified = getSoshikiFormVerifiedUnion();
   var unionName =
     verified && verified.KyosaikaiName
@@ -418,7 +424,14 @@ function getSoshikiFormPdfDownloadFileName() {
       pad2(String(today.getMonth() + 1)) +
       pad2(String(today.getDate()));
   }
-  return unionName + "_" + fileNameDate + ".pdf";
+  var stem = unionName + "_" + fileNameDate;
+  var idSegment = receiptId
+    ? sanitizeSoshikiFormPdfFileNameSegment(receiptId)
+    : "";
+  if (idSegment) {
+    stem += "_" + idSegment;
+  }
+  return stem + ".pdf";
 }
 
 function setSoshikiFormSendBusy(isBusy) {
