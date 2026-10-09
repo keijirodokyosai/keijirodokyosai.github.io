@@ -9,15 +9,47 @@ OneDrive の受付 `.json` を **Excel テンプレ**に流し込み、**PDF** �
 - PowerShell 5.1+
 - テンプレ `.xlsx`（用紙レイアウト済み・未記入セルは空）
 
-## 使い方
+## フォルダ構成（OneDrive）
+
+```text
+組織共済WEB受付/
+  組織共済申込書（PDF化テンプレ）.xlsx   … テンプレ（受付 と同じ階層）
+  受付/
+    2026年11月/
+      json/   … Worker が保存
+      pdf/    … 本スクリプトの出力
+```
+
+テンプレ名は `data/soshiki-form-excel-cell-map.json` の `templateFileName`。  
+**フルパスはスクリプトに書かない**（PC ごとの OneDrive パス差を吸収）。
+
+## 使い方（おすすめ）
 
 ```powershell
 cd scripts\soshiki-form-office
 
+.\Export-SoshikiFormPdfFromJson.ps1 `
+  -JsonPath "..\..\..\..\OneDrive - …\組織共済WEB受付\受付\2026年11月\json\合同互助会_20261109_abc12345.json"
+```
+
+`-TemplatePath` は **省略可**（json の位置からテンプレを自動解決）。  
+上の JsonPath は例です。実際は **json へのパスだけ**渡せばよいです。
+
+```powershell
+# 受付フォルダ内で実行する例
+cd "…\組織共済WEB受付\受付\2026年11月"
+..\..\..\..\path\to\repo\scripts\soshiki-form-office\Export-SoshikiFormPdfFromJson.ps1 -JsonPath ".\json\合同互助会_20261109_abc12345.json"
+```
+
+手動でテンプレを指定する場合のみ `-TemplatePath` を付けます。
+
+### 低レベル API
+
+```powershell
 .\Fill-SoshikiFormExcel.ps1 `
-  -JsonPath "D:\OneDrive\組織共済WEB受付\受付\2026年11月\json\合同互助会_20261109_abc12345.json" `
-  -TemplatePath "D:\templates\組織共済申込書.xlsx" `
-  -OutputPdfPath "D:\OneDrive\組織共済WEB受付\受付\2026年11月\pdf\合同互助会_20261109_abc12345.pdf"
+  -JsonPath "…\json\xxx.json" `
+  -TemplatePath "…\組織共済申込書（PDF化テンプレ）.xlsx" `
+  -OutputPdfPath "…\pdf\xxx.pdf"
 ```
 
 `-UnionMasterPath` / `-KyosaiMapPath` を省略すると、リポジトリの `data/union-master.json` と `data/form-kyosai-map.json` を使います。  
@@ -30,6 +62,8 @@ cd scripts\soshiki-form-office
 | ファイル | 役割 |
 |----------|------|
 | `Fill-SoshikiFormExcel.ps1` | JSON 読込 → Excel COM → PDF |
+| `Export-SoshikiFormPdfFromJson.ps1` | json → 同 stem の pdf（テンプレ自動） |
+| `SoshikiFormOfficePaths.ps1` | 受付/json からテンプレ・pdf パス解決 |
 | `SoshikiFormKuchi.ps1` | 口数・掛金（Web `computeFormKuchi` 相当） |
 
 ## JSON

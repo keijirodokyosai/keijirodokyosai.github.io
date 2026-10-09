@@ -451,7 +451,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 
 当月・月計は **バッチ再計算可**（JSON に含めない）。
 
-**事務 Excel → PDF（実装済み・初版）:** `scripts/soshiki-form-office/Fill-SoshikiFormExcel.ps1`。セル対応は `data/soshiki-form-excel-cell-map.json`。同一 stem で `pdf/` へ出す場合は `Export-SoshikiFormPdfFromJson.ps1`。手順は同ディレクトリ `README.md`。
+**事務 Excel → PDF（実装済み・初版）:** `scripts/soshiki-form-office/Export-SoshikiFormPdfFromJson.ps1`（**`-TemplatePath` 省略可** — json が `受付/{月}/json/` にあるとき、テンプレは **受付の親**＝`組織共済WEB受付` 直下の `templateFileName`）。セル対応は `data/soshiki-form-excel-cell-map.json`。手順は `scripts/soshiki-form-office/README.md`。
 
 | 表示 | 例（1人目） | 備考 |
 |------|-------------|------|
