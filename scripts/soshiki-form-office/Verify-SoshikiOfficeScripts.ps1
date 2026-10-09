@@ -8,7 +8,8 @@ $scripts = @(
     "Export-SoshikiFormPdfFromJson.ps1",
     "Process-SoshikiFormJsonInbox.ps1",
     "Register-SoshikiFormJsonInboxTask.ps1",
-    "Build-SoshikiFormPdf.ps1"
+    "Build-SoshikiFormPdf.ps1",
+    "Preview-SoshikiFormReceiptEmail.ps1"
 )
 
 foreach ($name in $scripts) {
@@ -32,13 +33,19 @@ if ($name.Length -ne 2) {
 }
 Write-Output "Paths OK"
 
+$p = Parse-SoshikiFormJsonFileStem -Stem "UnionName_20261009_7a4bb6ce"
+if ($p.ReceiptId -ne "7a4bb6ce" -or $p.FileNameDate -ne "20261009") {
+    throw "Json file stem parse failed"
+}
+Write-Output "Json stem parse OK"
+
 if (-not (Get-Command dotnet -ErrorAction SilentlyContinue)) {
     Write-Warning "dotnet not on PATH; skipping csharp build/test"
     exit 0
 }
 
-$testProj = Join-Path $dir "tests\SoshikiFormPdf.Tests\SoshikiFormPdf.Tests.csproj"
-& dotnet test $testProj -c Release
+$sln = Join-Path $dir "SoshikiFormPdf.sln"
+& dotnet test $sln -c Release
 if ($LASTEXITCODE -ne 0) {
     throw "dotnet test failed"
 }

@@ -460,7 +460,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | 住所 | AG13, AG14 | 4項目連結・建物名 |
 | 申込月日 | AM1, AQ1 等 | 月日は 0 埋め解除 |
 
-**返信メール:** 宛先は OneDrive `設定/union-contacts.json` の `ManagerEmail`（`KyosaikaiCode` 照合）。受付 ID はファイル名 `{組合名}_{yyyyMMdd}_{受付ID}.json` または移行後の保存 JSON ラップから取得。
+**返信メール:** 宛先は OneDrive `設定/union-contacts.json` の `ManagerEmail`（`KyosaikaiCode` 照合）。受付 ID はファイル名 `{組合名}_{yyyyMMdd}_{受付ID}.json` または移行後の保存 JSON ラップから取得。文面プレビュー（送信なし）: `scripts/soshiki-form-office/Preview-SoshikiFormReceiptEmail.ps1`。
 
 **Worker:** `pdfBase64` は **非対応**（JSON のみ PUT）。OneDrive `.json` 本文は現行 **`submission` オブジェクトのみ**（ラップ `{ receiptId, unionName, fileNameDate, submission }` は未実装）。
 

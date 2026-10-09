@@ -5,6 +5,95 @@ function Get-SoshikiReceptionFolderName {
     return -join @([char]0x53D7, [char]0x4ED8)
 }
 
+function Get-SoshikiFormSettingsFolderName {
+    return -join @([char]0x8A2D, [char]0x5B9A)
+}
+
+function Parse-SoshikiFormJsonFileStem {
+    param([Parameter(Mandatory = $true)][string]$Stem)
+
+    $parts = $Stem -split '_'
+    if ($parts.Length -lt 3) {
+        return @{
+            Stem             = $Stem
+            UnionFileSegment = $null
+            FileNameDate     = $null
+            ReceiptId        = $null
+        }
+    }
+
+    $receiptId = $parts[$parts.Length - 1]
+    $fileNameDate = $parts[$parts.Length - 2]
+    $unionSegment = ($parts[0..($parts.Length - 3)] -join '_')
+    return @{
+        Stem             = $Stem
+        UnionFileSegment = $unionSegment
+        FileNameDate     = $fileNameDate
+        ReceiptId        = $receiptId
+    }
+}
+
+function Get-SoshikiFormJsonFileInfo {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$JsonPath
+    )
+
+    $layout = Get-SoshikiFormWebRootFromJsonPath -JsonPath $JsonPath
+    $stem = [System.IO.Path]::GetFileNameWithoutExtension($layout.JsonFull)
+    $parsed = Parse-SoshikiFormJsonFileStem -Stem $stem
+    return @{
+        JsonFull         = $layout.JsonFull
+        WebRoot          = $layout.WebRoot
+        Stem             = $parsed.Stem
+        UnionFileSegment = $parsed.UnionFileSegment
+        FileNameDate     = $parsed.FileNameDate
+        ReceiptId        = $parsed.ReceiptId
+    }
+}
+
+function Get-SoshikiFormUnionContactsPath {
+    param([Parameter(Mandatory = $true)][string]$WebRoot)
+
+    $settings = Get-SoshikiFormSettingsFolderName
+    return Join-Path $WebRoot ($settings + "\union-contacts.json")
+}
+
+function Get-SoshikiFormUnionContact {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$WebRoot,
+
+        [Parameter(Mandatory = $true)]
+        [string]$KyosaikaiCode
+    )
+
+    $path = Get-SoshikiFormUnionContactsPath -WebRoot $WebRoot
+    if (-not (Test-Path -LiteralPath $path)) {
+        return $null
+    }
+
+    $raw = Get-Content -LiteralPath $path -Raw -Encoding UTF8 | ConvertFrom-Json
+    $list = @()
+    if ($null -ne $raw.contacts) {
+        $list = @($raw.contacts)
+    }
+    elseif ($raw -is [System.Array]) {
+        $list = @($raw)
+    }
+    elseif ($null -ne $raw) {
+        $list = @($raw)
+    }
+
+    foreach ($item in $list) {
+        if ($item.KyosaikaiCode -eq $KyosaikaiCode) {
+            return $item
+        }
+    }
+
+    return $null
+}
+
 function Get-SoshikiFormRepoRoot {
     param([string]$ScriptRoot = $PSScriptRoot)
     return Split-Path (Split-Path $ScriptRoot -Parent) -Parent

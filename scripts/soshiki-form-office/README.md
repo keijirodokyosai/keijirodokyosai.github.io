@@ -80,9 +80,25 @@ C# は Office PIA に依存せず `dynamic` で Excel を操作します。
 | `Process-SoshikiFormJsonInbox.ps1` | 一括 |
 | `Register-SoshikiFormJsonInboxTask.ps1` | タスク登録例 |
 | `Build-SoshikiFormPdf.ps1` | publish → `dist/` |
+| `Preview-SoshikiFormReceiptEmail.ps1` | 受付確認メール下書き（送信なし） |
+| `SoshikiFormPdf.sln` | C# + テストを一括ビルド |
 | `Verify-SoshikiOfficeScripts.ps1` | PS パース + `dotnet test` |
 
 ## JSON
 
 Worker が保存する **submission オブジェクトのみ**。  
 組合名・口欄・掛金は `data/union-master.json` + `data/form-kyosai-map.json` から再計算します。
+
+## 返信メール（プレビューのみ）
+
+送信は未実装。OneDrive に `設定/union-contacts.json` がある前提で文面を確認:
+
+```powershell
+.\Preview-SoshikiFormReceiptEmail.ps1 -JsonPath "（json のフルパス）"
+```
+
+## 開発（C#）
+
+```powershell
+dotnet test SoshikiFormPdf.sln -c Release
+```

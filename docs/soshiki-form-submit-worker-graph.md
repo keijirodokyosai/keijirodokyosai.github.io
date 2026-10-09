@@ -179,7 +179,7 @@ Web では **送 信 PDF を作らない**（html2canvas 経路は削除済み�
 - [x] JSON → セルマップ・マスタ参照・月計再計算 — `scripts/soshiki-form-office/csharp` + `data/soshiki-form-excel-cell-map.json`
 - [x] 手動・一括 PDF — `Export-SoshikiFormPdfFromJson.ps1` / `Process-SoshikiFormJsonInbox.ps1`（既存 pdf はスキップ）
 - [ ] タスクスケジューラ本番運用・同期待ちリトライの調整
-- [ ] 返信メール送信
+- [ ] 返信メール送信（下書き: `Preview-SoshikiFormReceiptEmail.ps1` → Graph `Mail.Send` は未配線）
 - [ ] 処理済み管理（`-MoveToProcessed` は任意・メール連携後に運用決定）
 - [x] Web: `SheetFooter` 送付・Worker: **JSON のみ**（`pdfBase64` 非対応）
 
@@ -231,7 +231,7 @@ Web では **送 信 PDF を作らない**（html2canvas 経路は削除済み�
 
 | 項目 | 備考 |
 |------|------|
-| **事務バッチ**（§13） | Excel PDF・返信メール |
+| **事務バッチ**（§13） | Excel PDF **初版済**（`scripts/soshiki-form-office/`）。**返信メール送信**は未実装（`Preview-SoshikiFormReceiptEmail.ps1` で文面確認のみ） |
 | ~~Web **`SheetFooter`** 送付~~ | **完了**（§5.10.1） |
 | ~~Worker **JSON のみ**・Web **html2canvas 削除**~~ | **完了** |
 | Worker 保存 JSON ラップ | 未実装（本文は `submission` のみ） |
@@ -282,4 +282,4 @@ PA 検討時の案を流用可: `組織共済WEB申込_{組合名}_{yyyyMMdd}`�
 
 ---
 
-**最終更新:** 2026-10-08（§13 事務 PDF・返信メール方針、Web 送 信 PDF 廃止予定）
+**最終更新:** 2026-10-10（§13 PDF 初版・返信メールプレビュー PS、Web 送 信 PDF 廃止済）
