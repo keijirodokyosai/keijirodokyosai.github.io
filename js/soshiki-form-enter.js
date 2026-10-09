@@ -17,7 +17,6 @@ var SOSHIKI_FORM_FOOTER_CLEAR_FIELD_IDS = [
 
 function initSoshikiFormActions() {
   var clearButton = document.getElementById("soshiki-form-clear");
-  var saveButton = document.getElementById("soshiki-form-save-pdf");
 
   if (clearButton) {
     clearButton.addEventListener("click", function () {
@@ -29,17 +28,12 @@ function initSoshikiFormActions() {
       finalizePriorMonthHeadcountAfterFooterReset();
     });
   }
-
-  if (saveButton) {
-    saveButton.addEventListener("click", saveSoshikiFormPdf);
-  }
 }
 
 /**
- * 保 存 — ブラウザの「印刷」と同じ画面（送信先「PDF に保存」想定）。§5.9
+ * 送 信成功後の PDF 保存用印刷（送信先「PDF に保存」想定）。§5.9
  */
 function printSoshikiFormForPdfSave() {
-  var saveButton = document.getElementById("soshiki-form-save-pdf");
   var previousTitle = document.title;
   var suggestedTitle = previousTitle;
 
@@ -60,10 +54,6 @@ function printSoshikiFormForPdfSave() {
       fallbackTimerId = null;
     }
     document.title = previousTitle;
-    if (saveButton) {
-      saveButton.disabled = false;
-      saveButton.textContent = "保 存";
-    }
     window.dispatchEvent(new Event("resize"));
     window.removeEventListener("afterprint", finishPrintSave);
   }
@@ -75,31 +65,16 @@ function printSoshikiFormForPdfSave() {
   }, 0);
 }
 
-function saveSoshikiFormPdf() {
-  var saveButton = document.getElementById("soshiki-form-save-pdf");
+function prepareSoshikiFormSheetForPrint() {
   var sheet = document.querySelector(".soshiki-form-sheet");
   var active = document.activeElement;
   if (active && typeof active.blur === "function") {
     active.blur();
   }
-
   if (sheet) {
     sheet.style.setProperty("--soshiki-form-scale", "1");
     sheet.style.marginBottom = "0";
   }
-
-  recordSoshikiFormTsukiKeiSnapshot();
-
-  if (typeof clearSoshikiFormSendResult === "function") {
-    clearSoshikiFormSendResult();
-  }
-
-  if (saveButton) {
-    saveButton.disabled = true;
-    saveButton.textContent = "保存中…";
-  }
-
-  printSoshikiFormForPdfSave();
 }
 
 function soshikiFormFooterFieldsHaveInput() {

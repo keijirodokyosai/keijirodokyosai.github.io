@@ -25,7 +25,7 @@
 
 | 項目 | 内容 |
 |------|------|
-| フロント | 入力・検証・**submission JSON** 送信。組合向け **保 存**＝ブラウザ印刷（§5.9）。**送 信 PDF はブラウザで作らない**方針（§9.0.3・§13） |
+| フロント | 入力・検証・**submission JSON** 送信。組合向け PDF は **送信成功後**のブラウザ印刷（§5.9・保 存ボタンなし） |
 | バックエンド | Cloudflare Worker **`workers/soshiki-submit`**（URL を config に書く） |
 | 用紙 PDF | **共済会側**（Excel テンプレ＋ PowerShell / Python）。Web の html2canvas は **採用しない**（位置合わせ困難） |
 | 返信メール | **共済会側バッチ**（json 着信と同じトリガー）。**PDF は添付しない** |
@@ -65,7 +65,7 @@
 |------|----------|
 | 入力フォーム | `soshiki-form-enter.html`、`_includes/soshiki-form-member-rows.html`、`css/style.css` |
 | 送 信 POST | `js/soshiki-form-submit.js`（**JSON のみ**） |
-| **保 存** | ブラウザ **印刷 → PDF に保存**（`js/soshiki-form-enter.js`）。組合の手元用。**事務用 PDF の正本は Excel 経路** |
+| **組合 PDF** | 送 信成功後 **印刷 → PDF に保存**（`printSoshikiFormForPdfSave`）。**事務用 PDF の正本は Excel 経路** |
 | 設定 | `data/soshiki-form-submit-config.json` の `submitEndpointUrl` |
 
 ### POST ボディ（Worker が受け取る形）
@@ -263,7 +263,7 @@ Web では **送 信 PDF を作らない**（html2canvas 経路は削除済み�
 ```text
 soshiki-form-enter.html
 js/soshiki-form-submit.js
-js/soshiki-form-enter.js          … 保 存＝印刷
+js/soshiki-form-enter.js          … 送信後印刷（§5.9）
 data/soshiki-form-submit-config.json
 data/soshiki-form-pdf-layout.json
 docs/soshiki-form-enter.md        … §5.10

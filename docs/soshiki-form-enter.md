@@ -54,7 +54,7 @@
 | 組合員欄 CSS の微調整 | 随時（§9・§13） |
 | 本番 `union-master.json`（kyosai-system 出力） | 運用で差し替え |
 | **送 信**（Worker → OneDrive json） | **完了**（§5.10） |
-| 組合向け **保 存**（ブラウザ印刷 PDF） | **完了**（§5.9） |
+| 組合向け PDF（送信後印刷） | **一部**（§5.9・保 存ボタン廃止・成功後 `print` 連携・受付 ID ファイル名は未） |
 | 事務 Excel → PDF | **初版済**（§5.10.1・`scripts/soshiki-form-office/`） |
 | 返信メール **送信** | **スクリプト済**（`Send-SoshikiFormReceiptEmail.ps1`・Inbox 自動連携は未） |
 | PA 通知・Access 取込 | 廃止／kyosai-system 側 |
@@ -77,7 +77,7 @@
 
 ```text
 soshiki-form-enter.html      … 入力ページ
-js/soshiki-form-enter.js     … 日付初期値・申込月の翌月を当月枠へ反映・マスタ連携・横フィット（§9.0.1）・操作ボタン（§5.9・クリア・保 存 PDF）・組合確定状態
+js/soshiki-form-enter.js     … 日付初期値・申込月の翌月を当月枠へ反映・マスタ連携・横フィット（§9.0.1）・操作ボタン（§5.9・クリア・送 信）・組合確定状態
 js/soshiki-form-footer-counts.js … 前月残持ち越し・月計自動計算・月計 localStorage（§5.7.2）
 js/soshiki-form-union-storage.js … 保存組合名 localStorage・datalist・削除 UI（§5.2）
 js/soshiki-form-submit.js    … WEB 受付（§5.10・JSON のみ・Worker POST）
@@ -262,7 +262,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | **前月残** | 初期表示・クリア後: **localStorage 持ち越し**（`applyPriorMonthHeadcountCarryForward`）。記録の `coverageMonth` が **今回より前** のときのみ。該当なしは **`0`**。組合確定・申込日変更時も同ロジック |
 | **月計** | **自動計算・`readonly`**。`前月残 + 新規行数 − 解約行数`（**変更**は人数に含めない）。結果は **0 未満にならない** |
 | 再計算 | 前月残の入力・異動トグル・組合員クリア |
-| **記録** | `localStorage` キー `soshiki-form-tsuki-kei-snapshots`。組合（`KyosaikaiCode`）ごと **直近1件** `{ tsukiKei, coverageMonth }` のみ（月ごとの履歴は持たない）。**保 存**・**送 信**成功で上書き |
+| **記録** | `localStorage` キー `soshiki-form-tsuki-kei-snapshots`。組合（`KyosaikaiCode`）ごと **直近1件** `{ tsukiKei, coverageMonth }` のみ（月ごとの履歴は持たない）。**送 信**成功で上書き |
 | 格納月 | 申込日からの `coverageMonth`（`js/soshiki-form-submit.js` と同型。申込 10 月 → `YYYY-11`） |
 | 持ち越し元 | 上記 **直近1件**の `tsukiKei`（中間月に未保存があっても、最後に記録した月計を使う） |
 | 送信 JSON | `SheetFooter.PriorMonthHeadcount`（送信時点の表示値。§5.10.1） |
@@ -291,16 +291,13 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | 順（左→右） | id | ラベル | 状態 |
 |-------------|-----|--------|------|
 | 1 | `soshiki-form-clear` | クリア | **実装済み** |
-| 2 | `soshiki-form-save-pdf` | 保 存 | **実装済み**（PDF ダウンロード・§5.9） |
-| 3 | `soshiki-form-send` | 送 信 | **実装済み**（§5.10・PA URL 設定要） |
+| 2 | `soshiki-form-send` | 送 信 | **実装済み**（§5.10） |
 
-ボタン行の下に `.soshiki-form-actions-hint`（右寄せ・14px）:「※ 保 存は、メニューの「印刷」と同じ画面。送信先を「PDF に保存」にして保存。ファイル名の初期値は組合名と申込日。」
-
-その下（ヒント・送 信結果の後）に **保存した組合**（`.soshiki-form-saved-unions-panel`）:
+その下（送 信ヒント・送 信結果の後）に **保存した組合**（`.soshiki-form-saved-unions-panel`）:
 
 | 項目 | 内容 |
 |------|------|
-| 配置 | 操作ボタンより**下**（クリア・保 存・送 信 → ヒント → 本パネル） |
+| 配置 | 操作ボタンより**下**（クリア・送 信 → ヒント → 本パネル） |
 | 見た目 | 背景 **#fffaf0**・枠線・角丸（操作ボタン行と同系） |
 | 行高 | **27px**（組合名＋小さな「削除」ボタン） |
 | ヘッダ | 「すべて削除」の**左端**を上段の**クリア**ボタン中心付近に合わせ、タイトル・組合名は削除ボタン列の**右 12px** から表示（3 列グリッド・`display: contents`） |
@@ -328,13 +325,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 * **残す**: 申込日・組合名・産別/支部/分会・口欄7・掛金
 * クリア後: 1行目の開発用 `placeholder` を復元（`restoreMemberRowOneDevHints()`）
 
-**保 存**（`saveSoshikiFormPdf()` → `printSoshikiFormForPdfSave()`・`initSoshikiFormActions()`）:
-
-* クリック → フォーカス解除 → **月計スナップショット記録**（§5.7.2）→ シート scale 解除 → **`window.print()`**（Chrome メニュー「印刷」と同じ UI）
-* 利用想定: 印刷ダイアログの送信先を **「PDF に保存」**（ユーザー設定）。物理プリンタ（例 RICOH）には送らない
-* ファイル名のヒント: 印刷前に `document.title` を `{組合名}_{申込日 yyyyMMdd}` に一時変更（`.pdf` なし）。組合未確定時は `組織共済申込書`、申込日未入力時は当日
-* 印字内容: `@media print`（§9.0.2）の HTML シート。町村域が短いとき **番地を続けて印字**は §9.11 住所表の印刷行
-* **送 信**は JSON のみ（§5.10）。事務用 PDF は共済会側（§5.10.1）。**保 存**は印刷（§5.9）
+**組合向け PDF（§5.9）:** **保 存ボタンは廃止**（未送信 PDF の残存を防ぐ）。`printSoshikiFormForPdfSave()` / `prepareSoshikiFormSheetForPrint()` は **送 信成功後**に開く想定（未送信では印刷しない）。印刷ダイアログの送信先は **「PDF に保存」**。ファイル名ヒントは `getSoshikiFormPdfDownloadFileName()`（受付 ID 付与は未実装）。印字は `@media print`（§9.0.2）。**送 信** POST は JSON のみ（§5.10）。事務用 PDF は §5.10.1。
 
 ### 5.9.1 Tab 移動順（DOM 順）
 
@@ -345,25 +336,23 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | ヘッダ | 申込日（年→月→日）→ 組合名 |
 | 組合員（1〜5 行・各行） | 異動（新規→解約→変更）→ 組合員コード → 漢字姓 → カナ姓 → 漢字名 → カナ名 → 生年月日（年→月→日）→ 性別（男→女）→ 郵便番号 → 都道府県 → 市区町村 → 町村域 → 番地 → 建物名 |
 | フッター | ページ枚数（現在→総数）→ **当月** → **前月残** → **月計** → 備考 |
-| 操作 | クリア → 保 存 → 送 信 |
+| 操作 | クリア → 送 信 |
 
 組合員欄の HTML は `soshiki-form-enter.html` 内で口数・掛金の直後（フッター欄より前）に include する。
 
 ### 5.10 WEB 受付（送 信）
-
-**保 存** は申込書 PDF の **ブラウザ印刷によるローカル保存**（§5.9）。
 
 **送 信（本命・2026-10 決定）:** 自作フォーム → **Cloudflare Workers** → **Microsoft Graph**（アプリ権限）→ 事務局 OneDrive。Exchange・Power Automate（HTTP／メールトリガー）は使わない。実装・引き継ぎは **`docs/soshiki-form-submit-worker-graph.md`** を正とする。
 
 | 項目 | 内容 |
 |------|------|
 | 設定 | `data/soshiki-form-submit-config.json` の `submitEndpointUrl`（**Worker API URL**。未設定時は送 信不可） |
-| JS | `js/soshiki-form-submit.js`（送 信）・`js/soshiki-form-enter.js`（保 存＝印刷） |
+| JS | `js/soshiki-form-submit.js`（送 信）・`js/soshiki-form-enter.js`（送信後印刷・§5.9） |
 | 送 信条件 | `validateSoshikiForm()` OK・組合名 Enter 確定（`getSoshikiFormVerifiedUnion()`）・組合員1名以上・パスワード入力 |
-| 確認ダイアログ | 組合名・格納月・**異動の増減**（`組合員 ＋n名　-m名`。新規／解約の行数。変更は加減しない。`countMemberTransferChanges()`） |
+| 確認ダイアログ | 組合名・格納月・**異動の増減**（`組合員 ＋n名　-m名`）・**「送信後にPDF印刷ダイアログが出ます。」**（取り消し不可の文言は出さない） |
 | POST | **1 リクエスト**（`submission` + パスワード + `unionName` / `fileNameDate`。**PDF は含めない**） |
-| 組合向け PDF | **保 存**のみ（§5.9・`window.print()`）。事務用 PDF は共済会バッチ |
-| 月計記録 | 送 信 **成功後** に §5.7.2 の localStorage へ上書き（保 存と同じ） |
+| 組合向け PDF | **送 信成功後**の `window.print()`（§5.9）。事務用 PDF は共済会バッチ |
+| 月計記録 | 送 信 **成功後** に §5.7.2 の localStorage へ上書き |
 | 取込 | **リアルタイム自動なし**（事務側の取込処理で json 削除・二重チェック） |
 
 #### OneDrive フォルダ（案C改）
@@ -657,7 +646,7 @@ PA 通知専用。Web・GitHub には載せない。kyosai-system が `Subbranch
 
 ### 9.0.2 印刷・PDF
 
-**保 存**は `window.print()`（§5.9・§9.0.2）。**送 信**は JSON のみ（§5.10）。事務用 PDF は §5.10.1（Excel・共済会側）。
+組合向け PDF は送 信成功後の `window.print()`（§5.9・§9.0.2）。**送 信** POST は JSON のみ（§5.10）。事務用 PDF は §5.10.1（Excel・共済会側）。
 
 ### 9.0.2 印刷（ブラウザメニュー）
 

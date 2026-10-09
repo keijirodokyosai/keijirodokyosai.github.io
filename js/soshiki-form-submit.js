@@ -88,7 +88,7 @@ function handleSoshikiFormSendClick() {
     "格納月：" + submissionPreview.StorageFolder,
     transferConfirmLabel,
     "",
-    "送信後の取り消しはできません。",
+    "送信後にPDF印刷ダイアログが出ます。",
   ];
   if (!window.confirm(confirmLines.join("\n"))) return;
 
