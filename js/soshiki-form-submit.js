@@ -146,12 +146,7 @@ function handleSoshikiFormSendClick() {
       var receiptId =
         (result && (result.receiptId || result.receipt_id)) || "";
       showSoshikiFormSendSuccess(receiptId);
-      if (typeof prepareSoshikiFormSheetForPrint === "function") {
-        prepareSoshikiFormSheetForPrint();
-      }
-      if (typeof printSoshikiFormForPdfSave === "function") {
-        printSoshikiFormForPdfSave(receiptId);
-      }
+      promptSoshikiFormPdfSaveAfterSend(receiptId);
     })
     .catch(function (error) {
       console.error("送 信に失敗しました:", error);
@@ -448,26 +443,59 @@ function setSoshikiFormSendBusy(isBusy) {
 function clearSoshikiFormSendResult() {
   var result = document.getElementById("soshiki-form-send-result");
   if (!result) return;
-  result.textContent = "";
+  result.replaceChildren();
   result.className = "soshiki-form-send-result";
   result.hidden = true;
+}
+
+function promptSoshikiFormPdfSaveAfterSend(receiptId) {
+  if (
+    !window.confirm(
+      "PDFの保存画面（印刷）を開きます。\n送信先を「PDF に保存」にしてください。"
+    )
+  ) {
+    return;
+  }
+  if (typeof runSoshikiFormPdfSaveAfterSend === "function") {
+    runSoshikiFormPdfSaveAfterSend(receiptId);
+  }
 }
 
 function showSoshikiFormSendSuccess(receiptId) {
   var result = document.getElementById("soshiki-form-send-result");
   if (!result) return;
 
-  var lines = ["送信が完了しました。"];
-  if (receiptId) {
-    lines.push("受付 ID：" + receiptId);
+  result.replaceChildren();
+  result.className = "soshiki-form-send-result soshiki-form-send-result--success";
+  result.hidden = false;
+
+  function addLine(text) {
+    var line = document.createElement("div");
+    line.className = "soshiki-form-send-result-line";
+    line.textContent = text;
+    result.appendChild(line);
   }
-  lines.push(
+
+  addLine("送信が完了しました。");
+  if (receiptId) {
+    addLine("受付 ID：" + receiptId);
+  }
+  addLine(
     "内容を誤って送信した場合は、受付 ID を控えて京滋労働共済までご連絡ください。"
   );
 
-  result.textContent = lines.join("\n");
-  result.className = "soshiki-form-send-result soshiki-form-send-result--success";
-  result.hidden = false;
+  var pdfButton = document.createElement("button");
+  pdfButton.type = "button";
+  pdfButton.id = "soshiki-form-pdf-after-send";
+  pdfButton.className =
+    "btn btn-secondary soshiki-form-send-result-pdf-btn";
+  pdfButton.textContent = "PDFを保存";
+  pdfButton.addEventListener("click", function () {
+    if (typeof runSoshikiFormPdfSaveAfterSend === "function") {
+      runSoshikiFormPdfSaveAfterSend(receiptId);
+    }
+  });
+  result.appendChild(pdfButton);
 }
 
 function showSoshikiFormSendError(message) {

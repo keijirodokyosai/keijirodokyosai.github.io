@@ -80,6 +80,11 @@ function prepareSoshikiFormSheetForPrint() {
   }
 }
 
+function runSoshikiFormPdfSaveAfterSend(receiptId) {
+  prepareSoshikiFormSheetForPrint();
+  printSoshikiFormForPdfSave(receiptId);
+}
+
 function soshikiFormFooterFieldsHaveInput() {
   var current = document.getElementById("page-count-current");
   var total = document.getElementById("page-count-total");

@@ -325,7 +325,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 * **残す**: 申込日・組合名・産別/支部/分会・口欄7・掛金
 * クリア後: 1行目の開発用 `placeholder` を復元（`restoreMemberRowOneDevHints()`）
 
-**組合向け PDF（§5.9）:** **保 存ボタンは廃止**（未送信 PDF の残存を防ぐ）。**送 信成功後**に `prepareSoshikiFormSheetForPrint()` → `printSoshikiFormForPdfSave(receiptId)` で印刷ダイアログを開く。送信先は **「PDF に保存」**。ファイル名ヒント（`document.title`）は `getSoshikiFormPdfDownloadFileName(receiptId)` → **`{組合名}_{申込日 yyyyMMdd}_{受付ID}.pdf`**（OneDrive json の stem と同型）。印字は `@media print`（§9.0.2）。**送 信** POST は JSON のみ（§5.10）。事務用 PDF は §5.10.1。
+**組合向け PDF（§5.9）:** **保 存ボタンは廃止**（未送信 PDF の残存を防ぐ）。**送 信成功後**、`window.print()` は fetch 完了後ではブラウザがブロックするため、**確認ダイアログ（OK）** または成功パネルの **「PDFを保存」** ボタンから `runSoshikiFormPdfSaveAfterSend(receiptId)` を呼ぶ。送信先は **「PDF に保存」**。ファイル名ヒントは **`{組合名}_{申込日 yyyyMMdd}_{受付ID}.pdf`**。印字は `@media print`（§9.0.2）。**送 信** POST は JSON のみ（§5.10）。事務用 PDF は §5.10.1。
 
 ### 5.9.1 Tab 移動順（DOM 順）
 

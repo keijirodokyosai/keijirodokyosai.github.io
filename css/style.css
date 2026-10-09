@@ -1,4 +1,4 @@
-﻿*,
+*,
 *::before,
 *::after {
   box-sizing: border-box;
@@ -1780,6 +1780,10 @@ a:focus-visible {
   color: #1a4d2e;
   background: #eef8f0;
   border: 1px solid #b8dcc4;
+}
+
+.soshiki-form-send-result-pdf-btn {
+  margin-top: 10px;
 }
 
 .soshiki-form-send-result--error {
