@@ -473,6 +473,53 @@ function padTwoDigitField(input) {
   input.value = String(num).padStart(2, "0");
 }
 
+function validateApplicationDateFields() {
+  var yearInput = document.getElementById("application-year");
+  var monthInput = document.getElementById("application-month");
+  var dayInput = document.getElementById("application-day");
+  if (!yearInput || !monthInput || !dayInput) {
+    return { ok: false, message: "申込日が未入力です" };
+  }
+
+  var year = yearInput.value.trim();
+  var month = monthInput.value.trim();
+  var day = dayInput.value.trim();
+
+  [yearInput, monthInput, dayInput].forEach(function (field) {
+    setFieldError(field, false);
+  });
+
+  if (!year || !month || !day) {
+    [yearInput, monthInput, dayInput].forEach(function (field) {
+      if (!field.value.trim()) setFieldError(field, true);
+    });
+    return { ok: false, message: "申込日が未入力です" };
+  }
+
+  if (year.length !== 4) {
+    setFieldError(yearInput, true);
+    return { ok: false, message: "申込日が正しくありません" };
+  }
+
+  var y = Number(year);
+  var m = Number(month);
+  var d = Number(day);
+  var date = new Date(y, m - 1, d);
+  var valid =
+    date.getFullYear() === y &&
+    date.getMonth() === m - 1 &&
+    date.getDate() === d;
+
+  if (!valid) {
+    setFieldError(yearInput, true);
+    setFieldError(monthInput, true);
+    setFieldError(dayInput, true);
+    return { ok: false, message: "申込日が正しくありません" };
+  }
+
+  return { ok: true };
+}
+
 function validateBirthDateForRow(row) {
   if (!row) return true;
 
@@ -1292,12 +1339,10 @@ function validateMemberRows() {
 function validateSoshikiForm() {
   var errors = [];
 
-  ["application-year", "application-month", "application-day"].forEach(function (id) {
-    var field = document.getElementById(id);
-    if (!field || !field.value.trim()) {
-      errors.push("申込日が未入力です");
-    }
-  });
+  var applicationDateResult = validateApplicationDateFields();
+  if (!applicationDateResult.ok) {
+    errors.push(applicationDateResult.message);
+  }
 
   var unionName = document.getElementById("union-name");
   if (!unionName || !unionName.value.trim()) {
