@@ -77,14 +77,16 @@ function handleSoshikiFormSendClick() {
 
   var verifiedUnion = getSoshikiFormVerifiedUnion();
   var submissionPreview = buildSoshikiFormSubmission();
-  var memberCount = submissionPreview.Members.length;
+  var transferConfirmLabel = formatMemberTransferConfirmLabel(
+    countMemberTransferChanges()
+  );
 
   var confirmLines = [
     "申込内容を送信します。よろしいですか？",
     "",
     "組合名：" + verifiedUnion.KyosaikaiName,
     "格納月：" + submissionPreview.StorageFolder,
-    "組合員：" + memberCount + "名",
+    transferConfirmLabel,
     "",
     "送信後の取り消しはできません。",
   ];

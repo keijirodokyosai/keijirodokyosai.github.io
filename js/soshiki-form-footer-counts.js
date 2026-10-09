@@ -121,7 +121,7 @@ function parseZengetsuZanCountValue(raw) {
   return value;
 }
 
-function countMemberTransferDelta() {
+function countMemberTransferChanges() {
   var added = 0;
   var removed = 0;
 
@@ -133,7 +133,18 @@ function countMemberTransferDelta() {
     else if (transfer === "cancel") removed += 1;
   }
 
-  return added - removed;
+  return { added: added, removed: removed };
+}
+
+function countMemberTransferDelta() {
+  var changes = countMemberTransferChanges();
+  return changes.added - changes.removed;
+}
+
+function formatMemberTransferConfirmLabel(changes) {
+  var added = changes && changes.added ? changes.added : 0;
+  var removed = changes && changes.removed ? changes.removed : 0;
+  return "組合員 ＋" + added + "名　-" + removed + "名";
 }
 
 function recalcSoshikiFormTsukiKeiCount() {

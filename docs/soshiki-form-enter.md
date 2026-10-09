@@ -356,6 +356,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | 設定 | `data/soshiki-form-submit-config.json` の `submitEndpointUrl`（**Worker API URL**。未設定時は送 信不可） |
 | JS | `js/soshiki-form-submit.js`（送 信）・`js/soshiki-form-enter.js`（保 存＝印刷） |
 | 送 信条件 | `validateSoshikiForm()` OK・組合名 Enter 確定（`getSoshikiFormVerifiedUnion()`）・組合員1名以上・パスワード入力 |
+| 確認ダイアログ | 組合名・格納月・**異動の増減**（`組合員 ＋n名　-m名`。新規／解約の行数。変更は加減しない。`countMemberTransferChanges()`） |
 | POST | **1 リクエスト**（`submission` + パスワード + `unionName` / `fileNameDate`。**PDF は含めない**） |
 | 組合向け PDF | **保 存**のみ（§5.9・`window.print()`）。事務用 PDF は共済会バッチ |
 | 月計記録 | 送 信 **成功後** に §5.7.2 の localStorage へ上書き（保 存と同じ） |
