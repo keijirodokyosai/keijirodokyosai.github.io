@@ -451,6 +451,15 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 
 当月・月計は **バッチ再計算可**（JSON に含めない）。
 
+**事務 Excel → PDF（実装済み・初版）:** `scripts/soshiki-form-office/Fill-SoshikiFormExcel.ps1`。セル対応は `data/soshiki-form-excel-cell-map.json`。同一 stem で `pdf/` へ出す場合は `Export-SoshikiFormPdfFromJson.ps1`。手順は同ディレクトリ `README.md`。
+
+| 表示 | 例（1人目） | 備考 |
+|------|-------------|------|
+| 異動 | B12 | `新規` / `解約` / `変更`（2文字） |
+| 性別 | AE13 | `男` / `女`（1文字） |
+| 住所 | AG13, AG14 | 4項目連結・建物名 |
+| 申込月日 | AM1, AQ1 等 | 月日は 0 埋め解除 |
+
 **返信メール:** 宛先は OneDrive `設定/union-contacts.json` の `ManagerEmail`（`KyosaikaiCode` 照合）。受付 ID はファイル名 `{組合名}_{yyyyMMdd}_{受付ID}.json` または移行後の保存 JSON ラップから取得。
 
 **Worker:** `pdfBase64` は **非対応**（JSON のみ PUT）。OneDrive `.json` 本文は現行 **`submission` オブジェクトのみ**（ラップ `{ receiptId, unionName, fileNameDate, submission }` は未実装）。
@@ -1215,7 +1224,7 @@ Subbranch（KyosaikaiName, IndustryCode, BranchCode, SubbranchCode, CollectiveKy
 12. ~~`validateSoshikiForm()` の配線~~ → **完了**（§5.10）
 13. ~~**送 信 PDF** — Web html2canvas 廃止~~ → **完了**（JSON のみ・§5.10）。事務 Excel PDF は §5.10.1・worker-graph §13
 14. ~~Web **`SheetFooter`**・PascalCase submission~~ → **完了**（§5.10.1）。Worker **json ラップ**は未実装
-15. 事務バッチ: **返信メール**（PDF 添付なし）→ Excel PDF（§5.10.1）
+15. 事務バッチ: Excel PDF（§5.10.1・**流し込みスクリプト初版済**）→ **返信メール**（PDF 添付なし）
 16. **union-contacts.json** export・Access 取込
 
 ---

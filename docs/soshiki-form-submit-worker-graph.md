@@ -175,8 +175,8 @@ Web では **送 信 PDF を作らない**（html2canvas 経路は削除済み�
 
 ### 13.5 事務バッチ実装チェックリスト（未着手）
 
-- [ ] Excel テンプレ（A4 横・印刷範囲・用紙どおり）
-- [ ] JSON → セルマップ・マスタ参照・月計再計算
+- [ ] Excel テンプレ（A4 横・印刷範囲・用紙どおり）— 事務側で配置
+- [x] JSON → セルマップ・マスタ参照・月計再計算 — **初版** `scripts/soshiki-form-office/` + `data/soshiki-form-excel-cell-map.json`
 - [ ] フォルダ監視 or タスクスケジューラ・同期待ちリトライ
 - [ ] メール送信・処理済み管理
 - [x] Web: `SheetFooter` 送付・Worker: **JSON のみ**（`pdfBase64` 非対応）

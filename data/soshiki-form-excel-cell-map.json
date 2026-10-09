@@ -1,0 +1,47 @@
+{
+  "comment": "事務 Excel PDF テンプレへの流し込み。scripts/soshiki-form-office/Fill-SoshikiFormExcel.ps1",
+  "memberRowStep": 3,
+  "memberRowBase": { "kana": 12, "main": 13, "building": 14 },
+  "header": {
+    "applicationYear": "AH1",
+    "applicationMonth": "AM1",
+    "applicationDay": "AQ1",
+    "unionName": "AC3",
+    "industryCode": { "row": 8, "cols": ["B", "C", "D"] },
+    "branchCode": { "row": 8, "cols": ["E", "F", "G"] },
+    "subbranchCode": { "row": 8, "cols": ["H", "I", "J"] },
+    "units": {
+      "danketsu": "N8",
+      "soshiki-seimei": "Q8",
+      "soshiki-iryo": "T8",
+      "soshiki-kotsu": "W8",
+      "soshiki-kasai": "Z8",
+      "keicho": "AC8",
+      "sogo-kyosai": "AF8"
+    },
+    "premiumPerPerson": "AO8"
+  },
+  "footer": {
+    "pageCountCurrent": "G29",
+    "pageCountTotal": "I30",
+    "priorMonthHeadcount": "N30",
+    "coverageMonth": "T28",
+    "monthTotal": "T30",
+    "remarks": "AA30"
+  },
+  "member": {
+    "transferCol": "B",
+    "unionMemberCodeCols": ["E", "F", "G", "H", "I", "J"],
+    "familyNameKanaCol": "L",
+    "givenNameKanaCol": "R",
+    "familyNameCol": "L",
+    "givenNameCol": "R",
+    "birthYearCol": "X",
+    "birthMonthCol": "Z",
+    "birthDayCol": "AC",
+    "postalCodeCol": "AH",
+    "genderCol": "AE",
+    "addressLineCol": "AG",
+    "buildingCol": "AG"
+  }
+}
