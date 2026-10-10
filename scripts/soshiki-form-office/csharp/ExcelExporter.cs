@@ -171,7 +171,7 @@ internal static class ExcelExporter
         var digits = PadLeftDigits(code, 3);
         for (var i = 0; i < 3; i++)
         {
-            Set(sheet, $"{cols[i]!.GetValue<string>()}{row}", digits[i].ToString());
+            SetSingleCell(sheet, $"{cols[i]!.GetValue<string>()}{row}", digits[i].ToString());
         }
     }
 
@@ -183,8 +183,15 @@ internal static class ExcelExporter
         if (digits.Length > 6) digits = digits[^6..];
         for (var i = 0; i < 6; i++)
         {
-            Set(sheet, $"{cols[i]!.GetValue<string>()}{row}", digits[i].ToString());
+            SetSingleCell(sheet, $"{cols[i]!.GetValue<string>()}{row}", digits[i].ToString());
         }
+    }
+
+    /// <summary>1桁枠用。結合範囲全体には書かず、指定セルだけ更新（氏名の結合を壊さない）。</summary>
+    private static void SetSingleCell(dynamic sheet, string address, string text)
+    {
+        if (text.Length == 0) return;
+        sheet.Range[address].Value2 = text;
     }
 
     private static string PadLeftDigits(string? code, int len)

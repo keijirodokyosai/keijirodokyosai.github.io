@@ -31,6 +31,16 @@ internal static class SubmissionRunner
         }
 
         var submission = LoadJson(jsonPath);
+        foreach (var mem in submission["Members"]?.AsArray() ?? [])
+        {
+            if (mem is null) continue;
+            Console.WriteLine(
+                "JSON member Row=" + (mem["Row"]?.GetValue<int>() ?? 0) +
+                " FamilyName=" + (mem["FamilyName"]?.GetValue<string>() ?? "") +
+                " GivenName=" + (mem["GivenName"]?.GetValue<string>() ?? ""));
+            break;
+        }
+
         var unionMaster = LoadJson(Path.Combine(repoRoot, "data", "union-master.json"));
         var kyosaiMap = LoadJson(Path.Combine(repoRoot, "data", "form-kyosai-map.json"));
 
