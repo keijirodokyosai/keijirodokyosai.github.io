@@ -62,9 +62,15 @@ inbox 内をすべて: 上と同じスクリプトに `-All`
 
 一括（pdf が無い `json\` だけ処理。成功後は `処理済\` に移動）:
 
+エクスプローラーで `Process-SoshikiFormJsonInbox.cmd` をダブルクリック（**チャットから長い1行を貼ると改行が入り、空行＋`>>` に見える**のを避ける）。
+
+PowerShell で1行だけ（コピー後メモ帳で**1行か確認**してから貼る）:
+
 ```powershell
-.\Process-SoshikiFormJsonInbox.ps1 -LogToWebRoot -PreviewReceiptMail
+& "C:\Users\deus_\OneDrive\GitHub\keijirodokyosai.github.io\scripts\soshiki-form-office\Process-SoshikiFormJsonInbox.ps1"
 ```
+
+ログ付き: 上の末尾に `-LogToWebRoot` を付ける。すでに `scripts\soshiki-form-office` にいるときだけ `.\Process-SoshikiFormJsonInbox.ps1`。
 
 `ReceptionRoot` は省略可。`設定/soshiki-form-office-settings.json` の **`ReceptionRoot`**（`…\組織共済WEB受付\受付`）または **`WebRoot`**（`…\組織共済WEB受付`）を読む。事務 M365 では OneDrive ルートが `OneDrive - 京滋労働組合共済会` のことが多い（`examples/soshiki-form-office-settings.example.json`）。JSON にパスが無い場合は `%USERPROFILE%\OneDrive*` 配下から `組織共済WEB受付\受付` を自動検出（1 件だけ見つかったとき）。上書き: `SOSHIKI_OFFICE_RECEPTION_ROOT`、`-ReceptionRoot`。
 
