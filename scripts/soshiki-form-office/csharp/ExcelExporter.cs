@@ -98,7 +98,7 @@ internal static class ExcelExporter
             var buildingRow = baseBuilding + off;
 
             Set(sheet, $"{m["transferCol"]!.GetValue<string>()}{kanaRow}", TransferLabel(member["Transfer"]?.GetValue<string>()));
-            WriteSix(sheet, m["unionMemberCodeCols"]!.AsArray(), mainRow, member["UnionMemberCode"]?.GetValue<string>());
+            WriteSix(sheet, m["unionMemberCodeCols"]!.AsArray(), kanaRow, member["UnionMemberCode"]?.GetValue<string>());
 
             Set(sheet, $"{m["familyNameKanaCol"]!.GetValue<string>()}{kanaRow}", member["FamilyNameKana"]?.GetValue<string>());
             Set(sheet, $"{m["givenNameKanaCol"]!.GetValue<string>()}{kanaRow}", member["GivenNameKana"]?.GetValue<string>());

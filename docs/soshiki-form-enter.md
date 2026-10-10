@@ -452,10 +452,12 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | 表示 | 例（1人目） | 備考 |
 |------|-------------|------|
 | 異動 | B12 | `新規` / `解約` / `変更`（2文字） |
+| 組合員コード | E12〜J12 等 | 1桁1セル（6枠）。行は `memberRowBase.kana`（12）。2人目は E15〜J15 |
 | 漢字姓 | K13 等 | テンプレ **結合セル**の左上（`familyNameCol`）。**全文**を `MergeArea` に書く。行は `memberRowBase.main` |
 | 漢字名 | Q13 等 | 同上（`givenNameCol`） |
 | 姓カナ | M12 等 | M 列。行は `memberRowBase.kana`（12）＋ `(人数-1)×memberRowStep`（例: 2人目 M15） |
 | 名カナ | S12 等 | S 列。行は姓カナと同じ |
+| 生年月日（年） | W13 等 | W 列。行は `memberRowBase.main` |
 | 性別 | AE13 | `男` / `女`（1文字） |
 | 生年月日（月） | AA13 | 1人目のみ。2人目以降は Z 列＋行オフセット（`memberRowStep`） |
 | 当月（月） | T28 | JSON `CoverageMonth.Month`（無いときは申込日から Web 同式） |
