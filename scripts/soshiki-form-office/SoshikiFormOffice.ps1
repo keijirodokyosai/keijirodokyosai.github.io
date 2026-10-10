@@ -245,6 +245,103 @@ function Get-SoshikiFormPdfPathForJson {
     return Join-Path $pdfDir ($stem + ".pdf")
 }
 
+function Test-SoshikiFormJsonInInboxFolder {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$JsonPath
+    )
+
+    $jsonFull = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($JsonPath)
+    if (-not (Test-Path -LiteralPath $jsonFull)) {
+        return $false
+    }
+
+    $jsonDir = Split-Path -Parent $jsonFull
+    return (Split-Path -Leaf $jsonDir) -eq "json"
+}
+
+function Move-SoshikiFormJsonToProcessedFolder {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$JsonPath
+    )
+
+    $layout = Get-SoshikiFormWebRootFromJsonPath -JsonPath $JsonPath
+    $processedName = Get-SoshikiFormProcessedFolderName
+    if ((Split-Path -Leaf $layout.JsonDir) -eq $processedName) {
+        return
+    }
+
+    $processedDir = Join-Path $layout.MonthDir $processedName
+    if (-not (Test-Path -LiteralPath $processedDir)) {
+        New-Item -ItemType Directory -Path $processedDir | Out-Null
+    }
+
+    $dest = Join-Path $processedDir (Split-Path -Leaf $layout.JsonFull)
+    if (Test-Path -LiteralPath $dest) {
+        throw "Processed JSON already exists: $dest"
+    }
+
+    Move-Item -LiteralPath $layout.JsonFull -Destination $dest
+}
+
+function Invoke-SoshikiFormJsonInboxFile {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$JsonPath,
+
+        [switch]$PreviewReceiptMail,
+
+        [switch]$KeepInJson,
+
+        [switch]$LogToWebRoot
+    )
+
+    $jsonFull = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($JsonPath)
+    if (-not (Test-Path -LiteralPath $jsonFull)) {
+        return "missing"
+    }
+
+    if (-not (Test-SoshikiFormJsonInInboxFolder -JsonPath $jsonFull)) {
+        return "skipped"
+    }
+
+    $layout = Get-SoshikiFormWebRootFromJsonPath -JsonPath $jsonFull
+    $pdfPath = Get-SoshikiFormPdfPathForJson -JsonPath $jsonFull
+    if (Test-Path -LiteralPath $pdfPath) {
+        if (-not $KeepInJson) {
+            Move-SoshikiFormJsonToProcessedFolder -JsonPath $jsonFull
+        }
+        return "skipped"
+    }
+
+    try {
+        if ($PreviewReceiptMail) {
+            $previewScript = Join-Path $PSScriptRoot "Preview-SoshikiFormReceiptEmail.ps1"
+            & $previewScript -JsonPath $jsonFull
+        }
+
+        Invoke-SoshikiFormPdf -JsonPath $jsonFull
+        if (-not $KeepInJson) {
+            Move-SoshikiFormJsonToProcessedFolder -JsonPath $jsonFull
+        }
+
+        if ($LogToWebRoot) {
+            Write-SoshikiFormOfficeLog -WebRoot $layout.WebRoot -Message ("OK " + (Split-Path -Leaf $jsonFull))
+        }
+
+        return "exported"
+    }
+    catch {
+        $msg = (Split-Path -Leaf $jsonFull) + ": " + $_.Exception.Message
+        if ($LogToWebRoot) {
+            Write-SoshikiFormOfficeLog -WebRoot $layout.WebRoot -Message ("FAIL " + $msg)
+        }
+        throw
+    }
+}
+
 function Get-SoshikiFormOfficeLogPath {
     param([Parameter(Mandatory = $true)][string]$WebRoot)
     $logDir = Join-Path $WebRoot "logs"

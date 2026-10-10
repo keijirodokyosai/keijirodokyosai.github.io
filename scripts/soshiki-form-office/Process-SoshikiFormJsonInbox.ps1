@@ -1,13 +1,14 @@
 #Requires -Version 5.1
 <#
   Scan 受付\<month>\json\ and export PDF when pdf\<stem>.pdf is missing.
+  On success, move JSON to 処理済み\ (unless -KeepInJson).
 #>
 [CmdletBinding()]
 param(
     [Parameter(Mandatory = $true)]
     [string]$ReceptionRoot,
 
-    [switch]$MoveToProcessed,
+    [switch]$KeepInJson,
 
     [switch]$LogToWebRoot,
 
@@ -34,6 +35,7 @@ $stats = @{
     exported = 0
     skipped  = 0
     failed   = 0
+    missing  = 0
 }
 
 foreach ($monthDir in Get-ChildItem -LiteralPath $receptionFull -Directory -ErrorAction SilentlyContinue) {
@@ -43,44 +45,28 @@ foreach ($monthDir in Get-ChildItem -LiteralPath $receptionFull -Directory -Erro
     }
 
     foreach ($jsonFile in Get-ChildItem -LiteralPath $jsonDir -Filter "*.json" -File) {
-        $pdfPath = Get-SoshikiFormPdfPathForJson -JsonPath $jsonFile.FullName
-        if (Test-Path -LiteralPath $pdfPath) {
-            $stats.skipped++
-            continue
-        }
-
         try {
-            if ($PreviewReceiptMail) {
-                $previewScript = Join-Path $PSScriptRoot "Preview-SoshikiFormReceiptEmail.ps1"
-                & $previewScript -JsonPath $jsonFile.FullName
-            }
+            $result = Invoke-SoshikiFormJsonInboxFile `
+                -JsonPath $jsonFile.FullName `
+                -PreviewReceiptMail:$PreviewReceiptMail `
+                -KeepInJson:$KeepInJson `
+                -LogToWebRoot:$LogToWebRoot
 
-            Invoke-SoshikiFormPdf -JsonPath $jsonFile.FullName
-            $stats.exported++
-            if ($LogToWebRoot) {
-                Write-SoshikiFormOfficeLog -WebRoot $webRoot -Message ("OK " + $jsonFile.Name)
-            }
-
-            if ($MoveToProcessed) {
-                $processedDir = Join-Path $monthDir.FullName "processed"
-                if (-not (Test-Path -LiteralPath $processedDir)) {
-                    New-Item -ItemType Directory -Path $processedDir | Out-Null
-                }
-                Move-Item -LiteralPath $jsonFile.FullName -Destination (Join-Path $processedDir $jsonFile.Name)
+            switch ($result) {
+                "exported" { $stats.exported++ }
+                "skipped" { $stats.skipped++ }
+                "missing" { $stats.missing++ }
+                default { $stats.skipped++ }
             }
         }
         catch {
             $stats.failed++
-            $msg = $jsonFile.Name + ": " + $_.Exception.Message
-            Write-Warning $msg
-            if ($LogToWebRoot) {
-                Write-SoshikiFormOfficeLog -WebRoot $webRoot -Message ("FAIL " + $msg)
-            }
+            Write-Warning $_.Exception.Message
         }
     }
 }
 
-$summary = "exported={0} skipped={1} failed={2}" -f $stats.exported, $stats.skipped, $stats.failed
+$summary = "exported={0} skipped={1} failed={2} missing={3}" -f $stats.exported, $stats.skipped, $stats.failed, $stats.missing
 if ($LogToWebRoot) {
     Write-SoshikiFormOfficeLog -WebRoot $webRoot -Message ("Inbox done: " + $summary)
 }

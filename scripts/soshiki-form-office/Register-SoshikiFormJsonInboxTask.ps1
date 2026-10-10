@@ -10,7 +10,7 @@ param(
 
     [string]$TaskName = "SoshikiFormJsonInbox",
 
-    [int]$IntervalMinutes = 5
+    [int]$IntervalMinutes = 1
 )
 
 Set-StrictMode -Version Latest

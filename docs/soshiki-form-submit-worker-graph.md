@@ -103,8 +103,9 @@
 組織共済WEB受付/
   受付/
     yyyy年mm月/          … submission.storageFolder（例 2027年01月）
-      json/              … 取込後削除（事務側）
+      json/              … 取込後削除（事務側）。PDF 後は 処理済み/ に移動（Inbox 自動）
       pdf/
+      処理済み/          … PDF 済み json
   設定/
     union-contacts.json  … 非公開・返信メール宛先（送信は未実装・Preview-SoshikiFormReceiptEmail.ps1 で文面確認）
 ```
@@ -137,10 +138,10 @@ Web では **送 信 PDF を作らない**（html2canvas 経路は削除済み�
 
 | 順 | 処理 | 備考 |
 |----|------|------|
-| 1 | **トリガー** | OneDrive 同期後、`受付/{storageFolder}/json/` に **未処理**の `.json` を検出 |
+| 1 | **トリガー** | OneDrive 同期後、事務 PC の **Inbox 自動**（`Register-SoshikiFormJsonInboxAutomation.ps1`：ログオン 60 秒ポール ＋ 1 分タスク）が `json/` をスキャン |
 | 2 | **返信メール** | 受付確認（受付 ID・共済会名・申込日など）。**PDF は添付しない** |
 | 3 | **PDF 生成** | Excel テンプレに値を書き込み → `pdf/` に `{組合名}_{yyyyMMdd}_{受付ID}.pdf` |
-| 4 | **処理済み** | 二重送信・二重 PDF 防止（`processed/` 移動・受付 ID 台帳など） |
+| 4 | **処理済み** | PDF 成功後 `処理済み/` に json 移動（`Invoke-SoshikiFormJsonInboxFile` 既定） |
 
 メールを PDF より先に送るのは **Excel 失敗時も受付通知を届ける**ため。文面に PDF 添付を約束しない。
 
@@ -182,9 +183,10 @@ Web では **送 信 PDF を作らない**（html2canvas 経路は削除済み�
 - [ ] Excel テンプレ（A4 横・印刷範囲・用紙どおり）— 事務側で配置
 - [x] JSON → セルマップ・マスタ参照・月計再計算 — `scripts/soshiki-form-office/csharp` + `data/soshiki-form-excel-cell-map.json`
 - [x] 手動・一括 PDF — `Export-SoshikiFormPdfFromJson.ps1` / `Process-SoshikiFormJsonInbox.ps1`（既存 pdf はスキップ）
-- [ ] タスクスケジューラ本番運用・同期待ちリトライの調整
+- [x] Inbox 自動（`Register-SoshikiFormJsonInboxAutomation.ps1`）・PDF 後 `処理済み/` 移動
+- [ ] 事務 PC への自動タスク登録（本番 OneDrive パスで一度実行）
 - [x] 返信メール送信スクリプト — `Send-SoshikiFormReceiptEmail.ps1`（Inbox からの自動送信は未）
-- [ ] 処理済み管理（`-MoveToProcessed` は任意・メール連携後に運用決定）
+- [x] 処理済み管理（`処理済み/` 移動・`-KeepInJson` で無効化可）
 - [x] Web: `SheetFooter` 送付・Worker: **JSON のみ**（`pdfBase64` 非対応）
 
 ---

@@ -19,9 +19,9 @@ OneDrive の受付 `.json` を **Excel テンプレ**に流し込み、**PDF** �
     soshiki-form-pdf.log                 … Inbox で -LogToWebRoot 時
   受付/
     2026年11月/
-      json/   … Worker が保存
+      json/   … Worker が保存（PDF 成功後 処理済み へ移動）
       pdf/    … 本ツールの出力
-      processed/  … 任意（Inbox で -MoveToProcessed 時のみ）
+      処理済み/  … PDF 作成済み json（Inbox 既定）
 ```
 
 テンプレ名は `data/soshiki-form-excel-cell-map.json` の `templateFileName`。  
@@ -36,21 +36,23 @@ cd scripts\soshiki-form-office
 .\Export-SoshikiFormPdfFromJson.ps1 -JsonPath "（json のフルパス）"
 ```
 
-一括（pdf が無い json だけ処理）:
+一括（pdf が無い `json\` だけ処理。成功後は `処理済み\` に移動）:
 
 ```powershell
 .\Process-SoshikiFormJsonInbox.ps1 -ReceptionRoot "（受付 フォルダのフルパス）" -LogToWebRoot -PreviewReceiptMail
 ```
 
-`-PreviewReceiptMail` は PDF 出力の直前に受付確認メール下書きを表示（§13 のメール→PDF の順のリハーサル。送信はしない）。
+`-KeepInJson` … PDF 後も `json\` に残す（デバッグ用）。  
+`-PreviewReceiptMail` … PDF の直前に受付確認メール下書き（送信なし）。
 
-定期実行の例（5 分間隔）:
+**自動発火（事務 PC・OneDrive 同期済み）**
 
 ```powershell
-.\Register-SoshikiFormJsonInboxTask.ps1 -ReceptionRoot "（受付 フォルダのフルパス）"
+# ログオン常駐（60 秒ポール）＋ 1 分間隔の予備タスクをまとめて登録
+.\Register-SoshikiFormJsonInboxAutomation.ps1 -ReceptionRoot "（受付 フォルダのフルパス）"
 ```
 
-（タスクからログを残す場合は `Register-*.ps1` の引数に `-LogToWebRoot` を足すか、タスクの引数を手で編集。）
+個別登録: `Register-SoshikiFormJsonInboxWatcherTask.ps1`（ログオン） / `Register-SoshikiFormJsonInboxTask.ps1`（1 分間隔・`-LogToWebRoot` 付き）。
 
 SDK が無い事務 PC:
 
@@ -80,7 +82,10 @@ C# は Office PIA に依存せず `dynamic` で Excel を操作します。
 | `tests/SoshikiFormPdf.Tests/` | xUnit（`KuchiCalculator`） |
 | `Export-SoshikiFormPdfFromJson.ps1` | 1 件 |
 | `Process-SoshikiFormJsonInbox.ps1` | 一括 |
-| `Register-SoshikiFormJsonInboxTask.ps1` | タスク登録例 |
+| `Watch-SoshikiFormJsonInbox.ps1` | ポール常駐 |
+| `Register-SoshikiFormJsonInboxWatcherTask.ps1` | ログオンタスク |
+| `Register-SoshikiFormJsonInboxTask.ps1` | 1 分間隔タスク |
+| `Register-SoshikiFormJsonInboxAutomation.ps1` | 上記 2 つを一括登録 |
 | `Build-SoshikiFormPdf.ps1` | publish → `dist/` |
 | `SoshikiFormReceiptMail.ps1` | 受付確認メール文面 |
 | `Preview-SoshikiFormReceiptEmail.ps1` | 受付確認メールプレビュー（送信なし） |
