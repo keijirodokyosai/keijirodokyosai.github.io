@@ -326,6 +326,79 @@ function Get-SoshikiFormPdfFolderName {
     return "PDF"
 }
 
+function Ensure-SoshikiFormMonthPdfDir {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$MonthDir
+    )
+
+    $name = Get-SoshikiFormPdfFolderName
+    $target = Join-Path $MonthDir $name
+    if (-not (Test-Path -LiteralPath $MonthDir)) {
+        return $target
+    }
+
+    foreach ($child in @(Get-ChildItem -LiteralPath $MonthDir -Directory -ErrorAction SilentlyContinue)) {
+        if ($child.Name -ieq $name -and $child.Name -cne $name) {
+            $tempLeaf = ".soshiki-pdf-rename-" + [guid]::NewGuid().ToString("n")
+            $tempFull = Join-Path $MonthDir $tempLeaf
+            Rename-Item -LiteralPath $child.FullName -NewName $tempLeaf
+            Rename-Item -LiteralPath $tempFull -NewName $name
+            break
+        }
+    }
+
+    if (-not (Test-Path -LiteralPath $target)) {
+        New-Item -ItemType Directory -Path $target | Out-Null
+    }
+
+    return $target
+}
+
+function Get-SoshikiFormPdfToolSourceStampUtc {
+    param([string]$OfficeDir = $PSScriptRoot)
+
+    $csharpDir = Join-Path $OfficeDir "csharp"
+    if (-not (Test-Path -LiteralPath $csharpDir)) {
+        return [datetime]::MinValue
+    }
+
+    $latest = [datetime]::MinValue
+    foreach ($f in @(Get-ChildItem -LiteralPath $csharpDir -Recurse -Include *.cs, *.csproj -File -ErrorAction SilentlyContinue)) {
+        if ($f.LastWriteTimeUtc -gt $latest) {
+            $latest = $f.LastWriteTimeUtc
+        }
+    }
+
+    return $latest
+}
+
+function Ensure-SoshikiFormPdfExe {
+    param([string]$OfficeDir = $PSScriptRoot)
+
+    $exe = Join-Path $OfficeDir "dist\SoshikiFormPdf.exe"
+    $sourceStamp = Get-SoshikiFormPdfToolSourceStampUtc -OfficeDir $OfficeDir
+    $rebuild = -not (Test-Path -LiteralPath $exe)
+    if (-not $rebuild -and $sourceStamp -gt [datetime]::MinValue) {
+        $exeStamp = (Get-Item -LiteralPath $exe).LastWriteTimeUtc
+        if ($sourceStamp -gt $exeStamp) {
+            $rebuild = $true
+        }
+    }
+
+    if ($rebuild) {
+        Write-Host "SoshikiFormPdf.exe is missing or older than csharp/; running Build-SoshikiFormPdf.ps1 ..."
+        & (Join-Path $OfficeDir "Build-SoshikiFormPdf.ps1")
+    }
+
+    if (Test-Path -LiteralPath $exe) {
+        $item = Get-Item -LiteralPath $exe
+        Write-Host ("SoshikiFormPdf: " + $item.FullName + " (" + $item.LastWriteTime.ToString("yyyy-MM-dd HH:mm") + ")")
+    }
+
+    return $exe
+}
+
 function Get-SoshikiFormOfficeSettingsPath {
     param([Parameter(Mandatory = $true)][string]$WebRoot)
 
@@ -553,7 +626,7 @@ function Get-SoshikiFormPdfPathForJson {
     )
 
     $layout = Get-SoshikiFormWebRootFromJsonPath -JsonPath $JsonPath
-    $pdfDir = Join-Path $layout.MonthDir (Get-SoshikiFormPdfFolderName)
+    $pdfDir = Ensure-SoshikiFormMonthPdfDir -MonthDir $layout.MonthDir
     $stem = [System.IO.Path]::GetFileNameWithoutExtension($layout.JsonFull)
     return Join-Path $pdfDir ($stem + ".pdf")
 }
@@ -623,6 +696,7 @@ function Invoke-SoshikiFormJsonInboxFile {
     $layout = Get-SoshikiFormWebRootFromJsonPath -JsonPath $jsonFull
     $pdfPath = Get-SoshikiFormPdfPathForJson -JsonPath $jsonFull
     if (Test-Path -LiteralPath $pdfPath) {
+        Write-Host ("Skipped (PDF exists): " + $pdfPath)
         if (-not $KeepInJson) {
             Move-SoshikiFormJsonToProcessedFolder -JsonPath $jsonFull
         }
@@ -693,7 +767,7 @@ function Invoke-SoshikiFormPdf {
 
     $officeDir = $PSScriptRoot
     $repoRoot = Get-SoshikiFormRepoRoot -ScriptRoot $officeDir
-    $exe = Join-Path $officeDir "dist\SoshikiFormPdf.exe"
+    $exe = Ensure-SoshikiFormPdfExe -OfficeDir $officeDir
     $csproj = Join-Path $officeDir "csharp\SoshikiFormPdf.csproj"
     $toolArgs = @("--repo", $repoRoot, $jsonFull)
     $ran = $false

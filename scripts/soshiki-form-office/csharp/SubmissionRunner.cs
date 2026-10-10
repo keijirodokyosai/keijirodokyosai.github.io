@@ -14,7 +14,14 @@ internal static class SubmissionRunner
             throw new FileNotFoundException("JSON not found.", jsonPath);
         }
 
+        LogBinaryStamp();
+
         var layout = ReceptionPaths.FromSubmissionJson(jsonPath);
+        var monthDir = Path.GetDirectoryName(layout.PdfDir)
+            ?? throw new InvalidOperationException("Cannot resolve month folder for PDF output.");
+        var pdfDir = MonthPdfFolder.EnsureInMonth(monthDir);
+        var pdfPath = Path.Combine(pdfDir, Path.GetFileName(layout.PdfPath));
+
         var cellMapPath = Path.Combine(repoRoot, "data", "soshiki-form-excel-cell-map.json");
         var cellMap = LoadJson(cellMapPath);
         var memberMap = cellMap["member"]!;
@@ -49,10 +56,22 @@ internal static class SubmissionRunner
             ?? throw new InvalidOperationException("union-master has no KyosaikaiCode=" + code);
         var kuchi = KuchiCalculator.Compute(union, kyosaiMap);
 
-        Directory.CreateDirectory(layout.PdfDir);
+        Console.WriteLine("PDF folder: " + pdfDir);
         Console.WriteLine("Template: " + templatePath);
-        ExcelExporter.FillAndExport(templatePath, layout.PdfPath, submission, union, kuchi, cellMap);
-        Console.WriteLine("PDF: " + layout.PdfPath);
+        ExcelExporter.FillAndExport(templatePath, pdfPath, submission, union, kuchi, cellMap);
+        Console.WriteLine("PDF: " + pdfPath);
+    }
+
+    private static void LogBinaryStamp()
+    {
+        var exePath = Environment.ProcessPath;
+        if (string.IsNullOrEmpty(exePath) || !File.Exists(exePath))
+        {
+            return;
+        }
+
+        var stamp = File.GetLastWriteTime(exePath).ToString("yyyy-MM-dd HH:mm");
+        Console.WriteLine("Binary: " + exePath + " (" + stamp + ")");
     }
 
     private static JsonNode LoadJson(string path) =>

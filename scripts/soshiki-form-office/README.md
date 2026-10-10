@@ -95,12 +95,15 @@ PowerShell で1行だけ（コピー後メモ帳で**1行か確認**してから
 
 `exported=0` かつ `jsonInInbox=0` のときは `ReceptionRoot` が実際の `受付` フォルダと一致しているか確認（出力行の `reception=` を見る）。
 
-SDK が無い事務 PC:
+**`dist\SoshikiFormPdf.exe`:** Inbox / 手動 PDF 実行時、`csharp\` が exe より新しければ **自動で `Build-SoshikiFormPdf.ps1`** を走らせます（.NET SDK 必須）。コンソールに `SoshikiFormPdf: ...\dist\SoshikiFormPdf.exe (日時)` と、PDF 出力時に `Binary:` / `PDF folder:` が出ます。
+
+SDK が無い事務 PCは、別 PC でビルドした `dist\` をリポごと同期するか、SDK を入れてから:
 
 ```powershell
 .\Build-SoshikiFormPdf.ps1
-# → dist\SoshikiFormPdf.exe（SoshikiFormOffice.ps1 内の Invoke が exe を優先）
 ```
+
+**`PDF` フォルダ名:** Windows では昔の `pdf` と同一扱いのため、出力時に **`PDF` へリネーム**（大文字小文字のみ）します。エクスプローラー表示が `pdf` のままなら、一度 PDF 生成を走らせるか手動で `pdf` → 一時名 → `PDF`。
 
 ## アーキテクチャ
 

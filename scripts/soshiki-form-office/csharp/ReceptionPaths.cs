@@ -6,7 +6,6 @@ internal static class ReceptionPaths
 {
     private const string ReceptionFolderName = "\u53D7\u4ED8";
     private const string JsonFolderName = "json";
-    private const string PdfFolderName = "PDF";
     private const string ProcessedFolderName = "\u51E6\u7406\u6E08";
 
     public static LayoutPaths FromSubmissionJson(string jsonFull)
@@ -30,7 +29,7 @@ internal static class ReceptionPaths
 
         var webRoot = Path.GetDirectoryName(receptionDir) ?? "";
         var stem = Path.GetFileNameWithoutExtension(jsonFull);
-        var pdfDir = Path.Combine(monthDir, PdfFolderName);
+        var pdfDir = Path.Combine(monthDir, MonthPdfFolder.Name);
         return new LayoutPaths(webRoot, pdfDir, Path.Combine(pdfDir, stem + ".pdf"));
     }
 }

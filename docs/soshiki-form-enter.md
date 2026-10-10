@@ -447,7 +447,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 
 当月・月計は **バッチ再計算可**（JSON に含めない）。
 
-**事務 Excel → PDF（実装済み・初版）:** 本体は `scripts/soshiki-form-office/csharp/`（`SoshikiFormPdf`・Excel は dynamic COM）。入口は `Export-SoshikiFormPdfFromJson.ps1`（1件）→ `SoshikiFormOffice.ps1` の `Invoke-SoshikiFormPdf`（`dotnet run` または `dist\SoshikiFormPdf.exe`）。**発火:** `Process-SoshikiFormJsonInbox.ps1`（各月 `json\` をスキャン → PDF → **`処理済\` に json 移動**。既に `PDF\{stem}.pdf` がある場合も json を `処理済\` に寄せる）。**自動:** 事務 PC で `Register-SoshikiFormJsonInboxAutomation.ps1`（ログオン 60 秒ポール ＋ 1 分間隔の予備タスク）。テンプレは **受付の親**直下の `templateFileName`。詳細は `scripts/soshiki-form-office/README.md`。
+**事務 Excel → PDF（実装済み・初版）:** 本体は `scripts/soshiki-form-office/csharp/`（`SoshikiFormPdf`・Excel は dynamic COM）。入口は `Export-SoshikiFormPdfFromJson.ps1`（1件）→ `SoshikiFormOffice.ps1` の `Invoke-SoshikiFormPdf`（`dist\SoshikiFormPdf.exe` を優先。`csharp\` が新しければ **自動ビルド**、無ければ `dotnet run`）。出力は各月 **`PDF\`**（Windows で既存 `pdf` は **大文字小文字のみ `PDF` に正規化**）。**発火:** `Process-SoshikiFormJsonInbox.ps1`（各月 `json\` をスキャン → PDF → **`処理済\` に json 移動**。既に `PDF\{stem}.pdf` がある場合はスキップし json を `処理済\` に寄せる。理由はコンソール `Skipped (PDF exists):`）。**自動:** 事務 PC で `Register-SoshikiFormJsonInboxAutomation.ps1`（ログオン 60 秒ポール ＋ 1 分間隔の予備タスク）。テンプレは **受付の親**直下の `templateFileName`。詳細は `scripts/soshiki-form-office/README.md`。
 
 | 表示 | 例（1人目） | 備考 |
 |------|-------------|------|
