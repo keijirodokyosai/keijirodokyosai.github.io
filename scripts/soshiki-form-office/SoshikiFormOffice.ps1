@@ -319,7 +319,7 @@ function Get-SoshikiFormSettingsFolderName {
 }
 
 function Get-SoshikiFormProcessedFolderName {
-    return -join @([char]0x5904, [char]0x7406, [char]0x6E08)
+    return -join @([char]0x51E6, [char]0x7406, [char]0x6E08)
 }
 
 function Get-SoshikiFormOfficeSettingsPath {

@@ -6,7 +6,7 @@ internal static class ReceptionPaths
 {
     private const string ReceptionFolderName = "\u53D7\u4ED8";
     private const string JsonFolderName = "json";
-    private const string ProcessedFolderName = "\u5904\u7406\u6E08";
+    private const string ProcessedFolderName = "\u51E6\u7406\u6E08";
 
     public static LayoutPaths FromSubmissionJson(string jsonFull)
     {
