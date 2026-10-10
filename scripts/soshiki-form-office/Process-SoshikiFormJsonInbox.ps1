@@ -1,6 +1,6 @@
 #Requires -Version 5.1
 <#
-  Scan 受付\*\json\ (recursive) and export PDF when pdf\<stem>.pdf is missing.
+  Scan 受付\*\json\ (recursive) and export PDF when PDF\<stem>.pdf is missing.
   On success, move JSON to 処理済\ (unless -KeepInJson).
 #>
 [CmdletBinding()]

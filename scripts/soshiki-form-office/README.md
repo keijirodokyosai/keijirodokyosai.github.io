@@ -20,7 +20,7 @@ OneDrive の受付 `.json` を **Excel テンプレ**に流し込み、**PDF** �
   受付/
     2026年11月/
       json/   … Worker が保存（PDF 成功後 処理済 へ移動）
-      pdf/    … 本ツールの出力
+      PDF/    … 本ツールの出力
       処理済/  … PDF 作成済み json（Inbox 既定）
 ```
 
@@ -60,7 +60,7 @@ inbox 内をすべて: 上と同じスクリプトに `-All`
 
 **特定ファイル** — `Show-SoshikiFormReceptionLayout.ps1` に出たフルパスを `-JsonPath` に渡す（仮の `（ファイル名）` は使わない）。
 
-一括（pdf が無い `json\` だけ処理。成功後は `処理済\` に移動）:
+一括（`PDF\` に同名が無い `json\` だけ処理。成功後は `処理済\` に移動）:
 
 エクスプローラーで `Process-SoshikiFormJsonInbox.cmd` をダブルクリック（**チャットから長い1行を貼ると改行が入り、空行＋`>>` に見える**のを避ける）。
 

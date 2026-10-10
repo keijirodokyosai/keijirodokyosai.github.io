@@ -1,6 +1,6 @@
 #Requires -Version 5.1
 <#
-  One submission JSON -> PDF (same stem under month\pdf\).
+  One submission JSON -> PDF (same stem under month\PDF\).
   Excel fill/export is implemented in csharp/ (SoshikiFormPdf).
 #>
 [CmdletBinding()]

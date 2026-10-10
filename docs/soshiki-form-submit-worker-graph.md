@@ -14,13 +14,13 @@
 [Cloudflare Workers] 中継 API（秘密鍵・パスワードは環境変数のみ）
     │ Microsoft Graph（アプリケーション権限）
     ▼
-[事務局 OneDrive] 組織共済WEB受付/受付/{storageFolder}/json/（＋移行完了後は pdf/ は事務側生成）
+[事務局 OneDrive] 組織共済WEB受付/受付/{storageFolder}/json/（＋移行完了後は PDF/ は事務側生成）
     │
     ▼ レスポンス { "ok": true, "receiptId": "…" } → Web に受付 ID 表示
 
 [事務 PC・OneDrive 同期後] 未処理 json を1件ずつ処理（§13）
     ① 返信メール（受付確認・PDF 添付なし）
-    ② Excel テンプレ → pdf/ に PDF 保存
+    ② Excel テンプレ → PDF/ に PDF 保存
 ```
 
 | 項目 | 内容 |
@@ -104,7 +104,7 @@
   受付/
     yyyy年mm月/          … submission.storageFolder（例 2027年01月）
       json/              … 取込後削除（事務側）。PDF 後は 処理済/ に移動（Inbox 自動）
-      pdf/
+      PDF/
       処理済/            … PDF 済み json
   設定/
     union-contacts.json  … 非公開・返信メール宛先（送信は未実装・Preview-SoshikiFormReceiptEmail.ps1 で文面確認）
@@ -116,7 +116,7 @@
 {組合名}_{yyyyMMdd}_{受付ID}.json
 ```
 
-事務バッチが生成する PDF は同 stem で `pdf/` に保存（§13）。Worker は **pdf を書かない**。
+事務バッチが生成する PDF は同 stem で `PDF/` に保存（§13）。Worker は **pdf を書かない**。
 
 - `unionName`・`fileNameDate` は POST トップレベル  
 - **受付 ID** は **Worker が生成**（旧設計の PA 生成の代わり）
@@ -140,7 +140,7 @@ Web では **送 信 PDF を作らない**（html2canvas 経路は削除済み�
 |----|------|------|
 | 1 | **トリガー** | OneDrive 同期後、事務 PC の **Inbox 自動**（`Register-SoshikiFormJsonInboxAutomation.ps1`：ログオン 60 秒ポール ＋ 1 分タスク）が `json/` をスキャン |
 | 2 | **返信メール** | 受付確認（受付 ID・共済会名・申込日など）。**PDF は添付しない** |
-| 3 | **PDF 生成** | Excel テンプレに値を書き込み → `pdf/` に `{組合名}_{yyyyMMdd}_{受付ID}.pdf` |
+| 3 | **PDF 生成** | Excel テンプレに値を書き込み → `PDF/` に `{組合名}_{yyyyMMdd}_{受付ID}.pdf` |
 | 4 | **処理済** | PDF 成功後 `処理済/` に json 移動（`Invoke-SoshikiFormJsonInboxFile` 既定） |
 
 メールを PDF より先に送るのは **Excel 失敗時も受付通知を届ける**ため。文面に PDF 添付を約束しない。
@@ -176,13 +176,13 @@ Web では **送 信 PDF を作らない**（html2canvas 経路は削除済み�
 | BCC | 受付確認メールのみ **`FromEmail` と同一**（事務局への送信通知） |
 | 件名 | `組織共済WEB受付_{yyyyMMdd}`（共済会名は含めない） |
 | 本文 | 担当者姓・受付完了・**受付 ID**・**共済会**（ラベル）・申込日・署名（京滋労働組合共済会／事務局）。OneDrive パスは記載しない |
-| 添付 | **なし**（PDF は `pdf/` にのみ保管） |
+| 添付 | **なし**（PDF は `PDF/` にのみ保管） |
 
 ### 13.5 事務バッチ実装チェックリスト
 
 - [ ] Excel テンプレ（A4 横・印刷範囲・用紙どおり）— 事務側で配置
 - [x] JSON → セルマップ・マスタ参照・月計再計算 — `scripts/soshiki-form-office/csharp` + `data/soshiki-form-excel-cell-map.json`
-- [x] 手動・一括 PDF — `Export-SoshikiFormPdfFromJson.ps1` / `Process-SoshikiFormJsonInbox.ps1`（既存 pdf はスキップ）
+- [x] 手動・一括 PDF — `Export-SoshikiFormPdfFromJson.ps1` / `Process-SoshikiFormJsonInbox.ps1`（既存 `PDF\` はスキップ）
 - [x] Inbox 自動（`Register-SoshikiFormJsonInboxAutomation.ps1`）・PDF 後 `処理済/` 移動
 - [ ] 事務 PC への自動タスク登録（本番 OneDrive パスで一度実行）
 - [x] 返信メール送信スクリプト — `Send-SoshikiFormReceiptEmail.ps1`（Inbox からの自動送信は未）

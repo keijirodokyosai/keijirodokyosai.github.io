@@ -322,6 +322,10 @@ function Get-SoshikiFormProcessedFolderName {
     return -join @([char]0x51E6, [char]0x7406, [char]0x6E08)
 }
 
+function Get-SoshikiFormPdfFolderName {
+    return "PDF"
+}
+
 function Get-SoshikiFormOfficeSettingsPath {
     param([Parameter(Mandatory = $true)][string]$WebRoot)
 
@@ -549,7 +553,7 @@ function Get-SoshikiFormPdfPathForJson {
     )
 
     $layout = Get-SoshikiFormWebRootFromJsonPath -JsonPath $JsonPath
-    $pdfDir = Join-Path $layout.MonthDir "pdf"
+    $pdfDir = Join-Path $layout.MonthDir (Get-SoshikiFormPdfFolderName)
     $stem = [System.IO.Path]::GetFileNameWithoutExtension($layout.JsonFull)
     return Join-Path $pdfDir ($stem + ".pdf")
 }
