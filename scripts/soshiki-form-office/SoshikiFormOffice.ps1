@@ -141,6 +141,27 @@ function Read-SoshikiFormOfficeSettingsJson {
     }
 }
 
+function Get-SoshikiFormInboxJsonFiles {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$ReceptionFull
+    )
+
+    $found = New-Object System.Collections.Generic.List[System.IO.FileInfo]
+    $items = Get-ChildItem -LiteralPath $ReceptionFull -Recurse -Filter "*.json" -File -ErrorAction SilentlyContinue
+    foreach ($item in $items) {
+        $parentDir = Split-Path -Parent $item.FullName
+        if ((Split-Path -Leaf $parentDir) -ne "json") {
+            continue
+        }
+        if (-not $found.Contains($item)) {
+            $found.Add($item)
+        }
+    }
+
+    return $found
+}
+
 function Assert-SoshikiFormReceptionRootPath {
     param(
         [Parameter(Mandatory = $true)]

@@ -1,6 +1,6 @@
 #Requires -Version 5.1
 <#
-  Scan 受付\<month>\json\ and export PDF when pdf\<stem>.pdf is missing.
+  Scan 受付\*\json\ (recursive) and export PDF when pdf\<stem>.pdf is missing.
   On success, move JSON to 処理済み\ (unless -KeepInJson).
 #>
 [CmdletBinding()]
@@ -21,6 +21,10 @@ $ErrorActionPreference = "Stop"
 
 $receptionFull = Resolve-SoshikiFormReceptionRoot -ReceptionRoot $ReceptionRoot
 
+if (-not (Test-Path -LiteralPath $receptionFull)) {
+    throw "Reception folder not found: $receptionFull"
+}
+
 $webRoot = Split-Path -Parent $receptionFull
 if ($LogToWebRoot) {
     Write-SoshikiFormOfficeLog -WebRoot $webRoot -Message "Inbox start: $receptionFull"
@@ -34,49 +38,43 @@ $stats = @{
 }
 
 $monthDirs = @(Get-ChildItem -LiteralPath $receptionFull -Directory -ErrorAction SilentlyContinue)
-$pendingJsonCount = 0
+$jsonFiles = @(Get-SoshikiFormInboxJsonFiles -ReceptionFull $receptionFull)
+$pendingJsonCount = $jsonFiles.Count
 
-foreach ($monthDir in $monthDirs) {
-    $jsonDir = Join-Path $monthDir.FullName "json"
-    if (-not (Test-Path -LiteralPath $jsonDir)) {
-        continue
+foreach ($jsonFile in $jsonFiles) {
+    try {
+        $result = Invoke-SoshikiFormJsonInboxFile `
+            -JsonPath $jsonFile.FullName `
+            -PreviewReceiptMail:$PreviewReceiptMail `
+            -KeepInJson:$KeepInJson `
+            -LogToWebRoot:$LogToWebRoot
+
+        switch ($result) {
+            "exported" { $stats.exported++ }
+            "skipped" { $stats.skipped++ }
+            "missing" { $stats.missing++ }
+            default { $stats.skipped++ }
+        }
     }
-
-    $jsonFiles = @(Get-ChildItem -LiteralPath $jsonDir -Filter "*.json" -File)
-    $pendingJsonCount += $jsonFiles.Count
-
-    foreach ($jsonFile in $jsonFiles) {
-        try {
-            $result = Invoke-SoshikiFormJsonInboxFile `
-                -JsonPath $jsonFile.FullName `
-                -PreviewReceiptMail:$PreviewReceiptMail `
-                -KeepInJson:$KeepInJson `
-                -LogToWebRoot:$LogToWebRoot
-
-            switch ($result) {
-                "exported" { $stats.exported++ }
-                "skipped" { $stats.skipped++ }
-                "missing" { $stats.missing++ }
-                default { $stats.skipped++ }
-            }
-        }
-        catch {
-            $stats.failed++
-            Write-Warning $_.Exception.Message
-        }
+    catch {
+        $stats.failed++
+        Write-Warning $_.Exception.Message
     }
 }
 
 $summary = "exported={0} skipped={1} failed={2} missing={3}" -f $stats.exported, $stats.skipped, $stats.failed, $stats.missing
-$detail = "reception={0} months={1} jsonInInbox={2} {3}" -f $receptionFull, $monthDirs.Count, $pendingJsonCount, $summary
+$detail = "reception={0} monthDirs={1} jsonInInbox={2} {3}" -f $receptionFull, $monthDirs.Count, $pendingJsonCount, $summary
 if ($LogToWebRoot) {
     Write-SoshikiFormOfficeLog -WebRoot $webRoot -Message ("Inbox done: " + $detail)
 }
 if ($pendingJsonCount -eq 0 -and $stats.exported -eq 0 -and $stats.skipped -eq 0 -and $stats.failed -eq 0) {
+    $settingsHint = Get-SoshikiFormSettingsFolderName
     Write-Warning (@(
-            "No *.json under any month\json folder."
+            "No *.json under reception\*\json\."
             " ReceptionRoot=$receptionFull"
-            " If files exist elsewhere, fix ReceptionRoot in 設定/soshiki-form-office-settings.json."
+            " monthDirs=$($monthDirs.Count) (if 0, sync OneDrive or use 'Always keep on this device' on 受付)."
+            " Or fix ReceptionRoot in ${settingsHint}/soshiki-form-office-settings.json."
+            " Diagnose: .\Show-SoshikiFormReceptionLayout.ps1"
         ) -join " ")
 }
 Write-Output $detail

@@ -11,6 +11,7 @@ $scripts = @(
     "Register-SoshikiFormJsonInboxTask.ps1",
     "Register-SoshikiFormJsonInboxWatcherTask.ps1",
     "Register-SoshikiFormJsonInboxAutomation.ps1",
+    "Show-SoshikiFormReceptionLayout.ps1",
     "Build-SoshikiFormPdf.ps1",
     "Get-DotNetCli.ps1",
     "SoshikiFormReceiptMail.ps1",
