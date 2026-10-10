@@ -1,7 +1,7 @@
 #Requires -Version 5.1
 <#
   Register inbox automation on this PC:
-    - Logon watcher (poll 60s, PDF + 処理済み)
+    - Logon watcher (poll 60s, PDF + 処理済)
     - Scheduled task every 1 min (same inbox, backup if watcher stopped)
 #>
 [CmdletBinding()]

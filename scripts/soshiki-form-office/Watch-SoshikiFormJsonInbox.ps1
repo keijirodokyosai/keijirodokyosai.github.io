@@ -1,6 +1,6 @@
 #Requires -Version 5.1
 <#
-  Poll 受付\*\json\ and export PDF + move to 処理済み (same as Process-SoshikiFormJsonInbox).
+  Poll 受付\*\json\ and export PDF + move to 処理済 (same as Process-SoshikiFormJsonInbox).
   OneDrive の同期完了待ちに向いた簡易ウォッチ（既定 60 秒間隔）。
   ログオン常駐: Register-SoshikiFormJsonInboxWatcherTask.ps1
 #>

@@ -1,6 +1,6 @@
 #Requires -Version 5.1
 <#
-  Register a logon task that runs Watch-SoshikiFormJsonInbox.ps1 (poll json -> PDF -> 処理済み).
+  Register a logon task that runs Watch-SoshikiFormJsonInbox.ps1 (poll json -> PDF -> 処理済).
   Run once per PC as the user who owns OneDrive.
 #>
 [CmdletBinding()]

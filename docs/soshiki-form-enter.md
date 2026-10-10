@@ -361,9 +361,9 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 組織共済WEB受付/
   受付/
     yyyy年mm月/          … 当月（申込月+1。12月申込→翌年01月）
-      json/              … Worker 保存。PDF 成功後 処理済み/ へ移動（Inbox 自動）
+      json/              … Worker 保存。PDF 成功後 処理済/ へ移動（Inbox 自動）
       pdf/               … 残す
-      処理済み/          … PDF 作成済み json
+      処理済/            … PDF 作成済み json
   設定/
     union-contacts.json  … 分会担当者メール（Web 非公開）
     soshiki-form-office-settings.json  … AdminEmail（PDF 失敗 To）・FromEmail（送信元）
@@ -446,7 +446,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 
 当月・月計は **バッチ再計算可**（JSON に含めない）。
 
-**事務 Excel → PDF（実装済み・初版）:** 本体は `scripts/soshiki-form-office/csharp/`（`SoshikiFormPdf`・Excel は dynamic COM）。入口は `Export-SoshikiFormPdfFromJson.ps1`（1件）→ `SoshikiFormOffice.ps1` の `Invoke-SoshikiFormPdf`（`dotnet run` または `dist\SoshikiFormPdf.exe`）。**発火:** `Process-SoshikiFormJsonInbox.ps1`（各月 `json\` をスキャン → PDF → **`処理済み\` に json 移動**。既に `pdf\{stem}.pdf` がある場合も json を `処理済み\` に寄せる）。**自動:** 事務 PC で `Register-SoshikiFormJsonInboxAutomation.ps1`（ログオン 60 秒ポール ＋ 1 分間隔の予備タスク）。テンプレは **受付の親**直下の `templateFileName`。詳細は `scripts/soshiki-form-office/README.md`。
+**事務 Excel → PDF（実装済み・初版）:** 本体は `scripts/soshiki-form-office/csharp/`（`SoshikiFormPdf`・Excel は dynamic COM）。入口は `Export-SoshikiFormPdfFromJson.ps1`（1件）→ `SoshikiFormOffice.ps1` の `Invoke-SoshikiFormPdf`（`dotnet run` または `dist\SoshikiFormPdf.exe`）。**発火:** `Process-SoshikiFormJsonInbox.ps1`（各月 `json\` をスキャン → PDF → **`処理済\` に json 移動**。既に `pdf\{stem}.pdf` がある場合も json を `処理済\` に寄せる）。**自動:** 事務 PC で `Register-SoshikiFormJsonInboxAutomation.ps1`（ログオン 60 秒ポール ＋ 1 分間隔の予備タスク）。テンプレは **受付の親**直下の `templateFileName`。詳細は `scripts/soshiki-form-office/README.md`。
 
 | 表示 | 例（1人目） | 備考 |
 |------|-------------|------|

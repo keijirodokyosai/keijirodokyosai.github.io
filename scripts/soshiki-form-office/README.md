@@ -19,9 +19,9 @@ OneDrive の受付 `.json` を **Excel テンプレ**に流し込み、**PDF** �
     soshiki-form-pdf.log                 … Inbox で -LogToWebRoot 時
   受付/
     2026年11月/
-      json/   … Worker が保存（PDF 成功後 処理済み へ移動）
+      json/   … Worker が保存（PDF 成功後 処理済 へ移動）
       pdf/    … 本ツールの出力
-      処理済み/  … PDF 作成済み json（Inbox 既定）
+      処理済/  … PDF 作成済み json（Inbox 既定）
 ```
 
 テンプレ名は `data/soshiki-form-excel-cell-map.json` の `templateFileName`。  
@@ -36,7 +36,7 @@ cd scripts\soshiki-form-office
 .\Export-SoshikiFormPdfFromJson.ps1 -JsonPath "（json のフルパス）"
 ```
 
-一括（pdf が無い `json\` だけ処理。成功後は `処理済み\` に移動）:
+一括（pdf が無い `json\` だけ処理。成功後は `処理済\` に移動）:
 
 ```powershell
 .\Process-SoshikiFormJsonInbox.ps1 -LogToWebRoot -PreviewReceiptMail

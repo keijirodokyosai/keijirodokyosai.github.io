@@ -319,7 +319,7 @@ function Get-SoshikiFormSettingsFolderName {
 }
 
 function Get-SoshikiFormProcessedFolderName {
-    return -join @([char]0x5904, [char]0x7406, [char]0x6E08, [char]0x307F)
+    return -join @([char]0x5904, [char]0x7406, [char]0x6E08)
 }
 
 function Get-SoshikiFormOfficeSettingsPath {
@@ -491,7 +491,7 @@ function Get-SoshikiFormWebRootFromJsonPath {
     $leaf = Split-Path -Leaf $jsonDir
     $allowed = @("json", (Get-SoshikiFormProcessedFolderName))
     if ($allowed -notcontains $leaf) {
-        throw "JSON must be under .../MONTH/json/ or .../MONTH/処理済み/ (got: $jsonDir)"
+        throw "JSON must be under .../MONTH/json/ or .../MONTH/処理済/ (got: $jsonDir)"
     }
 
     $monthDir = Split-Path -Parent $jsonDir
