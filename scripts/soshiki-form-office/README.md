@@ -42,13 +42,21 @@ cd scripts\soshiki-form-office
 
 `jsonInInbox` とフルパスが一覧される。OneDrive フォルダ名をコピペで組み立てない（改行で壊れやすい）。
 
-**inbox の json を1件 PDF 化（1コマンド・貼り付け空行の影響なし）**
+**inbox の json を1件 PDF 化**
+
+チャットの `...` や `cd "...\scripts"` は**そのまま実行しない**（パスが壊れて空行＋`>>` になる）。次のどちらかだけ使う。
 
 ```powershell
-.\Export-SoshikiFormPdfFromInboxJson.ps1
+& "C:\Users\deus_\OneDrive\GitHub\keijirodokyosai.github.io\scripts\soshiki-form-office\Export-SoshikiFormPdfFromInboxJson.ps1"
 ```
 
-inbox 内をすべて: `.\Export-SoshikiFormPdfFromInboxJson.ps1 -All`
+（`cd` 不要。リポの場所が違うときは上の1行のパスだけ自分の `keijirodokyosai.github.io` に直す。）
+
+エクスプローラー: `scripts\soshiki-form-office\Export-SoshikiFormPdfFromInboxJson.cmd` をダブルクリック。
+
+すでに `scripts\soshiki-form-office` にいるときだけ: `.\Export-SoshikiFormPdfFromInboxJson.ps1`
+
+inbox 内をすべて: 上と同じスクリプトに `-All`
 
 **特定ファイル** — `Show-SoshikiFormReceptionLayout.ps1` に出たフルパスを `-JsonPath` に渡す（仮の `（ファイル名）` は使わない）。
 
