@@ -455,7 +455,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | 住所 | AG13, AG14 | 4項目連結・建物名 |
 | 申込月日 | AM1, AQ1 等 | 月日は 0 埋め解除 |
 
-**返信メール:** 宛先は `設定/union-contacts.json` の `ManagerEmail`（`KyosaikaiCode` 照合）。送信元・BCC は `設定/soshiki-form-office-settings.json` の **`FromEmail`**（BCC は送信者通知用・担当者には非表示）。件名 `組織共済WEB受付_{yyyyMMdd}`。本文の組織名行はラベル **共済会:**（ファイル名の組合名セグメント）。受付 ID はファイル名 stem から取得。本文末尾は「京滋労働組合共済会」「事務局」。プレビュー: `Preview-SoshikiFormReceiptEmail.ps1`、送信: `Send-SoshikiFormReceiptEmail.ps1`（`-Send`）。管理者 PDF 失敗メール先頭文は「組織共済申込書PDF の作成に失敗しました。」（`SoshikiFormAdminMail.ps1`）。
+**返信メール:** 宛先は `設定/union-contacts.json` の `ManagerEmail`（`KyosaikaiCode` 照合）。送信元・BCC は `設定/soshiki-form-office-settings.json` の **`FromEmail`**（BCC は送信者通知用・担当者には非表示）。同 settings に **`ReceptionRoot`**（`受付` フォルダのフルパス）または **`WebRoot`**（`組織共済WEB受付` 直下）を書くと、Inbox 系スクリプトは `-ReceptionRoot` 省略可（例: `examples/soshiki-form-office-settings.example.json`）。件名 `組織共済WEB受付_{yyyyMMdd}`。本文の組織名行はラベル **共済会:**（ファイル名の組合名セグメント）。受付 ID はファイル名 stem から取得。本文末尾は「京滋労働組合共済会」「事務局」。プレビュー: `Preview-SoshikiFormReceiptEmail.ps1`、送信: `Send-SoshikiFormReceiptEmail.ps1`（`-Send`）。管理者 PDF 失敗メール先頭文は「組織共済申込書PDF の作成に失敗しました。」（`SoshikiFormAdminMail.ps1`）。
 
 **Worker:** `pdfBase64` は **非対応**（JSON のみ PUT）。OneDrive `.json` 本文は現行 **`submission` オブジェクトのみ**（ラップ `{ receiptId, unionName, fileNameDate, submission }` は未実装）。
 

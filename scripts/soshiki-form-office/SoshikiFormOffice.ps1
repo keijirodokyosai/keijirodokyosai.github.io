@@ -5,6 +5,254 @@ function Get-SoshikiReceptionFolderName {
     return -join @([char]0x53D7, [char]0x4ED8)
 }
 
+function Get-SoshikiFormWebRootFolderName {
+    return -join @(
+        [char]0x7D44, [char]0x7E54, [char]0x5171, [char]0x6E08,
+        "WEB",
+        [char]0x53D7, [char]0x4ED8
+    )
+}
+
+function Get-SoshikiFormOneDriveCandidateRoots {
+    $roots = New-Object System.Collections.Generic.List[string]
+    foreach ($name in @("OneDrive", "OneDriveCommercial", "OneDriveConsumer")) {
+        $value = [Environment]::GetEnvironmentVariable($name, "Process")
+        if (-not $value) {
+            continue
+        }
+        if (-not (Test-Path -LiteralPath $value)) {
+            continue
+        }
+        if (-not $roots.Contains($value)) {
+            $roots.Add($value)
+        }
+    }
+
+    if ($env:USERPROFILE) {
+        $profileDirs = Get-ChildItem -LiteralPath $env:USERPROFILE -Directory -ErrorAction SilentlyContinue
+        foreach ($dir in $profileDirs) {
+            if ($dir.Name -notlike "OneDrive*") {
+                continue
+            }
+            if (-not $roots.Contains($dir.FullName)) {
+                $roots.Add($dir.FullName)
+            }
+        }
+    }
+
+    return $roots
+}
+
+function Get-SoshikiFormDiscoveredReceptionRootCandidates {
+    $webFolder = Get-SoshikiFormWebRootFolderName
+    $receptionName = Get-SoshikiReceptionFolderName
+    $found = New-Object System.Collections.Generic.List[string]
+
+    foreach ($driveRoot in Get-SoshikiFormOneDriveCandidateRoots) {
+        $receptionPath = Join-Path $driveRoot ($webFolder + "\" + $receptionName)
+        if (-not (Test-Path -LiteralPath $receptionPath)) {
+            continue
+        }
+        $resolved = (Resolve-Path -LiteralPath $receptionPath).Path
+        if (-not $found.Contains($resolved)) {
+            $found.Add($resolved)
+        }
+    }
+
+    return $found
+}
+
+function Get-SoshikiFormReceptionRootFromSettingsFileLocation {
+    $settingsPath = Find-SoshikiFormOfficeSettingsFilePath
+    if (-not $settingsPath) {
+        return $null
+    }
+
+    $settingsDir = Split-Path -Parent $settingsPath
+    if ((Split-Path -Leaf $settingsDir) -ne (Get-SoshikiFormSettingsFolderName)) {
+        return $null
+    }
+
+    $webRoot = Split-Path -Parent $settingsDir
+    $receptionPath = Join-Path $webRoot (Get-SoshikiReceptionFolderName)
+    if (-not (Test-Path -LiteralPath $receptionPath)) {
+        return $null
+    }
+
+    $receptionFull = (Resolve-Path -LiteralPath $receptionPath).Path
+    Assert-SoshikiFormReceptionRootPath -ReceptionFull $receptionFull
+    return $receptionFull
+}
+
+function Resolve-SoshikiFormReceptionRootFromDiscovery {
+    $fromSettingsDir = Get-SoshikiFormReceptionRootFromSettingsFileLocation
+    if ($fromSettingsDir) {
+        return $fromSettingsDir
+    }
+
+    $candidates = @(Get-SoshikiFormDiscoveredReceptionRootCandidates)
+    if ($candidates.Count -eq 1) {
+        return $candidates[0]
+    }
+    if ($candidates.Count -gt 1) {
+        throw ("Multiple 受付 folders found. Set ReceptionRoot in office settings: " + ($candidates -join "; "))
+    }
+    return $null
+}
+
+function Find-SoshikiFormOfficeSettingsFilePath {
+    $webFolder = Get-SoshikiFormWebRootFolderName
+    $settingsDir = Get-SoshikiFormSettingsFolderName
+    $fileName = "soshiki-form-office-settings.json"
+
+    foreach ($driveRoot in Get-SoshikiFormOneDriveCandidateRoots) {
+        $path = Join-Path $driveRoot ($webFolder + "\" + $settingsDir + "\" + $fileName)
+        if (Test-Path -LiteralPath $path) {
+            return (Resolve-Path -LiteralPath $path).Path
+        }
+    }
+
+    return $null
+}
+
+function Read-SoshikiFormOfficeSettingsJson {
+    param(
+        [string]$SettingsFilePath = ""
+    )
+
+    if (-not $SettingsFilePath) {
+        $SettingsFilePath = Find-SoshikiFormOfficeSettingsFilePath
+    }
+
+    if (-not $SettingsFilePath) {
+        return $null
+    }
+
+    if (-not (Test-Path -LiteralPath $SettingsFilePath)) {
+        return $null
+    }
+
+    try {
+        return (Get-Content -LiteralPath $SettingsFilePath -Raw -Encoding UTF8 | ConvertFrom-Json)
+    }
+    catch {
+        Write-Warning ("Invalid office settings JSON: " + $SettingsFilePath + " — use / or \\ in paths. " + $_.Exception.Message)
+        return $null
+    }
+}
+
+function Assert-SoshikiFormReceptionRootPath {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$ReceptionFull
+    )
+
+    $expected = Get-SoshikiReceptionFolderName
+    if ((Split-Path -Leaf $ReceptionFull) -ne $expected) {
+        throw "ReceptionRoot must be the folder named $expected (got: $(Split-Path -Leaf $ReceptionFull))"
+    }
+}
+
+function Resolve-SoshikiFormReceptionRoot {
+    param(
+        [string]$ReceptionRoot = ""
+    )
+
+    $envOverride = [Environment]::GetEnvironmentVariable("SOSHIKI_OFFICE_RECEPTION_ROOT")
+    if ($envOverride -and $envOverride.Trim()) {
+        $receptionFull = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($envOverride.Trim())
+        Assert-SoshikiFormReceptionRootPath -ReceptionFull $receptionFull
+        return $receptionFull
+    }
+
+    if ($ReceptionRoot -and $ReceptionRoot.Trim()) {
+        $receptionFull = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($ReceptionRoot.Trim())
+        Assert-SoshikiFormReceptionRootPath -ReceptionFull $receptionFull
+        return $receptionFull
+    }
+
+    $raw = Read-SoshikiFormOfficeSettingsJson
+
+    $fromJson = ""
+    if ($raw) {
+        $fromJson = [string]$raw.ReceptionRoot
+    }
+    if ($fromJson.Trim()) {
+        $receptionFull = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($fromJson.Trim())
+        Assert-SoshikiFormReceptionRootPath -ReceptionFull $receptionFull
+        return $receptionFull
+    }
+
+    $webRootValue = ""
+    if ($raw) {
+        $webRootValue = [string]$raw.WebRoot
+    }
+    if ($webRootValue.Trim()) {
+        $webFull = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($webRootValue.Trim())
+        $receptionFull = Join-Path $webFull (Get-SoshikiReceptionFolderName)
+        if (-not (Test-Path -LiteralPath $receptionFull)) {
+            throw "Reception folder not found: $receptionFull (from WebRoot in office settings)"
+        }
+        Assert-SoshikiFormReceptionRootPath -ReceptionFull $receptionFull
+        return (Resolve-Path -LiteralPath $receptionFull).Path
+    }
+
+    $discovered = Resolve-SoshikiFormReceptionRootFromDiscovery
+    if ($discovered) {
+        return $discovered
+    }
+
+    throw @(
+        "ReceptionRoot not found. Set ReceptionRoot or WebRoot in"
+        " 設定/soshiki-form-office-settings.json (paths: use / or \\),"
+        " pass -ReceptionRoot, set SOSHIKI_OFFICE_RECEPTION_ROOT,"
+        " or ensure $(Get-SoshikiFormWebRootFolderName)\受付 exists under OneDrive."
+    ) -join " "
+}
+
+function Get-SoshikiFormScheduledTaskPrincipal {
+    $userId = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
+    return New-ScheduledTaskPrincipal -UserId $userId -LogonType Interactive -RunLevel Limited
+}
+
+function New-SoshikiFormInboxRepetitionTrigger {
+    param(
+        [int]$IntervalMinutes = 1
+    )
+
+    # Task Scheduler rejects [TimeSpan]::MaxValue (P99999999DT…).
+    $duration = New-TimeSpan -Days 3650
+    return New-ScheduledTaskTrigger -Once -At (Get-Date) `
+        -RepetitionInterval (New-TimeSpan -Minutes $IntervalMinutes) `
+        -RepetitionDuration $duration
+}
+
+function Register-SoshikiFormInboxScheduledTask {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$TaskName,
+
+        [Parameter(Mandatory = $true)]
+        [CimInstance]$Action,
+
+        [Parameter(Mandatory = $true)]
+        [CimInstance]$Trigger,
+
+        [Parameter(Mandatory = $true)]
+        [CimInstance]$Settings
+    )
+
+    $principal = Get-SoshikiFormScheduledTaskPrincipal
+    Register-ScheduledTask `
+        -TaskName $TaskName `
+        -Action $Action `
+        -Trigger $Trigger `
+        -Settings $Settings `
+        -Principal $principal `
+        -Force `
+        -ErrorAction Stop | Out-Null
+}
+
 function Get-SoshikiFormSettingsFolderName {
     return -join @([char]0x8A2D, [char]0x5B9A)
 }

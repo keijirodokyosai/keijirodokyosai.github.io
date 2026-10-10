@@ -39,7 +39,14 @@ cd scripts\soshiki-form-office
 一括（pdf が無い `json\` だけ処理。成功後は `処理済み\` に移動）:
 
 ```powershell
-.\Process-SoshikiFormJsonInbox.ps1 -ReceptionRoot "（受付 フォルダのフルパス）" -LogToWebRoot -PreviewReceiptMail
+.\Process-SoshikiFormJsonInbox.ps1 -LogToWebRoot -PreviewReceiptMail
+```
+
+`ReceptionRoot` は省略可。`設定/soshiki-form-office-settings.json` の **`ReceptionRoot`**（`…\組織共済WEB受付\受付`）または **`WebRoot`**（`…\組織共済WEB受付`）を読む。事務 M365 では OneDrive ルートが `OneDrive - 京滋労働組合共済会` のことが多い（`examples/soshiki-form-office-settings.example.json`）。JSON にパスが無い場合は `%USERPROFILE%\OneDrive*` 配下から `組織共済WEB受付\受付` を自動検出（1 件だけ見つかったとき）。上書き: `SOSHIKI_OFFICE_RECEPTION_ROOT`、`-ReceptionRoot`。
+
+```powershell
+# 引数で明示する例
+.\Process-SoshikiFormJsonInbox.ps1 -ReceptionRoot "（受付 フォルダのフルパス）" -LogToWebRoot
 ```
 
 `-KeepInJson` … PDF 後も `json\` に残す（デバッグ用）。  
@@ -49,10 +56,14 @@ cd scripts\soshiki-form-office
 
 ```powershell
 # ログオン常駐（60 秒ポール）＋ 1 分間隔の予備タスクをまとめて登録
-.\Register-SoshikiFormJsonInboxAutomation.ps1 -ReceptionRoot "（受付 フォルダのフルパス）"
+.\Register-SoshikiFormJsonInboxAutomation.ps1
 ```
 
 個別登録: `Register-SoshikiFormJsonInboxWatcherTask.ps1`（ログオン） / `Register-SoshikiFormJsonInboxTask.ps1`（1 分間隔・`-LogToWebRoot` 付き）。
+
+タスク登録で **アクセスが拒否** される場合: 通常ユーザーで実行（管理者昇格は不要な想定）。それでも失敗する PC ではタスク スケジューラを開き手動作成するか、ログオン後に `Watch-SoshikiFormJsonInbox.ps1` を常駐させる。
+
+`exported=0` かつ `jsonInInbox=0` のときは `ReceptionRoot` が実際の `受付` フォルダと一致しているか確認（出力行の `reception=` を見る）。
 
 SDK が無い事務 PC:
 
@@ -104,7 +115,7 @@ Worker が保存する **submission オブジェクトのみ**。
 | ファイル | 用途 |
 |----------|------|
 | `設定/union-contacts.json` | 受付確認メール To（`ManagerEmail`） |
-| `設定/soshiki-form-office-settings.json` | `AdminEmail`（管理者 To）・`FromEmail`（送信元・受付 BCC） |
+| `設定/soshiki-form-office-settings.json` | `AdminEmail`・`FromEmail`・**`ReceptionRoot` または `WebRoot`**（Inbox 自動の受付パス） |
 
 例: `examples/soshiki-form-office-settings.example.json`  
 環境変数: `SOSHIKI_OFFICE_ADMIN_EMAIL` / `SOSHIKI_OFFICE_FROM_EMAIL` があれば各キーより優先。

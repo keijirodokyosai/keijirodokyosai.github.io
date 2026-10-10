@@ -6,8 +6,7 @@
 #>
 [CmdletBinding()]
 param(
-    [Parameter(Mandatory = $true)]
-    [string]$ReceptionRoot,
+    [string]$ReceptionRoot = "",
 
     [string]$WatcherTaskName = "SoshikiFormJsonInboxWatcher",
 
@@ -22,14 +21,21 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
 $dir = $PSScriptRoot
+$registerParams = @{}
+if ($ReceptionRoot -and $ReceptionRoot.Trim()) {
+    $registerParams["ReceptionRoot"] = $ReceptionRoot
+}
+
 & (Join-Path $dir "Register-SoshikiFormJsonInboxWatcherTask.ps1") `
-    -ReceptionRoot $ReceptionRoot `
+    @registerParams `
     -TaskName $WatcherTaskName `
-    -PollSeconds $PollSeconds
+    -PollSeconds $PollSeconds `
+    -ErrorAction Stop
 
 & (Join-Path $dir "Register-SoshikiFormJsonInboxTask.ps1") `
-    -ReceptionRoot $ReceptionRoot `
+    @registerParams `
     -TaskName $ScheduledTaskName `
-    -IntervalMinutes $IntervalMinutes
+    -IntervalMinutes $IntervalMinutes `
+    -ErrorAction Stop
 
 Write-Output "Registered watcher + $IntervalMinutes min scheduled inbox tasks."

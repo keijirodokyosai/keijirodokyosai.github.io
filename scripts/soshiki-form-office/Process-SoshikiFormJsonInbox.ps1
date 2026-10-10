@@ -5,8 +5,7 @@
 #>
 [CmdletBinding()]
 param(
-    [Parameter(Mandatory = $true)]
-    [string]$ReceptionRoot,
+    [string]$ReceptionRoot = "",
 
     [switch]$KeepInJson,
 
@@ -20,11 +19,7 @@ $ErrorActionPreference = "Stop"
 
 . (Join-Path $PSScriptRoot "SoshikiFormOffice.ps1")
 
-$receptionFull = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($ReceptionRoot)
-$expected = Get-SoshikiReceptionFolderName
-if ((Split-Path -Leaf $receptionFull) -ne $expected) {
-    throw "ReceptionRoot must be the folder named $expected (got: $(Split-Path -Leaf $receptionFull))"
-}
+$receptionFull = Resolve-SoshikiFormReceptionRoot -ReceptionRoot $ReceptionRoot
 
 $webRoot = Split-Path -Parent $receptionFull
 if ($LogToWebRoot) {
@@ -38,13 +33,19 @@ $stats = @{
     missing  = 0
 }
 
-foreach ($monthDir in Get-ChildItem -LiteralPath $receptionFull -Directory -ErrorAction SilentlyContinue) {
+$monthDirs = @(Get-ChildItem -LiteralPath $receptionFull -Directory -ErrorAction SilentlyContinue)
+$pendingJsonCount = 0
+
+foreach ($monthDir in $monthDirs) {
     $jsonDir = Join-Path $monthDir.FullName "json"
     if (-not (Test-Path -LiteralPath $jsonDir)) {
         continue
     }
 
-    foreach ($jsonFile in Get-ChildItem -LiteralPath $jsonDir -Filter "*.json" -File) {
+    $jsonFiles = @(Get-ChildItem -LiteralPath $jsonDir -Filter "*.json" -File)
+    $pendingJsonCount += $jsonFiles.Count
+
+    foreach ($jsonFile in $jsonFiles) {
         try {
             $result = Invoke-SoshikiFormJsonInboxFile `
                 -JsonPath $jsonFile.FullName `
@@ -67,7 +68,15 @@ foreach ($monthDir in Get-ChildItem -LiteralPath $receptionFull -Directory -Erro
 }
 
 $summary = "exported={0} skipped={1} failed={2} missing={3}" -f $stats.exported, $stats.skipped, $stats.failed, $stats.missing
+$detail = "reception={0} months={1} jsonInInbox={2} {3}" -f $receptionFull, $monthDirs.Count, $pendingJsonCount, $summary
 if ($LogToWebRoot) {
-    Write-SoshikiFormOfficeLog -WebRoot $webRoot -Message ("Inbox done: " + $summary)
+    Write-SoshikiFormOfficeLog -WebRoot $webRoot -Message ("Inbox done: " + $detail)
 }
-Write-Output $summary
+if ($pendingJsonCount -eq 0 -and $stats.exported -eq 0 -and $stats.skipped -eq 0 -and $stats.failed -eq 0) {
+    Write-Warning @(
+        "No *.json under any month\json folder."
+        " ReceptionRoot=$receptionFull"
+        " If files exist elsewhere, fix ReceptionRoot in 設定/soshiki-form-office-settings.json."
+    ) -join " "
+}
+Write-Output $detail

@@ -6,8 +6,7 @@
 #>
 [CmdletBinding()]
 param(
-    [Parameter(Mandatory = $true)]
-    [string]$ReceptionRoot,
+    [string]$ReceptionRoot = "",
 
     [int]$PollSeconds = 60,
 
@@ -19,11 +18,7 @@ $ErrorActionPreference = "Stop"
 
 . (Join-Path $PSScriptRoot "SoshikiFormOffice.ps1")
 
-$receptionFull = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($ReceptionRoot)
-$expected = Get-SoshikiReceptionFolderName
-if ((Split-Path -Leaf $receptionFull) -ne $expected) {
-    throw "ReceptionRoot must be the folder named $expected (got: $(Split-Path -Leaf $receptionFull))"
-}
+$receptionFull = Resolve-SoshikiFormReceptionRoot -ReceptionRoot $ReceptionRoot
 
 $webRoot = Split-Path -Parent $receptionFull
 $processScript = Join-Path $PSScriptRoot "Process-SoshikiFormJsonInbox.ps1"
