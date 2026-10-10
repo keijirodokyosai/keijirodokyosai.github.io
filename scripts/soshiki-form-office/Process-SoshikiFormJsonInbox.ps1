@@ -73,10 +73,10 @@ if ($LogToWebRoot) {
     Write-SoshikiFormOfficeLog -WebRoot $webRoot -Message ("Inbox done: " + $detail)
 }
 if ($pendingJsonCount -eq 0 -and $stats.exported -eq 0 -and $stats.skipped -eq 0 -and $stats.failed -eq 0) {
-    Write-Warning @(
-        "No *.json under any month\json folder."
-        " ReceptionRoot=$receptionFull"
-        " If files exist elsewhere, fix ReceptionRoot in 設定/soshiki-form-office-settings.json."
-    ) -join " "
+    Write-Warning (@(
+            "No *.json under any month\json folder."
+            " ReceptionRoot=$receptionFull"
+            " If files exist elsewhere, fix ReceptionRoot in 設定/soshiki-form-office-settings.json."
+        ) -join " ")
 }
 Write-Output $detail
