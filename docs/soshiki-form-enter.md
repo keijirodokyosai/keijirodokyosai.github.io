@@ -433,7 +433,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | フッター・備考 | **`SheetFooter`**（Web 送 信時に含める・**実装済み**） |
 | 当月（月） | `ApplicationDate` から Web と同式（`coverage-month-display` 相当）。`CoverageMonth` も参照可 |
 | 月計 | **再計算可:** `PriorMonthHeadcount` +（`New` − `Cancel`）。`Change` は含めない（`countMemberTransferDelta` 同等） |
-| 住所・町村域結合 | C# `AddressPrintJoin`（Web `computeTownAreaPrintJoin` 同等・町村域12文字）で `addressLineCol` に1行印字 |
+| 住所・町村域結合 | 都道府県は `prefectureCol`（kana 行）。市区町村＋町村域＋番地は `AddressPrintJoin.FormatMemberAddressWithoutPrefecture` → `addressLineCol`（main 行） |
 | Excel 書き込み | 漢字氏名・カナ・住所は **結合セルの `MergeArea` に全文**（1桁ずつに分割しない）。**1桁ずつ**は産別/支部/分会・組合員コード（6枠）のみ |
 
 **`submission.SheetFooter`**
@@ -461,7 +461,9 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | 性別 | AE13 | `男` / `女`（1文字） |
 | 生年月日（月） | AA13 | 1人目のみ。2人目以降は Z 列＋行オフセット（`memberRowStep`） |
 | 当月（月） | T28 | JSON `CoverageMonth.Month`（無いときは申込日から Web 同式） |
-| 住所 | AG13, AG14 | 4項目連結・建物名 |
+| 都道府県 | AO12 等 | AO 列・`memberRowBase.kana` 行 |
+| 住所（市区町村〜番地） | AG13 等 | 町村域結合後に city+town+area を1行（main 行） |
+| 建物名 | AG14 等 | `building` 行 |
 | 申込月日 | AM1, AQ1 等 | 月日は 0 埋め解除 |
 
 **返信メール:** 宛先は `設定/union-contacts.json` の `ManagerEmail`（`KyosaikaiCode` 照合）。送信元・BCC は `設定/soshiki-form-office-settings.json` の **`FromEmail`**（BCC は送信者通知用・担当者には非表示）。同 settings に **`ReceptionRoot`**（`受付` フォルダのフルパス）または **`WebRoot`**（`組織共済WEB受付` 直下）を書くと、Inbox 系スクリプトは `-ReceptionRoot` 省略可（例: `examples/soshiki-form-office-settings.example.json`）。件名 `組織共済WEB受付_{yyyyMMdd}`。本文の組織名行はラベル **共済会:**（ファイル名の組合名セグメント）。受付 ID はファイル名 stem から取得。本文末尾は「京滋労働組合共済会」「事務局」。プレビュー: `Preview-SoshikiFormReceiptEmail.ps1`、送信: `Send-SoshikiFormReceiptEmail.ps1`（`-Send`）。管理者 PDF 失敗メール先頭文は「組織共済申込書PDF の作成に失敗しました。」（`SoshikiFormAdminMail.ps1`）。

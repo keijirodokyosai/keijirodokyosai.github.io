@@ -119,7 +119,11 @@ internal static class ExcelExporter
             Set(sheet, $"{m["postalCodeCol"]!.GetValue<string>()}{kanaRow}", member["PostalCode"]?.GetValue<string>());
             Set(sheet, $"{m["genderCol"]!.GetValue<string>()}{mainRow}", GenderLabel(member["Gender"]?.GetValue<string>()));
 
-            Set(sheet, $"{m["addressLineCol"]!.GetValue<string>()}{mainRow}", AddressPrintJoin.FormatMemberAddressLine(member));
+            Set(sheet, $"{m["prefectureCol"]!.GetValue<string>()}{kanaRow}", member["Prefecture"]?.GetValue<string>());
+            Set(
+                sheet,
+                $"{m["addressLineCol"]!.GetValue<string>()}{mainRow}",
+                AddressPrintJoin.FormatMemberAddressWithoutPrefecture(member));
             Set(sheet, $"{m["buildingCol"]!.GetValue<string>()}{buildingRow}", member["BuildingName"]?.GetValue<string>());
         }
     }

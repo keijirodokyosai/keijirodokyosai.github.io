@@ -43,6 +43,7 @@
     "firstMemberBirthMonth": "AA13",
     "birthDayCol": "AC",
     "postalCodeCol": "AH",
+    "prefectureCol": "AO",
     "genderCol": "AE",
     "addressLineCol": "AG",
     "buildingCol": "AG"

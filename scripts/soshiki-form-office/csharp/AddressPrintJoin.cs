@@ -32,10 +32,16 @@ internal static class AddressPrintJoin
     public static string FormatMemberAddressLine(JsonNode member, int townLimit = TownCharLimit)
     {
         var pref = member["Prefecture"]?.GetValue<string>() ?? "";
+        return pref + FormatMemberAddressWithoutPrefecture(member, townLimit);
+    }
+
+    /// <summary>市区町村・町村域・番地（町村域12文字結合ルール）。都道府県は含めない。</summary>
+    public static string FormatMemberAddressWithoutPrefecture(JsonNode member, int townLimit = TownCharLimit)
+    {
         var city = member["City"]?.GetValue<string>() ?? "";
         var town = member["TownArea"]?.GetValue<string>() ?? "";
         var area = member["AreaNumber"]?.GetValue<string>() ?? "";
         var (townDisplay, areaDisplay) = ComputeTownAreaPrintJoin(town, area, townLimit);
-        return pref + city + townDisplay + areaDisplay;
+        return city + townDisplay + areaDisplay;
     }
 }

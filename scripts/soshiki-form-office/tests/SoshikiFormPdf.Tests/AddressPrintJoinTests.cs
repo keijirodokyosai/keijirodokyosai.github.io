@@ -30,4 +30,13 @@ public sealed class AddressPrintJoinTests
         )!;
         Assert.Equal("京都府京都市北区1", AddressPrintJoin.FormatMemberAddressLine(member));
     }
+
+    [Fact]
+    public void FormatMemberAddressWithoutPrefecture_omits_prefecture()
+    {
+        var member = JsonNode.Parse(
+            """{"Prefecture":"京都府","City":"京都市左京区","TownArea":"聖護院川原町","AreaNumber":"4-13"}"""
+        )!;
+        Assert.Equal("京都市左京区聖護院川原町4-13", AddressPrintJoin.FormatMemberAddressWithoutPrefecture(member));
+    }
 }
