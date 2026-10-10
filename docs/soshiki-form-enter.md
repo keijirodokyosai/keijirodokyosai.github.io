@@ -451,6 +451,10 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | 表示 | 例（1人目） | 備考 |
 |------|-------------|------|
 | 異動 | B12 | `新規` / `解約` / `変更`（2文字） |
+| 漢字姓 | K13 等 | K 列。行は `memberRowBase.main`（13）＋ `(人数-1)×memberRowStep`（例: 2人目 K16） |
+| 漢字名 | Q13 等 | Q 列。行は漢字姓と同じ |
+| 姓カナ | M12 等 | M 列。行は `memberRowBase.kana`（12）＋ `(人数-1)×memberRowStep`（例: 2人目 M15） |
+| 名カナ | S12 等 | S 列。行は姓カナと同じ |
 | 性別 | AE13 | `男` / `女`（1文字） |
 | 生年月日（月） | AA13 | 1人目のみ。2人目以降は Z 列＋行オフセット（`memberRowStep`） |
 | 当月（月） | T28 | JSON `CoverageMonth.Month`（無いときは申込日から Web 同式） |
