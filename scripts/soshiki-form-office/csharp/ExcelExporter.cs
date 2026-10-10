@@ -107,14 +107,7 @@ internal static class ExcelExporter
 
             var birth = ParseBirth(member["BirthDate"]?.GetValue<string>());
             Set(sheet, $"{m["birthYearCol"]!.GetValue<string>()}{mainRow}", birth.Year);
-            if (rowIndex == 1 && m["firstMemberBirthMonth"] is not null)
-            {
-                Set(sheet, m["firstMemberBirthMonth"]!.GetValue<string>(), birth.Month);
-            }
-            else
-            {
-                Set(sheet, $"{m["birthMonthCol"]!.GetValue<string>()}{mainRow}", birth.Month);
-            }
+            Set(sheet, $"{m["birthMonthCol"]!.GetValue<string>()}{mainRow}", birth.Month);
             Set(sheet, $"{m["birthDayCol"]!.GetValue<string>()}{mainRow}", birth.Day);
             Set(sheet, $"{m["postalCodeCol"]!.GetValue<string>()}{kanaRow}", member["PostalCode"]?.GetValue<string>());
             Set(sheet, $"{m["genderCol"]!.GetValue<string>()}{mainRow}", GenderLabel(member["Gender"]?.GetValue<string>()));

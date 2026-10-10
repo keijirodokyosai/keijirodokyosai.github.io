@@ -459,7 +459,9 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | 名カナ | S12 等 | S 列。行は姓カナと同じ |
 | 生年月日（年） | W13 等 | W 列。行は `memberRowBase.main` |
 | 性別 | AE13 | `男` / `女`（1文字） |
-| 生年月日（月） | AA13 | 1人目のみ。2人目以降は Z 列＋行オフセット（`memberRowStep`） |
+| 生年月日（月） | AA13 等 | AA 列。行は `memberRowBase.main` ＋ `(人数-1)×memberRowStep`（例: 2人目 AA16） |
+| 生年月日（日） | AC13 等 | AC 列。行は月と同じ（main 行） |
+| 郵便番号 | AH12 等 | AH 列・`memberRowBase.kana` 行 |
 | 当月（月） | T28 | JSON `CoverageMonth.Month`（無いときは申込日から Web 同式） |
 | 都道府県 | AO12 等 | AO 列・`memberRowBase.kana` 行 |
 | 住所（市区町村〜番地） | AG13 等 | 町村域結合後に city+town+area を1行（main 行） |

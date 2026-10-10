@@ -28,4 +28,16 @@ public sealed class ExcelCellMapTests
         Assert.Equal("M", member["familyNameKanaCol"]?.GetValue<string>());
         Assert.Equal("S", member["givenNameKanaCol"]?.GetValue<string>());
     }
+
+    [Fact]
+    public void Member_birth_month_column_is_AA_for_all_rows()
+    {
+        var repoRoot = RepoLocator.Find(AppContext.BaseDirectory);
+        var path = Path.Combine(repoRoot, "data", "soshiki-form-excel-cell-map.json");
+        var cellMap = JsonNode.Parse(File.ReadAllText(path))!;
+
+        var member = cellMap["member"]!;
+        Assert.Equal("AA", member["birthMonthCol"]?.GetValue<string>());
+        Assert.Null(member["firstMemberBirthMonth"]);
+    }
 }
