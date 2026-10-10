@@ -32,9 +32,25 @@ OneDrive の受付 `.json` を **Excel テンプレ**に流し込み、**PDF** �
 ```powershell
 cd scripts\soshiki-form-office
 .\Verify-SoshikiOfficeScripts.ps1
-
-.\Export-SoshikiFormPdfFromJson.ps1 -JsonPath "（json のフルパス）"
 ```
+
+**受付パスと json の場所（手入力しない）**
+
+```powershell
+.\Show-SoshikiFormReceptionLayout.ps1
+```
+
+`jsonInInbox` とフルパスが一覧される。OneDrive フォルダ名をコピペで組み立てない（改行で壊れやすい）。
+
+**inbox の json を1件 PDF 化（1コマンド・貼り付け空行の影響なし）**
+
+```powershell
+.\Export-SoshikiFormPdfFromInboxJson.ps1
+```
+
+inbox 内をすべて: `.\Export-SoshikiFormPdfFromInboxJson.ps1 -All`
+
+**特定ファイル** — `Show-SoshikiFormReceptionLayout.ps1` に出たフルパスを `-JsonPath` に渡す（仮の `（ファイル名）` は使わない）。
 
 一括（pdf が無い `json\` だけ処理。成功後は `処理済\` に移動）:
 
