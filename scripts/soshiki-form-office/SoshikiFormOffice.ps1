@@ -91,13 +91,25 @@ function Resolve-SoshikiFormReceptionRootFromDiscovery {
     }
 
     $candidates = @(Get-SoshikiFormDiscoveredReceptionRootCandidates)
-    if ($candidates.Count -eq 1) {
-        return $candidates[0]
+    if ($candidates.Count -eq 0) {
+        return $null
     }
-    if ($candidates.Count -gt 1) {
-        throw ("Multiple 受付 folders found. Set ReceptionRoot in office settings: " + ($candidates -join "; "))
+
+    $best = $null
+    $bestJsonCount = -1
+    foreach ($candidate in $candidates) {
+        $jsonCount = @(Get-SoshikiFormInboxJsonFiles -ReceptionFull $candidate).Count
+        if ($jsonCount -gt $bestJsonCount) {
+            $bestJsonCount = $jsonCount
+            $best = $candidate
+        }
     }
-    return $null
+
+    if ($best) {
+        return $best
+    }
+
+    return $candidates[0]
 }
 
 function Find-SoshikiFormOfficeSettingsFilePath {
@@ -174,6 +186,25 @@ function Assert-SoshikiFormReceptionRootPath {
     }
 }
 
+function Resolve-SoshikiFormReceptionRootIfExists {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$CandidatePath
+    )
+
+    if (-not $CandidatePath.Trim()) {
+        return $null
+    }
+
+    $receptionFull = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($CandidatePath.Trim())
+    Assert-SoshikiFormReceptionRootPath -ReceptionFull $receptionFull
+    if (-not (Test-Path -LiteralPath $receptionFull)) {
+        return $null
+    }
+
+    return (Resolve-Path -LiteralPath $receptionFull).Path
+}
+
 function Resolve-SoshikiFormReceptionRoot {
     param(
         [string]$ReceptionRoot = ""
@@ -181,15 +212,24 @@ function Resolve-SoshikiFormReceptionRoot {
 
     $envOverride = [Environment]::GetEnvironmentVariable("SOSHIKI_OFFICE_RECEPTION_ROOT")
     if ($envOverride -and $envOverride.Trim()) {
-        $receptionFull = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($envOverride.Trim())
-        Assert-SoshikiFormReceptionRootPath -ReceptionFull $receptionFull
-        return $receptionFull
+        $fromEnv = Resolve-SoshikiFormReceptionRootIfExists -CandidatePath $envOverride
+        if ($fromEnv) {
+            return $fromEnv
+        }
+        throw "SOSHIKI_OFFICE_RECEPTION_ROOT folder not found: $envOverride"
     }
 
     if ($ReceptionRoot -and $ReceptionRoot.Trim()) {
-        $receptionFull = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($ReceptionRoot.Trim())
-        Assert-SoshikiFormReceptionRootPath -ReceptionFull $receptionFull
-        return $receptionFull
+        $fromArg = Resolve-SoshikiFormReceptionRootIfExists -CandidatePath $ReceptionRoot
+        if ($fromArg) {
+            return $fromArg
+        }
+        throw "ReceptionRoot folder not found: $ReceptionRoot"
+    }
+
+    $fromSettingsDir = Get-SoshikiFormReceptionRootFromSettingsFileLocation
+    if ($fromSettingsDir) {
+        return $fromSettingsDir
     }
 
     $raw = Read-SoshikiFormOfficeSettingsJson
@@ -199,9 +239,10 @@ function Resolve-SoshikiFormReceptionRoot {
         $fromJson = [string]$raw.ReceptionRoot
     }
     if ($fromJson.Trim()) {
-        $receptionFull = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($fromJson.Trim())
-        Assert-SoshikiFormReceptionRootPath -ReceptionFull $receptionFull
-        return $receptionFull
+        $fromJsonPath = Resolve-SoshikiFormReceptionRootIfExists -CandidatePath $fromJson
+        if ($fromJsonPath) {
+            return $fromJsonPath
+        }
     }
 
     $webRootValue = ""
@@ -210,12 +251,11 @@ function Resolve-SoshikiFormReceptionRoot {
     }
     if ($webRootValue.Trim()) {
         $webFull = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($webRootValue.Trim())
-        $receptionFull = Join-Path $webFull (Get-SoshikiReceptionFolderName)
-        if (-not (Test-Path -LiteralPath $receptionFull)) {
-            throw "Reception folder not found: $receptionFull (from WebRoot in office settings)"
+        $receptionCandidate = Join-Path $webFull (Get-SoshikiReceptionFolderName)
+        $fromWebRoot = Resolve-SoshikiFormReceptionRootIfExists -CandidatePath $receptionCandidate
+        if ($fromWebRoot) {
+            return $fromWebRoot
         }
-        Assert-SoshikiFormReceptionRootPath -ReceptionFull $receptionFull
-        return (Resolve-Path -LiteralPath $receptionFull).Path
     }
 
     $discovered = Resolve-SoshikiFormReceptionRootFromDiscovery

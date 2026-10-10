@@ -1,6 +1,6 @@
 {
   "AdminEmail": "sysadmin@example.co.jp",
   "FromEmail": "jimu@example.co.jp",
-  "ReceptionRoot": "C:\\Users\\YOU\\OneDrive - 京滋労働組合共済会\\組織共済WEB受付\\受付",
-  "WebRoot": "C:\\Users\\YOU\\OneDrive - 京滋労働組合共済会\\組織共済WEB受付"
+  "ReceptionRoot": "C:/Users/YOU/OneDrive - 京滋労働組合共済会　＊/組織共済WEB受付/受付",
+  "WebRoot": ""
 }
