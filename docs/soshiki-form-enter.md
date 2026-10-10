@@ -434,7 +434,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | 当月（月） | `ApplicationDate` から Web と同式（`coverage-month-display` 相当）。`CoverageMonth` も参照可 |
 | 月計 | **再計算可:** `PriorMonthHeadcount` +（`New` − `Cancel`）。`Change` は含めない（`countMemberTransferDelta` 同等） |
 | 住所・町村域結合 | C# `AddressPrintJoin`（Web `computeTownAreaPrintJoin` 同等・町村域12文字）で `addressLineCol` に1行印字 |
-| Excel 書き込み | 氏名・カナ・住所などは **結合セルごと1文字列**（`MergeArea` に書き、結合解除しない）。**1桁ずつ**は産別/支部/分会（3枠）・組合員コード（6枠）のみ |
+| Excel 書き込み | 漢字氏名・カナ・住所は **結合セルの `MergeArea` に全文**（1桁ずつに分割しない）。**1桁ずつ**は産別/支部/分会・組合員コード（6枠）のみ |
 
 **`submission.SheetFooter`**
 
@@ -452,8 +452,8 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | 表示 | 例（1人目） | 備考 |
 |------|-------------|------|
 | 異動 | B12 | `新規` / `解約` / `変更`（2文字） |
-| 漢字姓 | K13 等 | K 列。行は `memberRowBase.main`（13）＋ `(人数-1)×memberRowStep`（例: 2人目 K16） |
-| 漢字名 | Q13 等 | Q 列。行は漢字姓と同じ |
+| 漢字姓 | K13 等 | テンプレ **結合セル**の左上（`familyNameCol`）。**全文**を `MergeArea` に書く。行は `memberRowBase.main` |
+| 漢字名 | Q13 等 | 同上（`givenNameCol`） |
 | 姓カナ | M12 等 | M 列。行は `memberRowBase.kana`（12）＋ `(人数-1)×memberRowStep`（例: 2人目 M15） |
 | 名カナ | S12 等 | S 列。行は姓カナと同じ |
 | 性別 | AE13 | `男` / `女`（1文字） |

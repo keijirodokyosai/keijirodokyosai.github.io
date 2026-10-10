@@ -134,34 +134,8 @@ internal static class ExcelExporter
         var text = $"{value}".Trim();
         if (text.Length == 0) return;
 
-        dynamic range = sheet.Range[address];
-        if (IsMergedExcelRange(range))
-        {
-            range.MergeArea.Value2 = text;
-        }
-        else
-        {
-            range.Value2 = text;
-        }
-    }
-
-    private static bool IsMergedExcelRange(dynamic range)
-    {
-        try
-        {
-            return (bool)range.MergeCells;
-        }
-        catch
-        {
-            try
-            {
-                return Convert.ToInt32(range.MergeCells, CultureInfo.InvariantCulture) != 0;
-            }
-            catch
-            {
-                return false;
-            }
-        }
+        // 結合セルは MergeArea に全文（未結合でも MergeArea はそのセル自身）
+        sheet.Range[address].MergeArea.Value2 = text;
     }
 
     private static void WriteThree(dynamic sheet, JsonNode colsDef, string? code)

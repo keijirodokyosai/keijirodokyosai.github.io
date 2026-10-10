@@ -15,8 +15,6 @@ public sealed class ExcelCellMapTests
         var member = cellMap["member"]!;
         Assert.Equal("K", member["familyNameCol"]?.GetValue<string>());
         Assert.Equal("Q", member["givenNameCol"]?.GetValue<string>());
-        Assert.NotEqual("L", member["familyNameCol"]?.GetValue<string>());
-        Assert.NotEqual("R", member["givenNameCol"]?.GetValue<string>());
     }
 
     [Fact]
