@@ -76,7 +76,7 @@ internal static class ExcelExporter
         Set(sheet, footer["pageCountCurrent"]!.GetValue<string>(), sf["PageCountCurrent"]?.GetValue<string>());
         Set(sheet, footer["pageCountTotal"]!.GetValue<string>(), sf["PageCountTotal"]?.GetValue<string>());
         Set(sheet, footer["priorMonthHeadcount"]!.GetValue<string>(), sf["PriorMonthHeadcount"]?.GetValue<string>());
-        Set(sheet, footer["coverageMonth"]!.GetValue<string>(), CoverageMonth(appDate));
+        Set(sheet, footer["coverageMonth"]!.GetValue<string>(), CoverageMonth(submission, appDate));
         var prior = int.TryParse(sf["PriorMonthHeadcount"]?.GetValue<string>(), out var p) ? p : 0;
         Set(sheet, footer["monthTotal"]!.GetValue<string>(), MonthTotal(prior, submission["Members"]?.AsArray()));
         Set(sheet, footer["remarks"]!.GetValue<string>(), sf["Remarks"]?.GetValue<string>());
@@ -107,7 +107,14 @@ internal static class ExcelExporter
 
             var birth = ParseBirth(member["BirthDate"]?.GetValue<string>());
             Set(sheet, $"{m["birthYearCol"]!.GetValue<string>()}{mainRow}", birth.Year);
-            Set(sheet, $"{m["birthMonthCol"]!.GetValue<string>()}{mainRow}", birth.Month);
+            if (rowIndex == 1 && m["firstMemberBirthMonth"] is not null)
+            {
+                Set(sheet, m["firstMemberBirthMonth"]!.GetValue<string>(), birth.Month);
+            }
+            else
+            {
+                Set(sheet, $"{m["birthMonthCol"]!.GetValue<string>()}{mainRow}", birth.Month);
+            }
             Set(sheet, $"{m["birthDayCol"]!.GetValue<string>()}{mainRow}", birth.Day);
             Set(sheet, $"{m["postalCodeCol"]!.GetValue<string>()}{kanaRow}", member["PostalCode"]?.GetValue<string>());
             Set(sheet, $"{m["genderCol"]!.GetValue<string>()}{mainRow}", GenderLabel(member["Gender"]?.GetValue<string>()));
@@ -184,15 +191,25 @@ internal static class ExcelExporter
         return (parts[0].Trim(), IntNoPad(parts[1]) ?? "", IntNoPad(parts[2]) ?? "");
     }
 
-    private static string CoverageMonth(JsonNode appDate)
+    private static string CoverageMonth(JsonNode submission, JsonNode appDate)
     {
-        if (!int.TryParse(appDate["Year"]?.GetValue<string>(), out var y) ||
-            !int.TryParse(appDate["Month"]?.GetValue<string>(), out var m) || y == 0 || m == 0)
+        var cm = submission["CoverageMonth"];
+        if (cm is not null)
+        {
+            var monthText = IntNoPad(cm["Month"]?.GetValue<string>());
+            if (!string.IsNullOrEmpty(monthText))
+            {
+                return monthText;
+            }
+        }
+
+        if (!int.TryParse(appDate["Year"]?.GetValue<string>(), out _) ||
+            !int.TryParse(appDate["Month"]?.GetValue<string>(), out var appMonth) || appMonth == 0)
         {
             return "";
         }
 
-        return m == 12 ? "1" : (m + 1).ToString(CultureInfo.InvariantCulture);
+        return appMonth == 12 ? "1" : (appMonth + 1).ToString(CultureInfo.InvariantCulture);
     }
 
     private static string MonthTotal(int prior, JsonArray? members)
