@@ -15,7 +15,13 @@ internal static class SubmissionRunner
         }
 
         var layout = ReceptionPaths.FromSubmissionJson(jsonPath);
-        var cellMap = LoadJson(Path.Combine(repoRoot, "data", "soshiki-form-excel-cell-map.json"));
+        var cellMapPath = Path.Combine(repoRoot, "data", "soshiki-form-excel-cell-map.json");
+        var cellMap = LoadJson(cellMapPath);
+        var memberMap = cellMap["member"]!;
+        Console.WriteLine(
+            "Cell map: " + cellMapPath +
+            " | kanji " + memberMap["familyNameCol"] + "/" + memberMap["givenNameCol"] +
+            " | kana " + memberMap["familyNameKanaCol"] + "/" + memberMap["givenNameKanaCol"]);
         var templateName = cellMap["templateFileName"]?.GetValue<string>()
             ?? throw new InvalidOperationException("templateFileName missing in cell map.");
         var templatePath = Path.Combine(layout.WebRoot, templateName);

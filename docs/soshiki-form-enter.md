@@ -434,6 +434,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | 当月（月） | `ApplicationDate` から Web と同式（`coverage-month-display` 相当）。`CoverageMonth` も参照可 |
 | 月計 | **再計算可:** `PriorMonthHeadcount` +（`New` − `Cancel`）。`Change` は含めない（`countMemberTransferDelta` 同等） |
 | 住所・町村域結合 | C# `AddressPrintJoin`（Web `computeTownAreaPrintJoin` 同等・町村域12文字）で `addressLineCol` に1行印字 |
+| Excel 書き込み | 氏名・カナ・住所などは **結合セルごと1文字列**（`MergeArea` に書き、結合解除しない）。**1桁ずつ**は産別/支部/分会（3枠）・組合員コード（6枠）のみ |
 
 **`submission.SheetFooter`**
 

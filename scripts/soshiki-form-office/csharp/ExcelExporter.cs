@@ -124,12 +124,44 @@ internal static class ExcelExporter
         }
     }
 
+    /// <summary>
+    /// 1セル（または結合セル全体）に文字列をそのまま書く。結合は解除しない。
+    /// 1桁ずつ分割するのは <see cref="WriteThree"/> / <see cref="WriteSix"/>（コード欄のみ）。
+    /// </summary>
     private static void Set(dynamic sheet, string address, object? value)
     {
         if (value is null) return;
         var text = $"{value}".Trim();
         if (text.Length == 0) return;
-        sheet.Range[address].Value2 = text;
+
+        dynamic range = sheet.Range[address];
+        if (IsMergedExcelRange(range))
+        {
+            range.MergeArea.Value2 = text;
+        }
+        else
+        {
+            range.Value2 = text;
+        }
+    }
+
+    private static bool IsMergedExcelRange(dynamic range)
+    {
+        try
+        {
+            return (bool)range.MergeCells;
+        }
+        catch
+        {
+            try
+            {
+                return Convert.ToInt32(range.MergeCells, CultureInfo.InvariantCulture) != 0;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 
     private static void WriteThree(dynamic sheet, JsonNode colsDef, string? code)
