@@ -35,7 +35,7 @@ internal static class Program
                 continue;
             }
 
-            if (!args[i].StartsWith('-', StringComparison.Ordinal))
+            if (!args[i].StartsWith("-", StringComparison.Ordinal))
             {
                 jsonPath = args[i];
             }

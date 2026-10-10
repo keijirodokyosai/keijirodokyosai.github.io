@@ -11,7 +11,9 @@ internal static class KuchiCalculator
         foreach (var item in union["Kyosai"]?.AsArray() ?? [])
         {
             if (item is null) continue;
-            if (!item["KyosaiId"]!.TryGetValue<int>(out var id)) continue;
+            var kyosaiIdNode = item["KyosaiId"];
+            if (kyosaiIdNode is null) continue;
+            var id = kyosaiIdNode.GetValue<int>();
             var units = item["Units"]!.GetValue<double>();
             units = ApplyDisplayRule(id, units, kyosaiMap);
             display[id] = display.GetValueOrDefault(id) + units;
@@ -51,9 +53,9 @@ internal static class KuchiCalculator
             foreach (var field in kyosaiMap["formFields"]?.AsArray() ?? [])
             {
                 if (field?["formKey"]?.GetValue<string>() == "sogo-kyosai" &&
-                    field["displayKuchi"]?.TryGetValue<int>(out var d))
+                    field["displayKuchi"] is JsonNode displayKuchiNode)
                 {
-                    dk = d;
+                    dk = displayKuchiNode.GetValue<int>();
                 }
             }
 
@@ -79,7 +81,8 @@ internal static class KuchiCalculator
         }
 
         if (rules is null) return units;
-        if (!rules.AsObject().TryGetValue(kyosaiId.ToString(), out var rule))
+        var rulesObject = rules.AsObject();
+        if (!rulesObject.TryGetPropertyValue(kyosaiId.ToString(), out var rule) || rule is null)
         {
             return units;
         }
