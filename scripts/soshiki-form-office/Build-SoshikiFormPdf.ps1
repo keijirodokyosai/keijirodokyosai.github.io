@@ -18,4 +18,4 @@ if ($LASTEXITCODE -ne 0) {
     throw "dotnet publish failed"
 }
 
-Write-Output "Published: $(Join-Path $outDir 'SoshikiFormPdf.exe')"
+Write-Host "Published: $(Join-Path $outDir 'SoshikiFormPdf.exe')"

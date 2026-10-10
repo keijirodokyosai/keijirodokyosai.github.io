@@ -388,7 +388,12 @@ function Ensure-SoshikiFormPdfExe {
 
     if ($rebuild) {
         Write-Host "SoshikiFormPdf.exe is missing or older than csharp/; running Build-SoshikiFormPdf.ps1 ..."
-        & (Join-Path $OfficeDir "Build-SoshikiFormPdf.ps1")
+        $buildScript = Join-Path $OfficeDir "Build-SoshikiFormPdf.ps1"
+        $buildLog = @(& $buildScript 2>&1)
+        $buildLog | ForEach-Object { Write-Host $_ }
+        if ($LASTEXITCODE -ne 0) {
+            throw "Build-SoshikiFormPdf.ps1 failed with exit code $LASTEXITCODE"
+        }
     }
 
     if (Test-Path -LiteralPath $exe) {
@@ -396,7 +401,7 @@ function Ensure-SoshikiFormPdfExe {
         Write-Host ("SoshikiFormPdf: " + $item.FullName + " (" + $item.LastWriteTime.ToString("yyyy-MM-dd HH:mm") + ")")
     }
 
-    return $exe
+    return , $exe
 }
 
 function Get-SoshikiFormOfficeSettingsPath {
@@ -767,7 +772,7 @@ function Invoke-SoshikiFormPdf {
 
     $officeDir = $PSScriptRoot
     $repoRoot = Get-SoshikiFormRepoRoot -ScriptRoot $officeDir
-    $exe = Ensure-SoshikiFormPdfExe -OfficeDir $officeDir
+    $exe = [string](Ensure-SoshikiFormPdfExe -OfficeDir $officeDir)
     $csproj = Join-Path $officeDir "csharp\SoshikiFormPdf.csproj"
     $toolArgs = @("--repo", $repoRoot, $jsonFull)
     $ran = $false
