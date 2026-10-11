@@ -1656,17 +1656,6 @@ a:focus-visible {
   transform: none;
 }
 
-.soshiki-form-actions-hint {
-  width: 297mm;
-  max-width: 100%;
-  margin: 8px auto 0;
-  padding: 0 20px;
-  box-sizing: border-box;
-  font-size: 14px;
-  color: #456;
-  text-align: right;
-}
-
 .soshiki-form-saved-unions-panel {
   display: grid;
   grid-template-columns:
@@ -2495,7 +2484,6 @@ a:focus-visible {
   body.soshiki-form-enter-page .breadcrumb,
   body.soshiki-form-enter-page .hero,
   body.soshiki-form-enter-page .soshiki-form-actions,
-  body.soshiki-form-enter-page .soshiki-form-actions-hint,
   body.soshiki-form-enter-page .soshiki-form-saved-unions-panel,
   body.soshiki-form-enter-page .soshiki-form-send-result {
     display: none !important;

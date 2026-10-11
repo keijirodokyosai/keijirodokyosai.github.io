@@ -293,25 +293,17 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | 1 | `soshiki-form-clear` | クリア | **実装済み** |
 | 2 | `soshiki-form-send` | 送 信 | **実装済み**（§5.10） |
 
-その下（送 信ヒント・送 信結果の後）に **保存した組合**（`.soshiki-form-saved-unions-panel`）:
+その下（送 信結果の後）に **保存した組合**（`.soshiki-form-saved-unions-panel`）:
 
 | 項目 | 内容 |
 |------|------|
-| 配置 | 操作ボタンより**下**（クリア・送 信 → ヒント → 本パネル） |
+| 配置 | 操作ボタンより**下**（クリア・送 信 → 送信結果 → 本パネル） |
 | 見た目 | 背景 **#fffaf0**・枠線・角丸（操作ボタン行と同系） |
 | 行高 | **27px**（組合名＋小さな「削除」ボタン） |
 | ヘッダ | 「すべて削除」の**左端**を上段の**クリア**ボタン中心付近に合わせ、タイトル・組合名は削除ボタン列の**右 12px** から表示（3 列グリッド・`display: contents`） |
 | 削除列 | 「すべて削除」と各行の「削除」は**右辺揃え**（同一グリッド列） |
 
 印刷時は非表示。
-
-送 信の注意（`#soshiki-form-send-hint`）:
-
-```text
-送信後の取り消しはできません。
-内容を誤って送信した場合は、受付 ID を控えて京滋労働共済までご連絡ください。
-もしデータベースに反映させた後に判明した場合は、お手数ですが「変更」で再送信してください。
-```
 
 **クリア**（`js/soshiki-form-enter.js` + `js/soshiki-form-members.js`）:
 
@@ -667,7 +659,7 @@ PA 通知専用。Web・GitHub には載せない。kyosai-system が `Subbranch
 | 項目 | 内容 |
 |------|------|
 | `@page` | `size: A4 landscape`、`margin: 0` |
-| 非印字 | `.site-header`、`.site-footer`、`.breadcrumb`、`.hero`、`.soshiki-form-actions`、`.soshiki-form-actions-hint`、保存組合パネル・送信結果 |
+| 非印字 | `.site-header`、`.site-footer`、`.breadcrumb`、`.hero`、`.soshiki-form-actions`、保存組合パネル・送信結果 |
 | ページ数 | **1 ページ**（シートのみ。共通ヘッダー／フッターを印刷対象外） |
 | シート | `transform: none`（§9.0.1 の scale 解除）、`297mm × 210mm`、影なし。組合員行は `overflow: visible`（住所2〜3行目） |
 | 背景 PNG | `.soshiki-form-sheet-bg` に `print-color-adjust: exact` |
