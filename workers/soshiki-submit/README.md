@@ -1,16 +1,16 @@
 # 組織共済 WEB 受付 Worker（`soshiki-submit`）
 
-Cloudflare Worker が GitHub Pages フォームからの POST を受け、Microsoft Graph で OneDrive に **JSON のみ** 保存します。
+Cloudflare Worker が GitHub Pages フォームからの POST を受け、Microsoft Graph で OneDrive に **JSON** を保存し、続けて **受付確認メール**（Graph `sendMail`・PDF 添付なし）を送ります。
 
 仕様の正: [`docs/soshiki-form-submit-worker-graph.md`](../../docs/soshiki-form-submit-worker-graph.md)  
-**事務用 PDF・返信メール**は Worker 外（同 doc **§13**・`docs/soshiki-form-enter.md` §5.10.1）。`pdfBase64` は **受け付けません**。
+**事務用 PDF** は事務 PC（Graph delta または OneDrive 同期 + Inbox）。`pdfBase64` は **受け付けません**。
 
 ## 前提
 
 - **Node.js LTS**（`node` / `npm` が PowerShell で通ること）。未導入例: `winget install OpenJS.NodeJS.LTS` → **ターミナルを開き直して** `node -v` を確認
 - Wrangler は **グローバル不要**（本ディレクトリの `npm install` で `node_modules` に入る）
 - Cloudflare API トークン: 環境変数 `CLOUDFLARE_API_TOKEN`（Windows ユーザー環境変数推奨）
-- Entra アプリ登録・`Files.ReadWrite.All` 管理者同意済み（手動 C で Graph 書き込み確認済み想定）
+- Entra アプリ登録・`Files.ReadWrite.All` と **`Mail.Send`** の管理者同意済み（手動で Graph 書き込み・送信確認済み想定）
 
 ## 初回セットアップ
 
@@ -40,6 +40,15 @@ wrangler secret put SOSHIKI_SUBMIT_PASSWORD
 | `GRAPH_DRIVE_USER_ID` | OneDrive 所有者のオブジェクト ID |
 | `GRAPH_BASE_PATH` | 例: `組織共済WEB受付` |
 | `SOSHIKI_SUBMIT_PASSWORD` | Web 送信用パスワード（事務と共有） |
+| `GRAPH_MAIL_USER_ID`（任意） | `sendMail` の送信元ユーザー ID。省略時は `GRAPH_DRIVE_USER_ID` |
+| `SOSHIKI_SKIP_RECEIPT_MAIL`（任意） | `1` のとき受付確認メールを送らない（json 保存のみ） |
+
+OneDrive の `設定/soshiki-form-office-settings.json`（`FromEmail`・`AdminEmail`）と `設定/union-contacts.json`（`ManagerEmail`）を Worker が読みます（`SoshikiFormReceiptMail.ps1` 同等の文面）。
+
+### レスポンス
+
+成功時: `{ "ok": true, "receiptId": "…", "mailSent": true|false }`  
+json は保存済みでもメール失敗時は `mailWarning` 付き（Web が注意文を表示）。失敗時は管理者向け Graph メール（`FailureStage: ReceiptMail`）。
 
 ### デプロイ
 

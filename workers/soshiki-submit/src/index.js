@@ -1,7 +1,10 @@
 /**
- * 組織共済 WEB 受付 — Cloudflare Worker（Graph → OneDrive）
+ * 組織共済 WEB 受付 — Cloudflare Worker（Graph → OneDrive + receipt mail）
  * 仕様: docs/soshiki-form-submit-worker-graph.md
  */
+
+import { downloadDriveFile, uploadDriveFile } from "./graphDrive.js";
+import { sendReceiptMailAfterUpload } from "./receiptMail.js";
 
 const ALLOWED_ORIGIN = "https://keijirodokyosai.github.io";
 const MAX_BODY_BYTES = 2 * 1024 * 1024;
@@ -113,6 +116,7 @@ export default {
     const fileStem = `${sanitizeFileNameSegment(unionName)}_${fileNameDate}_${receiptId}`;
     const jsonFileName = `${fileStem}.json`;
     const basePath = env.GRAPH_BASE_PATH.trim();
+    const userId = env.GRAPH_DRIVE_USER_ID.trim();
 
     const jsonPath = [
       basePath,
@@ -124,10 +128,11 @@ export default {
 
     const jsonContent = JSON.stringify(submission, null, 2);
 
+    let token;
     try {
-      const token = await fetchGraphToken(env);
+      token = await fetchGraphToken(env);
       await uploadDriveFile(
-        env.GRAPH_DRIVE_USER_ID,
+        userId,
         token,
         jsonPath,
         jsonContent,
@@ -146,7 +151,30 @@ export default {
       );
     }
 
-    return jsonResponse({ ok: true, receiptId }, 200, corsHeaders);
+    const mailCtx = {
+      token,
+      userId,
+      basePath,
+      submission,
+      unionName,
+      fileNameDate,
+      receiptId,
+      downloadDriveFile,
+    };
+    const mailResult = await sendReceiptMailAfterUpload(env, mailCtx);
+
+    return jsonResponse(
+      {
+        ok: true,
+        receiptId,
+        mailSent: mailResult.mailSent,
+        ...(mailResult.mailError && !mailResult.mailSent
+          ? { mailWarning: "受付確認メールの送信に失敗しました。事務局へお問い合わせください。" }
+          : {}),
+      },
+      200,
+      corsHeaders
+    );
   },
 };
 
@@ -267,25 +295,4 @@ async function fetchGraphToken(env) {
     throw new Error("Token response missing access_token");
   }
   return data.access_token;
-}
-
-async function uploadDriveFile(userId, token, pathSegments, body, contentType) {
-  const encodedPath = pathSegments
-    .map((segment) => encodeURIComponent(segment))
-    .join("/");
-  const url = `https://graph.microsoft.com/v1.0/users/${userId}/drive/root:/${encodedPath}:/content`;
-
-  const response = await fetch(url, {
-    method: "PUT",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": contentType,
-    },
-    body,
-  });
-
-  if (!response.ok) {
-    const text = await response.text();
-    throw new Error(`Upload ${pathSegments.join("/")}: ${response.status} ${text}`);
-  }
 }

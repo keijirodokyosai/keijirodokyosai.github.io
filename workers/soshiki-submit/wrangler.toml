@@ -5,3 +5,6 @@ compatibility_date = "2024-09-01"
 # Secrets（wrangler secret put）:
 # AZURE_TENANT_ID, AZURE_CLIENT_ID, AZURE_CLIENT_SECRET,
 # GRAPH_DRIVE_USER_ID, GRAPH_BASE_PATH, SOSHIKI_SUBMIT_PASSWORD
+# 任意: GRAPH_MAIL_USER_ID（sendMail 送信元ユーザー。未設定時は GRAPH_DRIVE_USER_ID）
+# 任意: SOSHIKI_SKIP_RECEIPT_MAIL=1（本番以外で受付確認メールを送らない）
+# Entra: Mail.Send（アプリケーション）の管理者同意が必要

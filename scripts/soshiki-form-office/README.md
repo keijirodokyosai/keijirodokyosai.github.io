@@ -82,12 +82,28 @@ PowerShell で1行だけ（コピー後メモ帳で**1行か確認**してから
 `-KeepInJson` … PDF 後も `json\` に残す（デバッグ用）。  
 `-PreviewReceiptMail` … PDF の直前に受付確認メール下書き（送信なし）。
 
-**自動発火（事務 PC・OneDrive 同期済み）**
+**自動発火 — Graph delta（推奨・PC の OneDrive 同期に依存しない）**
+
+環境変数は Worker と同じ Entra 値（`SOSHIKI_GRAPH_*` または `AZURE_*` + `GRAPH_DRIVE_USER_ID` + `GRAPH_BASE_PATH`）。事務 PC のユーザー環境変数またはタスクの「環境」で設定。
+
+```powershell
+# 1 回だけ実行 → state/graph-inbox-delta.json にベースライン（既存 json は PDF 化しない）
+.\Process-SoshikiFormJsonInboxGraph.ps1 -LogToWebRoot
+
+# 常駐（既定 30 秒）
+.\Watch-SoshikiFormJsonInboxGraph.ps1 -LogToWebRoot
+```
+
+**受付確認メールは Worker が送信。** この Inbox 経路では **PDF のみ**（`Invoke-SoshikiFormJsonInboxFile` はメールを送らない）。
+
+**代替 — ローカル OneDrive 同期**
 
 ```powershell
 # ログオン常駐（60 秒ポール）＋ 1 分間隔の予備タスクをまとめて登録
 .\Register-SoshikiFormJsonInboxAutomation.ps1
 ```
+
+Graph watcher と **同時に走らせない**（二重 PDF 防止はスキップで吸収できるが推奨しない）。
 
 個別登録: `Register-SoshikiFormJsonInboxWatcherTask.ps1`（ログオン） / `Register-SoshikiFormJsonInboxTask.ps1`（1 分間隔・`-LogToWebRoot` 付き）。
 
@@ -125,8 +141,11 @@ C# は Office PIA に依存せず `dynamic` で Excel を操作します。
 | `csharp/` | `SoshikiFormPdf` コンソール |
 | `tests/SoshikiFormPdf.Tests/` | xUnit（`KuchiCalculator`） |
 | `Export-SoshikiFormPdfFromJson.ps1` | 1 件 |
-| `Process-SoshikiFormJsonInbox.ps1` | 一括 |
-| `Watch-SoshikiFormJsonInbox.ps1` | ポール常駐 |
+| `Process-SoshikiFormJsonInbox.ps1` | 一括（ローカル `json\`） |
+| `SoshikiFormGraph.ps1` | Graph トークン・delta・移動 |
+| `Process-SoshikiFormJsonInboxGraph.ps1` | Graph delta → ダウンロード → PDF |
+| `Watch-SoshikiFormJsonInboxGraph.ps1` | Graph ポール常駐（30s） |
+| `Watch-SoshikiFormJsonInbox.ps1` | ローカルポール常駐 |
 | `Register-SoshikiFormJsonInboxWatcherTask.ps1` | ログオンタスク |
 | `Register-SoshikiFormJsonInboxTask.ps1` | 1 分間隔タスク |
 | `Register-SoshikiFormJsonInboxAutomation.ps1` | 上記 2 つを一括登録 |
@@ -179,7 +198,7 @@ Worker が保存する **submission オブジェクトのみ**。
 .\Send-SoshikiFormAdminAlertEmail.ps1 -JsonPath '…' -ErrorMessage '…' -Send
 ```
 
-Outlook **Classic**（COM）が必要です。Inbox からの自動連携は別途実装予定。
+Outlook **Classic**（COM）が必要です。**本番の受付確認は Worker**（Graph）。ここは手動・再送用。
 
 ## 開発（C#）
 

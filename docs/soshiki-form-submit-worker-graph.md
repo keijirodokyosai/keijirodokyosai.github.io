@@ -13,14 +13,13 @@
     ▼ POST（password, unionName, fileNameDate, submission）
 [Cloudflare Workers] 中継 API（秘密鍵・パスワードは環境変数のみ）
     │ Microsoft Graph（アプリケーション権限）
-    ▼
-[事務局 OneDrive] 組織共済WEB受付/受付/{storageFolder}/json/（＋移行完了後は PDF/ は事務側生成）
-    │
-    ▼ レスポンス { "ok": true, "receiptId": "…" } → Web に受付 ID 表示
+    ├─► OneDrive 受付/{storageFolder}/json/ に .json 保存
+    └─► 受付確認メール（sendMail・PDF 添付なし・設定/union-contacts 参照）
+    ▼ レスポンス { "ok": true, "receiptId": "…", "mailSent": … } → Web
 
-[事務 PC・OneDrive 同期後] 未処理 json を1件ずつ処理（§13）
-    ① 返信メール（受付確認・PDF 添付なし）
-    ② Excel テンプレ → PDF/ に PDF 保存
+[事務 PC] Graph delta ポール（推奨）または OneDrive 同期 + ローカル Inbox（§13）
+    ① Excel テンプレ → PDF/ に PDF 保存（**メールは送らない**・二重送信防止）
+    ② json を 処理済/ に移動（クラウド＋ローカル）
 ```
 
 | 項目 | 内容 |
@@ -28,9 +27,9 @@
 | フロント | 入力・検証・**submission JSON** 送信。組合向け PDF は **送信成功後**のブラウザ印刷（§5.9・保 存ボタンなし） |
 | バックエンド | Cloudflare Worker **`workers/soshiki-submit`**（URL を config に書く） |
 | 用紙 PDF | **共済会側**（Excel テンプレ＋ PowerShell / Python）。Web の html2canvas は **採用しない**（位置合わせ困難） |
-| 返信メール | **共済会側バッチ**（json 着信と同じトリガー）。**PDF は添付しない** |
+| 返信メール | **Worker** が json 保存直後に Graph **sendMail**（**PDF は添付しない**）。失敗時は管理者アラート |
 | 認証 | **Entra ID アプリ登録** + Client Secret（Worker Secrets）。**申込者の Microsoft ログインは不要** |
-| Exchange / メール | **Worker 経路では送らない**。事務 PC バッチから Graph / SMTP 等で送信（設計は §13） |
+| Exchange / メール | **本番の受付確認は Worker**。事務 Inbox は **PDF のみ**（`Send-SoshikiFormReceiptEmail.ps1` は手動・再送用） |
 | Power Automate | **送信用・保存用とも不要**（HTTP 受信は Premium。メールトリガーは REST／ライセンス問題） |
 
 ---
@@ -84,10 +83,11 @@
 ### Web が期待するレスポンス
 
 ```json
-{ "receiptId": "7f3a2b1c", "ok": true }
+{ "receiptId": "7f3a2b1c", "ok": true, "mailSent": true }
 ```
 
-`js/soshiki-form-submit.js` は `receiptId` / `receipt_id` を読んで成功表示。
+メール失敗でも json 保存済みのときは `ok: true` のまま `mailWarning` を付与することがある。  
+`js/soshiki-form-submit.js` は `receiptId` / `receipt_id` と `mailWarning` を表示。
 
 ### 送 信条件（既存）
 
@@ -130,20 +130,19 @@
 
 ---
 
-## 13. 事務側自動化（PDF・返信メール）— 2026-10 決定
+## 13. 事務側自動化（PDF）— 2026-10 決定・2026-10 更新
 
-Web では **送 信 PDF を作らない**（html2canvas 経路は削除済み）。取込用 JSON を正とし、**共済会側**で PDF とメールを自動化する。
+Web では **送 信 PDF を作らない**（html2canvas 経路は削除済み）。**受付確認メールは Worker**（§6）。事務 PC は **Excel → PDF** と **処理済** のみ。
 
-### 13.1 処理順（1 json ＝ 1 ジョブ）
+### 13.1 処理順（1 json ＝ 1 ジョブ・事務 Inbox）
 
 | 順 | 処理 | 備考 |
 |----|------|------|
-| 1 | **トリガー** | OneDrive 同期後、事務 PC の **Inbox 自動**（`Register-SoshikiFormJsonInboxAutomation.ps1`：ログオン 60 秒ポール ＋ 1 分タスク）が `json/` をスキャン |
-| 2 | **返信メール** | 受付確認（受付 ID・共済会名・申込日など）。**PDF は添付しない** |
-| 3 | **PDF 生成** | Excel テンプレに値を書き込み → `PDF/` に `{組合名}_{yyyyMMdd}_{受付ID}.pdf` |
-| 4 | **処理済** | PDF 成功後 `処理済/` に json 移動（`Invoke-SoshikiFormJsonInboxFile` 既定） |
+| 1 | **トリガー** | **推奨:** `Watch-SoshikiFormJsonInboxGraph.ps1`（Graph **delta**・既定 30 秒）。**代替:** OneDrive 同期 + `Register-SoshikiFormJsonInboxAutomation.ps1`（ローカル `json/` スキャン）。**両方同時は避ける** |
+| 2 | **PDF 生成** | Excel テンプレ → `PDF/` に `{組合名}_{yyyyMMdd}_{受付ID}.pdf`（`Invoke-SoshikiFormJsonInboxFile`） |
+| 3 | **処理済** | 成功または既存 PDF ありで `処理済/` に json 移動。Graph 経路はクラウド上の json も `処理済` へ PATCH |
 
-メールを PDF より先に送るのは **Excel 失敗時も受付通知を届ける**ため。文面に PDF 添付を約束しない。
+初回 Graph delta は **ベースラインのみ**（既存 json を PDF 化しない）。`state/graph-inbox-delta.json` は Git 管理外。
 
 ### 13.2 実行環境
 
@@ -151,7 +150,7 @@ Web では **送 信 PDF を作らない**（html2canvas 経路は削除済み�
 |------|------|
 | 場所 | **事務 PC** または常時起動 Windows（OneDrive で受付フォルダ同期） |
 | 手段 | `scripts/soshiki-form-office/` — **C#**（Excel `dynamic` COM）＋薄い PowerShell。`ExportAsFixedFormat` で PDF |
-| Worker | **Excel は動かせない**。PDF・メールは Worker 外 |
+| Worker | **Excel は動かせない**。受付確認メールは Worker、**事務 PDF は Worker 外** |
 
 ### 13.3 用紙 PDF のデータ源
 
@@ -165,27 +164,27 @@ Web では **送 信 PDF を作らない**（html2canvas 経路は削除済み�
 | 当月（月）・月計 | バッチで **再計算**（`ApplicationDate` / `CoverageMonth`・`Members[].Transfer`・`SheetFooter.PriorMonthHeadcount`） |
 | 住所の町村域結合印字 | バッチで Web の `computeTownAreaPrintJoin` 相当、または表示用フィールドを JSON に含める |
 
-### 13.4 返信メール
+### 13.4 返信メール（Worker 本番・事務は手動補助）
 
 | 項目 | 内容 |
 |------|------|
-| 宛先 | **`union-contacts.json`** の `ManagerEmail`（`KyosaikaiCode` 照合）。Web フォームにメール欄は無い |
-| 送信 | **Outlook デスクトップ**（事務 PC）。組合向け: `Send-SoshikiFormReceiptEmail.ps1`（`-Send`）。管理者 PDF 失敗: `Send-SoshikiFormAdminAlertEmail.ps1`（`-Send`） |
-| 送信元 | `設定/soshiki-form-office-settings.json` の **`FromEmail`**（Outlook `SendUsingAccount`。環境変数 `SOSHIKI_OFFICE_FROM_EMAIL` で上書き可） |
-| 管理者宛先 | 同ファイルの **`AdminEmail`**（`SOSHIKI_OFFICE_ADMIN_EMAIL` で上書き可） |
-| BCC | 受付確認メールのみ **`FromEmail` と同一**（事務局への送信通知） |
-| 件名 | `組織共済WEB受付_{yyyyMMdd}`（共済会名は含めない） |
-| 本文 | 担当者姓・受付完了・**受付 ID**・**共済会**（ラベル）・申込日・署名（京滋労働組合共済会／事務局）。OneDrive パスは記載しない |
-| 添付 | **なし**（PDF は `PDF/` にのみ保管） |
+| 宛先 | OneDrive **`設定/union-contacts.json`** の `ManagerEmail`（`KyosaikaiCode` 照合） |
+| 本番送信 | **Worker** `workers/soshiki-submit/src/receiptMail.js`（Graph **sendMail**・Entra **`Mail.Send`**） |
+| 送信元 | 同 **`FromEmail`**（settings）。任意 Secret **`GRAPH_MAIL_USER_ID`**（未設定時は `GRAPH_DRIVE_USER_ID`） |
+| BCC | **`FromEmail` と同一**（事務局への送信通知） |
+| 失敗時 | 管理者 **`AdminEmail`** に Graph メール（`FailureStage: ReceiptMail`）。Web は `mailWarning` |
+| 件名・本文 | `SoshikiFormReceiptMail.ps1` 同等（`組織共済WEB受付_{yyyyMMdd}` 等） |
+| 手動・再送 | 事務 PC: `Send-SoshikiFormReceiptEmail.ps1`（`-Send`・Outlook）。**Inbox 自動では送らない** |
+| PDF 失敗通知 | `Send-SoshikiFormAdminAlertEmail.ps1`（`-Send`）— 事務 Inbox の Excel 失敗時 |
 
 ### 13.5 事務バッチ実装チェックリスト
 
 - [ ] Excel テンプレ（A4 横・印刷範囲・用紙どおり）— 事務側で配置
 - [x] JSON → セルマップ・マスタ参照・月計再計算 — `scripts/soshiki-form-office/csharp` + `data/soshiki-form-excel-cell-map.json`
 - [x] 手動・一括 PDF — `Export-SoshikiFormPdfFromJson.ps1` / `Process-SoshikiFormJsonInbox.ps1`（既存 `PDF\` はスキップ）
-- [x] Inbox 自動（`Register-SoshikiFormJsonInboxAutomation.ps1`）・PDF 後 `処理済/` 移動
-- [ ] 事務 PC への自動タスク登録（本番 OneDrive パスで一度実行）
-- [x] 返信メール送信スクリプト — `Send-SoshikiFormReceiptEmail.ps1`（Inbox からの自動送信は未）
+- [x] Inbox 自動（ローカル同期）・Graph delta（`Process-SoshikiFormJsonInboxGraph.ps1`）・PDF 後 `処理済/` 移動
+- [ ] 事務 PC への自動タスク登録（Graph  watcher またはローカル Automation・本番で一度設定）
+- [x] 返信メール — **Worker 実装済**（deploy + `Mail.Send` 同意）。PS は手動用
 - [x] 処理済管理（`処理済/` 移動・`-KeepInJson` で無効化可）
 - [x] Web: `SheetFooter` 送付・Worker: **JSON のみ**（`pdfBase64` 非対応）
 
@@ -204,7 +203,8 @@ Web では **送 信 PDF を作らない**（html2canvas 経路は削除済み�
 | パスワード | `SOSHIKI_SUBMIT_PASSWORD`（Secret） |
 | 受付 ID | `crypto.randomUUID()` の先頭 8 文字（16進） |
 | Graph | client_credentials → 所有者 drive に PUT（中間フォルダは Graph が作成） |
-| エラー | `{ "ok": false, "message": "…" }`（Web は `message` を表示） |
+| 受付確認メール | PUT 成功後 `sendMail`（settings + union-contacts を drive から GET） |
+| エラー | `{ "ok": false, "message": "…" }`（Web は `message` を表示）。保存成功・メール失敗は `ok: true` + `mailWarning` |
 | レート制限 | 未実装（後回し可） |
 
 ### Worker 環境変数（例）
@@ -217,6 +217,8 @@ Web では **送 信 PDF を作らない**（html2canvas 経路は削除済み�
 | `GRAPH_DRIVE_USER_ID` または `GRAPH_SITE_ID` | 保存先（設計時に1つ決定） |
 | `GRAPH_BASE_PATH` | 例: `組織共済WEB受付` |
 | `SOSHIKI_SUBMIT_PASSWORD` | Web 送信用パスワード（事務と共有） |
+| `GRAPH_MAIL_USER_ID`（任意） | sendMail 送信元ユーザー ID |
+| `SOSHIKI_SKIP_RECEIPT_MAIL`（任意） | `1` でメール省略（テスト用） |
 
 ---
 
@@ -237,7 +239,7 @@ Web では **送 信 PDF を作らない**（html2canvas 経路は削除済み�
 
 | 項目 | 備考 |
 |------|------|
-| **事務バッチ**（§13） | Excel PDF **初版済**。返信メール **送信スクリプト済**（Inbox 連携は未） |
+| **事務バッチ**（§13） | Excel PDF **初版済**。Graph Inbox **初版済**。返信メールは **Worker**（Entra `Mail.Send` 要） |
 | ~~Web **`SheetFooter`** 送付~~ | **完了**（§5.10.1） |
 | ~~Worker **JSON のみ**・Web **html2canvas 削除**~~ | **完了** |
 | Worker 保存 JSON ラップ | 未実装（本文は `submission` のみ） |
@@ -255,7 +257,7 @@ Web では **送 信 PDF を作らない**（html2canvas 経路は削除済み�
 |----------|------|
 | **0〜3** | Entra・Worker・本番 json 受付 — **完了想定** |
 | **4** | ~~Web: `SheetFooter`・Worker JSON のみ~~ **完了**。残: json ラップ（任意） |
-| **5** | 事務バッチ: メール → Excel PDF（§13） |
+| **5** | 事務バッチ: Graph Inbox 本番化・Excel PDF（§13）。メールは Worker deploy |
 | **6** | Access 取込・json 削除運用 |
 
 ---
@@ -278,7 +280,7 @@ workers/soshiki-submit/                 … Worker（src/index.js, README, deplo
 ## 11. 返信メール件名（事務バッチ・案）
 
 確定: `組織共済WEB受付_{yyyyMMdd}`（旧案: `組織共済WEB申込_{組合名}_{yyyyMMdd}`）。  
-**Worker POST ではメールを送らない**。送信は §13 の事務 PC バッチ。
+**本番送信は Worker POST 直後**（§6）。事務 Inbox は PDF のみ。
 
 ---
 
@@ -288,4 +290,4 @@ workers/soshiki-submit/                 … Worker（src/index.js, README, deplo
 
 ---
 
-**最終更新:** 2026-10-10（§13 PDF 初版・返信メールプレビュー PS、Web 送 信 PDF 廃止済）
+**最終更新:** 2026-10-12（Worker 受付確認メール・Graph delta Inbox・事務は PDF のみ）

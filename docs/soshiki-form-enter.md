@@ -56,7 +56,7 @@
 | **送 信**（Worker → OneDrive json） | **完了**（§5.10） |
 | 組合向け PDF（送信後印刷） | **完了**（§5.9・`{組合名}_{yyyyMMdd}_{受付ID}.pdf`） |
 | 事務 Excel → PDF | **初版済**（§5.10.1・`scripts/soshiki-form-office/`） |
-| 返信メール **送信** | **スクリプト済**（`Send-SoshikiFormReceiptEmail.ps1`・Inbox 自動連携は未） |
+| 返信メール **送信** | **Worker 実装済**（Graph sendMail・deploy + `Mail.Send`）。事務 Inbox は PDF のみ |
 | PA 通知・Access 取込 | 廃止／kyosai-system 側 |
 
 ### 完了（組合員入力・2026-08-28）
@@ -415,7 +415,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 
 #### 5.10.1 事務用 PDF・返信メール（2026-10 決定）
 
-**方針:** Web では **送 信 PDF を作らない**（html2canvas 経路は削除済み）。OneDrive に json が着信したら **事務 PC バッチ**が **返信メール（PDF 添付なし）→ Excel PDF** の順で処理。詳細は **`docs/soshiki-form-submit-worker-graph.md` §13**。
+**方針:** Web では **送 信 PDF を作らない**（html2canvas 経路は削除済み）。**受付確認メール**は **Worker** が json 保存直後に Graph で送信（PDF 添付なし）。**事務 PC** は **Excel PDF** のみ（Graph delta または OneDrive 同期 Inbox）。詳細は **`docs/soshiki-form-submit-worker-graph.md` §6・§13**。
 
 | 用紙の領域 | データ源 |
 |------------|----------|
@@ -439,7 +439,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 
 当月・月計は **バッチ再計算可**（JSON に含めない）。
 
-**事務 Excel → PDF（実装済み・初版）:** 本体は `scripts/soshiki-form-office/csharp/`（`SoshikiFormPdf`・Excel は dynamic COM）。入口は `Export-SoshikiFormPdfFromJson.ps1`（1件）→ `SoshikiFormOffice.ps1` の `Invoke-SoshikiFormPdf`（`dist\SoshikiFormPdf.exe` を優先。`csharp\` が新しければ **自動ビルド**、無ければ `dotnet run`）。出力は各月 **`PDF\`**（Windows で既存 `pdf` は **大文字小文字のみ `PDF` に正規化**）。**発火:** `Process-SoshikiFormJsonInbox.ps1`（各月 `json\` をスキャン → PDF → **`処理済\` に json 移動**。既に `PDF\{stem}.pdf` がある場合はスキップし json を `処理済\` に寄せる。理由はコンソール `Skipped (PDF exists):`）。**自動:** 事務 PC で `Register-SoshikiFormJsonInboxAutomation.ps1`（ログオン 60 秒ポール ＋ 1 分間隔の予備タスク）。テンプレは **受付の親**直下の `templateFileName`。詳細は `scripts/soshiki-form-office/README.md`。
+**事務 Excel → PDF（実装済み・初版）:** 本体は `scripts/soshiki-form-office/csharp/`（`SoshikiFormPdf`・Excel は dynamic COM）。入口は `Export-SoshikiFormPdfFromJson.ps1`（1件）→ `SoshikiFormOffice.ps1` の `Invoke-SoshikiFormPdf`（`dist\SoshikiFormPdf.exe` を優先。`csharp\` が新しければ **自動ビルド**、無ければ `dotnet run`）。出力は各月 **`PDF\`**（Windows で既存 `pdf` は **大文字小文字のみ `PDF` に正規化**）。**発火（推奨）:** `Process-SoshikiFormJsonInboxGraph.ps1` / `Watch-SoshikiFormJsonInboxGraph.ps1`（OneDrive **Graph delta**・**メールは送らない**・初回は delta ベースラインのみ）。**代替:** `Process-SoshikiFormJsonInbox.ps1`（ローカル同期済み `json\` スキャン）＋ `Register-SoshikiFormJsonInboxAutomation.ps1`。**両方の watcher は同時に走らせない。** 既に `PDF\{stem}.pdf` がある場合はスキップし json を `処理済\` に寄せる（`Skipped (PDF exists):`）。テンプレは **受付の親**直下の `templateFileName`。詳細は `scripts/soshiki-form-office/README.md`。
 
 | 表示 | 例（1人目） | 備考 |
 |------|-------------|------|
@@ -460,20 +460,22 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | 建物名 | AG14 等 | `building` 行 |
 | 申込月日 | AM1, AQ1 等 | 月日は 0 埋め解除 |
 
-**返信メール:** 宛先は `設定/union-contacts.json` の `ManagerEmail`（`KyosaikaiCode` 照合）。送信元・BCC は `設定/soshiki-form-office-settings.json` の **`FromEmail`**（BCC は送信者通知用・担当者には非表示）。同 settings に **`ReceptionRoot`**（`受付` フォルダのフルパス）または **`WebRoot`**（`組織共済WEB受付` 直下）を書くと、Inbox 系スクリプトは `-ReceptionRoot` 省略可（例: `examples/soshiki-form-office-settings.example.json`）。件名 `組織共済WEB受付_{yyyyMMdd}`。本文の組織名行はラベル **共済会:**（ファイル名の組合名セグメント）。受付 ID はファイル名 stem から取得。本文末尾は「京滋労働組合共済会」「事務局」。プレビュー: `Preview-SoshikiFormReceiptEmail.ps1`、送信: `Send-SoshikiFormReceiptEmail.ps1`（`-Send`）。管理者 PDF 失敗メール先頭文は「組織共済申込書PDF の作成に失敗しました。」（`SoshikiFormAdminMail.ps1`）。
+**返信メール:** 本番は **Worker**（`workers/soshiki-submit/src/receiptMail.js`）が json 保存後に Graph **sendMail**。宛先は OneDrive `設定/union-contacts.json` の `ManagerEmail`（`KyosaikaiCode` 照合）。送信元・BCC は `設定/soshiki-form-office-settings.json` の **`FromEmail`**（BCC は送信者通知用）。件名 `組織共済WEB受付_{yyyyMMdd}`。失敗時は **`AdminEmail`** にアラート（`FailureStage: ReceiptMail`）、Web は `mailWarning`。事務 Inbox は **メールを送らない**（二重送信防止）。手動・再送: `Preview-SoshikiFormReceiptEmail.ps1` / `Send-SoshikiFormReceiptEmail.ps1`（`-Send`・Outlook）。管理者 PDF 失敗は `SoshikiFormAdminMail.ps1`（「組織共済申込書PDF の作成に失敗しました。」）。
 
 **Worker:** `pdfBase64` は **非対応**（JSON のみ PUT）。OneDrive `.json` 本文は現行 **`submission` オブジェクトのみ**（ラップ `{ receiptId, unionName, fileNameDate, submission }` は未実装）。
 
 #### Worker レスポンス（Web 期待）
 
 ```json
-{ "receiptId": "7f3a2b1c", "ok": true }
+{ "receiptId": "7f3a2b1c", "ok": true, "mailSent": true }
 ```
+
+メール失敗時は `ok: true` のまま `mailWarning` が付く場合あり（json は保存済み）。
 
 #### Worker 側（`workers/soshiki-submit`）
 
 実装済み。デプロイ・Secrets は `workers/soshiki-submit/README.md`。  
-json の Graph 保存は Worker（**pdf は書かない**）。**事務 PDF** は §5.10.1・`scripts/soshiki-form-office/`（初版済）。**返信メール**は worker-graph §13 未実装。  
+json の Graph 保存と **受付確認メール**は Worker（**pdf は書かない**・Entra **`Mail.Send`** 要）。**事務 PDF** は §5.10.1・`scripts/soshiki-form-office/`（Graph Inbox 初版済）。  
 
 **廃止:** PA HTTP 受信（Premium）、PA メール → OneDrive（REST／ライセンス）。詳細は `docs/soshiki-form-submit-worker-graph.md`。
 
@@ -1226,7 +1228,7 @@ Subbranch（KyosaikaiName, IndustryCode, BranchCode, SubbranchCode, CollectiveKy
 12. ~~`validateSoshikiForm()` の配線~~ → **完了**（§5.10）
 13. ~~**送 信 PDF** — Web html2canvas 廃止~~ → **完了**（JSON のみ・§5.10）。事務 Excel PDF は §5.10.1・worker-graph §13
 14. ~~Web **`SheetFooter`**・PascalCase submission~~ → **完了**（§5.10.1）。Worker **json ラップ**は未実装
-15. 事務バッチ: Excel PDF（§5.10.1・**流し込みスクリプト初版済**）→ **返信メール**（PDF 添付なし）
+15. ~~事務バッチ Excel PDF~~ → **初版済**。~~返信メール~~ → **Worker 実装済**（deploy・`Mail.Send`）。残: Graph Inbox 本番タスク登録
 16. **union-contacts.json** export・Access 取込
 
 ---

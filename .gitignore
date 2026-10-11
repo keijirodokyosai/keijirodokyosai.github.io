@@ -10,6 +10,7 @@ _site/
 /_head.png
 
 # soshiki-form-office C# build output
+scripts/soshiki-form-office/state/
 scripts/soshiki-form-office/dist/
 scripts/soshiki-form-office/csharp/bin/
 scripts/soshiki-form-office/csharp/obj/
