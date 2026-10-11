@@ -317,7 +317,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 * **残す**: 申込日・組合名・産別/支部/分会・口欄7・掛金
 * クリア後: 1行目の開発用 `placeholder` を復元（`restoreMemberRowOneDevHints()`）
 
-**組合向け PDF（§5.9）:** **保 存ボタンは廃止**（未送信 PDF の残存を防ぐ）。**送 信成功後**、`window.print()` は fetch 完了後ではブラウザがブロックするため、**確認ダイアログ（OK）** または成功パネルの **「PDFを保存」** ボタンから `runSoshikiFormPdfSaveAfterSend(receiptId)` を呼ぶ。送信先は **「PDF に保存」**。ファイル名ヒントは **`{組合名}_{申込日 yyyyMMdd}_{受付ID}.pdf`**。印字は `@media print`（§9.0.2）。**送 信** POST は JSON のみ（§5.10）。事務用 PDF は §5.10.1。
+**組合向け PDF（§5.9）:** **保 存ボタンは廃止**（未送信 PDF の残存を防ぐ）。**送 信成功後**、成功パネル表示の直後に **2 段目の確認**（「印刷画面を開きます。PDF として保存する場合は、」改行「送信先を『PDF に保存』に変更し実行してください。」）→ OK で `window.print()`（fetch 完了直後だけではブラウザがブロックするため確認を挟む）。キャンセル時は成功パネルの **「PDFを保存」** から `runSoshikiFormPdfSaveAfterSend(receiptId)` を再実行可。送信先は **「PDF に保存」** 想定。ファイル名ヒントは **`{組合名}_{申込日 yyyyMMdd}_{受付ID}.pdf`**。印字は `@media print`（§9.0.2）。**送 信** POST は JSON のみ（§5.10）。事務用 PDF は §5.10.1。
 
 ### 5.9.1 Tab 移動順（DOM 順）
 
@@ -341,7 +341,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | 設定 | `data/soshiki-form-submit-config.json` の `submitEndpointUrl`（**Worker API URL**。未設定時は送 信不可） |
 | JS | `js/soshiki-form-submit.js`（送 信）・`js/soshiki-form-enter.js`（送信後印刷・§5.9） |
 | 送 信条件 | `validateSoshikiForm()` OK・組合名 Enter 確定（`getSoshikiFormVerifiedUnion()`）・組合員1名以上・パスワード入力 |
-| 確認ダイアログ | 組合名・格納月・**異動の増減**（`組合員 ＋n名　-m名`）・**「送信後にPDF印刷ダイアログが出ます。」**（取り消し不可の文言は出さない） |
+| 確認ダイアログ | 組合名・格納月・**異動の増減**（`組合員 ＋n名　-m名`）・**「送信後、印刷画面が開きます。PDF として保存する場合は送信先を『PDF に保存』に変更し実行してください。」**（取り消し不可の文言は出さない） |
 | POST | **1 リクエスト**（`submission` + パスワード + `unionName` / `fileNameDate`。**PDF は含めない**） |
 | 組合向け PDF | **送 信成功後**の `window.print()`（§5.9）。事務用 PDF は共済会バッチ |
 | 月計記録 | 送 信 **成功後** に §5.7.2 の localStorage へ上書き |

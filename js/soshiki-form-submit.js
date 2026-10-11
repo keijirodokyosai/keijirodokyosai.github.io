@@ -88,7 +88,7 @@ function handleSoshikiFormSendClick() {
     "格納月：" + submissionPreview.StorageFolder,
     transferConfirmLabel,
     "",
-    "送信後にPDF印刷ダイアログが出ます。",
+    "送信後、印刷画面が開きます。PDF として保存する場合は送信先を『PDF に保存』に変更し実行してください。",
   ];
   if (!window.confirm(confirmLines.join("\n"))) return;
 
@@ -451,7 +451,7 @@ function clearSoshikiFormSendResult() {
 function promptSoshikiFormPdfSaveAfterSend(receiptId) {
   if (
     !window.confirm(
-      "PDFの保存画面（印刷）を開きます。\n送信先を「PDF に保存」にしてください。"
+      "印刷画面を開きます。PDF として保存する場合は、\n送信先を『PDF に保存』に変更し実行してください。"
     )
   ) {
     return;
