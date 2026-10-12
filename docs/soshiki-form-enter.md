@@ -56,7 +56,7 @@
 | **送 信**（Worker → OneDrive json） | **完了**（§5.10） |
 | 組合向け PDF（送信後印刷） | **完了**（§5.9・`{組合名}_{yyyyMMdd}_{受付ID}.pdf`） |
 | 事務 Excel → PDF | **初版済**（§5.10.1・`scripts/soshiki-form-office/`） |
-| 返信メール **送信** | **Worker 実装済**（Graph sendMail・deploy + `Mail.Send`）。事務 Inbox は PDF のみ |
+| 返信メール **送信** | Worker **実装済・本番未**（`mailSent: false`・Exchange 1 席 or 代替要。**`docs/soshiki-form-receipt-mail-status.md`**） |
 | PA 通知・Access 取込 | 廃止／kyosai-system 側 |
 
 ### 完了（組合員入力・2026-08-28）
@@ -1228,7 +1228,7 @@ Subbranch（KyosaikaiName, IndustryCode, BranchCode, SubbranchCode, CollectiveKy
 12. ~~`validateSoshikiForm()` の配線~~ → **完了**（§5.10）
 13. ~~**送 信 PDF** — Web html2canvas 廃止~~ → **完了**（JSON のみ・§5.10）。事務 Excel PDF は §5.10.1・worker-graph §13
 14. ~~Web **`SheetFooter`**・PascalCase submission~~ → **完了**（§5.10.1）。Worker **json ラップ**は未実装
-15. ~~事務バッチ Excel PDF~~ → **初版済**。~~返信メール~~ → **Worker 実装済**（deploy・`Mail.Send`）。残: Graph Inbox 本番タスク登録
+15. ~~事務バッチ Excel PDF~~ → **初版済**。返信メール → **経路未決**（`docs/soshiki-form-receipt-mail-status.md`）。残: Graph Inbox 本番・メール方針決定
 16. **union-contacts.json** export・Access 取込
 
 ---

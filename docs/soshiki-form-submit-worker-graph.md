@@ -229,8 +229,9 @@ Web では **送 信 PDF を作らない**（html2canvas 経路は削除済み�
 - [ ] **Client Secret** 発行 → Worker にのみ設定  
 - [ ] **保存先の決定** — 特定ユーザーの OneDrive か SharePoint ドキュメント ライブラリか（Graph パス・ドライブ ID）  
 - [ ] （任意）秘密のローテーション手順  
+- [ ] **受付確認メール（`sendMail`）** — 送信元ユーザーに **Exchange Online 付きメールボックス**（例: Business Basic 1 席）。Apps for business のみでは不可  
 
-**Exchange Online ライセンスはこの経路では不要。**
+**受付確認メール:** Graph `sendMail` には **Exchange Online が有効なテナント内ユーザー**が必須（無料のみでは不可）。調査・未決定の整理は **`docs/soshiki-form-receipt-mail-status.md`**。
 
 ---
 
@@ -238,7 +239,7 @@ Web では **送 信 PDF を作らない**（html2canvas 経路は削除済み�
 
 | 項目 | 備考 |
 |------|------|
-| **事務バッチ**（§13） | Excel PDF **初版済**。Graph Inbox **初版済**。返信メールは **Worker**（Entra `Mail.Send` 要） |
+| **事務バッチ**（§13） | Excel PDF **初版済**。Graph Inbox **初版済**。返信メール **Worker 実装済・本番未**（Exchange 1 席 or 代替経路要。`docs/soshiki-form-receipt-mail-status.md`） |
 | ~~Web **`SheetFooter`** 送付~~ | **完了**（§5.10.1） |
 | ~~Worker **JSON のみ**・Web **html2canvas 削除**~~ | **完了** |
 | Worker 保存 JSON ラップ | 未実装（本文は `submission` のみ） |
@@ -256,7 +257,7 @@ Web では **送 信 PDF を作らない**（html2canvas 経路は削除済み�
 |----------|------|
 | **0〜3** | Entra・Worker・本番 json 受付 — **完了想定** |
 | **4** | ~~Web: `SheetFooter`・Worker JSON のみ~~ **完了**。残: json ラップ（任意） |
-| **5** | 事務バッチ: Graph Inbox 本番化・Excel PDF（§13）。メールは Worker deploy |
+| **5** | **受付確認メール経路の決定**（`docs/soshiki-form-receipt-mail-status.md`）→ Graph Inbox 本番化 |
 | **6** | Access 取込・json 削除運用 |
 
 ---
@@ -271,6 +272,7 @@ data/soshiki-form-submit-config.json
 data/soshiki-form-pdf-layout.json
 docs/soshiki-form-enter.md        … §5.10
 docs/soshiki-form-submit-worker-graph.md  … 本ファイル
+docs/soshiki-form-receipt-mail-status.md  … 受付メール調査・次回決定（2026-10-13）
 workers/soshiki-submit/                 … Worker（src/index.js, README, deploy.ps1）
 ```
 
@@ -289,4 +291,4 @@ workers/soshiki-submit/                 … Worker（src/index.js, README, deplo
 
 ---
 
-**最終更新:** 2026-10-12（Worker 受付確認メール・Graph delta Inbox・事務は PDF のみ）
+**最終更新:** 2026-10-13（受付メール調査メモ追加・Exchange 要否を修正）
