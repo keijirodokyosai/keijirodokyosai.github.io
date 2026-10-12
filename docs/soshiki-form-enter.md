@@ -460,7 +460,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 | 建物名 | AG14 等 | `building` 行 |
 | 申込月日 | AM1, AQ1 等 | 月日は 0 埋め解除 |
 
-**返信メール:** 本番は **Worker**（`workers/soshiki-submit/src/receiptMail.js`）が json 保存後に Graph **sendMail**。宛先は OneDrive `設定/union-contacts.json` の `ManagerEmail`（`KyosaikaiCode` 照合）。送信元・BCC は `設定/soshiki-form-office-settings.json` の **`FromEmail`**（BCC は送信者通知用）。件名 `組織共済WEB受付_{yyyyMMdd}`。失敗時は **`AdminEmail`** にアラート（`FailureStage: ReceiptMail`）、Web は `mailWarning`。事務 Inbox は **メールを送らない**（二重送信防止）。手動・再送: `Preview-SoshikiFormReceiptEmail.ps1` / `Send-SoshikiFormReceiptEmail.ps1`（`-Send`・Outlook）。管理者 PDF 失敗は `SoshikiFormAdminMail.ps1`（「組織共済申込書PDF の作成に失敗しました。」）。
+**返信メール:** 本番は **Worker**（`workers/soshiki-submit/src/receiptMail.js`）が json 保存後に Graph **sendMail**。宛先は OneDrive `設定/union-contacts.json` の `ManagerEmail`（`KyosaikaiCode` 照合）。送信元・BCC は `設定/soshiki-form-office-settings.json` の **`FromEmail`**（BCC は送信者通知用）。件名 `組織共済WEB受付_{yyyyMMdd}`。失敗時は **`AdminEmail`** にアラート（`FailureStage: ReceiptMail`）。Web は申込者向けにメール失敗を表示しない。事務 Inbox は **メールを送らない**（二重送信防止）。手動・再送: `Preview-SoshikiFormReceiptEmail.ps1` / `Send-SoshikiFormReceiptEmail.ps1`（`-Send`・Outlook）。管理者 PDF 失敗は `SoshikiFormAdminMail.ps1`（「組織共済申込書PDF の作成に失敗しました。」）。
 
 **Worker:** `pdfBase64` は **非対応**（JSON のみ PUT）。OneDrive `.json` 本文は現行 **`submission` オブジェクトのみ**（ラップ `{ receiptId, unionName, fileNameDate, submission }` は未実装）。
 
@@ -470,7 +470,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 { "receiptId": "7f3a2b1c", "ok": true, "mailSent": true }
 ```
 
-メール失敗時は `ok: true` のまま `mailWarning` が付く場合あり（json は保存済み）。
+メール失敗時も Web は送信成功表示（`ok: true`・受付 ID）。json は保存済み。`mailSent: false` は API 応答のみ（事務・調査用）。
 
 #### Worker 側（`workers/soshiki-submit`）
 

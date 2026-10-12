@@ -168,9 +168,6 @@ export default {
         ok: true,
         receiptId,
         mailSent: mailResult.mailSent,
-        ...(mailResult.mailError && !mailResult.mailSent
-          ? { mailWarning: "受付確認メールの送信に失敗しました。事務局へお問い合わせください。" }
-          : {}),
       },
       200,
       corsHeaders

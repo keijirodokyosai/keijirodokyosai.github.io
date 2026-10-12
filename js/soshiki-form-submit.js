@@ -145,9 +145,7 @@ function handleSoshikiFormSendClick() {
       recordSoshikiFormTsukiKeiSnapshot();
       var receiptId =
         (result && (result.receiptId || result.receipt_id)) || "";
-      var mailWarning =
-        result && result.mailWarning ? String(result.mailWarning) : "";
-      showSoshikiFormSendSuccess(receiptId, mailWarning);
+      showSoshikiFormSendSuccess(receiptId);
       promptSoshikiFormPdfSaveAfterSend(receiptId);
     })
     .catch(function (error) {
@@ -463,7 +461,7 @@ function promptSoshikiFormPdfSaveAfterSend(receiptId) {
   }
 }
 
-function showSoshikiFormSendSuccess(receiptId, extraLine) {
+function showSoshikiFormSendSuccess(receiptId) {
   var result = document.getElementById("soshiki-form-send-result");
   if (!result) return;
 
@@ -481,9 +479,6 @@ function showSoshikiFormSendSuccess(receiptId, extraLine) {
   addLine("送信が完了しました。");
   if (receiptId) {
     addLine("受付 ID：" + receiptId);
-  }
-  if (extraLine) {
-    addLine(extraLine);
   }
   addLine(
     "内容を誤って送信した場合は、受付 ID を控えて京滋労働共済までご連絡ください。"

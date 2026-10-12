@@ -48,7 +48,7 @@ OneDrive の `設定/soshiki-form-office-settings.json`（`FromEmail`・`AdminEm
 ### レスポンス
 
 成功時: `{ "ok": true, "receiptId": "…", "mailSent": true|false }`  
-json は保存済みでもメール失敗時は `mailWarning` 付き（Web が注意文を表示）。失敗時は管理者向け Graph メール（`FailureStage: ReceiptMail`）。
+メール失敗時も Web は成功表示のみ（申込者向けにメール障害は出さない）。事務向けは管理者 Graph メール（`FailureStage: ReceiptMail`）と Cloudflare ログ。
 
 ### デプロイ
 

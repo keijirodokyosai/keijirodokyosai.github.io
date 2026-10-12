@@ -86,8 +86,7 @@
 { "receiptId": "7f3a2b1c", "ok": true, "mailSent": true }
 ```
 
-メール失敗でも json 保存済みのときは `ok: true` のまま `mailWarning` を付与することがある。  
-`js/soshiki-form-submit.js` は `receiptId` / `receipt_id` と `mailWarning` を表示。
+メール失敗でも json 保存済みのときは `ok: true` のまま `mailSent: false`（Web は成功表示のみ・メール障害は申込者に非表示）。
 
 ### 送 信条件（既存）
 
@@ -172,7 +171,7 @@ Web では **送 信 PDF を作らない**（html2canvas 経路は削除済み�
 | 本番送信 | **Worker** `workers/soshiki-submit/src/receiptMail.js`（Graph **sendMail**・Entra **`Mail.Send`**） |
 | 送信元 | 同 **`FromEmail`**（settings）。任意 Secret **`GRAPH_MAIL_USER_ID`**（未設定時は `GRAPH_DRIVE_USER_ID`） |
 | BCC | **`FromEmail` と同一**（事務局への送信通知） |
-| 失敗時 | 管理者 **`AdminEmail`** に Graph メール（`FailureStage: ReceiptMail`）。Web は `mailWarning` |
+| 失敗時 | 管理者 **`AdminEmail`** に Graph メール（`FailureStage: ReceiptMail`）。Web は申込者向けにメール失敗を表示しない |
 | 件名・本文 | `SoshikiFormReceiptMail.ps1` 同等（`組織共済WEB受付_{yyyyMMdd}` 等） |
 | 手動・再送 | 事務 PC: `Send-SoshikiFormReceiptEmail.ps1`（`-Send`・Outlook）。**Inbox 自動では送らない** |
 | PDF 失敗通知 | `Send-SoshikiFormAdminAlertEmail.ps1`（`-Send`）— 事務 Inbox の Excel 失敗時 |
@@ -204,7 +203,7 @@ Web では **送 信 PDF を作らない**（html2canvas 経路は削除済み�
 | 受付 ID | `crypto.randomUUID()` の先頭 8 文字（16進） |
 | Graph | client_credentials → 所有者 drive に PUT（中間フォルダは Graph が作成） |
 | 受付確認メール | PUT 成功後 `sendMail`（settings + union-contacts を drive から GET） |
-| エラー | `{ "ok": false, "message": "…" }`（Web は `message` を表示）。保存成功・メール失敗は `ok: true` + `mailWarning` |
+| エラー | `{ "ok": false, "message": "…" }`（Web は `message` を表示）。保存成功・メール失敗は `ok: true` + `mailSent: false` |
 | レート制限 | 未実装（後回し可） |
 
 ### Worker 環境変数（例）
