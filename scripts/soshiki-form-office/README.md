@@ -3,6 +3,8 @@
 OneDrive の受付 `.json` を **Excel テンプレ**に流し込み、**PDF** を出力します。  
 セル対応: `data/soshiki-form-excel-cell-map.json`（仕様は `docs/soshiki-form-enter.md` §5.10.1）。
 
+**M365:** 受付フォルダは **info@keijirodokyosai.org**（表示名: 京滋労働共済 事務局）の OneDrive。**admin** はテナント管理のみ。→ **`docs/soshiki-m365-accounts.md`**
+
 ## 前提
 
 - Windows + **Microsoft Excel**（デスクトップ）

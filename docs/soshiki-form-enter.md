@@ -56,7 +56,7 @@
 | **送 信**（Worker → OneDrive json） | **完了**（§5.10） |
 | 組合向け PDF（送信後印刷） | **完了**（§5.9・`{組合名}_{yyyyMMdd}_{受付ID}.pdf`） |
 | 事務 Excel → PDF | **初版済**（§5.10.1・`scripts/soshiki-form-office/`） |
-| 返信メール **送信** | Worker **実装済・本番未**（`mailSent: false`・Exchange 1 席 or 代替要。**`docs/soshiki-form-receipt-mail-status.md`**） |
+| 返信メール **送信** | Worker **実装済**。**info@** + Exchange 1 席・OneDrive 切替後に本番（**`docs/soshiki-m365-accounts.md`**・**`docs/soshiki-form-receipt-mail-status.md`**） |
 | PA 通知・Access 取込 | 廃止／kyosai-system 側 |
 
 ### 完了（組合員入力・2026-08-28）
@@ -90,6 +90,7 @@ pdf/soshiki-form-enter.pdf   … 原本 PDF
 data/union-master.json       … 開発用サンプル（kyosai-system 本番出力で置換）
 data/soshiki-form-submit-config.json … WEB 受付 API URL（§5.10）
 docs/soshiki-form-submit-worker-graph.md … 送 信本命（Worker + Graph）引き継ぎ
+docs/soshiki-m365-accounts.md            … M365 admin / info・ドメイン・切替
 workers/soshiki-submit/      … Cloudflare Worker（README・deploy.ps1）
 data/form-kyosai-map.json    … 申込書口欄 ↔ KyosaiId 対応（確定）
 scripts/serve-open.ps1       … ローカルプレビュー（起動 / -Stop で停止）
@@ -1228,7 +1229,7 @@ Subbranch（KyosaikaiName, IndustryCode, BranchCode, SubbranchCode, CollectiveKy
 12. ~~`validateSoshikiForm()` の配線~~ → **完了**（§5.10）
 13. ~~**送 信 PDF** — Web html2canvas 廃止~~ → **完了**（JSON のみ・§5.10）。事務 Excel PDF は §5.10.1・worker-graph §13
 14. ~~Web **`SheetFooter`**・PascalCase submission~~ → **完了**（§5.10.1）。Worker **json ラップ**は未実装
-15. ~~事務バッチ Excel PDF~~ → **初版済**。返信メール → **経路未決**（`docs/soshiki-form-receipt-mail-status.md`）。残: Graph Inbox 本番・メール方針決定
+15. ~~事務バッチ Excel PDF~~ → **初版済**。M365 **admin/info** → **`docs/soshiki-m365-accounts.md`**。残: 10/15 切替・`mailSent: true`・Graph Inbox 本番
 16. **union-contacts.json** export・Access 取込
 
 ---

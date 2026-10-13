@@ -1,7 +1,7 @@
 # 組織共済 WEB 受付 — 本命ルート（自作フォーム + Cloudflare Workers + Graph）
 
 **目的:** 別セッション・別担当が実装を続けられるよう、2026-10 時点の決定事項と未作業を1本にまとめる。  
-**関連:** 入力 UI・JSON 仕様の詳細は `docs/soshiki-form-enter.md` §5.10 以降。本ドキュメントは **送信バックエンド** 専用。
+**関連:** 入力 UI・JSON 仕様は `docs/soshiki-form-enter.md` §5.10 以降。M365 **admin / info** は **`docs/soshiki-m365-accounts.md`**。本ドキュメントは **送信バックエンド** 専用。
 
 ---
 
@@ -223,15 +223,17 @@ Web では **送 信 PDF を作らない**（html2canvas 経路は削除済み�
 
 ## 7. Azure / Entra — 管理者チェックリスト
 
-- [ ] **アプリ登録**（単一テナント推奨）  
-- [ ] **アプリケーション権限** — 例: `Files.ReadWrite.All`（またはサイト限定で可能なら最小化）  
-- [ ] **管理者の同意**  
-- [ ] **Client Secret** 発行 → Worker にのみ設定  
-- [ ] **保存先の決定** — 特定ユーザーの OneDrive か SharePoint ドキュメント ライブラリか（Graph パス・ドライブ ID）  
-- [ ] （任意）秘密のローテーション手順  
-- [ ] **受付確認メール（`sendMail`）** — 送信元ユーザーに **Exchange Online 付きメールボックス**（例: Business Basic 1 席）。Apps for business のみでは不可  
+**アカウント方針（確定）:** **`docs/soshiki-m365-accounts.md`**
 
-**受付確認メール:** Graph `sendMail` には **Exchange Online が有効なテナント内ユーザー**が必須（無料のみでは不可）。調査・未決定の整理は **`docs/soshiki-form-receipt-mail-status.md`**。
+- [ ] **admin** — グローバル管理者・**テナント管理のみ**（通常事務は使わない）  
+- [ ] **info@keijirodokyosai.org** — 表示名 **京滋労働共済 事務局**、Exchange **1 席**、OneDrive **`組織共済WEB受付`** のオーナー  
+- [ ] **アプリ登録**（単一テナント推奨）・`Files.ReadWrite.All` + **`Mail.Send`** の管理者同意  
+- [ ] **Client Secret** → Worker Secrets のみ  
+- [ ] Worker **`GRAPH_DRIVE_USER_ID`**（＋任意 **`GRAPH_MAIL_USER_ID`）** → **info のオブジェクト ID**（10/15 切替後）  
+- [ ] OneDrive `設定/soshiki-form-office-settings.json` の **`FromEmail`** ＝ `info@keijirodokyosai.org`  
+- [ ] （任意）秘密のローテーション手順  
+
+**受付確認メール:** Graph `sendMail` には **Exchange Online が有効なユーザー**（**info**）が必須。障害・切替は **`docs/soshiki-form-receipt-mail-status.md`**。
 
 ---
 
@@ -272,7 +274,8 @@ data/soshiki-form-submit-config.json
 data/soshiki-form-pdf-layout.json
 docs/soshiki-form-enter.md        … §5.10
 docs/soshiki-form-submit-worker-graph.md  … 本ファイル
-docs/soshiki-form-receipt-mail-status.md  … 受付メール調査・次回決定（2026-10-13）
+docs/soshiki-m365-accounts.md             … admin / info・ドメイン・切替
+docs/soshiki-form-receipt-mail-status.md  … 受付メール・Ricoh 依頼文
 workers/soshiki-submit/                 … Worker（src/index.js, README, deploy.ps1）
 ```
 
@@ -291,4 +294,4 @@ workers/soshiki-submit/                 … Worker（src/index.js, README, deplo
 
 ---
 
-**最終更新:** 2026-10-13（受付メール調査メモ追加・Exchange 要否を修正）
+**最終更新:** 2026-10-13（`docs/soshiki-m365-accounts.md` 追加・§7 admin/info）

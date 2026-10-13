@@ -3,7 +3,7 @@
 **目的:** 2026-10 の本番準備で判明した事実と、次回セッションで決めることを1本に残す。  
 **関連:** `docs/soshiki-form-submit-worker-graph.md` §6・§13、`docs/soshiki-form-enter.md` §5.10.1。
 
-**状態:** 2026-10-13 **一旦中断**。受付確認メールの本番経路は **未決定**（json 受付は稼働可能）。
+**状態:** 2026-10-13 **アカウント方針確定**（詳細は **`docs/soshiki-m365-accounts.md`**）。**info@keijirodokyosai.org** + Exchange 1 席・OneDrive 切替は **10/15 前後**。本番 `mailSent: true` は切替・deploy 後。
 
 ---
 
@@ -40,16 +40,15 @@ Admin alert failed: （同じ sendMail 失敗）
 
 ---
 
-## 3. 議論で整理した構成（方針 A）
+## 3. 確定した構成（2026-10）
 
 | 役割 | アカウント |
 |------|------------|
-| OneDrive（json・`設定/*.json`） | **Admin**（共有用・既存 `GRAPH_DRIVE_USER_ID`） |
-| メール送信（`sendMail`） | **別ユーザー** → Secret **`GRAPH_MAIL_USER_ID`** + settings **`FromEmail`** |
+| テナント管理 | **admin**（グローバル管理者。**通常事務は使わない**） |
+| OneDrive（json・`設定/*.json`）・事務メール・sendMail 送信元 | **info@keijirodokyosai.org**（表示名: **京滋労働共済 事務局**） |
+| Worker `GRAPH_DRIVE_USER_ID` / `GRAPH_MAIL_USER_ID` | **info** のオブジェクト ID（切替後） |
 
-**Admin に Exchange を 1 席足す**（方針 B）でも可。ライセンス **1 席分のコストは同程度**。
-
-検討した送信用 UPN 例: `keijikyosai@keijikyosai.onmicrosoft.com`（テナントの `*.onmicrosoft.com` を Entra「ドメイン名」で確認してから作成）。
+旧構成（Admin の OneDrive のみ・Mail ID 未設定）は **移行中**。全文は **`docs/soshiki-m365-accounts.md` §5**。
 
 ---
 
@@ -78,32 +77,15 @@ Admin alert failed: （同じ sendMail 失敗）
 
 ---
 
-## 6. 次回セッションで決めること（チェックリスト）
+## 6. 本番切替チェックリスト（案 A＝Worker + Graph を採用）
 
-### 6.1 経路の決定（いずれか1つを本命に）
-
-- [ ] **A** — M365 **Business Basic（または Exchange Online Plan 1）を 1 席**購入・割り当て  
-  - 送信用: **新規 `keijikyosai@…onmicrosoft.com`** か **Admin に追加**か  
-  - `FromEmail` / `GRAPH_MAIL_USER_ID`（Admin 一本なら Mail ID 省略可）  
-  - Ricoh 見積（税込年額）  
-- [ ] **B** — Worker メールは **オフ**（または失敗を許容）し、**Inbox で Outlook 送信**を復活させるか  
-  - 遅延・PC 常時 ON を運用で許容するか  
-- [ ] **C** — 外部メール API を **新規設計・実装**するか（ドメイン取得も含む）  
-- [ ] **D** — 受付確認メール **自動化なし**
-
-### 6.2 A を選んだ場合の残作業
-
-- [ ] Entra で送信用ユーザー確認・**オブジェクト ID**  
-- [ ] `wrangler secret put GRAPH_MAIL_USER_ID`（Admin 以外を送る場合）  
-- [ ] OneDrive `設定/soshiki-form-office-settings.json` の **`FromEmail`** 整合  
-- [ ] テスト送信 → **`mailSent: true`**・`wrangler tail` でエラーなし  
-- [ ] GitHub Pages: `js/soshiki-form-submit.js`（mailWarning 非表示）**push**  
-- [ ] Worker: `mailWarning` 削除版 **deploy**（未反映なら）  
-- [ ] 事務 **Graph Inbox** 本番タスク（PDF・**メールは送らない**方針の確認）
-
-### 6.3 ドキュメント
-
-- [ ] 決定後 `docs/soshiki-form-submit-worker-graph.md` §6・§13 と `docs/soshiki-form-enter.md` §5.10.1 を **本命経路に合わせて更新**
+- [x] 経路 **A**（Worker `sendMail`）— アカウントは **info** 一本（`docs/soshiki-m365-accounts.md`）  
+- [ ] **10/15** — ドメイン `keijirodokyosai.org`・info に **Exchange 1 席**  
+- [ ] info の OneDrive に **`組織共済WEB受付`**（Admin から移行）  
+- [ ] Entra **info** のオブジェクト ID → `GRAPH_DRIVE_USER_ID`（＋必要なら `GRAPH_MAIL_USER_ID`）・**deploy**  
+- [ ] `設定/soshiki-form-office-settings.json` — **`FromEmail`**: `info@keijirodokyosai.org`  
+- [ ] テスト送 信 → **`mailSent: true`**・`wrangler tail` でエラーなし  
+- [ ] 事務 **Graph Inbox** 本番タスク（**PDF のみ**・メールは Worker）
 
 ---
 
@@ -113,12 +95,13 @@ Admin alert failed: （同じ sendMail 失敗）
 
 ---
 
-## 8. Ricoh / M365 依頼文（案 A・コピペ用）
+## 8. Ricoh / M365 依頼文（コピペ用・2026-10 確定版）
 
-> 組織共済 Web 受付の Graph `sendMail` 用に、**Exchange Online が含まれるライセンスを 1 席**追加してください（**Microsoft 365 Business Basic** または **Exchange Online Plan 1**）。  
-> 現状 OneDrive Admin は **Apps for business のみ**で `MailboxNotEnabledForRESTAPI` です。  
-> OneDrive 受付は Admin のまま、送信は **別ユーザー**（例: `keijikyosai@keijikyosai.onmicrosoft.com`）または Admin への追加割り当てのいずれかで、**オブジェクト ID** と **From 用メールアドレス**を共有ください。
+> 組織共済 Web 受付用に、ドメイン **keijirodokyosai.org** の追加と、ユーザー **info@keijirodokyosai.org**（表示名: 京滋労働共済 事務局）への **Exchange Online が含まれるライセンス 1 席**（例: Microsoft 365 Business Basic）の割り当てをお願いします。  
+> このユーザーで **OneDrive** に受付フォルダ「組織共済WEB受付」を運用し、Graph **sendMail** の送信元とします。  
+> 作成後、**info ユーザーの Entra オブジェクト ID** を共有ください（Cloudflare Worker 設定用）。  
+> テナント管理用 **admin** には Exchange は不要です。
 
 ---
 
-**最終更新:** 2026-10-13（セッション中断・次回決定待ち）
+**最終更新:** 2026-10-13（info@ 方針確定・`docs/soshiki-m365-accounts.md`）

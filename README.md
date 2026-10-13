@@ -233,6 +233,23 @@ https://keijirodokyosai.github.io/
 
 詳細仕様（KyosaiId マッピング、総合パッケージ、41/44 抑制、慶弔 42/43）は **[docs/soshiki-form-enter.md](docs/soshiki-form-enter.md)** に記載。
 
+### WEB 受付（送 信・OneDrive・事務 PDF）
+
+組合担当者が申込書を **送 信** → Cloudflare Worker → 事務局 OneDrive に **json** 保存。用紙 **PDF** と **受付確認メール**は事務側の自動化（Worker / Excel）。
+
+| 項目 | 内容 |
+|------|------|
+| 入力・送 信 | `soshiki-form-enter.html`、`js/soshiki-form-submit.js` |
+| Worker | `workers/soshiki-submit/` → `data/soshiki-form-submit-config.json` の URL |
+| 事務 PDF | `scripts/soshiki-form-office/`（Excel テンプレ → PDF） |
+| M365 | **admin**＝テナント管理のみ。**info@keijirodokyosai.org**（表示名: 京滋労働共済 事務局）＝事務・OneDrive 受付 |
+
+設計の正:
+
+- [docs/soshiki-form-submit-worker-graph.md](docs/soshiki-form-submit-worker-graph.md) — バックエンド・§13 事務バッチ  
+- [docs/soshiki-m365-accounts.md](docs/soshiki-m365-accounts.md) — **admin / info・ドメイン・切替チェックリスト**  
+- [docs/soshiki-form-receipt-mail-status.md](docs/soshiki-form-receipt-mail-status.md) — 受付メール本番・障害  
+
 ---
 
 ## ニュースページ仕様

@@ -3,7 +3,8 @@
 Cloudflare Worker が GitHub Pages フォームからの POST を受け、Microsoft Graph で OneDrive に **JSON** を保存し、続けて **受付確認メール**（Graph `sendMail`・PDF 添付なし）を送ります。
 
 仕様の正: [`docs/soshiki-form-submit-worker-graph.md`](../../docs/soshiki-form-submit-worker-graph.md)  
-**事務用 PDF** は事務 PC（Graph delta または OneDrive 同期 + Inbox）。`pdfBase64` は **受け付けません**。
+**事務用 PDF** は事務 PC（Graph delta または OneDrive 同期 + Inbox）。`pdfBase64` は **受け付けません**。  
+**M365 admin / info:** `docs/soshiki-m365-accounts.md`（`GRAPH_DRIVE_USER_ID` ＝ info の OneDrive）。
 
 ## 前提
 
