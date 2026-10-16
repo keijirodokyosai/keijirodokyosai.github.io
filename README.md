@@ -194,6 +194,7 @@ https://keijirodokyosai.github.io/
 | --- | --- | --- | --- |
 | `index.html` | トップページ | - | - |
 | `kasai.html` | 火災共済 | `kasai.png` | `kasai.pdf` |
+| `special-contract.html` | 自然災害特約 | `special-contract.png` | `special-contract.pdf` |
 | `iryo.html` | 医療共済 | `iryo.png` | `iryo.pdf` |
 | `seimei.html` | 生命共済 | `seimei.png` | `seimei.pdf` |
 | `kotsu.html` | 交通災害共済 | `kotsu.png` | `kotsu.pdf` |
