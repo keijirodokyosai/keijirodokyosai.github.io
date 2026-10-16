@@ -1150,10 +1150,11 @@ Sitemap: https://keijirodokyosai.github.io/sitemap.xml
 ### 共済ページ更新手順
 
 1. パンフレット画像（PNG）を `/images/` に配置
-2. パンフレットPDFを `/pdf/` に配置
-3. 対象の共済ページHTMLを更新
-4. 画像表示とPDFリンクの両方が正しいか確認
-5. 必要書類導線が `downloads.html` を向いているか確認
+2. `python scripts/optimize-pamphlet-png.py` で表示用 WebP（`images/*.webp`）を生成（`soshiki-form-enter.png` は対象外）
+3. パンフレットPDFを `/pdf/` に配置
+4. 対象の共済ページHTMLを更新（プレビューは `{% include pamphlet-preview.html %}` を使用）
+5. 画像表示とPDFリンクの両方が正しいか確認
+6. 必要書類導線が `downloads.html` を向いているか確認
 
 ### 自転車共済更新手順
 
