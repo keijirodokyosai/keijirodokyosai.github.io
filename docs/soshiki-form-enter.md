@@ -347,7 +347,7 @@ docs/soshiki-form-enter.md   … 本ドキュメント
 
 **保 存** は申込書 PDF の **ブラウザ印刷によるローカル保存**（§5.9）。
 
-**送 信（本命・2026-10 決定）:** 自作フォーム → **Cloudflare Workers** → **Microsoft Graph**（アプリ権限）→ 事務局 OneDrive。Exchange・Power Automate（HTTP／メールトリガー）は使わない。実装・引き継ぎは **`docs/soshiki-form-submit-worker-graph.md`** を正とする。
+**送 信（本命・2026-10 決定）:** 自作フォーム → **Cloudflare Workers** → **Microsoft Graph**（アプリ権限）→ 事務局 OneDrive。Exchange・Power Automate（HTTP／メールトリガー）は使わない。実装・引き継ぎは **`docs/soshiki-form-submit-worker-graph.md`** を正とする。事務局 M365 テナント・`info@` メールの運用は **`docs/m365-tenant-and-mail.md`**。
 
 | 項目 | 内容 |
 |------|------|

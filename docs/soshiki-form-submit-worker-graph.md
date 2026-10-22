@@ -44,12 +44,15 @@
 
 ## 3. 京滋 M365 テナント（2026-10 時点の整理）
 
+**運用の詳細（ドメイン・DNS・`info@`・Outlook）:** [`docs/m365-tenant-and-mail.md`](m365-tenant-and-mail.md)
+
 | 事実 | 影響 |
 |------|------|
-| 新規ユーザーに割り当て可能なのが **Power Automate Free** 中心。**Apps for business** は在庫 0（admin 等に割当済み） | **メールボックス用 SKU なし** → メール経路 PA は本命にしない |
-| admin: **Apps for business + PA Free**。PA Outlook 接続で **REST API 非対応** | admin を監視用にしない |
-| パターン B（受付→転送→監視用）も **REST OK の箱** が要るが未確保 | Graph 直保存で回避 |
-| パートナー: Ricoh（`zjc_o365helpdesk@jp.ricoh.com` 等） | ライセンス追加は **Graph 本命では不要**。Entra アプリ登録・同意は管理者作業 |
+| **Microsoft 365 Business Standard（Teams なし）× 1** → `admin@keijikyosai.onmicrosoft.com` に割当。Exchange メールボックスあり | **Graph ファイル保存**は引き続き本命。**Graph 送信メール**（分会通知など）も技術的には可能（Entra アプリ・権限は未設定） |
+| 独自ドメイン **`keijirodokyosai.org`** セットアップ完了（お名前.com / dnsv.jp） | 事務公開アドレス **`info@keijirodokyosai.org`** は **admin のエイリアス**（ライセンス 1 のため別ユーザーにしない） |
+| **送 信・保存の本命**は Worker → Graph → OneDrive。**メール経由 PA は採用しない** | PA Free の Outlook REST 制限は残るが、受付保存には不要 |
+| パターン B（`union-contacts.json` → 担当者通知） | Worker 実装後に **Graph `sendMail`** 等で検討。`info@` 差出人は Exchange 設定済み |
+| パートナー: Ricoh（`zjc_o365helpdesk@jp.ricoh.com` 等） | Entra アプリ登録・管理者同意は管理者作業 |
 
 ---
 

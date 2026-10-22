@@ -13,7 +13,7 @@
 https://keijirodokyosai.github.io/
 ```
 
-**最終更新日：2026-08-27**
+**最終更新日：2026-10-22**
 
 ---
 
@@ -147,7 +147,9 @@ https://keijirodokyosai.github.io/
 │  ├─ header.html
 │  └─ footer.html
 ├─ docs/
-│  └─ soshiki-form-enter.md
+│  ├─ soshiki-form-enter.md
+│  ├─ soshiki-form-submit-worker-graph.md
+│  └─ m365-tenant-and-mail.md
 ├─ scripts/
 │  ├─ serve-open.ps1
 │  └─ _jekyll-common.ps1
@@ -232,6 +234,23 @@ https://keijirodokyosai.github.io/
 | 組合名記憶 | ブラウザ localStorage（PC ごと） |
 
 詳細仕様（KyosaiId マッピング、総合パッケージ、41/44 抑制、慶弔 42/43）は **[docs/soshiki-form-enter.md](docs/soshiki-form-enter.md)** に記載。
+
+送信バックエンド（Cloudflare Worker + Graph）の引き継ぎは **[docs/soshiki-form-submit-worker-graph.md](docs/soshiki-form-submit-worker-graph.md)**。
+
+---
+
+## 事務局 Microsoft 365・メール
+
+組織共済サイト（GitHub Pages）とは別に、事務用 **Microsoft 365** テナントと **`keijirodokyosai.org`** メールを運用している。
+
+| 項目 | 内容 |
+|------|------|
+| ログイン | `admin@keijikyosai.onmicrosoft.com` |
+| 事務連絡用アドレス | `info@keijirodokyosai.org`（admin メールボックスのエイリアス。ライセンス 1 つのため別ユーザーなし） |
+| ライセンス | Microsoft 365 Business Standard（Teams なし）× 1 |
+| クライアント | Outlook on the web / デスクトップ Outlook（admin 追加済み） |
+
+DNS・Exchange でのエイリアス設定、トラブルシュート、未実施（Worker・Graph アプリ）は **[docs/m365-tenant-and-mail.md](docs/m365-tenant-and-mail.md)** に記載。
 
 ---
 
