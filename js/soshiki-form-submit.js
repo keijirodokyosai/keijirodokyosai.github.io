@@ -1,11 +1,17 @@
 /**
  * 組織共済申込書 — WEB 受付（送 信）
- * JSON 組み立て・PDF（js/soshiki-form-pdf-fill.js）・Power Automate へ POST
+ * JSON 組み立て・Worker API へ POST（JSON のみ）
  */
 
 var SOSHIKI_FORM_SUBMIT_CONFIG = {
   submitEndpointUrl: "",
   ready: false,
+};
+
+var SOSHIKI_FORM_TRANSFER_JSON = {
+  new: "New",
+  cancel: "Cancel",
+  change: "Change",
 };
 
 function initSoshikiFormSubmit() {
@@ -53,7 +59,7 @@ function updateSoshikiFormSendButtonState() {
 function handleSoshikiFormSendClick() {
   if (!SOSHIKI_FORM_SUBMIT_CONFIG.submitEndpointUrl) {
     window.alert(
-      "送 信の設定がありません。\ndata/soshiki-form-submit-config.json に Power Automate の URL を設定してください。"
+      "送 信の設定がありません。\ndata/soshiki-form-submit-config.json に Worker の URL を設定してください。"
     );
     return;
   }
@@ -71,16 +77,18 @@ function handleSoshikiFormSendClick() {
 
   var verifiedUnion = getSoshikiFormVerifiedUnion();
   var submissionPreview = buildSoshikiFormSubmission();
-  var memberCount = submissionPreview.members.length;
+  var transferConfirmLabel = formatMemberTransferConfirmLabel(
+    countMemberTransferChanges()
+  );
 
   var confirmLines = [
     "申込内容を送信します。よろしいですか？",
     "",
     "組合名：" + verifiedUnion.KyosaikaiName,
-    "格納月：" + submissionPreview.storageFolder,
-    "組合員：" + memberCount + "名",
+    "格納月：" + submissionPreview.StorageFolder,
+    transferConfirmLabel,
     "",
-    "送信後の取り消しはできません。",
+    "送信後、印刷画面が開きます。PDF として保存する場合は送信先を『PDF に保存』に変更し実行してください。",
   ];
   if (!window.confirm(confirmLines.join("\n"))) return;
 
@@ -94,48 +102,43 @@ function handleSoshikiFormSendClick() {
   setSoshikiFormSendBusy(true);
   clearSoshikiFormSendResult();
 
-  buildSoshikiFormSubmitPdfBase64()
-    .then(function (pdfBase64) {
-      var submission = buildSoshikiFormSubmission();
-      var applicationDate = submission.applicationDate;
-      var fileNameDate =
-        applicationDate.year +
-        applicationDate.month +
-        applicationDate.day;
+  var submission = buildSoshikiFormSubmission();
+  var applicationDate = submission.ApplicationDate;
+  var fileNameDate =
+    applicationDate.Year + applicationDate.Month + applicationDate.Day;
 
-      var payload = {
-        password: String(password),
-        unionName: verifiedUnion.KyosaikaiName,
-        fileNameDate: fileNameDate,
-        submission: submission,
-        pdfBase64: pdfBase64,
-      };
+  var payload = {
+    password: String(password),
+    unionName: verifiedUnion.KyosaikaiName,
+    fileNameDate: fileNameDate,
+    submission: submission,
+  };
 
-      return fetch(SOSHIKI_FORM_SUBMIT_CONFIG.submitEndpointUrl, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      }).then(function (response) {
-        return response.text().then(function (text) {
-          var body = null;
-          if (text) {
-            try {
-              body = JSON.parse(text);
-            } catch (parseError) {
-              body = { raw: text };
-            }
+  fetch(SOSHIKI_FORM_SUBMIT_CONFIG.submitEndpointUrl, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  })
+    .then(function (response) {
+      return response.text().then(function (text) {
+        var body = null;
+        if (text) {
+          try {
+            body = JSON.parse(text);
+          } catch (parseError) {
+            body = { raw: text };
           }
-          if (!response.ok) {
-            var message =
-              (body && (body.message || body.error)) ||
-              "HTTP " + response.status;
-            throw new Error(message);
-          }
-          return body || {};
-        });
+        }
+        if (!response.ok) {
+          var message =
+            (body && (body.message || body.error)) ||
+            "HTTP " + response.status;
+          throw new Error(message);
+        }
+        return body || {};
       });
     })
     .then(function (result) {
@@ -143,6 +146,7 @@ function handleSoshikiFormSendClick() {
       var receiptId =
         (result && (result.receiptId || result.receipt_id)) || "";
       showSoshikiFormSendSuccess(receiptId);
+      promptSoshikiFormPdfSaveAfterSend(receiptId);
     })
     .catch(function (error) {
       console.error("送 信に失敗しました:", error);
@@ -175,13 +179,52 @@ function collectSoshikiFormSendValidationErrors() {
     errors.push("組合員欄に1名以上入力してください。");
   }
 
-  if (typeof collectSoshikiFormPdfLibErrors === "function") {
-    errors = errors.concat(collectSoshikiFormPdfLibErrors());
-  } else if (!window.PDFLib || !window.PDFLib.PDFDocument) {
-    errors.push("PDF 生成ライブラリ（pdf-lib）が読み込まれていません。");
+  errors = errors.concat(collectSoshikiFormSheetFooterValidationErrors());
+
+  return errors;
+}
+
+function collectSoshikiFormSheetFooterValidationErrors() {
+  var errors = [];
+  var currentRaw = getTrimmedFieldValue("page-count-current");
+  var totalRaw = getTrimmedFieldValue("page-count-total");
+
+  if (!isValidPageCountFieldValue(currentRaw) || !isValidPageCountFieldValue(totalRaw)) {
+    errors.push("ページ数を正しく入力してください");
+    return errors;
+  }
+
+  var current = parseInt(currentRaw, 10);
+  var total = parseInt(totalRaw, 10);
+  if (current > total) {
+    errors.push("ページ数を正しく入力してください");
+  }
+
+  var priorRaw = getTrimmedFieldValue("prior-month-headcount");
+  if (!isValidPriorMonthHeadcountValue(priorRaw)) {
+    errors.push("前月残（人数）を正しく入力してください");
+  }
+
+  var remarks = document.getElementById("remarks");
+  if (remarks && remarks.value.length > 120) {
+    errors.push("備考は120文字以内で入力してください");
   }
 
   return errors;
+}
+
+function isValidPageCountFieldValue(raw) {
+  var trimmed = String(raw).trim();
+  if (!trimmed || !/^\d+$/.test(trimmed)) return false;
+  var value = parseInt(trimmed, 10);
+  return Number.isFinite(value) && value >= 1 && value <= 99;
+}
+
+function isValidPriorMonthHeadcountValue(raw) {
+  var trimmed = String(raw).trim();
+  if (!trimmed || !/^\d+$/.test(trimmed)) return false;
+  var value = parseInt(trimmed, 10);
+  return Number.isFinite(value) && value >= 0 && value <= 999;
 }
 
 function soshikiFormHasMemberSubmission() {
@@ -223,46 +266,59 @@ function buildSoshikiFormSubmission() {
   var coverageMonth = computeSoshikiCoverageMonth(applicationDate);
 
   return {
-    formType: "soshiki-form-enter",
-    formVersion: "1",
-    submittedAt: new Date().toISOString(),
+    FormType: "soshiki-form-enter",
+    FormVersion: "1",
+    SubmittedAt: new Date().toISOString(),
     IndustryCode: verifiedUnion.IndustryCode,
     BranchCode: verifiedUnion.BranchCode,
     SubbranchCode: verifiedUnion.SubbranchCode,
     KyosaikaiCode: verifiedUnion.KyosaikaiCode,
-    applicationDate: applicationDate,
-    coverageMonth: coverageMonth,
-    storageFolder: formatSoshikiStorageFolder(coverageMonth),
-    members: buildSoshikiFormSubmissionMembers(),
+    ApplicationDate: applicationDate,
+    CoverageMonth: coverageMonth,
+    StorageFolder: formatSoshikiStorageFolder(coverageMonth),
+    SheetFooter: buildSoshikiFormSheetFooter(),
+    Members: buildSoshikiFormSubmissionMembers(),
+  };
+}
+
+function buildSoshikiFormSheetFooter() {
+  var remarksField = document.getElementById("remarks");
+  var remarks = remarksField ? remarksField.value.trim() : "";
+
+  return {
+    PageCountCurrent: getTrimmedFieldValue("page-count-current"),
+    PageCountTotal: getTrimmedFieldValue("page-count-total"),
+    PriorMonthHeadcount: getTrimmedFieldValue("prior-month-headcount"),
+    Remarks: remarks,
   };
 }
 
 function readSoshikiApplicationDate() {
   return {
-    year: getTrimmedFieldValue("application-year"),
-    month: pad2(getTrimmedFieldValue("application-month")),
-    day: pad2(getTrimmedFieldValue("application-day")),
+    Year: getTrimmedFieldValue("application-year"),
+    Month: pad2(getTrimmedFieldValue("application-month")),
+    Day: pad2(getTrimmedFieldValue("application-day")),
   };
 }
 
 function computeSoshikiCoverageMonth(applicationDate) {
-  var year = parseInt(applicationDate.year, 10);
-  var month = parseInt(applicationDate.month, 10);
+  var year = parseInt(applicationDate.Year, 10);
+  var month = parseInt(applicationDate.Month, 10);
 
   if (!Number.isFinite(year) || !Number.isFinite(month)) {
-    return { year: "", month: "" };
+    return { Year: "", Month: "" };
   }
 
   if (month === 12) {
-    return { year: String(year + 1), month: "01" };
+    return { Year: String(year + 1), Month: "01" };
   }
 
-  return { year: String(year), month: pad2(String(month + 1)) };
+  return { Year: String(year), Month: pad2(String(month + 1)) };
 }
 
 function formatSoshikiStorageFolder(coverageMonth) {
-  if (!coverageMonth.year || !coverageMonth.month) return "";
-  return coverageMonth.year + "年" + coverageMonth.month + "月";
+  if (!coverageMonth.Year || !coverageMonth.Month) return "";
+  return coverageMonth.Year + "年" + coverageMonth.Month + "月";
 }
 
 function buildSoshikiFormSubmissionMembers() {
@@ -276,6 +332,11 @@ function buildSoshikiFormSubmissionMembers() {
   return members;
 }
 
+function mapTransferValueToJson(internalValue) {
+  var key = String(internalValue).trim().toLowerCase();
+  return SOSHIKI_FORM_TRANSFER_JSON[key] || "";
+}
+
 function buildSoshikiFormSubmissionMember(row) {
   var birthYear = getMemberFieldValue(row, "birth-year");
   var birthMonth = pad2(getMemberFieldValue(row, "birth-month"));
@@ -283,8 +344,8 @@ function buildSoshikiFormSubmissionMember(row) {
   var postalDigits = extractZipDigits(getMemberFieldValue(row, "postal-code"));
 
   var member = {
-    row: row,
-    idou: getMemberFieldValue(row, "idou"),
+    Row: row,
+    Transfer: mapTransferValueToJson(getMemberFieldValue(row, "transfer")),
     FamilyNameKana: getMemberFieldValue(row, "family-name-kana"),
     GivenNameKana: getMemberFieldValue(row, "given-name-kana"),
     FamilyName: getMemberFieldValue(row, "family-name"),
@@ -340,7 +401,7 @@ function sanitizeSoshikiFormPdfFileNameSegment(value) {
   return String(value).replace(/[\\/:*?"<>|]/g, "_").trim();
 }
 
-function getSoshikiFormPdfDownloadFileName() {
+function getSoshikiFormPdfDownloadFileName(receiptId) {
   var verified = getSoshikiFormVerifiedUnion();
   var unionName =
     verified && verified.KyosaikaiName
@@ -348,8 +409,8 @@ function getSoshikiFormPdfDownloadFileName() {
       : "組織共済申込書";
   var applicationDate = readSoshikiApplicationDate();
   var fileNameDate =
-    applicationDate.year && applicationDate.month && applicationDate.day
-      ? applicationDate.year + applicationDate.month + applicationDate.day
+    applicationDate.Year && applicationDate.Month && applicationDate.Day
+      ? applicationDate.Year + applicationDate.Month + applicationDate.Day
       : "";
   if (!fileNameDate) {
     var today = new Date();
@@ -358,16 +419,14 @@ function getSoshikiFormPdfDownloadFileName() {
       pad2(String(today.getMonth() + 1)) +
       pad2(String(today.getDate()));
   }
-  return unionName + "_" + fileNameDate + ".pdf";
-}
-
-function buildSoshikiFormSubmitPdfBase64() {
-  return buildSoshikiFormSubmitPdfBase64FromTemplate();
-}
-
-/** 未使用（保 存は enter.js の window.print）。pdf-fill 経路の残置 */
-function downloadSoshikiFormPdfFile() {
-  return downloadSoshikiFormPdfFromTemplate();
+  var stem = unionName + "_" + fileNameDate;
+  var idSegment = receiptId
+    ? sanitizeSoshikiFormPdfFileNameSegment(receiptId)
+    : "";
+  if (idSegment) {
+    stem += "_" + idSegment;
+  }
+  return stem + ".pdf";
 }
 
 function setSoshikiFormSendBusy(isBusy) {
@@ -384,26 +443,59 @@ function setSoshikiFormSendBusy(isBusy) {
 function clearSoshikiFormSendResult() {
   var result = document.getElementById("soshiki-form-send-result");
   if (!result) return;
-  result.textContent = "";
+  result.replaceChildren();
   result.className = "soshiki-form-send-result";
   result.hidden = true;
+}
+
+function promptSoshikiFormPdfSaveAfterSend(receiptId) {
+  if (
+    !window.confirm(
+      "印刷画面を開きます。PDF として保存する場合は、\n送信先を『PDF に保存』に変更し実行してください。"
+    )
+  ) {
+    return;
+  }
+  if (typeof runSoshikiFormPdfSaveAfterSend === "function") {
+    runSoshikiFormPdfSaveAfterSend(receiptId);
+  }
 }
 
 function showSoshikiFormSendSuccess(receiptId) {
   var result = document.getElementById("soshiki-form-send-result");
   if (!result) return;
 
-  var lines = ["送信が完了しました。"];
-  if (receiptId) {
-    lines.push("受付 ID：" + receiptId);
+  result.replaceChildren();
+  result.className = "soshiki-form-send-result soshiki-form-send-result--success";
+  result.hidden = false;
+
+  function addLine(text) {
+    var line = document.createElement("div");
+    line.className = "soshiki-form-send-result-line";
+    line.textContent = text;
+    result.appendChild(line);
   }
-  lines.push(
+
+  addLine("送信が完了しました。");
+  if (receiptId) {
+    addLine("受付 ID：" + receiptId);
+  }
+  addLine(
     "内容を誤って送信した場合は、受付 ID を控えて京滋労働共済までご連絡ください。"
   );
 
-  result.textContent = lines.join("\n");
-  result.className = "soshiki-form-send-result soshiki-form-send-result--success";
-  result.hidden = false;
+  var pdfButton = document.createElement("button");
+  pdfButton.type = "button";
+  pdfButton.id = "soshiki-form-pdf-after-send";
+  pdfButton.className =
+    "btn btn-secondary soshiki-form-send-result-pdf-btn";
+  pdfButton.textContent = "PDFを保存";
+  pdfButton.addEventListener("click", function () {
+    if (typeof runSoshikiFormPdfSaveAfterSend === "function") {
+      runSoshikiFormPdfSaveAfterSend(receiptId);
+    }
+  });
+  result.appendChild(pdfButton);
 }
 
 function showSoshikiFormSendError(message) {

@@ -1,7 +1,7 @@
 # 京滋労働組合共済会サイト
 
 京滋労働組合共済会の共済制度を案内する公式サイトです。  
-組合員向けに、制度概要、パンフレット、各種書類、お問い合わせ先、見積り依頼、ニュース、キャンペーン情報などを提供します。
+組合員向けに、制度概要、パンフレット、各種書類、お問い合わせ先、見積り依頼、ニュースなどを提供します。
 
 本サイトは、**長期運用を前提とした、軽量で可読性の高い静的サイト**として構築しています。
 
@@ -28,8 +28,6 @@ https://keijirodokyosai.github.io/
 * お知らせ
 * お問い合わせ
 * おうちの安心共済（火災共済）の見積り依頼
-* 共済クイズへの導線
-* 春期拡大キャンペーンの案内
 
 特に重要視しているのは、**利用者が迷わず必要な情報にたどり着けること**です。  
 見た目の派手さよりも、分かりやすさ、読みやすさ、運用しやすさを優先しています。
@@ -68,39 +66,30 @@ https://keijirodokyosai.github.io/
   * 共済制度
 
     * 火災共済
+    * 自然災害特約
     * 医療共済
     * 生命共済
     * 交通災害共済
     * 高齢医療共済
     * 高齢生命共済
+    * ONE-CO共済
+    * 緩和型医療共済
+    * 組織共済
     * 自転車共済
     * 自動車共済
-    * ONE-CO共済
   * 書類ダウンロード
   * よくある質問
   * お知らせ
   * お問い合わせ
   * おうちの安心共済（火災共済）見積り依頼
-  * 共済クイズ
-  * 春期拡大キャンペーン
 
 ### トップページの主要CTA
 
-トップページのヒーロー部分には、以下の3つの導線を配置します。
+トップページのヒーロー部分には、次の導線を配置しています。
 
-* 火災共済の見積依頼はこちら
-* 共済クイズの参加はこちら
-* 春期拡大キャンペーンの詳細はこちら
+* 火災共済の見積依頼はこちら → `/estimate.html`（ボタン型リンク）
 
-これらは、通常のテキストリンクではなく、**薄い黄色背景・濃い紺色文字のボタン型リンク**として表示します。
-
-#### リンク先
-
-| 表示文言 | リンク先 |
-| --- | --- |
-| 火災共済の見積依頼はこちら | `/estimate.html` |
-| 共済クイズの参加はこちら | Googleフォーム |
-| 春期拡大キャンペーンの詳細はこちら | `/news/spring-campaign.html` |
+※ 共済クイズ・春期拡大キャンペーン用の個別ページ（`/news/spring-campaign.html` など）は、**現時点では未公開**です。
 
 ---
 
@@ -158,6 +147,7 @@ https://keijirodokyosai.github.io/
 │  └─ union-master.json     … 開発用サンプル（kyosai-system 本番出力で置換）
 ├─ index.html
 ├─ kasai.html
+├─ special-contract.html
 ├─ iryo.html
 ├─ seimei.html
 ├─ kotsu.html
@@ -166,12 +156,11 @@ https://keijirodokyosai.github.io/
 ├─ jitensha.html
 ├─ jidosha.html
 ├─ one-co.html
+├─ kanwa-iryo.html
 ├─ downloads.html
 ├─ soshiki-form-enter.html  … 組織共済申込書（ブラウザ入力）
 ├─ faq.html
 ├─ news.html
-├─ news/
-│  └─ spring-campaign.html
 ├─ contact.html
 ├─ soshiki.html
 ├─ sitemap.xml
@@ -196,6 +185,7 @@ https://keijirodokyosai.github.io/
 | --- | --- | --- | --- |
 | `index.html` | トップページ | - | - |
 | `kasai.html` | 火災共済 | `kasai.png` | `kasai.pdf` |
+| `special-contract.html` | 自然災害特約 | `special-contract.png` | `special-contract.pdf` |
 | `iryo.html` | 医療共済 | `iryo.png` | `iryo.pdf` |
 | `seimei.html` | 生命共済 | `seimei.png` | `seimei.pdf` |
 | `kotsu.html` | 交通災害共済 | `kotsu.png` | `kotsu.pdf` |
@@ -204,19 +194,19 @@ https://keijirodokyosai.github.io/
 | `jitensha.html` | 自転車共済 | `jitensha1.png` / `jitensha2.png` | `jitensha.pdf` |
 | `jidosha.html` | 自動車共済 | - | 外部リンク |
 | `one-co.html` | ONE-CO共済 | `one-co.png` | `one-co.pdf` |
+| `kanwa-iryo.html` | 緩和型医療共済 | `kanwa-iryo.png` | `kanwa-iryo.pdf` |
+| `soshiki.html` | 組織共済 | - | - |
 | `downloads.html` | 書類ダウンロード | - | 各種PDF |
 | `soshiki-form-enter.html` | 組織共済申込書（ブラウザ入力・PC向け） | `soshiki-form-enter.png` | - |
 | `faq.html` | よくある質問 | - | - |
 | `news.html` | お知らせ | - | - |
-| `news/spring-campaign.html` | 春期拡大キャンペーン | - | - |
 | `contact.html` | お問い合わせ | - | - |
 | `estimate.html` | おうちの安心共済（火災共済）見積り依頼 | - | - |
-| `soshiki.html` | 組織共済（補助ページ） | - | - |
 
 ※ `estimate.html` は実ファイル `other_pages/estimate.html` を `permalink: /estimate.html` で公開しています。  
-※ `news/spring-campaign.html` はニュース配下の個別案内ページです。グローバルナビには直接追加せず、トップページ・ニュースページから誘導します。  
-※ `soshiki.html` は単体HTMLの補助ページです（現時点でグローバルナビ・`sitemap.xml` には未掲載）。  
-※ 組織共済申込書のブラウザ入力は `soshiki-form-enter.html`。設計・今後の実装は [`docs/soshiki-form-enter.md`](docs/soshiki-form-enter.md) を参照。
+※ `kyosai.html` は共済ページのテンプレート用（`published: false`）で、サイトマップ・トップには出しません。  
+※ 春期拡大キャンペーン用の `news/spring-campaign.html` は**未作成**（公開時は `news/` に追加し `sitemap.xml` を更新）。  
+※ 組織共済申込書のブラウザ入力は `soshiki-form-enter.html`。設計・実装詳細は [`docs/soshiki-form-enter.md`](docs/soshiki-form-enter.md) を参照。
 
 ---
 
@@ -235,22 +225,23 @@ https://keijirodokyosai.github.io/
 
 詳細仕様（KyosaiId マッピング、総合パッケージ、41/44 抑制、慶弔 42/43）は **[docs/soshiki-form-enter.md](docs/soshiki-form-enter.md)** に記載。
 
-送信バックエンド（Cloudflare Worker + Graph）の引き継ぎは **[docs/soshiki-form-submit-worker-graph.md](docs/soshiki-form-submit-worker-graph.md)**。
+### WEB 受付（送 信・OneDrive・事務 PDF）
 
----
-
-## 事務局 Microsoft 365・メール
-
-組織共済サイト（GitHub Pages）とは別に、事務用 **Microsoft 365** テナントと **`keijirodokyosai.org`** メールを運用している。
+組合担当者が申込書を **送 信** → Cloudflare Worker → 事務局 OneDrive に **json** 保存。用紙 **PDF** と **受付確認メール**は事務側の自動化（Worker / Excel）。
 
 | 項目 | 内容 |
 |------|------|
-| ログイン | `admin@keijikyosai.onmicrosoft.com` |
-| 事務連絡用アドレス | `info@keijirodokyosai.org`（admin メールボックスのエイリアス。ライセンス 1 つのため別ユーザーなし） |
-| ライセンス | Microsoft 365 Business Standard（Teams なし）× 1 |
-| クライアント | Outlook on the web / デスクトップ Outlook（admin 追加済み） |
+| 入力・送 信 | `soshiki-form-enter.html`、`js/soshiki-form-submit.js` |
+| Worker | `workers/soshiki-submit/` → `data/soshiki-form-submit-config.json` の URL |
+| 事務 PDF | `scripts/soshiki-form-office/`（Excel テンプレ → PDF） |
+| M365（現状） | **admin@keijikyosai.onmicrosoft.com** に Business Standard ×1。**`info@keijirodokyosai.org`** は admin のエイリアス（Outlook 差出人・受信とも同一メールボックス） |
 
-DNS・Exchange でのエイリアス設定、トラブルシュート、未実施（Worker・Graph アプリ）は **[docs/m365-tenant-and-mail.md](docs/m365-tenant-and-mail.md)** に記載。
+設計の正:
+
+- [docs/soshiki-form-submit-worker-graph.md](docs/soshiki-form-submit-worker-graph.md) — バックエンド・§13 事務バッチ  
+- [docs/m365-tenant-and-mail.md](docs/m365-tenant-and-mail.md) — **ドメイン・DNS・`info@` エイリアス・Outlook（2026-10-22 時点の実態）**  
+- [docs/soshiki-m365-accounts.md](docs/soshiki-m365-accounts.md) — **admin / info 分離の目標構成・切替チェックリスト**（ライセンス追加時）  
+- [docs/soshiki-form-receipt-mail-status.md](docs/soshiki-form-receipt-mail-status.md) — 受付メール本番・障害  
 
 ---
 
@@ -292,14 +283,14 @@ DNS・Exchange でのエイリアス設定、トラブルシュート、未実�
 ニュースページの関連ページには、以下の導線を配置します。
 
 * おうちの安心共済　見積り依頼
-* 共済クイズ
-* 春期拡大キャンペーン
 
 ---
 
-## 春期拡大キャンペーンページ仕様
+## 春期拡大キャンペーンページ仕様（未公開・作成時の仕様メモ）
 
-### 対象ページ
+**現状:** リポジトリに `news/spring-campaign.html` はありません。`sitemap.xml` にも未掲載です。以下はページを作るときの仕様メモです。
+
+### 対象ページ（予定）
 
 ```text
 /news/spring-campaign.html
@@ -345,13 +336,7 @@ permalink: /news/spring-campaign.html
 
 ### サイトマップ掲載
 
-`sitemap.xml` には、以下を追加します。
-
-```xml
-<url>
-  <loc>https://keijirodokyosai.github.io/news/spring-campaign.html</loc>
-</url>
-```
+ページを公開したら `sitemap.xml` に URL を追加します（現在未掲載）。
 
 ---
 
@@ -360,6 +345,7 @@ permalink: /news/spring-campaign.html
 ### 対象ページ
 
 * `kasai.html`
+* `special-contract.html`
 * `iryo.html`
 * `seimei.html`
 * `kotsu.html`
@@ -368,6 +354,7 @@ permalink: /news/spring-campaign.html
 * `jitensha.html`
 * `jidosha.html`
 * `one-co.html`
+* `kanwa-iryo.html`
 
 ### 基本構成
 
@@ -511,19 +498,15 @@ permalink: /news/spring-campaign.html
 
 メール本文には入力用ひな形を自動挿入します。
 
-### 共済クイズ
+### 共済クイズ（未掲載）
 
-* トップページのCTAボタンからGoogleフォームへ誘導する
-* ニュースページの関連ページからも誘導する
-* 外部リンクのため `target="_blank" rel="noopener"` を使用する
+* **現状:** トップ・ニュースにクイズ導線はありません
+* 掲載する場合は Google フォームへ誘導し、外部リンクは `target="_blank" rel="noopener"` を使用する
 
-### 春期拡大キャンペーン
+### 春期拡大キャンペーン（未公開）
 
-* ページ名：`news/spring-campaign.html`
-* ニュース配下の個別案内ページとして管理する
-* トップページのCTAボタンから誘導する
-* ニュースページの更新履歴・関連ページから誘導する
-* `sitemap.xml` に掲載する
+* 予定ページ名：`news/spring-campaign.html`（**ファイル未作成**）
+* 公開時はニュース配下の個別案内として管理し、`sitemap.xml` に URL を追加する
 
 ---
 
@@ -1102,15 +1085,32 @@ Google検索結果でサイト名が意図しない表示になる可能性が�
 
 ### sitemap.xml
 
-サイトマップには、公開している主要ページを掲載します。
+`sitemap.xml` には、公開中の主要 HTML を掲載します（2026-10-16 時点）。
 
-春期拡大キャンペーンページを追加したため、以下を含めます。
+| URL |
+| --- |
+| `https://keijirodokyosai.github.io/` |
+| `…/kasai.html` |
+| `…/special-contract.html` |
+| `…/iryo.html` |
+| `…/seimei.html` |
+| `…/kotsu.html` |
+| `…/korei-iryo.html` |
+| `…/korei-seimei.html` |
+| `…/one-co.html` |
+| `…/kanwa-iryo.html` |
+| `…/soshiki.html` |
+| `…/jitensha.html` |
+| `…/jidosha.html` |
+| `…/downloads.html` |
+| `…/soshiki-form-enter.html` |
+| `…/faq.html` |
+| `…/news.html` |
+| `…/contact.html` |
+| `…/estimate.html` |
 
-```xml
-<url>
-  <loc>https://keijirodokyosai.github.io/news/spring-campaign.html</loc>
-</url>
-```
+掲載しない例: `kyosai.html`（`published: false`）、Google 検証用 HTML、`campaign.html`（存在しない旧記載は削除済み）。  
+個別ニュースページ（例: 春期キャンペーン）を新規公開したら、上表に追記してください。
 
 ### robots.txt
 
@@ -1153,10 +1153,11 @@ Sitemap: https://keijirodokyosai.github.io/sitemap.xml
 ### 共済ページ更新手順
 
 1. パンフレット画像（PNG）を `/images/` に配置
-2. パンフレットPDFを `/pdf/` に配置
-3. 対象の共済ページHTMLを更新
-4. 画像表示とPDFリンクの両方が正しいか確認
-5. 必要書類導線が `downloads.html` を向いているか確認
+2. `python scripts/optimize-pamphlet-png.py` で表示用 WebP（`images/*.webp`）を生成（`soshiki-form-enter.png` は対象外）
+3. パンフレットPDFを `/pdf/` に配置
+4. 対象の共済ページHTMLを更新（プレビューは `{% include pamphlet-preview.html %}` を使用）
+5. 画像表示とPDFリンクの両方が正しいか確認
+6. 必要書類導線が `downloads.html` を向いているか確認
 
 ### 自転車共済更新手順
 
@@ -1173,12 +1174,12 @@ Sitemap: https://keijirodokyosai.github.io/sitemap.xml
 4. 個別ページがある場合は `news/` フォルダ内に作成する
 5. `sitemap.xml` に個別ページURLを追加する
 
-### 春期拡大キャンペーン更新手順
+### 春期拡大キャンペーン更新手順（ページ公開後）
 
-1. `news/spring-campaign.html` を更新する
-2. トップページのCTAリンクが正しいか確認する
-3. ニュースページの更新履歴・関連ページからリンクされているか確認する
-4. `sitemap.xml` にURLが含まれているか確認する
+1. `news/spring-campaign.html` を作成または更新する
+2. トップ・ニュースからの導線を追加した場合はリンク先を確認する
+3. `news.html` の更新履歴を追記する
+4. `sitemap.xml` に URL を追加する
 5. スマホ表示でカードが1列表示になるか確認する
 
 ---

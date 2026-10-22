@@ -1,4 +1,5 @@
 {
+  "comment": "Legacy layout reference (Web PDF coords). Office Excel PDF uses data/soshiki-form-excel-cell-map.json only.",
   "formVersion": "1",
   "template": "/pdf/soshiki-form-enter.pdf",
   "page": {
@@ -10,5 +11,6 @@
     "stepPt": null,
     "comment": "組合員行の縦オフセット（pt）。フェーズ2以降で実測値を入れる。"
   },
-  "fields": []
+  "fields": [],
+  "commentFields": "事務 Excel PDF 用の座標参照（§5.10.1）。Web 送 信では PDF を作らない。"
 }

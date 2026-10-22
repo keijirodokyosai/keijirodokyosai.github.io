@@ -1,0 +1,9 @@
+<picture>
+  <source srcset="{{ '/images/' | append: include.image | append: '.webp' | relative_url }}" type="image/webp">
+  <img
+    src="{{ '/images/' | append: include.image | append: '.png' | relative_url }}"
+    alt="{{ include.alt }}"
+    loading="lazy"
+    decoding="async"
+  >
+</picture>

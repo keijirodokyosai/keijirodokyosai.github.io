@@ -11,7 +11,7 @@
   </url>
 
   <url>
-    <loc>https://keijirodokyosai.github.io/seimei.html</loc>
+    <loc>https://keijirodokyosai.github.io/special-contract.html</loc>
   </url>
 
   <url>
@@ -19,11 +19,7 @@
   </url>
 
   <url>
-    <loc>https://keijirodokyosai.github.io/korei-seimei.html</loc>
-  </url>
-
-  <url>
-    <loc>https://keijirodokyosai.github.io/korei-iryo.html</loc>
+    <loc>https://keijirodokyosai.github.io/seimei.html</loc>
   </url>
 
   <url>
@@ -31,11 +27,11 @@
   </url>
 
   <url>
-    <loc>https://keijirodokyosai.github.io/jidosha.html</loc>
+    <loc>https://keijirodokyosai.github.io/korei-iryo.html</loc>
   </url>
 
   <url>
-    <loc>https://keijirodokyosai.github.io/jitensha.html</loc>
+    <loc>https://keijirodokyosai.github.io/korei-seimei.html</loc>
   </url>
 
   <url>
@@ -43,7 +39,27 @@
   </url>
 
   <url>
+    <loc>https://keijirodokyosai.github.io/kanwa-iryo.html</loc>
+  </url>
+
+  <url>
+    <loc>https://keijirodokyosai.github.io/soshiki.html</loc>
+  </url>
+
+  <url>
+    <loc>https://keijirodokyosai.github.io/jitensha.html</loc>
+  </url>
+
+  <url>
+    <loc>https://keijirodokyosai.github.io/jidosha.html</loc>
+  </url>
+
+  <url>
     <loc>https://keijirodokyosai.github.io/downloads.html</loc>
+  </url>
+
+  <url>
+    <loc>https://keijirodokyosai.github.io/soshiki-form-enter.html</loc>
   </url>
 
   <url>
@@ -62,8 +78,4 @@
     <loc>https://keijirodokyosai.github.io/estimate.html</loc>
   </url>
 
-  <url>
-    <loc>https://keijirodokyosai.github.io/campaign.html</loc>
-  </url>
-  
 </urlset>

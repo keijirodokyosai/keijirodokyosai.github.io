@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
   initApplicationDate();
-  initTougetsuMonth();
+  initCoverageMonthDisplay();
   initSoshikiFormFooterCounts();
   initSoshikiFormUnionStorage();
   initUnionMaster();
@@ -10,16 +10,13 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 var SOSHIKI_FORM_FOOTER_CLEAR_FIELD_IDS = [
-  "page-count-current",
-  "page-count-total",
-  "zengetsu-zan-count",
-  "tsuki-kei-count",
-  "biko-remarks",
+  "prior-month-headcount",
+  "month-total-count",
+  "remarks",
 ];
 
 function initSoshikiFormActions() {
   var clearButton = document.getElementById("soshiki-form-clear");
-  var saveButton = document.getElementById("soshiki-form-save-pdf");
 
   if (clearButton) {
     clearButton.addEventListener("click", function () {
@@ -27,25 +24,24 @@ function initSoshikiFormActions() {
       if (!window.confirm("入力内容をクリアします。よろしいですか？")) return;
       clearAllMemberRows();
       clearSoshikiFormFooterFields();
-      recalcSoshikiFormTsukiKeiCount();
+      applySoshikiFormPageCountDefaults();
+      finalizePriorMonthHeadcountAfterFooterReset();
     });
-  }
-
-  if (saveButton) {
-    saveButton.addEventListener("click", saveSoshikiFormPdf);
   }
 }
 
 /**
- * 保 存 — ブラウザの「印刷」と同じ画面（送信先「PDF に保存」想定）。§5.9
+ * 送 信成功後の PDF 保存用印刷（送信先「PDF に保存」想定）。§5.9
  */
-function printSoshikiFormForPdfSave() {
-  var saveButton = document.getElementById("soshiki-form-save-pdf");
+function printSoshikiFormForPdfSave(receiptId) {
   var previousTitle = document.title;
   var suggestedTitle = previousTitle;
 
   if (typeof getSoshikiFormPdfDownloadFileName === "function") {
-    suggestedTitle = getSoshikiFormPdfDownloadFileName().replace(/\.pdf$/i, "");
+    suggestedTitle = getSoshikiFormPdfDownloadFileName(receiptId).replace(
+      /\.pdf$/i,
+      ""
+    );
   }
 
   document.title = suggestedTitle;
@@ -61,10 +57,6 @@ function printSoshikiFormForPdfSave() {
       fallbackTimerId = null;
     }
     document.title = previousTitle;
-    if (saveButton) {
-      saveButton.disabled = false;
-      saveButton.textContent = "保 存";
-    }
     window.dispatchEvent(new Event("resize"));
     window.removeEventListener("afterprint", finishPrintSave);
   }
@@ -76,38 +68,41 @@ function printSoshikiFormForPdfSave() {
   }, 0);
 }
 
-function saveSoshikiFormPdf() {
-  var saveButton = document.getElementById("soshiki-form-save-pdf");
+function prepareSoshikiFormSheetForPrint() {
   var sheet = document.querySelector(".soshiki-form-sheet");
   var active = document.activeElement;
   if (active && typeof active.blur === "function") {
     active.blur();
   }
-
   if (sheet) {
     sheet.style.setProperty("--soshiki-form-scale", "1");
     sheet.style.marginBottom = "0";
   }
+}
 
-  recordSoshikiFormTsukiKeiSnapshot();
-
-  if (typeof clearSoshikiFormSendResult === "function") {
-    clearSoshikiFormSendResult();
-  }
-
-  if (saveButton) {
-    saveButton.disabled = true;
-    saveButton.textContent = "保存中…";
-  }
-
-  printSoshikiFormForPdfSave();
+function runSoshikiFormPdfSaveAfterSend(receiptId) {
+  prepareSoshikiFormSheetForPrint();
+  printSoshikiFormForPdfSave(receiptId);
 }
 
 function soshikiFormFooterFieldsHaveInput() {
-  for (var i = 0; i < SOSHIKI_FORM_FOOTER_CLEAR_FIELD_IDS.length; i += 1) {
-    var field = document.getElementById(SOSHIKI_FORM_FOOTER_CLEAR_FIELD_IDS[i]);
-    if (field && field.value.trim()) return true;
+  var current = document.getElementById("page-count-current");
+  var total = document.getElementById("page-count-total");
+  if (current && total) {
+    var cur = current.value.trim();
+    var tot = total.value.trim();
+    if (cur && tot && !(cur === "1" && tot === "1")) return true;
   }
+
+  var prior = document.getElementById("prior-month-headcount");
+  if (prior) {
+    var priorValue = prior.value.trim();
+    if (priorValue && priorValue !== "0") return true;
+  }
+
+  var remarks = document.getElementById("remarks");
+  if (remarks && remarks.value.trim()) return true;
+
   return false;
 }
 
@@ -163,17 +158,17 @@ function initSoshikiFormLayout() {
   }
 }
 
-var KUCHI_FIELD_IDS = {
-  danketsu: "kuchi-danketsu",
-  "soshiki-seimei": "kuchi-soshiki-seimei",
-  "soshiki-iryo": "kuchi-soshiki-iryo",
-  "soshiki-kotsu": "kuchi-soshiki-kotsu",
-  "soshiki-kasai": "kuchi-soshiki-kasai",
-  keicho: "kuchi-keicho",
-  "sogo-kyosai": "kuchi-sogo-kyosai",
+var UNIT_FIELD_IDS = {
+  danketsu: "unit-danketsu",
+  "soshiki-seimei": "unit-soshiki-seimei",
+  "soshiki-iryo": "unit-soshiki-iryo",
+  "soshiki-kotsu": "unit-soshiki-kotsu",
+  "soshiki-kasai": "unit-soshiki-kasai",
+  keicho: "unit-keicho",
+  "sogo-kyosai": "unit-sogo-kyosai",
 };
 
-var KAKEKIN_FIELD_ID = "kakekin-per-person";
+var PREMIUM_PER_PERSON_FIELD_ID = "premium-per-person";
 
 var soshikiFormVerifiedUnion = null;
 
@@ -196,23 +191,23 @@ function initApplicationDate() {
   dayInput.value = String(today.getDate()).padStart(2, "0");
 }
 
-function initTougetsuMonth() {
+function initCoverageMonthDisplay() {
   var monthInput = document.getElementById("application-month");
-  var tougetsuInput = document.getElementById("tougetsu-count");
-  if (!monthInput || !tougetsuInput) return;
+  var coverageMonthInput = document.getElementById("coverage-month-display");
+  if (!monthInput || !coverageMonthInput) return;
 
-  function updateTougetsuMonth() {
+  function updateCoverageMonthDisplay() {
     var month = parseInt(String(monthInput.value).trim(), 10);
     if (!Number.isFinite(month) || month < 1 || month > 12) {
-      tougetsuInput.value = "";
+      coverageMonthInput.value = "";
       return;
     }
-    tougetsuInput.value = String(month === 12 ? 1 : month + 1);
+    coverageMonthInput.value = String(month === 12 ? 1 : month + 1);
   }
 
-  monthInput.addEventListener("input", updateTougetsuMonth);
-  monthInput.addEventListener("change", updateTougetsuMonth);
-  updateTougetsuMonth();
+  monthInput.addEventListener("input", updateCoverageMonthDisplay);
+  monthInput.addEventListener("change", updateCoverageMonthDisplay);
+  updateCoverageMonthDisplay();
 }
 
 function initUnionMaster() {
@@ -320,12 +315,12 @@ function clearUnionRelatedFields() {
   setFieldValue("branch-code", "");
   setFieldValue("subbranch-code", "");
   clearKuchiFields();
-  setFieldValue(KAKEKIN_FIELD_ID, "");
+  setFieldValue(PREMIUM_PER_PERSON_FIELD_ID, "");
 }
 
 function clearKuchiFields() {
-  Object.keys(KUCHI_FIELD_IDS).forEach(function (formKey) {
-    setFieldValue(KUCHI_FIELD_IDS[formKey], "");
+  Object.keys(UNIT_FIELD_IDS).forEach(function (formKey) {
+    setFieldValue(UNIT_FIELD_IDS[formKey], "");
   });
 }
 
@@ -342,24 +337,26 @@ function applyUnionData(union, kyosaiMap) {
   setFieldValue("branch-code", union.BranchCode || "");
   setFieldValue("subbranch-code", union.SubbranchCode || "");
   applyFormKuchiToDom(computeFormKuchi(union, kyosaiMap));
-  applySoshikiFormZengetsuCarryForward();
+  applyPriorMonthHeadcountCarryForward();
+  ensurePriorMonthHeadcountDefault();
+  recalcSoshikiFormTsukiKeiCount();
 }
 
 function applyFormKuchiToDom(result) {
   if (!result) {
     clearKuchiFields();
-    setFieldValue(KAKEKIN_FIELD_ID, "");
+    setFieldValue(PREMIUM_PER_PERSON_FIELD_ID, "");
     return;
   }
 
-  Object.keys(KUCHI_FIELD_IDS).forEach(function (formKey) {
+  Object.keys(UNIT_FIELD_IDS).forEach(function (formKey) {
     var value = result.formKuchi && result.formKuchi[formKey];
-    setFieldValue(KUCHI_FIELD_IDS[formKey], value || "");
+    setFieldValue(UNIT_FIELD_IDS[formKey], value || "");
   });
 
   var kakekin = result.KakekinPerPerson;
   setFieldValue(
-    KAKEKIN_FIELD_ID,
+    PREMIUM_PER_PERSON_FIELD_ID,
     kakekin != null && kakekin !== "" ? String(kakekin) : ""
   );
 }

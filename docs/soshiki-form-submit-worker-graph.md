@@ -1,7 +1,7 @@
 # 組織共済 WEB 受付 — 本命ルート（自作フォーム + Cloudflare Workers + Graph）
 
 **目的:** 別セッション・別担当が実装を続けられるよう、2026-10 時点の決定事項と未作業を1本にまとめる。  
-**関連:** 入力 UI・JSON 仕様の詳細は `docs/soshiki-form-enter.md` §5.10 以降。本ドキュメントは **送信バックエンド** 専用。
+**関連:** 入力 UI・JSON 仕様は `docs/soshiki-form-enter.md` §5.10 以降。M365 **admin / info** は **`docs/soshiki-m365-accounts.md`**。本ドキュメントは **送信バックエンド** 専用。
 
 ---
 
@@ -10,21 +10,26 @@
 ```
 [ブラウザ] soshiki-form-enter.html（自作・GitHub Pages）
     │ 送 信ボタン
-    ▼ POST JSON（password, unionName, fileNameDate, submission, pdfBase64）
+    ▼ POST（password, unionName, fileNameDate, submission）
 [Cloudflare Workers] 中継 API（秘密鍵・パスワードは環境変数のみ）
     │ Microsoft Graph（アプリケーション権限）
-    ▼
-[事務局 OneDrive / SharePoint] 組織共済WEB受付/受付/{storageFolder}/json|pdf/
-    │
-    ▼ レスポンス { "ok": true, "receiptId": "…" } → Web に受付 ID 表示
+    ├─► OneDrive 受付/{storageFolder}/json/ に .json 保存
+    └─► 受付確認メール（sendMail・PDF 添付なし・設定/union-contacts 参照）
+    ▼ レスポンス { "ok": true, "receiptId": "…", "mailSent": … } → Web
+
+[事務 PC] Graph delta ポール（推奨）または OneDrive 同期 + ローカル Inbox（§13）
+    ① Excel テンプレ → PDF/ に PDF 保存（**メールは送らない**・二重送信防止）
+    ② json を 処理済/ に移動（クラウド＋ローカル）
 ```
 
 | 項目 | 内容 |
 |------|------|
-| フロント | **変更最小**。`js/soshiki-form-submit.js` は既存 POST 形式のまま。URL は `data/soshiki-form-submit-config.json` の `submitEndpointUrl` |
-| バックエンド | **新規** Cloudflare Worker（リポジトリ外でも可。URL を config に書く） |
+| フロント | 入力・検証・**submission JSON** 送信。組合向け PDF は **送信成功後**のブラウザ印刷（§5.9・保 存ボタンなし） |
+| バックエンド | Cloudflare Worker **`workers/soshiki-submit`**（URL を config に書く） |
+| 用紙 PDF | **共済会側**（Excel テンプレ＋ PowerShell / Python）。Web の html2canvas は **採用しない**（位置合わせ困難） |
+| 返信メール | **Worker** が json 保存直後に Graph **sendMail**（**PDF は添付しない**）。失敗時は管理者アラート |
 | 認証 | **Entra ID アプリ登録** + Client Secret（Worker Secrets）。**申込者の Microsoft ログインは不要** |
-| Exchange / メール | **不要**（メール → Power Automate 経路は採用しない） |
+| Exchange / メール | **本番の受付確認は Worker**。事務 Inbox は **PDF のみ**（`Send-SoshikiFormReceiptEmail.ps1` は手動・再送用） |
 | Power Automate | **送信用・保存用とも不要**（HTTP 受信は Premium。メールトリガーは REST／ライセンス問題） |
 
 ---
@@ -61,30 +66,30 @@
 | 機能 | ファイル |
 |------|----------|
 | 入力フォーム | `soshiki-form-enter.html`、`_includes/soshiki-form-member-rows.html`、`css/style.css` |
-| 送 信 POST | `js/soshiki-form-submit.js` |
-| PDF（送信・pdf-lib） | `js/soshiki-form-pdf-fill.js`（座標は `data/soshiki-form-pdf-layout.json`） |
-| **保 存** | ブラウザ **印刷 → PDF に保存**（`js/soshiki-form-enter.js`）。送信 PDF とは別経路の調整が継続中の可能性あり |
-| 設定 | `data/soshiki-form-submit-config.json` → **`submitEndpointUrl` は空**。Worker デプロイ後に URL を設定 |
+| 送 信 POST | `js/soshiki-form-submit.js`（**JSON のみ**） |
+| **組合 PDF** | 送 信成功後 **印刷 → PDF に保存**（ファイル名 `{組合名}_{yyyyMMdd}_{受付ID}.pdf`）。**事務用 PDF の正本は Excel 経路** |
+| 設定 | `data/soshiki-form-submit-config.json` の `submitEndpointUrl` |
 
-### POST ボディ（Worker が受け取る形・変更しない）
+### POST ボディ（Worker が受け取る形）
+
+**`pdfBase64` は受け付けない**（送ると 400）。OneDrive には **`.json` のみ** PUT。submission は §5.10.1（`SheetFooter` 等）。
 
 ```json
 {
   "password": "ユーザー入力",
   "unionName": "サンプル労働組合",
   "fileNameDate": "20260903",
-  "submission": { … },
-  "pdfBase64": "…"
+  "submission": { … }
 }
 ```
 
 ### Web が期待するレスポンス
 
 ```json
-{ "receiptId": "7f3a2b1c", "ok": true }
+{ "receiptId": "7f3a2b1c", "ok": true, "mailSent": true }
 ```
 
-`js/soshiki-form-submit.js` は `receiptId` / `receipt_id` を読んで成功表示。
+メール失敗でも json 保存済みのときは `ok: true` のまま `mailSent: false`（Web は成功表示のみ・メール障害は申込者に非表示）。
 
 ### 送 信条件（既存）
 
@@ -100,37 +105,109 @@
 組織共済WEB受付/
   受付/
     yyyy年mm月/          … submission.storageFolder（例 2027年01月）
-      json/              … 取込後削除（事務側）
-      pdf/
+      json/              … 取込後削除（事務側）。PDF 後は 処理済/ に移動（Inbox 自動）
+      PDF/
+      処理済/            … PDF 済み json
   設定/
-    union-contacts.json  … 非公開・Web に載せない（通知は後述・未実装）
+    union-contacts.json  … 非公開・返信メール宛先（送信は未実装・Preview-SoshikiFormReceiptEmail.ps1 で文面確認）
 ```
 
 ### ファイル名
 
 ```text
 {組合名}_{yyyyMMdd}_{受付ID}.json
-{組合名}_{yyyyMMdd}_{受付ID}.pdf
 ```
+
+事務バッチが生成する PDF は同 stem で `PDF/` に保存（§13）。Worker は **pdf を書かない**。
 
 - `unionName`・`fileNameDate` は POST トップレベル  
 - **受付 ID** は **Worker が生成**（旧設計の PA 生成の代わり）
 
 ### submission JSON
 
-`docs/soshiki-form-enter.md` §5.10「submission JSON（確定）」に準拠。組合名は POST の `unionName` のみ（submission 内に含めない）。
+`docs/soshiki-form-enter.md` §5.10・**§5.10.1** に準拠。
+
+**現行:** OneDrive の `.json` ファイル本文は **`submission` オブジェクトのみ**（`unionName`・`receiptId` はファイル名から取得）。  
+**移行後（推奨）:** Worker が `{ receiptId, unionName, fileNameDate, submission }` を保存し、事務バッチの解析を単純化。
 
 ---
 
-## 6. Worker 実装タスク（未実装）
+## 13. 事務側自動化（PDF）— 2026-10 決定・2026-10 更新
 
-1. **POST 受信** — CORS（GitHub Pages オリジン）、Body サイズ（PDF Base64）上限の確認  
-2. **パスワード照合** — Worker Secret（例: `SOSHIKI_SUBMIT_PASSWORD`）。GitHub に置かない  
-3. **受付 ID 生成** — 推測困難な短い ID（UUID 等）  
-4. **Graph 認証** — Client ID + Client Secret（または証明書）でトークン取得  
-5. **アップロード** — `json` と `pdf` を所定パスに PUT/CREATE（フォルダ無ければ作成）  
-6. **エラー** — 4xx/5xx と JSON `{ "ok": false, "message": "…" }` など（Web の挙動に合わせて調整）  
-7. **レート制限** — 任意だが推奨（公開 URL）
+Web では **送 信 PDF を作らない**（html2canvas 経路は削除済み）。**受付確認メールは Worker**（§6）。事務 PC は **Excel → PDF** と **処理済** のみ。
+
+### 13.1 処理順（1 json ＝ 1 ジョブ・事務 Inbox）
+
+| 順 | 処理 | 備考 |
+|----|------|------|
+| 1 | **トリガー** | **推奨:** `Watch-SoshikiFormJsonInboxGraph.ps1`（Graph **delta**・既定 30 秒）。**代替:** OneDrive 同期 + `Register-SoshikiFormJsonInboxAutomation.ps1`（ローカル `json/` スキャン）。**両方同時は避ける** |
+| 2 | **PDF 生成** | Excel テンプレ → `PDF/` に `{組合名}_{yyyyMMdd}_{受付ID}.pdf`（`Invoke-SoshikiFormJsonInboxFile`） |
+| 3 | **処理済** | 成功または既存 PDF ありで `処理済/` に json 移動。Graph 経路はクラウド上の json も `処理済` へ PATCH |
+
+初回 Graph delta は **ベースラインのみ**（既存 json を PDF 化しない）。`state/graph-inbox-delta.json` は Git 管理外。
+
+### 13.2 実行環境
+
+| 項目 | 内容 |
+|------|------|
+| 場所 | **事務 PC** または常時起動 Windows（OneDrive で受付フォルダ同期） |
+| 手段 | `scripts/soshiki-form-office/` — **C#**（Excel `dynamic` COM）＋薄い PowerShell。`ExportAsFixedFormat` で PDF |
+| Worker | **Excel は動かせない**。受付確認メールは Worker、**事務 PDF は Worker 外** |
+
+### 13.3 用紙 PDF のデータ源
+
+詳細は `docs/soshiki-form-enter.md` §5.10.1。
+
+| 用紙の領域 | データ源 |
+|------------|----------|
+| 申込日・コード・組合員 | `submission`（現行どおり） |
+| 組合名・口欄7・1人あたり掛金 | **`union-master.json`** ＋ **`form-kyosai-map.json`**（Web の `computeFormKuchi` 相当をバッチで再現） |
+| フッター（ページ枚数・前月残・備考） | **`submission.SheetFooter`**（Web 送 信時に含める・**実装済み**） |
+| 当月（月）・月計 | バッチで **再計算**（`ApplicationDate` / `CoverageMonth`・`Members[].Transfer`・`SheetFooter.PriorMonthHeadcount`） |
+| 住所の町村域結合印字 | バッチで Web の `computeTownAreaPrintJoin` 相当、または表示用フィールドを JSON に含める |
+
+### 13.4 返信メール（Worker 本番・事務は手動補助）
+
+| 項目 | 内容 |
+|------|------|
+| 宛先 | OneDrive **`設定/union-contacts.json`** の `ManagerEmail`（`KyosaikaiCode` 照合） |
+| 本番送信 | **Worker** `workers/soshiki-submit/src/receiptMail.js`（Graph **sendMail**・Entra **`Mail.Send`**） |
+| 送信元 | 同 **`FromEmail`**（settings）。任意 Secret **`GRAPH_MAIL_USER_ID`**（未設定時は `GRAPH_DRIVE_USER_ID`） |
+| BCC | **`FromEmail` と同一**（事務局への送信通知） |
+| 失敗時 | 管理者 **`AdminEmail`** に Graph メール（`FailureStage: ReceiptMail`）。Web は申込者向けにメール失敗を表示しない |
+| 件名・本文 | `SoshikiFormReceiptMail.ps1` 同等（`組織共済WEB受付_{yyyyMMdd}` 等） |
+| 手動・再送 | 事務 PC: `Send-SoshikiFormReceiptEmail.ps1`（`-Send`・Outlook）。**Inbox 自動では送らない** |
+| PDF 失敗通知 | `Send-SoshikiFormAdminAlertEmail.ps1`（`-Send`）— 事務 Inbox の Excel 失敗時 |
+
+### 13.5 事務バッチ実装チェックリスト
+
+- [ ] Excel テンプレ（A4 横・印刷範囲・用紙どおり）— 事務側で配置
+- [x] JSON → セルマップ・マスタ参照・月計再計算 — `scripts/soshiki-form-office/csharp` + `data/soshiki-form-excel-cell-map.json`
+- [x] 手動・一括 PDF — `Export-SoshikiFormPdfFromJson.ps1` / `Process-SoshikiFormJsonInbox.ps1`（既存 `PDF\` はスキップ）
+- [x] Inbox 自動（ローカル同期）・Graph delta（`Process-SoshikiFormJsonInboxGraph.ps1`）・PDF 後 `処理済/` 移動
+- [ ] 事務 PC への自動タスク登録（Graph  watcher またはローカル Automation・本番で一度設定）
+- [x] 返信メール — **Worker 実装済**（deploy + `Mail.Send` 同意）。PS は手動用
+- [x] 処理済管理（`処理済/` 移動・`-KeepInJson` で無効化可）
+- [x] Web: `SheetFooter` 送付・Worker: **JSON のみ**（`pdfBase64` 非対応）
+
+---
+
+## 6. Worker 実装（`workers/soshiki-submit`）
+
+リポジトリ内実装。手順は `workers/soshiki-submit/README.md`。
+
+| 項目 | 実装 |
+|------|------|
+| POST・CORS | `https://keijirodokyosai.github.io` のみ。OPTIONS 対応 |
+| Body 上限 | 2MB（JSON のみ） |
+| 保存 | `受付/{storageFolder}/json/` に **`.json` 1 件**のみ |
+| `pdfBase64` | **拒否**（旧クライアントは再読み込みを促す 400） |
+| パスワード | `SOSHIKI_SUBMIT_PASSWORD`（Secret） |
+| 受付 ID | `crypto.randomUUID()` の先頭 8 文字（16進） |
+| Graph | client_credentials → 所有者 drive に PUT（中間フォルダは Graph が作成） |
+| 受付確認メール | PUT 成功後 `sendMail`（settings + union-contacts を drive から GET） |
+| エラー | `{ "ok": false, "message": "…" }`（Web は `message` を表示）。保存成功・メール失敗は `ok: true` + `mailSent: false` |
+| レート制限 | 未実装（後回し可） |
 
 ### Worker 環境変数（例）
 
@@ -142,19 +219,24 @@
 | `GRAPH_DRIVE_USER_ID` または `GRAPH_SITE_ID` | 保存先（設計時に1つ決定） |
 | `GRAPH_BASE_PATH` | 例: `組織共済WEB受付` |
 | `SOSHIKI_SUBMIT_PASSWORD` | Web 送信用パスワード（事務と共有） |
+| `GRAPH_MAIL_USER_ID`（任意） | sendMail 送信元ユーザー ID |
+| `SOSHIKI_SKIP_RECEIPT_MAIL`（任意） | `1` でメール省略（テスト用） |
 
 ---
 
 ## 7. Azure / Entra — 管理者チェックリスト
 
-- [ ] **アプリ登録**（単一テナント推奨）  
-- [ ] **アプリケーション権限** — 例: `Files.ReadWrite.All`（またはサイト限定で可能なら最小化）  
-- [ ] **管理者の同意**  
-- [ ] **Client Secret** 発行 → Worker にのみ設定  
-- [ ] **保存先の決定** — 特定ユーザーの OneDrive か SharePoint ドキュメント ライブラリか（Graph パス・ドライブ ID）  
+**アカウント方針（確定）:** **`docs/soshiki-m365-accounts.md`**
+
+- [ ] **admin** — グローバル管理者・**テナント管理のみ**（通常事務は使わない）  
+- [ ] **info@keijirodokyosai.org** — 表示名 **京滋労働共済 事務局**、Exchange **1 席**、OneDrive **`組織共済WEB受付`** のオーナー  
+- [ ] **アプリ登録**（単一テナント推奨）・`Files.ReadWrite.All` + **`Mail.Send`** の管理者同意  
+- [ ] **Client Secret** → Worker Secrets のみ  
+- [ ] Worker **`GRAPH_DRIVE_USER_ID`**（＋任意 **`GRAPH_MAIL_USER_ID`）** → **info のオブジェクト ID**（10/15 切替後）  
+- [ ] OneDrive `設定/soshiki-form-office-settings.json` の **`FromEmail`** ＝ `info@keijirodokyosai.org`  
 - [ ] （任意）秘密のローテーション手順  
 
-**Exchange Online ライセンスはこの経路では不要。**
+**受付確認メール:** Graph `sendMail` には **Exchange Online が有効なユーザー**（**info**）が必須。障害・切替は **`docs/soshiki-form-receipt-mail-status.md`**。
 
 ---
 
@@ -162,12 +244,15 @@
 
 | 項目 | 備考 |
 |------|------|
-| Cloudflare Worker 本体 | 別リポジトリでも可 |
-| `submitEndpointUrl` 設定 | デプロイ後 |
-| 送 信 PDF と **保 存（印刷）** の見た目一致 | `soshiki-form-pdf-fill.js` / 座標調整（§9.0.3） |
-| **union-contacts.json** による担当者通知 | 旧 PA 案。Graph でメール送信 or 別バッチ |
+| **事務バッチ**（§13） | Excel PDF **初版済**。Graph Inbox **初版済**。返信メール **Worker 実装済・本番未**（Exchange 1 席 or 代替経路要。`docs/soshiki-form-receipt-mail-status.md`） |
+| ~~Web **`SheetFooter`** 送付~~ | **完了**（§5.10.1） |
+| ~~Worker **JSON のみ**・Web **html2canvas 削除**~~ | **完了** |
+| Worker 保存 JSON ラップ | 未実装（本文は `submission` のみ） |
+| **union-contacts.json** export | kyosai-system → OneDrive `設定/` |
 | Access 取込 | kyosai-system 側 |
-| `docs/soshiki-form-enter.md` §5.10 本文の全面差し替え | 本 doc を正とし、§5.10 はリンク済み |
+| レート制限（Worker） | 後回し可 |
+
+**完了済み（参考）:** Entra・Graph 手動テスト・Worker deploy・`submitEndpointUrl`・OneDrive **json のみ**保存。
 
 ---
 
@@ -175,11 +260,10 @@
 
 | フェーズ | 内容 |
 |----------|------|
-| **0** | 管理者: Entra アプリ + 保存先 OneDrive/SharePoint 決定 |
-| **1** | Worker: トークン取得 + テストファイル1つアップロード（手動 curl） |
-| **2** | Worker: POST 受信・パスワード・`receiptId`・json/pdf 保存 |
-| **3** | Web: `submitEndpointUrl` 設定・本番テスト |
-| **4** | 送 信 PDF 品質・ドキュメント §5.10 整理・通知（任意） |
+| **0〜3** | Entra・Worker・本番 json 受付 — **完了想定** |
+| **4** | ~~Web: `SheetFooter`・Worker JSON のみ~~ **完了**。残: json ラップ（任意） |
+| **5** | **受付確認メール経路の決定**（`docs/soshiki-form-receipt-mail-status.md`）→ Graph Inbox 本番化 |
+| **6** | Access 取込・json 削除運用 |
 
 ---
 
@@ -188,20 +272,22 @@
 ```text
 soshiki-form-enter.html
 js/soshiki-form-submit.js
-js/soshiki-form-pdf-fill.js
-js/soshiki-form-enter.js          … 保 存＝印刷
+js/soshiki-form-enter.js          … 送信後印刷（§5.9）
 data/soshiki-form-submit-config.json
 data/soshiki-form-pdf-layout.json
 docs/soshiki-form-enter.md        … §5.10
 docs/soshiki-form-submit-worker-graph.md  … 本ファイル
+docs/soshiki-m365-accounts.md             … admin / info・ドメイン・切替
+docs/soshiki-form-receipt-mail-status.md  … 受付メール・Ricoh 依頼文
+workers/soshiki-submit/                 … Worker（src/index.js, README, deploy.ps1）
 ```
 
 ---
 
-## 11. メール件名ルール（参考・Graph 本命では不使用）
+## 11. 返信メール件名（事務バッチ・案）
 
-PA メール経路を検討していた際の案: `組織共済WEB申込_{組合名}_{yyyyMMdd}`、フィルター `組織共済WEB申込`。  
-**Worker + Graph ではメールを経由しない**ため、送 信実装では不要。外部へ説明用に残す。
+確定: `組織共済WEB受付_{yyyyMMdd}`（旧案: `組織共済WEB申込_{組合名}_{yyyyMMdd}`）。  
+**本番送信は Worker POST 直後**（§6）。事務 Inbox は PDF のみ。
 
 ---
 
@@ -211,4 +297,4 @@ PA メール経路を検討していた際の案: `組織共済WEB申込_{組合
 
 ---
 
-**最終更新:** 2026-10-07（本命ルート合意・引き継ぎ用初版）
+**最終更新:** 2026-10-13（`docs/soshiki-m365-accounts.md` 追加・§7 admin/info）

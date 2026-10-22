@@ -41,7 +41,7 @@ var ADDRESS_FONT_FIT_SELECTOR =
   ".soshiki-form-member-prefecture, .soshiki-form-member-city, .soshiki-form-member-town-area, .soshiki-form-member-area-number, .soshiki-form-member-building-name";
 
 function initMemberRows() {
-  initIdouButtons();
+  initTransferButtons();
   initGenderButtons();
   initUnionMemberCodeFields();
   initHalfWidthInputs();
@@ -92,19 +92,19 @@ function getMemberField(row, suffix) {
   return document.getElementById(memberFieldId(row, suffix));
 }
 
-function initIdouButtons() {
-  document.querySelectorAll(".soshiki-form-idou-btn").forEach(function (button) {
+function initTransferButtons() {
+  document.querySelectorAll(".soshiki-form-transfer-btn").forEach(function (button) {
     button.addEventListener("click", function () {
       var row = button.getAttribute("data-row");
-      var idou = button.getAttribute("data-idou");
-      var hidden = getMemberField(row, "idou");
+      var transfer = button.getAttribute("data-transfer");
+      var hidden = getMemberField(row, "transfer");
       if (!hidden) return;
 
       var isSelected = button.classList.contains("is-selected");
-      clearIdouSelection(row);
+      clearTransferSelection(row);
 
       if (!isSelected) {
-        hidden.value = idou;
+        hidden.value = transfer;
         button.classList.add("is-selected");
         button.setAttribute("aria-pressed", "true");
       } else {
@@ -115,12 +115,12 @@ function initIdouButtons() {
   });
 }
 
-function clearIdouSelection(row) {
-  var hidden = getMemberField(row, "idou");
+function clearTransferSelection(row) {
+  var hidden = getMemberField(row, "transfer");
   if (hidden) hidden.value = "";
 
   document
-    .querySelectorAll('.soshiki-form-idou-btn[data-row="' + row + '"]')
+    .querySelectorAll('.soshiki-form-transfer-btn[data-row="' + row + '"]')
     .forEach(function (button) {
       button.classList.remove("is-selected");
       button.setAttribute("aria-pressed", "false");
@@ -471,6 +471,53 @@ function padTwoDigitField(input) {
   var num = Number(input.value);
   if (Number.isNaN(num) || num < 1 || num > 99) return;
   input.value = String(num).padStart(2, "0");
+}
+
+function validateApplicationDateFields() {
+  var yearInput = document.getElementById("application-year");
+  var monthInput = document.getElementById("application-month");
+  var dayInput = document.getElementById("application-day");
+  if (!yearInput || !monthInput || !dayInput) {
+    return { ok: false, message: "申込日が未入力です" };
+  }
+
+  var year = yearInput.value.trim();
+  var month = monthInput.value.trim();
+  var day = dayInput.value.trim();
+
+  [yearInput, monthInput, dayInput].forEach(function (field) {
+    setFieldError(field, false);
+  });
+
+  if (!year || !month || !day) {
+    [yearInput, monthInput, dayInput].forEach(function (field) {
+      if (!field.value.trim()) setFieldError(field, true);
+    });
+    return { ok: false, message: "申込日が未入力です" };
+  }
+
+  if (year.length !== 4) {
+    setFieldError(yearInput, true);
+    return { ok: false, message: "申込日が正しくありません" };
+  }
+
+  var y = Number(year);
+  var m = Number(month);
+  var d = Number(day);
+  var date = new Date(y, m - 1, d);
+  var valid =
+    date.getFullYear() === y &&
+    date.getMonth() === m - 1 &&
+    date.getDate() === d;
+
+  if (!valid) {
+    setFieldError(yearInput, true);
+    setFieldError(monthInput, true);
+    setFieldError(dayInput, true);
+    return { ok: false, message: "申込日が正しくありません" };
+  }
+
+  return { ok: true };
 }
 
 function validateBirthDateForRow(row) {
@@ -1148,7 +1195,7 @@ function memberRowHasAnyInput(row) {
   var rowEl = document.querySelector('.soshiki-form-member-row[data-row="' + row + '"]');
   if (!rowEl) return false;
 
-  if (getMemberField(row, "idou").value) return true;
+  if (getMemberField(row, "transfer").value) return true;
 
   var unionMemberCode = getMemberField(row, "union-member-code");
   if (unionMemberCode && unionMemberCode.value.trim()) return true;
@@ -1182,7 +1229,7 @@ function memberRowHasAnyInput(row) {
  * 行の必須項目がすべて入力済みか（建物名は任意）
  */
 function memberRowRequiredFieldsFilled(row) {
-  if (!getMemberField(row, "idou").value) return false;
+  if (!getMemberField(row, "transfer").value) return false;
 
   var requiredText = [
     "family-name",
@@ -1252,8 +1299,8 @@ function validateMemberRows() {
     if (!memberRowHasAnyInput(row)) continue;
 
     var rowLabel = row + "行目";
-    var idou = getMemberField(row, "idou").value;
-    if (!idou) errors.push(rowLabel + "：異動内容を選択してください");
+    var transfer = getMemberField(row, "transfer").value;
+    if (!transfer) errors.push(rowLabel + "：異動内容を選択してください");
 
     var requiredText = [
       { suffix: "family-name", label: "漢字姓" },
@@ -1292,12 +1339,10 @@ function validateMemberRows() {
 function validateSoshikiForm() {
   var errors = [];
 
-  ["application-year", "application-month", "application-day"].forEach(function (id) {
-    var field = document.getElementById(id);
-    if (!field || !field.value.trim()) {
-      errors.push("申込日が未入力です");
-    }
-  });
+  var applicationDateResult = validateApplicationDateFields();
+  if (!applicationDateResult.ok) {
+    errors.push(applicationDateResult.message);
+  }
 
   var unionName = document.getElementById("union-name");
   if (!unionName || !unionName.value.trim()) {
@@ -1308,7 +1353,7 @@ function validateSoshikiForm() {
 }
 
 function clearMemberRow(row) {
-  clearIdouSelection(row);
+  clearTransferSelection(row);
   clearGenderSelection(row);
 
   var unionMemberCode = getMemberField(row, "union-member-code");

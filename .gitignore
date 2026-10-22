@@ -6,5 +6,14 @@ _site/
 
 # soshiki-form-enter.png 編集時の切り出し確認（scripts が再生成）
 /measure/
+/tmp_crops/
 /_*.png
 /_head.png
+
+# soshiki-form-office C# build output
+scripts/soshiki-form-office/state/
+scripts/soshiki-form-office/dist/
+scripts/soshiki-form-office/csharp/bin/
+scripts/soshiki-form-office/csharp/obj/
+scripts/soshiki-form-office/tests/**/bin/
+scripts/soshiki-form-office/tests/**/obj/
