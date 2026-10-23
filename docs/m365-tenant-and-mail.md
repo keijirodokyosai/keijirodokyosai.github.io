@@ -1,7 +1,7 @@
 # 事務局 Microsoft 365・メール（`keijirodokyosai.org`）
 
 **目的:** 京滋労働組合共済会の事務用 M365 テナント、独自ドメイン、事務局メール `info@` の現状を運用者向けに記録する。  
-**最終更新:** 2026-10-24（Worker 受付確認メール本番を反映）
+**最終更新:** 2026-10-24（正規 Web URL `keijirodokyosai.org`・DNS Web レコードを反映）
 
 **関連:** 組織共済 WEB 受付は [`soshiki-form-submit-worker-graph.md`](soshiki-form-submit-worker-graph.md)。**1ライセンス・admin / `info@` 方針** は [`soshiki-m365-accounts.md`](soshiki-m365-accounts.md)。
 
@@ -53,6 +53,8 @@
 | TXT | `@` | 所有権 `MS=ms…`、SPF（`v=spf1 include:spf.protection.outlook.com -all` 等） |
 | MX | `@` | `keijirodokyosai-org.mail.protection.outlook.com`（優先度 0） |
 | CNAME | `autodiscover` | `autodiscover.outlook.com` |
+| A | `@`（`keijirodokyosai.org`） | GitHub Pages 用 4 IP（`185.199.108.153` 〜 `111.153`） |
+| CNAME | `www` | `keijirodokyosai.github.io` |
 
 ネームサーバーは **`01.dnsv.jp`〜`04.dnsv.jp`**。`onamae.com` デフォルト NS のみだと検証が進まないことがある。
 
@@ -146,5 +148,6 @@ OWA の **設定 → メール → 作成** に「既定の差出人」が無い
 
 | 名前 | 役割 |
 |------|------|
-| `keijirodokyosai.github.io` | 静的サイト（GitHub Pages） |
-| `keijirodokyosai.org` | 事務メール（Web ホスティングは当面 GitHub Pages のまま） |
+| `https://keijirodokyosai.org` | **正規**の公開 Web（GitHub Pages・リポジトリ `CNAME` / `_config.yml` の `url`） |
+| `keijirodokyosai.github.io` | GitHub Pages のデフォルト URL（移行期は併用可。検索・canonical は `.org`） |
+| `keijirodokyosai.org`（メール） | 事務メール `info@`（MX・SPF 等。Web 用 A/CNAME と共存） |

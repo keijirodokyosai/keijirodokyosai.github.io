@@ -6,7 +6,11 @@
 import { downloadDriveFile, uploadDriveFile } from "./graphDrive.js";
 import { sendReceiptMailAfterUpload } from "./receiptMail.js";
 
-const ALLOWED_ORIGIN = "https://keijirodokyosai.github.io";
+/** 正規は https://keijirodokyosai.org。移行期間は github.io も許可。 */
+const ALLOWED_ORIGINS = new Set([
+  "https://keijirodokyosai.org",
+  "https://keijirodokyosai.github.io",
+]);
 const MAX_BODY_BYTES = 2 * 1024 * 1024;
 
 export default {
@@ -177,11 +181,11 @@ export default {
 
 function corsHeadersFor(request) {
   const origin = request.headers.get("Origin");
-  if (origin !== ALLOWED_ORIGIN) {
+  if (!origin || !ALLOWED_ORIGINS.has(origin)) {
     return null;
   }
   return {
-    "Access-Control-Allow-Origin": ALLOWED_ORIGIN,
+    "Access-Control-Allow-Origin": origin,
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type, Accept",
     "Access-Control-Max-Age": "86400",

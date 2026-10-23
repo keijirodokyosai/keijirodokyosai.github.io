@@ -1202,7 +1202,7 @@ Subbranch（KyosaikaiName, IndustryCode, BranchCode, SubbranchCode, CollectiveKy
 | 4 | `union-contacts.json` に `KyosaikaiCode`, `ManagerFamilyName`, `ManagerEmail` を export |
 | 5 | ~~総合扱いの `CollectiveKyosaiId` を確定し、`sogoCollectiveKyosaiIds` に連携~~ → **確定済み**（Web 側 `form-kyosai-map.json` に反映） |
 | 6 | 1 組合分で検算 → 全組合で出力テスト |
-| 7 | `keijirodokyosai.github.io/data/` へ配置 |
+| 7 | 公開サイト `data/`（正規 URL `https://keijirodokyosai.org/data/`）へ配置 |
 
 詳細は `kyosai-system` の `docs/COLLECTIVE_KYOSAI.md` を参照。
 

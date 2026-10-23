@@ -1,3 +1,6 @@
 # Site-wide Jekyll config (minimal). Keep QR assets in repo but off the public site.
+url: "https://keijirodokyosai.org"
+baseurl: ""
+
 exclude:
   - QRコード

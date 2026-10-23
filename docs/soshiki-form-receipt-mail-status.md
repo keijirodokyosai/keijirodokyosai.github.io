@@ -65,7 +65,7 @@ JSON 形・export 手順: `docs/soshiki-form-enter.md` §5.10（union-contacts�
 ## 5. 動作確認手順
 
 1. 事務 PC で `cd workers/soshiki-submit` → `npx wrangler tail`（ログ待ち）
-2. [組織共済申込書（入力）](https://keijirodokyosai.github.io/soshiki-form-enter.html) でテスト組合を選び送 信
+2. [組織共済申込書（入力）](https://keijirodokyosai.org/soshiki-form-enter.html) でテスト組合を選び送 信
 3. 成功画面の **受付 ID**、OneDrive `受付/{月}/json/` の新規ファイル
 4. ネットワーク（Fetch/XHR）の Worker **POST 応答**: `"mailSent": true`（メール届いていれば実質 OK）
 5. tail に `Receipt mail failed` / `sendMail:` が無いこと

@@ -10,10 +10,12 @@
 ## 公開URL
 
 ```text
-https://keijirodokyosai.github.io/
+https://keijirodokyosai.org/
 ```
 
-**最終更新日：2026-10-22**
+正規 URL は上記（www なし）。ホスティングは GitHub Pages（リポジトリ名 `keijirodokyosai.github.io`）。`https://keijirodokyosai.github.io/` も当面開けることがあるが、canonical・sitemap は `.org` に統一する。
+
+**最終更新日：2026-10-24**
 
 ---
 
@@ -314,7 +316,7 @@ https://keijirodokyosai.github.io/
 ### URL
 
 ```text
-https://keijirodokyosai.github.io/news/spring-campaign.html
+https://keijirodokyosai.org/news/spring-campaign.html
 ```
 
 ### FrontMatter
@@ -1061,6 +1063,16 @@ kyufu-required-documents.pdf
 * canonical対応
 * favicon対応
 
+### 独自ドメイン（正規 URL）
+
+| 項目 | 場所 |
+| --- | --- |
+| 正規 URL | `https://keijirodokyosai.org`（`_config.yml` の `url`） |
+| GitHub Pages | リポジトリ直下 `CNAME`（`keijirodokyosai.org`） |
+| DNS | お名前.com DNSレコード設定（詳細は `docs/m365-tenant-and-mail.md` §3） |
+
+GitHub の **Settings → Pages → Custom domain** にも `keijirodokyosai.org` を設定し、DNS 反映後 **Enforce HTTPS** を有効にする。
+
 ### サイト名対策
 
 Google検索結果でサイト名が意図しない表示になる可能性があるため、以下を設定します。
@@ -1089,7 +1101,7 @@ Google検索結果でサイト名が意図しない表示になる可能性が�
 
 | URL |
 | --- |
-| `https://keijirodokyosai.github.io/` |
+| `https://keijirodokyosai.org/` |
 | `…/kasai.html` |
 | `…/special-contract.html` |
 | `…/iryo.html` |
@@ -1120,7 +1132,7 @@ Google検索結果でサイト名が意図しない表示になる可能性が�
 User-agent: *
 Allow: /
 
-Sitemap: https://keijirodokyosai.github.io/sitemap.xml
+Sitemap: https://keijirodokyosai.org/sitemap.xml
 ```
 
 ### Search Console

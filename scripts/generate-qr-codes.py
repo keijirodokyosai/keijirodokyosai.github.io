@@ -14,8 +14,8 @@ OUT_DIR = REPO_ROOT / "QRコード"
 OUTPUT_PX = 2000
 
 TARGETS = [
-    ("QR-top.png", "https://keijirodokyosai.github.io/"),
-    ("QR-special-contract.png", "https://keijirodokyosai.github.io/special-contract.html"),
+    ("QR-top.png", "https://keijirodokyosai.org/"),
+    ("QR-special-contract.png", "https://keijirodokyosai.org/special-contract.html"),
 ]
 
 

@@ -68,7 +68,7 @@ wrangler deploy
 
 ## CORS
 
-許可オリジン: `https://keijirodokyosai.github.io` のみ。
+許可オリジン: 正規 `https://keijirodokyosai.org`、移行期は `https://keijirodokyosai.github.io` も許可。
 
 ## 再デプロイ
 
