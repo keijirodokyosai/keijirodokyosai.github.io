@@ -1138,7 +1138,7 @@ Sitemap: https://keijirodokyosai.org/sitemap.xml
 
 ### Search Console
 
-**プロパティ（2026-10-24 設定済み）:** URL プレフィックス `https://keijirodokyosai.org`。所有権はルートの `google472039e0cc0f3f2a.html`（**削除不可**）。サイトマップ `sitemap.xml` 送信済み（19 URL）。
+**プロパティ（2026-10-24 設定済み）:** URL プレフィックス `https://keijirodokyosai.org`。所有権はルートの `googlea6db66c4e2f6a7d0.html`（**削除不可**）。サイトマップ `sitemap.xml` 送信済み（19 URL）。
 
 変更・再確認時:
 

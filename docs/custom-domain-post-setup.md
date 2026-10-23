@@ -69,8 +69,8 @@ cd "C:\Users\deus_\OneDrive\GitHub\keijirodokyosai.github.io\workers\soshiki-sub
 ### 2.2 所有権の確認（本番: HTML ファイル）
 
 1. Search Console が指定する **`google*.html`** をダウンロード。
-2. リポジトリ **ルート**に配置（`index.html` と同じ階層）。**2026-10-24 時点のファイル名:** `google472039e0cc0f3f2a.html`
-3. `main` に push → `https://keijirodokyosai.org/google472039e0cc0f3f2a.html` が開けることを確認 → Search Console で **確認**。
+2. リポジトリ **ルート**に配置（`index.html` と同じ階層）。**2026-10-24 時点のファイル名:** `googlea6db66c4e2f6a7d0.html`
+3. `main` に push → `https://keijirodokyosai.org/googlea6db66c4e2f6a7d0.html` が開けることを確認 → Search Console で **確認**。
 4. **確認後もファイルを削除しない。**
 
 **代替:** HTML タグ（`_layouts/base.html`）または DNS TXT（メール用 TXT は削除せず **追加**）。

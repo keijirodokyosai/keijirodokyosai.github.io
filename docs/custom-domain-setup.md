@@ -54,9 +54,9 @@ GitHub **Settings → Pages**
 
 | ファイル | 注意 |
 |----------|------|
-| リポジトリ直下 `google472039e0cc0f3f2a.html` | **削除しない**（所有権維持）。`sitemap.xml` には載せない |
+| リポジトリ直下 `googlea6db66c4e2f6a7d0.html` | **削除しない**（所有権維持）。`sitemap.xml` には載せない |
 
-公開確認: `https://keijirodokyosai.org/google472039e0cc0f3f2a.html`
+公開確認: `https://keijirodokyosai.org/googlea6db66c4e2f6a7d0.html`
 
 ---
 
