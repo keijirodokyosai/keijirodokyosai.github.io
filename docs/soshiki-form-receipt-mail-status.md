@@ -3,7 +3,7 @@
 **目的:** 2026-10 の本番準備で判明した事実と、次回セッションで決めることを1本に残す。  
 **関連:** `docs/soshiki-form-submit-worker-graph.md` §6・§13、`docs/soshiki-form-enter.md` §5.10.1。
 
-**状態:** 2026-10-13 **アカウント方針確定**（詳細は **`docs/soshiki-m365-accounts.md`**）。**info@keijirodokyosai.org** + Exchange 1 席・OneDrive 切替は **10/15 前後**。本番 `mailSent: true` は切替・deploy 後。
+**状態:** **2026-10-23** — **ライセンス 1（Business Standard → admin）**・**`info@` は admin エイリアス**（**info 専用ユーザーは作らない**）。方針は **`docs/soshiki-m365-accounts.md`**。本番 `mailSent: true` は **`GRAPH_DRIVE_USER_ID` = admin**・deploy・設定後。
 
 ---
 
@@ -40,15 +40,16 @@ Admin alert failed: （同じ sendMail 失敗）
 
 ---
 
-## 3. 確定した構成（2026-10）
+## 3. 確定した構成（2026-10-23）
 
 | 役割 | アカウント |
 |------|------------|
-| テナント管理 | **admin**（グローバル管理者。**通常事務は使わない**） |
-| OneDrive（json・`設定/*.json`）・事務メール・sendMail 送信元 | **info@keijirodokyosai.org**（表示名: **京滋労働共済 事務局**） |
-| Worker `GRAPH_DRIVE_USER_ID` / `GRAPH_MAIL_USER_ID` | **info** のオブジェクト ID（切替後） |
+| テナント管理 | **admin**（グローバル管理者。**対外メールアドレスは使わない**） |
+| OneDrive（json・`設定/*.json`） | **admin** の OneDrive |
+| 事務窓口・sendMail の **From** | **`info@keijirodokyosai.org`**（**admin のエイリアス**） |
+| Worker `GRAPH_DRIVE_USER_ID` / `GRAPH_MAIL_USER_ID` | **admin** のオブジェクト ID（未設定時 Mail も同じ） |
 
-旧構成（Admin の OneDrive のみ・Mail ID 未設定）は **移行中**。全文は **`docs/soshiki-m365-accounts.md` §5**。
+§2 の **Apps for business のみ** は過去テスト時の記録。現行は **admin に Business Standard（Exchange あり）**。全文は **`docs/soshiki-m365-accounts.md`**。
 
 ---
 
@@ -79,10 +80,10 @@ Admin alert failed: （同じ sendMail 失敗）
 
 ## 6. 本番切替チェックリスト（案 A＝Worker + Graph を採用）
 
-- [x] 経路 **A**（Worker `sendMail`）— アカウントは **info** 一本（`docs/soshiki-m365-accounts.md`）  
-- [ ] **10/15** — ドメイン `keijirodokyosai.org`・info に **Exchange 1 席**  
-- [ ] info の OneDrive に **`組織共済WEB受付`**（Admin から移行）  
-- [ ] Entra **info** のオブジェクト ID → `GRAPH_DRIVE_USER_ID`（＋必要なら `GRAPH_MAIL_USER_ID`）・**deploy**  
+- [x] 経路 **A**（Worker `sendMail`）— **1 ライセンス・admin + `info@` エイリアス**（`docs/soshiki-m365-accounts.md`）  
+- [x] ドメイン `keijirodokyosai.org`・**admin に Exchange**（Business Standard）・**`info@` エイリアス**（Exchange 側 `smtp:` 付与）  
+- [ ] **admin** の OneDrive に **`組織共済WEB受付`**  
+- [ ] Entra **admin** のオブジェクト ID → `GRAPH_DRIVE_USER_ID`（＋必要なら `GRAPH_MAIL_USER_ID`）・**deploy**  
 - [ ] `設定/soshiki-form-office-settings.json` — **`FromEmail`**: `info@keijirodokyosai.org`  
 - [ ] テスト送 信 → **`mailSent: true`**・`wrangler tail` でエラーなし  
 - [ ] 事務 **Graph Inbox** 本番タスク（**PDF のみ**・メールは Worker）
@@ -95,13 +96,17 @@ Admin alert failed: （同じ sendMail 失敗）
 
 ---
 
-## 8. Ricoh / M365 依頼文（コピペ用・2026-10 確定版）
+## 8. Ricoh / M365 依頼文（参考・**2026-10-23 以降は不採用**）
 
-> 組織共済 Web 受付用に、ドメイン **keijirodokyosai.org** の追加と、ユーザー **info@keijirodokyosai.org**（表示名: 京滋労働共済 事務局）への **Exchange Online が含まれるライセンス 1 席**（例: Microsoft 365 Business Basic）の割り当てをお願いします。  
-> このユーザーで **OneDrive** に受付フォルダ「組織共済WEB受付」を運用し、Graph **sendMail** の送信元とします。  
-> 作成後、**info ユーザーの Entra オブジェクト ID** を共有ください（Cloudflare Worker 設定用）。  
-> テナント管理用 **admin** には Exchange は不要です。
+以下は **info 専用ユーザー + 第2ライセンス** 案の依頼文。**現方針はライセンス 1・admin + `info@` エイリアス**（`docs/soshiki-m365-accounts.md`）。ドメイン・エイリアスは自社設定済みのため、Ricoh への新規依頼は **Worker ID 共有・Entra 同意** など必要分のみ。
+
+<details>
+<summary>旧依頼文（折りたたみ）</summary>
+
+> 組織共済 Web 受付用に、ドメイン **keijirodokyosai.org** の追加と、ユーザー **info@keijirodokyosai.org** への Exchange 付きライセンス 1 席…（省略）
+
+</details>
 
 ---
 
-**最終更新:** 2026-10-13（info@ 方針確定・`docs/soshiki-m365-accounts.md`）
+**最終更新:** 2026-10-23（1ライセンス方針・`docs/soshiki-m365-accounts.md` と整合）

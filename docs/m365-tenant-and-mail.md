@@ -1,9 +1,9 @@
 # 事務局 Microsoft 365・メール（`keijirodokyosai.org`）
 
 **目的:** 京滋労働組合共済会の事務用 M365 テナント、独自ドメイン、事務局メール `info@` の現状を運用者向けに記録する。  
-**最終更新:** 2026-10-22（ドメイン完了・`info@` エイリアス・デスクトップ Outlook 接続まで）
+**最終更新:** 2026-10-23（ライセンス1方針・admin / `info@` 運用ルールを [`soshiki-m365-accounts.md`](soshiki-m365-accounts.md) と整合）
 
-**関連:** 組織共済 WEB 受付の送信バックエンドは [`soshiki-form-submit-worker-graph.md`](soshiki-form-submit-worker-graph.md)。Graph 保存はメール経路に依存しないが、**通知メール（パターン B）** や事務連絡では本ドキュメントの Exchange が使える。
+**関連:** 組織共済 WEB 受付の送信バックエンドは [`soshiki-form-submit-worker-graph.md`](soshiki-form-submit-worker-graph.md)。**アカウント方針（1席・論理分離）** は [`soshiki-m365-accounts.md`](soshiki-m365-accounts.md)。
 
 ---
 
@@ -35,12 +35,26 @@
 | **Microsoft 365 Business Standard（Teams なし）** | **1** | `admin@keijikyosai.onmicrosoft.com` |
 | Power Automate Free | admin に付随 | — |
 
+**方針（2026-10-23 確定）**
+
+- **第2ライセンスは追加しない。** メールボックスは **admin のみ**。
+- `info@keijirodokyosai.org` は **admin のエイリアス**（別ユーザー・共有メールボックスへの載せ替えは行わない）。
+- **未ライセンスユーザーに `info@` を付けない**（配信失敗の原因になる）。
+
 **運用上の制約**
 
-- **ライセンス 1 つ = メールボックスを持つユーザーは実質 1 人（admin）**。
-- `info@keijirodokyosai.org` 用に **別ユーザーを新規作成しライセンスを付けない**（未ライセンスユーザーに `info@` が付くと配信失敗の原因になる）。
-- 事務局公開アドレスとして **`info@` は admin メールボックスのエイリアス** で運用（後述）。
-- 将来 `info@` だけ別ログインしたい場合は **ライセンスを 1 つ追加**し、専用ユーザーを作成する（エイリアスは移行・整理が必要）。
+- Outlook / OWA のサインインは **admin@keijikyosai.onmicrosoft.com** のみ可能（技術上）。
+- 対外の送受信の表向きは **`info@` のみ**（[`soshiki-m365-accounts.md`](soshiki-m365-accounts.md) §4.3）。
+
+---
+
+## 2.1 admin と `info@` の運用（要約）
+
+| やること | やらないこと |
+|----------|----------------|
+| テナント管理は **admin** で **admin.microsoft.com** | 対外に **`admin@…onmicrosoft.com`** を掲載・送信 |
+| 事務メールは **差出人・窓口を `info@`** | **`info` 専用ユーザー**を作ってライセンスを付けない |
+| Exchange で **admin に `smtp:info@…`** を付与 | 太字 SMTP を **`info@` に変更**（ログイン ID が変わる） |
 
 ---
 
@@ -120,8 +134,8 @@ Outlook デスクトップ追加: **ファイル → アカウントの追加** 
 | Cloudflare Worker + Graph 送信 | [`soshiki-form-submit-worker-graph.md`](soshiki-form-submit-worker-graph.md) のとおり **未デプロイ**（`submitEndpointUrl` 空） |
 | Entra アプリ登録（Graph アプリ権限） | Worker 実装時に管理者作業 |
 | DKIM / DMARC の強化 | ドメイン認証は M365 ウィザード分は済。必要に応じて Defender ポータルで DKIM 有効化 |
-| `info@` 専用ユーザー | ライセンス追加時 |
-| `union-contacts.json` による分会通知 | 設計は `soshiki-form-enter.md` §5.10 付近。Graph 送信メールが可能になったテナント状態 |
+| `info@` 専用ユーザー・第2ライセンス | **不採用**（方針は `soshiki-m365-accounts.md`） |
+| `union-contacts.json` による分会通知 | Worker Graph `sendMail`（From `info@`・mailbox admin） |
 
 ---
 

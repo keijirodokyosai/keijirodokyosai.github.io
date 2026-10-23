@@ -1,7 +1,7 @@
 # 組織共済 WEB 受付 — 本命ルート（自作フォーム + Cloudflare Workers + Graph）
 
 **目的:** 別セッション・別担当が実装を続けられるよう、2026-10 時点の決定事項と未作業を1本にまとめる。  
-**関連:** 入力 UI・JSON 仕様は `docs/soshiki-form-enter.md` §5.10 以降。M365 **admin / info** は **`docs/soshiki-m365-accounts.md`**。本ドキュメントは **送信バックエンド** 専用。
+**関連:** 入力 UI・JSON 仕様は `docs/soshiki-form-enter.md` §5.10 以降。M365 **1ライセンス・admin + `info@` エイリアス** は **`docs/soshiki-m365-accounts.md`**（技術手順は **`docs/m365-tenant-and-mail.md`**）。本ドキュメントは **送信バックエンド** 専用。
 
 ---
 
@@ -49,7 +49,7 @@
 
 ## 3. 京滋 M365 テナント（2026-10 時点の整理）
 
-**運用の詳細（ドメイン・DNS・`info@`・Outlook）:** [`docs/m365-tenant-and-mail.md`](m365-tenant-and-mail.md)
+**運用の詳細:** [`docs/soshiki-m365-accounts.md`](soshiki-m365-accounts.md)（方針）・[`docs/m365-tenant-and-mail.md`](m365-tenant-and-mail.md)（DNS・Exchange）
 
 | 事実 | 影響 |
 |------|------|
@@ -228,15 +228,15 @@ Web では **送 信 PDF を作らない**（html2canvas 経路は削除済み�
 
 **アカウント方針（確定）:** **`docs/soshiki-m365-accounts.md`**
 
-- [ ] **admin** — グローバル管理者・**テナント管理のみ**（通常事務は使わない）  
-- [ ] **info@keijirodokyosai.org** — 表示名 **京滋労働共済 事務局**、Exchange **1 席**、OneDrive **`組織共済WEB受付`** のオーナー  
+- [ ] **admin** — グローバル管理者・OneDrive **`組織共済WEB受付`** のオーナー（**対外メールアドレスは使わない**）  
+- [ ] **`info@keijirodokyosai.org`** — **admin のエイリアス**（Exchange `smtp:info@…`）。事務の From・窓口  
 - [ ] **アプリ登録**（単一テナント推奨）・`Files.ReadWrite.All` + **`Mail.Send`** の管理者同意  
 - [ ] **Client Secret** → Worker Secrets のみ  
-- [ ] Worker **`GRAPH_DRIVE_USER_ID`**（＋任意 **`GRAPH_MAIL_USER_ID`）** → **info のオブジェクト ID**（10/15 切替後）  
+- [ ] Worker **`GRAPH_DRIVE_USER_ID`**（＋任意 **`GRAPH_MAIL_USER_ID`）** → **admin のオブジェクト ID**  
 - [ ] OneDrive `設定/soshiki-form-office-settings.json` の **`FromEmail`** ＝ `info@keijirodokyosai.org`  
 - [ ] （任意）秘密のローテーション手順  
 
-**受付確認メール:** Graph `sendMail` には **Exchange Online が有効なユーザー**（**info**）が必須。障害・切替は **`docs/soshiki-form-receipt-mail-status.md`**。
+**受付確認メール:** Graph `sendMail` は **admin のメールボックス**から **`info@` 差出人**。障害は **`docs/soshiki-form-receipt-mail-status.md`**。方針は **`docs/soshiki-m365-accounts.md`**。
 
 ---
 
