@@ -63,7 +63,7 @@
 - **通常の事務メール**（対外窓口としての `info@`）
 - **組織共済 WEB 受付**の受付確認メール **送信元（From）**（Worker Graph `sendMail`）
 - **OneDrive** 上の **`組織共済WEB受付`**（`受付/{月}/json/`、`PDF/`、`設定/`、Excel テンプレなど）— **admin の OneDrive**
-- 将来 **お問い合わせページ**（`contact.html`）の `mailto` を msn から `info@` に寄せる候補
+- **お問い合わせページ**（`contact.html`）・見積ページ・トップの構造化データは **`info@`**（2026-10-24）
 
 ### 4.2 受付確認メール
 

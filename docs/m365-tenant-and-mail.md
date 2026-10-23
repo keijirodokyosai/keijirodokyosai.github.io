@@ -122,9 +122,9 @@ OWA の **設定 → メール → 作成** に「既定の差出人」が無い
 | 項目 | 備考 |
 |------|------|
 | Worker 受付確認メール | **本番稼働（2026-10-24）** — `docs/soshiki-form-receipt-mail-status.md` |
-| `soshiki-form-office-settings.json` の **`AdminEmail`** 最終化 | 障害通知先（任意だが推奨） |
+| `soshiki-form-office-settings.json` の **`AdminEmail`** | **`info@`**（障害通知・2026-10-24 運用決定） |
 | DKIM / DMARC の強化 | 任意（Defender ポータル） |
-| `contact.html` の mailto を `info@` に | サイト側・別タスク |
+| 公開サイトの窓口メール | **`info@`** — `contact.html`・`index.html` 構造化データ・`estimate.html`（2026-10-24） |
 
 ※ Web 送信用 Worker URL は `data/soshiki-form-submit-config.json` に設定済み（`https://soshiki-submit.kjkyosaikai.workers.dev`）。
 

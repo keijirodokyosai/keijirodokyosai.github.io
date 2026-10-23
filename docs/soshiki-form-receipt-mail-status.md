@@ -57,7 +57,7 @@ JSON 形・export 手順: `docs/soshiki-form-enter.md` §5.10（union-contacts�
 - [x] **`FromEmail`** = `info@keijirodokyosai.org`
 - [x] Cloudflare Secrets（`AZURE_*`, `GRAPH_DRIVE_USER_ID`, `GRAPH_BASE_PATH`, `SOSHIKI_SUBMIT_PASSWORD`）
 - [x] 本番サイトからテスト送 信 — **json 保存**・担当 **`ManagerEmail` 受信**・**`info@` BCC**
-- [ ] **`AdminEmail`** を障害通知用に最終確定（任意だが推奨）
+- [x] **`AdminEmail`** = `info@keijirodokyosai.org`（障害通知）
 - [ ] 事務 **Graph Inbox / PDF** 本番タスク（メールは Worker のみ — `docs/soshiki-form-submit-worker-graph.md` §13）
 
 ---

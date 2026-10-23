@@ -482,7 +482,7 @@ permalink: /news/spring-campaign.html
 * 実ファイル：`other_pages/estimate.html`
 * 対象：おうちの安心共済（火災共済）
 * 見積り依頼方法：Eメール
-* メール送信先：`kjkyosaikai@msn.com`
+* メール送信先：`info@keijirodokyosai.org`
 * 3日以内に見積内容をメールで返信
 * 案内ページ（`kasai.html`）へのリンクあり
 * トップページのCTAボタンから誘導する
