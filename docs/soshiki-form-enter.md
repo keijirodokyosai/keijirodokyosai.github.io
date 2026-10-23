@@ -1,7 +1,7 @@
 # 組織共済申込書（ブラウザ入力）設計書
 
 **最終更新:** 2026-10-10  
-**関連リポジトリ:** [keijirodokyosai.github.io](https://github.com/keijirodokyosai/keijirodokyosai.github.io)（Web）、`kyosai-system`（Access・マスタ出力）
+**関連リポジトリ:** [keijirodokyosai.github.io](https://github.com/keijirodokyosai/keijirodokyosai.github.io)（Web。公開 URL は `https://keijirodokyosai.org`）、`kyosai-system`（Access・マスタ出力）
 
 ---
 

@@ -1,7 +1,7 @@
 # 事務局 Microsoft 365・メール（`keijirodokyosai.org`）
 
 **目的:** 京滋労働組合共済会の事務用 M365 テナント、独自ドメイン、事務局メール `info@` の現状を運用者向けに記録する。  
-**最終更新:** 2026-10-24（正規 Web URL `keijirodokyosai.org`・DNS Web レコードを反映）
+**最終更新:** 2026-10-24（正規 Web `keijirodokyosai.org`・DNS Web・Search Console・Worker デプロイを doc 反映）
 
 **関連:** 組織共済 WEB 受付は [`soshiki-form-submit-worker-graph.md`](soshiki-form-submit-worker-graph.md)。**1ライセンス・admin / `info@` 方針** は [`soshiki-m365-accounts.md`](soshiki-m365-accounts.md)。
 
@@ -151,3 +151,5 @@ OWA の **設定 → メール → 作成** に「既定の差出人」が無い
 | `https://keijirodokyosai.org` | **正規**の公開 Web（GitHub Pages・リポジトリ `CNAME` / `_config.yml` の `url`） |
 | `keijirodokyosai.github.io` | GitHub Pages のデフォルト URL（移行期は併用可。検索・canonical は `.org`） |
 | `keijirodokyosai.org`（メール） | 事務メール `info@`（MX・SPF 等。Web 用 A/CNAME と共存） |
+
+Web 公開（2026-10-24）: 構築 [`custom-domain-setup.md`](custom-domain-setup.md)、Worker・Search Console [`custom-domain-post-setup.md`](custom-domain-post-setup.md)。

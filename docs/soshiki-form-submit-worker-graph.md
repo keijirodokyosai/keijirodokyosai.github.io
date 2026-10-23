@@ -49,7 +49,7 @@
 
 ## 3. 京滋 M365 テナント（2026-10 時点の整理）
 
-**運用の詳細:** [`docs/soshiki-m365-accounts.md`](soshiki-m365-accounts.md)（方針）・[`docs/m365-tenant-and-mail.md`](m365-tenant-and-mail.md)（DNS・Exchange）
+**運用の詳細:** [`docs/soshiki-m365-accounts.md`](soshiki-m365-accounts.md)（方針）・[`docs/m365-tenant-and-mail.md`](m365-tenant-and-mail.md)（DNS・Exchange）・[`docs/custom-domain-post-setup.md`](custom-domain-post-setup.md)（Worker デプロイ・CORS）
 
 | 事実 | 影響 |
 |------|------|

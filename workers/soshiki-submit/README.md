@@ -70,6 +70,8 @@ wrangler deploy
 
 許可オリジン: 正規 `https://keijirodokyosai.org`、移行期は `https://keijirodokyosai.github.io` も許可。
 
+**独自ドメイン切替後:** `src/index.js` を変更したら必ず `.\deploy.ps1`（`CLOUDFLARE_API_TOKEN` 要）。手順はリポジトリ直下 [`docs/custom-domain-post-setup.md`](../../docs/custom-domain-post-setup.md) §1。
+
 ## 再デプロイ
 
 コード変更後:

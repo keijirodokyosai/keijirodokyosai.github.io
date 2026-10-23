@@ -1070,6 +1070,7 @@ kyufu-required-documents.pdf
 | 正規 URL | `https://keijirodokyosai.org`（`_config.yml` の `url`） |
 | GitHub Pages | リポジトリ直下 `CNAME`（`keijirodokyosai.org`） |
 | DNS | お名前.com DNSレコード設定（詳細は `docs/m365-tenant-and-mail.md` §3） |
+| 手順書 | [`docs/custom-domain-setup.md`](docs/custom-domain-setup.md)（DNS・Pages・検証ファイル） |
 
 GitHub の **Settings → Pages → Custom domain** にも `keijirodokyosai.org` を設定し、DNS 反映後 **Enforce HTTPS** を有効にする。
 
@@ -1121,7 +1122,7 @@ Google検索結果でサイト名が意図しない表示になる可能性が�
 | `…/contact.html` |
 | `…/estimate.html` |
 
-掲載しない例: `kyosai.html`（`published: false`）、Google 検証用 HTML、`campaign.html`（存在しない旧記載は削除済み）。  
+掲載しない例: `kyosai.html`（`published: false`）、Search Console 用 `google*.html`（ルートに置くが sitemap には含めない）、`campaign.html`（存在しない旧記載は削除済み）。  
 個別ニュースページ（例: 春期キャンペーン）を新規公開したら、上表に追記してください。
 
 ### robots.txt
@@ -1137,12 +1138,14 @@ Sitemap: https://keijirodokyosai.org/sitemap.xml
 
 ### Search Console
 
-サイト修正後は、Google Search Consoleで以下を確認します。
+**プロパティ（2026-10-24 設定済み）:** URL プレフィックス `https://keijirodokyosai.org`。所有権はルートの `google472039e0cc0f3f2a.html`（**削除不可**）。サイトマップ `sitemap.xml` 送信済み（19 URL）。
+
+変更・再確認時:
 
 * `sitemap.xml` を送信する
-* トップページをURL検査する
-* 公開URLをテストする
-* インデックス登録をリクエストする
+* トップを URL 検査 → 公開 URL をテスト → インデックス登録をリクエストする
+
+手順の詳細: [`docs/custom-domain-post-setup.md`](docs/custom-domain-post-setup.md)。DNS・Pages 初回構築: [`docs/custom-domain-setup.md`](docs/custom-domain-setup.md)。
 
 ---
 

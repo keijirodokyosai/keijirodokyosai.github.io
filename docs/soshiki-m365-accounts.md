@@ -1,7 +1,7 @@
 # 組織共済 WEB 受付 — M365 アカウント・運用方針
 
 **目的:** 京滋 M365 テナント上の **管理（admin）** と **事務窓口（`info@`）** の役割、メール・OneDrive・Worker 設定を1本に固定する。  
-**関連:** [`m365-tenant-and-mail.md`](m365-tenant-and-mail.md)（ドメイン・DNS・Exchange エイリアス手順）、[`soshiki-form-submit-worker-graph.md`](soshiki-form-submit-worker-graph.md)（Worker・Graph）、[`soshiki-form-receipt-mail-status.md`](soshiki-form-receipt-mail-status.md)（受付メール本番・障害）、[`scripts/soshiki-form-office/README.md`](../scripts/soshiki-form-office/README.md)（事務 PDF）。
+**関連:** [`m365-tenant-and-mail.md`](m365-tenant-and-mail.md)（ドメイン・DNS・Exchange エイリアス手順）、[`custom-domain-setup.md`](custom-domain-setup.md)（公開 Web `https://keijirodokyosai.org`）、[`soshiki-form-submit-worker-graph.md`](soshiki-form-submit-worker-graph.md)（Worker・Graph）、[`soshiki-form-receipt-mail-status.md`](soshiki-form-receipt-mail-status.md)（受付メール本番・障害）、[`scripts/soshiki-form-office/README.md`](../scripts/soshiki-form-office/README.md)（事務 PDF）。
 
 **状態（2026-10-23 確定）**
 
