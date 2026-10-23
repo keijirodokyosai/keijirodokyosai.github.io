@@ -109,7 +109,7 @@
       PDF/
       処理済/            … PDF 済み json
   設定/
-    union-contacts.json  … 非公開・返信メール宛先（送信は未実装・Preview-SoshikiFormReceiptEmail.ps1 で文面確認）
+    union-contacts.json  … 非公開・受付確認メール To（Worker が `KyosaikaiCode` 照合）
 ```
 
 ### ファイル名
@@ -186,7 +186,7 @@ Web では **送 信 PDF を作らない**（html2canvas 経路は削除済み�
 - [x] 手動・一括 PDF — `Export-SoshikiFormPdfFromJson.ps1` / `Process-SoshikiFormJsonInbox.ps1`（既存 `PDF\` はスキップ）
 - [x] Inbox 自動（ローカル同期）・Graph delta（`Process-SoshikiFormJsonInboxGraph.ps1`）・PDF 後 `処理済/` 移動
 - [ ] 事務 PC への自動タスク登録（Graph  watcher またはローカル Automation・本番で一度設定）
-- [x] 返信メール — **Worker 実装済**（deploy + `Mail.Send` 同意）。PS は手動用
+- [x] 返信メール — **Worker 本番稼働**（2026-10-24）。PS は手動・再送用
 - [x] 処理済管理（`処理済/` 移動・`-KeepInJson` で無効化可）
 - [x] Web: `SheetFooter` 送付・Worker: **JSON のみ**（`pdfBase64` 非対応）
 
@@ -228,15 +228,15 @@ Web では **送 信 PDF を作らない**（html2canvas 経路は削除済み�
 
 **アカウント方針（確定）:** **`docs/soshiki-m365-accounts.md`**
 
-- [ ] **admin** — グローバル管理者・OneDrive **`組織共済WEB受付`** のオーナー（**対外メールアドレスは使わない**）  
+- [x] **admin** — グローバル管理者・OneDrive **`組織共済WEB受付`** のオーナー（**対外メールアドレスは使わない**）  
 - [x] **`info@keijirodokyosai.org`** — admin の **プライマリ SMTP**（事務 From・窓口。手順は `m365-tenant-and-mail.md`）  
-- [ ] **アプリ登録**（単一テナント推奨）・`Files.ReadWrite.All` + **`Mail.Send`** の管理者同意  
-- [ ] **Client Secret** → Worker Secrets のみ  
-- [ ] Worker **`GRAPH_DRIVE_USER_ID`**（＋任意 **`GRAPH_MAIL_USER_ID`）** → **admin のオブジェクト ID**  
-- [ ] OneDrive `設定/soshiki-form-office-settings.json` の **`FromEmail`** ＝ `info@keijirodokyosai.org`  
+- [x] **アプリ登録**（単一テナント推奨）・`Files.ReadWrite.All` + **`Mail.Send`** の管理者同意  
+- [x] **Client Secret** → Worker Secrets のみ  
+- [x] Worker **`GRAPH_DRIVE_USER_ID`**（＋任意 **`GRAPH_MAIL_USER_ID`）** → **admin のオブジェクト ID**  
+- [x] OneDrive `設定/soshiki-form-office-settings.json` の **`FromEmail`** ＝ `info@keijirodokyosai.org`  
 - [ ] （任意）秘密のローテーション手順  
 
-**受付確認メール:** Graph `sendMail` は **admin のメールボックス**から **`info@` 差出人**。障害は **`docs/soshiki-form-receipt-mail-status.md`**。方針は **`docs/soshiki-m365-accounts.md`**。
+**受付確認メール:** Graph `sendMail` は **admin のメールボックス**から **`info@` 差出人**。**本番確認済み（2026-10-24）** — 運用・障害切り分けは **`docs/soshiki-form-receipt-mail-status.md`**。方針は **`docs/soshiki-m365-accounts.md`**。
 
 ---
 
@@ -244,7 +244,7 @@ Web では **送 信 PDF を作らない**（html2canvas 経路は削除済み�
 
 | 項目 | 備考 |
 |------|------|
-| **事務バッチ**（§13） | Excel PDF **初版済**。Graph Inbox **初版済**。返信メール **Worker 実装済・本番未**（Exchange 1 席 or 代替経路要。`docs/soshiki-form-receipt-mail-status.md`） |
+| **事務バッチ**（§13） | Excel PDF **初版済**。Graph Inbox **初版済**。受付確認メール **Worker 本番稼働**（`docs/soshiki-form-receipt-mail-status.md`） |
 | ~~Web **`SheetFooter`** 送付~~ | **完了**（§5.10.1） |
 | ~~Worker **JSON のみ**・Web **html2canvas 削除**~~ | **完了** |
 | Worker 保存 JSON ラップ | 未実装（本文は `submission` のみ） |
@@ -260,9 +260,9 @@ Web では **送 信 PDF を作らない**（html2canvas 経路は削除済み�
 
 | フェーズ | 内容 |
 |----------|------|
-| **0〜3** | Entra・Worker・本番 json 受付 — **完了想定** |
+| **0〜3** | Entra・Worker・本番 json 受付 — **完了** |
 | **4** | ~~Web: `SheetFooter`・Worker JSON のみ~~ **完了**。残: json ラップ（任意） |
-| **5** | **受付確認メール経路の決定**（`docs/soshiki-form-receipt-mail-status.md`）→ Graph Inbox 本番化 |
+| **5** | ~~受付確認メール（Worker + Graph）~~ **本番稼働（2026-10-24）**。残: Graph Inbox 本番化・`AdminEmail` 最終化 |
 | **6** | Access 取込・json 削除運用 |
 
 ---
@@ -278,7 +278,7 @@ data/soshiki-form-pdf-layout.json
 docs/soshiki-form-enter.md        … §5.10
 docs/soshiki-form-submit-worker-graph.md  … 本ファイル
 docs/soshiki-m365-accounts.md             … admin / info・ドメイン・切替
-docs/soshiki-form-receipt-mail-status.md  … 受付メール・Ricoh 依頼文
+docs/soshiki-form-receipt-mail-status.md  … 受付確認メール本番運用・障害切り分け
 workers/soshiki-submit/                 … Worker（src/index.js, README, deploy.ps1）
 ```
 
@@ -297,4 +297,4 @@ workers/soshiki-submit/                 … Worker（src/index.js, README, deplo
 
 ---
 
-**最終更新:** 2026-10-13（`docs/soshiki-m365-accounts.md` 追加・§7 admin/info）
+**最終更新:** 2026-10-24（受付確認メール本番・§7 チェックリスト更新）

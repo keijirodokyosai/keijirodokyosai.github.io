@@ -227,7 +227,7 @@ https://keijirodokyosai.github.io/
 
 ### WEB 受付（送 信・OneDrive・事務 PDF）
 
-組合担当者が申込書を **送 信** → Cloudflare Worker → 事務局 OneDrive に **json** 保存。用紙 **PDF** と **受付確認メール**は事務側の自動化（Worker / Excel）。
+組合担当者が申込書を **送 信** → Cloudflare Worker → 事務局 OneDrive に **json** 保存し、**受付確認メール**を Graph で即時送信。用紙 **PDF** は事務 PC（Excel バッチ）。
 
 | 項目 | 内容 |
 |------|------|
@@ -241,7 +241,7 @@ https://keijirodokyosai.github.io/
 - [docs/soshiki-form-submit-worker-graph.md](docs/soshiki-form-submit-worker-graph.md) — バックエンド・§13 事務バッチ  
 - [docs/soshiki-m365-accounts.md](docs/soshiki-m365-accounts.md) — **1ライセンス・admin / `info@` 運用方針・Worker ID**  
 - [docs/m365-tenant-and-mail.md](docs/m365-tenant-and-mail.md) — **ドメイン・DNS・プライマリ SMTP・Outlook 手順**  
-- [docs/soshiki-form-receipt-mail-status.md](docs/soshiki-form-receipt-mail-status.md) — 受付メール本番・障害  
+- [docs/soshiki-form-receipt-mail-status.md](docs/soshiki-form-receipt-mail-status.md) — 受付確認メール本番運用  
 
 ---
 

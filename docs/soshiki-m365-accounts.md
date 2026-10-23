@@ -103,17 +103,17 @@ Worker は **人ではなく** Entra アプリ **「組織共済WEB受付」** �
 
 ### 6.2 OneDrive・事務データ（admin 配下）
 
-- [ ] OneDrive（**admin**）に **`組織共済WEB受付`** を配置
-- [ ] `設定/soshiki-form-office-settings.json` — **`FromEmail`**: `info@keijirodokyosai.org`、**`AdminEmail`**: 障害通知先
-- [ ] `設定/union-contacts.json` — kyosai-system から export・配置
+- [x] OneDrive（**admin**）に **`組織共済WEB受付`** を配置
+- [x] `設定/soshiki-form-office-settings.json` — **`FromEmail`**: `info@keijirodokyosai.org`、**`AdminEmail`**: 障害通知先（`AdminEmail` の最終値は本番運用で調整可）
+- [x] `設定/union-contacts.json` — 配置済み（kyosai-system からの定期 export は運用で継続）
 - [ ] Excel テンプレ `組織共済申込書（PDF化テンプレ）.xlsx`
 
 ### 6.3 Worker・Web
 
-- [ ] `wrangler secret put GRAPH_DRIVE_USER_ID` → **admin のオブジェクト ID**
-- [ ] （任意）`GRAPH_MAIL_USER_ID` → 未設定で Drive と同一で可
-- [ ] `wrangler deploy`
-- [ ] テスト送 信 → json が **admin の OneDrive** に保存、**`mailSent: true`**（From は `info@`）
+- [x] `wrangler secret put GRAPH_DRIVE_USER_ID` → **admin のオブジェクト ID**
+- [x] （任意）`GRAPH_MAIL_USER_ID` → 未設定で Drive と同一で可
+- [x] `wrangler deploy`（本番 URL 設定済み）
+- [x] テスト送 信 → json が **admin の OneDrive** に保存、受付確認メール届く（**2026-10-24** 確認）
 
 ### 6.4 事務 PC
 
@@ -136,10 +136,10 @@ Worker は **人ではなく** Entra アプリ **「組織共済WEB受付」** �
 | `docs/m365-tenant-and-mail.md` | DNS・Exchange エイリアス手順・トラブルシュート |
 | `docs/soshiki-form-submit-worker-graph.md` | POST・OneDrive パス・§13 事務 PDF |
 | `docs/soshiki-form-enter.md` | 入力 UI・submission・§5.10 |
-| `docs/soshiki-form-receipt-mail-status.md` | メール障害・経路選択 |
+| `docs/soshiki-form-receipt-mail-status.md` | 受付確認メール本番運用・障害切り分け |
 | `workers/soshiki-submit/README.md` | Worker Secrets・deploy |
 | `scripts/soshiki-form-office/README.md` | Excel PDF・Inbox・設定 JSON |
 
 ---
 
-**最終更新:** 2026-10-23（プライマリ SMTP `info@`・Outlook 再追加まで完了を反映）
+**最終更新:** 2026-10-24（Worker 受付確認メール本番確認を反映）

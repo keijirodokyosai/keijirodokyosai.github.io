@@ -4,7 +4,7 @@ Cloudflare Worker が GitHub Pages フォームからの POST を受け、Micros
 
 仕様の正: [`docs/soshiki-form-submit-worker-graph.md`](../../docs/soshiki-form-submit-worker-graph.md)  
 **事務用 PDF** は事務 PC（Graph delta または OneDrive 同期 + Inbox）。`pdfBase64` は **受け付けません**。  
-**M365 admin / info:** `docs/soshiki-m365-accounts.md`（`GRAPH_DRIVE_USER_ID` ＝ info の OneDrive）。
+**M365 admin / info:** `docs/soshiki-m365-accounts.md`（`GRAPH_DRIVE_USER_ID` ＝ **admin** の OneDrive・sendMail も同一）。本番運用: `docs/soshiki-form-receipt-mail-status.md`。
 
 ## 前提
 

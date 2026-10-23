@@ -1230,7 +1230,7 @@ Subbranch（KyosaikaiName, IndustryCode, BranchCode, SubbranchCode, CollectiveKy
 12. ~~`validateSoshikiForm()` の配線~~ → **完了**（§5.10）
 13. ~~**送 信 PDF** — Web html2canvas 廃止~~ → **完了**（JSON のみ・§5.10）。事務 Excel PDF は §5.10.1・worker-graph §13
 14. ~~Web **`SheetFooter`**・PascalCase submission~~ → **完了**（§5.10.1）。Worker **json ラップ**は未実装
-15. ~~事務バッチ Excel PDF~~ → **初版済**。M365 **admin/info** → **`docs/soshiki-m365-accounts.md`**。残: 10/15 切替・`mailSent: true`・Graph Inbox 本番
+15. ~~事務バッチ Excel PDF~~ → **初版済**。~~受付確認メール（Worker）~~ → **本番稼働（2026-10-24）** — `docs/soshiki-form-receipt-mail-status.md`。残: Graph Inbox 本番・`AdminEmail` 最終化
 16. **union-contacts.json** export・Access 取込
 
 ---

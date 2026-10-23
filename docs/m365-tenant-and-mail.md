@@ -1,7 +1,7 @@
 # 事務局 Microsoft 365・メール（`keijirodokyosai.org`）
 
 **目的:** 京滋労働組合共済会の事務用 M365 テナント、独自ドメイン、事務局メール `info@` の現状を運用者向けに記録する。  
-**最終更新:** 2026-10-23（プライマリ SMTP を `info@` に変更・OWA／デスクトップ Outlook 確認済み）
+**最終更新:** 2026-10-24（Worker 受付確認メール本番を反映）
 
 **関連:** 組織共済 WEB 受付は [`soshiki-form-submit-worker-graph.md`](soshiki-form-submit-worker-graph.md)。**1ライセンス・admin / `info@` 方針** は [`soshiki-m365-accounts.md`](soshiki-m365-accounts.md)。
 
@@ -117,11 +117,12 @@ OWA の **設定 → メール → 作成** に「既定の差出人」が無い
 
 ---
 
-## 5. 未実施・将来（メール周り以外）
+## 5. 未実施・将来
 
 | 項目 | 備考 |
 |------|------|
-| Worker 受付確認メール **`mailSent: true` 本番** | Graph・Secrets・OneDrive 配置。`docs/soshiki-form-receipt-mail-status.md` |
+| Worker 受付確認メール | **本番稼働（2026-10-24）** — `docs/soshiki-form-receipt-mail-status.md` |
+| `soshiki-form-office-settings.json` の **`AdminEmail`** 最終化 | 障害通知先（任意だが推奨） |
 | DKIM / DMARC の強化 | 任意（Defender ポータル） |
 | `contact.html` の mailto を `info@` に | サイト側・別タスク |
 
