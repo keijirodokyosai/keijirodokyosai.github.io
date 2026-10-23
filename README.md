@@ -234,13 +234,13 @@ https://keijirodokyosai.github.io/
 | 入力・送 信 | `soshiki-form-enter.html`、`js/soshiki-form-submit.js` |
 | Worker | `workers/soshiki-submit/` → `data/soshiki-form-submit-config.json` の URL |
 | 事務 PDF | `scripts/soshiki-form-office/`（Excel テンプレ → PDF） |
-| M365 | **Business Standard ×1**（増席なし）。**admin** がメールボックス。**`info@`** はエイリアス。対外は `info@` のみ（管理は admin.microsoft.com） |
+| M365 | **Business Standard ×1**。**admin** でログイン・**プライマリ SMTP は `info@`**。対外は `info@` のみ（管理は admin.microsoft.com） |
 
 設計の正:
 
 - [docs/soshiki-form-submit-worker-graph.md](docs/soshiki-form-submit-worker-graph.md) — バックエンド・§13 事務バッチ  
 - [docs/soshiki-m365-accounts.md](docs/soshiki-m365-accounts.md) — **1ライセンス・admin / `info@` 運用方針・Worker ID**  
-- [docs/m365-tenant-and-mail.md](docs/m365-tenant-and-mail.md) — **ドメイン・DNS・Exchange エイリアス手順**  
+- [docs/m365-tenant-and-mail.md](docs/m365-tenant-and-mail.md) — **ドメイン・DNS・プライマリ SMTP・Outlook 手順**  
 - [docs/soshiki-form-receipt-mail-status.md](docs/soshiki-form-receipt-mail-status.md) — 受付メール本番・障害  
 
 ---

@@ -1,9 +1,9 @@
 # 事務局 Microsoft 365・メール（`keijirodokyosai.org`）
 
 **目的:** 京滋労働組合共済会の事務用 M365 テナント、独自ドメイン、事務局メール `info@` の現状を運用者向けに記録する。  
-**最終更新:** 2026-10-23（ライセンス1方針・admin / `info@` 運用ルールを [`soshiki-m365-accounts.md`](soshiki-m365-accounts.md) と整合）
+**最終更新:** 2026-10-23（プライマリ SMTP を `info@` に変更・OWA／デスクトップ Outlook 確認済み）
 
-**関連:** 組織共済 WEB 受付の送信バックエンドは [`soshiki-form-submit-worker-graph.md`](soshiki-form-submit-worker-graph.md)。**アカウント方針（1席・論理分離）** は [`soshiki-m365-accounts.md`](soshiki-m365-accounts.md)。
+**関連:** 組織共済 WEB 受付は [`soshiki-form-submit-worker-graph.md`](soshiki-form-submit-worker-graph.md)。**1ライセンス・admin / `info@` 方針** は [`soshiki-m365-accounts.md`](soshiki-m365-accounts.md)。
 
 ---
 
@@ -23,131 +23,121 @@
 | 用途 | URL |
 |------|-----|
 | Microsoft 365 管理センター | https://admin.microsoft.com |
-| Exchange 管理センター | https://admin.exchange.microsoft.com （または M365 左下「すべて表示」→ Exchange） |
+| Exchange 管理センター | https://admin.exchange.microsoft.com |
 | Outlook Web | https://outlook.office.com |
 
 ---
 
-## 2. ライセンス（2026-10-22）
+## 2. ライセンス
 
 | SKU | 数量 | 割当 |
 |-----|------|------|
 | **Microsoft 365 Business Standard（Teams なし）** | **1** | `admin@keijikyosai.onmicrosoft.com` |
-| Power Automate Free | admin に付随 | — |
 
-**方針（2026-10-23 確定）**
+**方針:** **第2ライセンスは追加しない。** メールボックスは **admin のみ**。`info@` は **別ユーザーではない**（同一箱の別アドレス）。
 
-- **第2ライセンスは追加しない。** メールボックスは **admin のみ**。
-- `info@keijirodokyosai.org` は **admin のエイリアス**（別ユーザー・共有メールボックスへの載せ替えは行わない）。
-- **未ライセンスユーザーに `info@` を付けない**（配信失敗の原因になる）。
-
-**運用上の制約**
-
-- Outlook / OWA のサインインは **admin@keijikyosai.onmicrosoft.com** のみ可能（技術上）。
-- 対外の送受信の表向きは **`info@` のみ**（[`soshiki-m365-accounts.md`](soshiki-m365-accounts.md) §4.3）。
-
----
-
-## 2.1 admin と `info@` の運用（要約）
-
-| やること | やらないこと |
-|----------|----------------|
-| テナント管理は **admin** で **admin.microsoft.com** | 対外に **`admin@…onmicrosoft.com`** を掲載・送信 |
-| 事務メールは **差出人・窓口を `info@`** | **`info` 専用ユーザー**を作ってライセンスを付けない |
-| Exchange で **admin に `smtp:info@…`** を付与 | 太字 SMTP を **`info@` に変更**（ログイン ID が変わる） |
+| 種別 | 値 |
+|------|-----|
+| **サインイン（UPN）** | `admin@keijikyosai.onmicrosoft.com`（変更不要） |
+| **プライマリ SMTP（太字・既定の差出人）** | **`info@keijirodokyosai.org`** |
+| **副 SMTP** | `admin@keijikyosai.onmicrosoft.com`（削除しない） |
 
 ---
 
 ## 3. DNS（`keijirodokyosai.org`）
 
-お名前.com の **DNSレコード設定**（`dnsv.jp`）に、Microsoft のドメインウィザードに沿って設定済み。
+お名前.com **DNSレコード設定**（`dnsv.jp`）に設定済み。
 
-| 種別 | ホスト | 用途（概要） |
-|------|--------|----------------|
-| TXT | `@` | ドメイン所有権（`MS=ms…`） |
-| TXT | `@` | SPF（例: `v=spf1 include:spf.protection.outlook.com -all`） |
+| 種別 | ホスト | 値（概要） |
+|------|--------|------------|
+| TXT | `@` | 所有権 `MS=ms…`、SPF（`v=spf1 include:spf.protection.outlook.com -all` 等） |
 | MX | `@` | `keijirodokyosai-org.mail.protection.outlook.com`（優先度 0） |
 | CNAME | `autodiscover` | `autodiscover.outlook.com` |
 
-**注意:** ネームサーバーが **お名前.com デフォルト（`onamae.com`）** のままだと、Microsoft が **DNSレコード設定（dnsv.jp）** を参照せず検証が進まないことがある。ドメイン追加時は **dnsv.jp 系 NS とレコードの両方** が有効であることを確認する。
-
-変更後は M365 **設定 → ドメイン → `keijirodokyosai.org`** で MX / SPF 等が **正常** と表示されること。
+ネームサーバーは **`01.dnsv.jp`〜`04.dnsv.jp`**。`onamae.com` デフォルト NS のみだと検証が進まないことがある。
 
 ---
 
 ## 4. 事務局メール `info@keijirodokyosai.org`
 
-### 4.1 構成（決定）
+### 4.1 いまの構成（2026-10-23）
 
 | 項目 | 値 |
 |------|-----|
-| 公開・事務連絡用アドレス | `info@keijirodokyosai.org` |
-| 実体 | **admin と同一メールボックス**（エイリアス） |
-| ログイン（サインイン） | **`admin@keijikyosai.onmicrosoft.com` のまま**（変更しない） |
-| プライマリ SMTP（太字・既定） | `admin@keijikyosai.onmicrosoft.com` |
+| 対外の窓口 | `info@keijirodokyosai.org` |
+| メールボックス | **admin 1 つ**（ライセンス 1） |
+| 受信 | `info@` 宛は **admin で開く受信トレイ**に届く（引用の To も `info@` 表示） |
+| 送信 | **新規・返信の既定差出人は `info@`**（OWA・デスクトップ Outlook 確認済み） |
 
-**受信:** `info@` に送ったメールは **admin で開く Outlook / OWA の受信トレイ** に入る（別受信トレイはない）。
+### 4.2 Exchange で行った設定（再現用）
 
-**送信:** デスクトップ Outlook または OWA で **差出人（From）を `info@keijirodokyosai.org` に選択**して送れる（2026-10-22 にデスクトップ Outlook で接続・運用確認済み）。
+**A. エイリアス追加（必須・先行）**
 
-### 4.2 設定手順の要点（再現用）
+1. M365 **ユーザー** → admin → **ユーザー名とメール アドレスの管理** で `info@` を追加してもよいが、**配信には Exchange 側が必須**。
+2. **Exchange** → **受信者** → **メールボックス** → **京滋労働共済** → 右パネル **全般** → **メール アドレスの種類 mail の管理**。
+3. **「+ メール アドレスの種類を追加」** → **SMTP** → `info` + `keijirodokyosai.org`。
+4. 太字 **SMTP** の **「編集」** で `admin` を `info` に**書き換えない**（ログイン混同の恐れ）。
 
-1. **M365 管理センター** → **ユーザー** → **admin** → **アカウント** → **ユーザー名とメール アドレスの管理**  
-   - エイリアスとして `info@keijirodokyosai.org` を追加可能（UI に表示される）。
+**B. プライマリ SMTP を `info@` にする（差出人・返信の既定）**
 
-2. **Exchange 側の proxy アドレス**  
-   - 上記だけでは **配信できない事例あり**（NDR: `info が keijirodokyosai.org で見つかりません` / DSN 5.1.0）。
-   - **Exchange 管理センター** → **受信者** → **メールボックス** → **京滋労働共済** を選択 → 右パネル **全般** → **メール アドレス** 下の **「メール アドレスの種類 mail の管理」**  
-   - **「+ メール アドレスの種類を追加」** → **SMTP** → `info` + `keijirodokyosai.org`  
-   - 一覧で **太字の既定は `admin@…onmicrosoft.com` のまま**、追加行は **`smtp:info@keijirodokyosai.org`**（小文字 smtp = 追加アドレス）。
+1. 同じ **メール アドレスの種類** 一覧で、**`info@keijirodokyosai.org`（smtp 行）の「編集」**。
+2. **プライマリ／既定の返信アドレス** をオン（UI の文言は環境により異なる）。
+3. 一覧で **太字 SMTP が `info@`**、`admin@…onmicrosoft.com` が **小文字 smtp** になっていることを確認。
+4. **保存**。
 
-3. **やってはいけない操作**  
-   - 既存 **SMTP（太字）** の **「編集」** で `admin` を `info` に書き換えない → プライマリ／ログイン ID が変わる恐れ。  
-   - **「+ 追加」** で別名を足すのが正しい。
+**サインインは UPN のまま**（`admin@…onmicrosoft.com`）。M365 管理センターで **「プライマリ＝ユーザー名を info に変更」** とセットの画面は **使わない**。
 
-### 4.3 クライアント
+**管理者 PowerShell（UI に既定が無い場合）:**
 
-| 環境 | 状態（2026-10-22） |
-|------|---------------------|
-| Outlook on the web | `admin` で利用可 |
-| Outlook デスクトップ（Windows） | **admin アカウント追加済み・問題なし** |
-| `info@` 専用プロファイル | **不要**（同一メールボックス） |
+```powershell
+Connect-ExchangeOnline -UserPrincipalName admin@keijikyosai.onmicrosoft.com
+Set-Mailbox -Identity admin@keijikyosai.onmicrosoft.com -EmailAddresses @{
+  remove = "SMTP:admin@keijikyosai.onmicrosoft.com"
+  add    = "SMTP:info@keijirodokyosai.org","smtp:admin@keijikyosai.onmicrosoft.com"
+}
+```
 
-Outlook デスクトップ追加: **ファイル → アカウントの追加** → `admin@keijikyosai.onmicrosoft.com` → Microsoft 365 / Exchange としてサインイン。
+### 4.3 Outlook クライアント
 
-差出人 `info@`: 新規メールで **差出人** を表示し、`info@keijirodokyosai.org` を選択。既定にする場合は OWA **設定 → メール → 作成と返信** の「既定の差出人」。
+| 環境 | 状態 |
+|------|------|
+| **Outlook on the web** | admin でログイン。新規・返信の差出人 **`info@`** |
+| **Outlook デスクトップ（Windows）** | プライマリ変更**後**も差出人が `admin@` のまま残ることがある → **京滋の Microsoft 365 アカウントだけ削除し、`admin@` で再追加**（他アカウントは触らない）。再追加後 **新規・返信とも `info@`**（2026-10-23 確認済み） |
+| 再追加時の入力 | **メール アドレスは `admin@keijikyosai.onmicrosoft.com`**（`info@` ではない）。Outlook.com 新規作成リンクは使わない |
 
-### 4.4 動作確認のしかた
+OWA の **設定 → メール → 作成** に「既定の差出人」が無い版でも、**プライマリ SMTP が `info@` なら返信差出人は `info@`** になる。
+
+### 4.4 動作確認
 
 | テスト | 期待結果 |
 |--------|----------|
-| admin の Outlook から `info@` 宛（手入力） | 同じ受信トレイに届く（表示名はどちらも「京滋労働共済」になりやすい） |
-| 外部（MSN 等）から `info@` 宛 | admin の受信トレイに届く |
-| 失敗時 | 受信トレイに NDR。Exchange **メッセージ トレース**で理由確認 |
+| 外部から `info@` 宛 | 受信トレイに届く。返信画面の To（引用）が **`info@`** |
+| 返信・新規 | 差出人 **`info@keijirodokyosai.org`** |
+| ログイン | **`admin@keijikyosai.onmicrosoft.com`** のまま |
 
 ---
 
-## 5. 未実施・将来
+## 5. 未実施・将来（メール周り以外）
 
 | 項目 | 備考 |
 |------|------|
-| Cloudflare Worker + Graph 送信 | [`soshiki-form-submit-worker-graph.md`](soshiki-form-submit-worker-graph.md) のとおり **未デプロイ**（`submitEndpointUrl` 空） |
-| Entra アプリ登録（Graph アプリ権限） | Worker 実装時に管理者作業 |
-| DKIM / DMARC の強化 | ドメイン認証は M365 ウィザード分は済。必要に応じて Defender ポータルで DKIM 有効化 |
-| `info@` 専用ユーザー・第2ライセンス | **不採用**（方針は `soshiki-m365-accounts.md`） |
-| `union-contacts.json` による分会通知 | Worker Graph `sendMail`（From `info@`・mailbox admin） |
+| Worker 受付確認メール **`mailSent: true` 本番** | Graph・Secrets・OneDrive 配置。`docs/soshiki-form-receipt-mail-status.md` |
+| DKIM / DMARC の強化 | 任意（Defender ポータル） |
+| `contact.html` の mailto を `info@` に | サイト側・別タスク |
+
+※ Web 送信用 Worker URL は `data/soshiki-form-submit-config.json` に設定済み（`https://soshiki-submit.kjkyosaikai.workers.dev`）。
 
 ---
 
-## 6. トラブルシュート早見表
+## 6. トラブルシュート
 
-| 症状 | 確認 |
+| 症状 | 対処 |
 |------|------|
-| `info@` に届かない（テナント内） | Exchange で admin に `smtp:info@keijirodokyosai.org` があるか。M365 エイリアスだけでは不足のことがある |
-| 外からだけ届かない | お名前.com の MX が Outlook Protection を向いているか。M365 ドメインの DNS 状態 |
-| `info` ユーザーを作った | ライセンスなしなら削除し、admin のエイリアスに一本化 |
-| 管理画面のリンクが押せない | 通常ブラウザで再試行。Exchange は **メールボックス一覧 → 右パネル** から操作 |
-| ログインできなくなった | プライマリ SMTP を `info@` に変更していないか。Exchange で既定を `admin@…onmicrosoft.com` に戻す／Entra で UPN 確認 |
+| `info@` に届かない | Exchange に `smtp:info@…` があるか。MX／ドメイン健全性 |
+| 受信は `info@` 表示だが返信差出人が `admin@` | Exchange で **太字 SMTP が `info@` か**。デスクトップは **M365 行の再追加** |
+| 差出人に `info@` が出ない | プライマリ未反映。Exchange 一覧を確認 |
+| ログインできない | Entra の **ユーザー名（UPN）** が誤って `info@` に変わっていないか。UPN は `admin@…` に戻す |
+| M365 の「メール」タブのリンクが押せない | **Exchange** → メールボックス一覧 → **右パネル** → **メール アドレスの種類 mail の管理** |
 
 ---
 
@@ -156,6 +146,4 @@ Outlook デスクトップ追加: **ファイル → アカウントの追加** 
 | 名前 | 役割 |
 |------|------|
 | `keijirodokyosai.github.io` | 静的サイト（GitHub Pages） |
-| `keijirodokyosai.org` | 事務メール・将来の公式メール／DNS 拡張用（**現時点で Web ホスティングは GitHub Pages のまま**） |
-
-メール用 MX と Web 用 CNAME/A は **別レコード**として共存できる。Web を `keijirodokyosai.org` に載せ替える場合は別タスクで DNS を追加する。
+| `keijirodokyosai.org` | 事務メール（Web ホスティングは当面 GitHub Pages のまま） |

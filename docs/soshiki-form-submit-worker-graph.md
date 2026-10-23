@@ -54,7 +54,7 @@
 | 事実 | 影響 |
 |------|------|
 | **Microsoft 365 Business Standard（Teams なし）× 1** → `admin@keijikyosai.onmicrosoft.com` に割当。Exchange メールボックスあり | **Graph ファイル保存**は引き続き本命。**Graph 送信メール**（分会通知など）も技術的には可能（Entra アプリ・権限は未設定） |
-| 独自ドメイン **`keijirodokyosai.org`** セットアップ完了（お名前.com / dnsv.jp） | 事務公開アドレス **`info@keijirodokyosai.org`** は **admin のエイリアス**（ライセンス 1 のため別ユーザーにしない） |
+| 独自ドメイン **`keijirodokyosai.org`** セットアップ完了 | 事務 From **`info@`**（admin 箱の **プライマリ SMTP**。ライセンス 1） |
 | **送 信・保存の本命**は Worker → Graph → OneDrive。**メール経由 PA は採用しない** | PA Free の Outlook REST 制限は残るが、受付保存には不要 |
 | パターン B（`union-contacts.json` → 担当者通知） | Worker 実装後に **Graph `sendMail`** 等で検討。`info@` 差出人は Exchange 設定済み |
 | パートナー: Ricoh（`zjc_o365helpdesk@jp.ricoh.com` 等） | Entra アプリ登録・管理者同意は管理者作業 |
@@ -229,7 +229,7 @@ Web では **送 信 PDF を作らない**（html2canvas 経路は削除済み�
 **アカウント方針（確定）:** **`docs/soshiki-m365-accounts.md`**
 
 - [ ] **admin** — グローバル管理者・OneDrive **`組織共済WEB受付`** のオーナー（**対外メールアドレスは使わない**）  
-- [ ] **`info@keijirodokyosai.org`** — **admin のエイリアス**（Exchange `smtp:info@…`）。事務の From・窓口  
+- [x] **`info@keijirodokyosai.org`** — admin の **プライマリ SMTP**（事務 From・窓口。手順は `m365-tenant-and-mail.md`）  
 - [ ] **アプリ登録**（単一テナント推奨）・`Files.ReadWrite.All` + **`Mail.Send`** の管理者同意  
 - [ ] **Client Secret** → Worker Secrets のみ  
 - [ ] Worker **`GRAPH_DRIVE_USER_ID`**（＋任意 **`GRAPH_MAIL_USER_ID`）** → **admin のオブジェクト ID**  

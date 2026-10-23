@@ -6,7 +6,7 @@
 **状態（2026-10-23 確定）**
 
 - **Microsoft 365 Business Standard（Teams なし）× 1** のみ。**第2ライセンス・`info` 専用ユーザーは採用しない。**
-- 技術上のメールボックスは **admin 1 つ**。対外アドレス **`info@keijirodokyosai.org`** は **admin のエイリアス**（Exchange に `smtp:info@…` を付与済みであること）。
+- 技術上のメールボックスは **admin 1 つ**。対外アドレス **`info@keijirodokyosai.org`** は同一箱の代表アドレス（Exchange **プライマリ SMTP**）。`admin@…onmicrosoft.com` は副アドレス。
 - **「admin を日常メールに使わない」** ＝ **`admin@keijikyosai.onmicrosoft.com` を対外に出さず、送受信の表向きは常に `info@`**。Outlook / OWA のサインインは **admin**（ライセンス上他に選択がない）だが、**事務作業は事務局メール（`info@`）として行う**。
 
 ---
@@ -27,7 +27,7 @@
 | 論理上の役割 | 技術上の実体 | グローバル管理者 | 事務の送受信 |
 |--------------|--------------|------------------|--------------|
 | **テナント管理** | **admin**（UPN `admin@keijikyosai.onmicrosoft.com`） | **付与** | **対外は `admin@` を使わない** |
-| **事務局窓口** | **`info@keijirodokyosai.org`**（admin の **SMTP エイリアス**） | — | **From・名刺・サイトは `info@` のみ** |
+| **事務局窓口** | **`info@keijirodokyosai.org`**（admin の **プライマリ SMTP**） | — | **From・名刺・サイトは `info@` のみ** |
 
 - **申込 Web** は組合担当者のブラウザから送る。**Microsoft ログインは不要**（送信用パスワードのみ）。
 - **管理センター**（ユーザー・ドメイン・ライセンス・Entra アプリの同意）は **admin** でブラウザログイン。**テナント設定のときだけ admin を使う**運用とする。
@@ -56,7 +56,7 @@
 | **表示名（推奨）** | 京滋労働共済 事務局（差出人表示は Outlook 設定に依存） |
 | **ログイン** | **専用 UPN はない**。Outlook / OWA は **admin でサインイン**し、差出人・受信は **`info@` として扱う** |
 | **受信** | `info@` 宛は **admin と同じ受信トレイ**に届く |
-| **送信** | 既定の差出人を **`info@keijirodokyosai.org`** に設定（OWA: 設定 → メール → 作成と返信。デスクトップ: 差出人フィールド） |
+| **送信** | Exchange で **プライマリ SMTP = `info@`**（手順は [`m365-tenant-and-mail.md`](m365-tenant-and-mail.md) §4.2）。デスクトップで差出人が `admin@` のままなら **京滋 M365 行だけ削除→`admin@` で再追加** |
 
 ### 4.1 事務で担うもの
 
@@ -71,12 +71,12 @@
 - **送信元・BCC:** `設定/soshiki-form-office-settings.json` の **`FromEmail`** ＝ `info@keijirodokyosai.org`
 - **PDF 添付:** **なし**（用紙 PDF は事務 Inbox → Excel、worker-graph §13）
 
-### 4.3 事務 PC の運用ルール（admin を「日常メール」に見せない）
+### 4.3 事務 PC の運用ルール
 
-1. 名刺・Web・署名は **`info@keijirodokyosai.org` だけ**。
-2. 送信は **差出人 `info@`**（`admin@…onmicrosoft.com` から送らない）。
-3. Outlook に **admin プロファイルを1つ**持つ（`info@` 用の第2アカウントは不要）。受信トレイは1つでよい。
-4. **admin.microsoft.com** は設定変更時のみ。日常の「メールを読む」意識は **事務局（info）** とする。
+1. 名刺・Web・署名は **`info@keijirodokyosai.org` だけ**（`admin@…onmicrosoft.com` は出さない）。
+2. **サインインは admin**、**送受信の表向きは `info@`**（プライマリ SMTP 設定済み。2026-10-23 OWA／デスクトップで新規・返信とも `info@` 確認済み）。
+3. Outlook に **他アカウント（MSN 等）と併用**する場合、京滋の行は **`admin@` で再接続**したプロファイルを使う（`info@` 用の第2ログインは不要）。
+4. **admin.microsoft.com** はテナント設定時のみ。
 
 ---
 
@@ -91,18 +91,15 @@ Worker は **人ではなく** Entra アプリ **「組織共済WEB受付」** �
 | `GRAPH_BASE_PATH` | 例: `組織共済WEB受付` |
 | OneDrive `FromEmail` | `info@keijirodokyosai.org` |
 
-申込者は Graph にログインしない。保存・sendMail はすべて **アプリ権限**＋上記ユーザー ID。Exchange 上 **admin に `info@` エイリアス**があることが sendMail の From に必要。
+申込者は Graph にログインしない。保存・sendMail はすべて **アプリ権限**＋上記ユーザー ID。メールボックスの **プライマリ SMTP が `info@`** であることが From に整合する。
 
 ---
 
 ## 6. セットアップ・本番チェックリスト
 
-### 6.1 ドメイン・メール（多くは完了）
+### 6.1 ドメイン・事務メール（完了）
 
-- [x] ドメイン **`keijirodokyosai.org`** をテナントに追加・DNS 確認（詳細は [`m365-tenant-and-mail.md`](m365-tenant-and-mail.md)）
-- [x] **`info@`** を admin に付与（M365 エイリアス **および** Exchange **メール アドレスの種類**で `smtp:info@…`）
-- [ ] 外から **`info@` 宛**・**`info@` 差出人で外へ** の受信テスト（未なら実施）
-- [ ] Entra アプリの **管理者の同意**（`Files.ReadWrite.All`・`Mail.Send`）— 済みなら再確認のみ
+- [x] ドメイン・DNS・Exchange **`info@`**・**プライマリ SMTP = `info@`**・OWA／Outlook 差出人（[`m365-tenant-and-mail.md`](m365-tenant-and-mail.md)）
 
 ### 6.2 OneDrive・事務データ（admin 配下）
 
@@ -121,7 +118,7 @@ Worker は **人ではなく** Entra アプリ **「組織共済WEB受付」** �
 ### 6.4 事務 PC
 
 - [ ] `soshiki-form-office-settings.json` の **`ReceptionRoot` / `WebRoot`** を事務環境に合わせる
-- [ ] Outlook: **admin で接続**、差出人既定 **`info@`**
+- [x] Outlook: **admin で接続**、新規・返信の差出人 **`info@`**（プライマリ変更後は M365 行の再追加が必要な場合あり）
 - [ ] Graph Inbox watcher またはローカル Inbox タスクを **1 系統だけ** 本番登録（`scripts/soshiki-form-office/README.md`）
 
 ---
@@ -145,4 +142,4 @@ Worker は **人ではなく** Entra アプリ **「組織共済WEB受付」** �
 
 ---
 
-**最終更新:** 2026-10-23（ライセンス1・`info@` エイリアス運用・admin 対外非使用を確定）
+**最終更新:** 2026-10-23（プライマリ SMTP `info@`・Outlook 再追加まで完了を反映）
