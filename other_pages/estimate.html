@@ -3,30 +3,12 @@ layout: site-shell
 title: おうちの安心共済 見積り依頼
 description: おうちの安心共済（火災共済）の見積り依頼ページです。必要事項をご確認のうえ、メールでお申し込みください。
 permalink: /estimate.html
-breadcrumb_json_ld: >
-  {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      {
-        "@type": "ListItem",
-        "position": 1,
-        "name": "ホーム",
-        "item": "{{ '/index.html' | absolute_url }}"
-      },
-      {
-        "@type": "ListItem",
-        "position": 2,
-        "name": "おうちの安心共済（火災共済）　見積り依頼",
-        "item": "{{ '/estimate.html' | absolute_url }}"
-      }
-    ]
-  }
+breadcrumb_name: おうちの安心共済（火災共済）　見積り依頼
 ---
 
 <nav class="breadcrumb" aria-label="パンくずリスト">
   <ol class="breadcrumb-list">
-    <li><a href="{{ '/index.html' | relative_url }}">ホーム</a></li>
+    <li><a href="{{ '/' | relative_url }}">ホーム</a></li>
     <li aria-current="page">おうちの安心共済（火災共済）　見積り依頼</li>
   </ol>
 </nav>

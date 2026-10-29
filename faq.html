@@ -3,30 +3,12 @@ layout: site-shell
 title: FAQ | 京滋労働組合共済会
 description: 京滋労働組合共済会の共済制度や手続きに関するよくある質問を掲載しています。
 permalink: /faq.html
-breadcrumb_json_ld: >
-  {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      {
-        "@type": "ListItem",
-        "position": 1,
-        "name": "ホーム",
-        "item": "{{ '/index.html' | absolute_url }}"
-      },
-      {
-        "@type": "ListItem",
-        "position": 2,
-        "name": "FAQ",
-        "item": "{{ '/faq.html' | absolute_url }}"
-      }
-    ]
-  }
+breadcrumb_name: FAQ
 ---
 
 <nav class="breadcrumb" aria-label="パンくずリスト">
   <ol class="breadcrumb-list">
-    <li><a href="{{ '/index.html' | relative_url }}">ホーム</a></li>
+    <li><a href="{{ '/' | relative_url }}">ホーム</a></li>
     <li aria-current="page">FAQ</li>
   </ol>
 </nav>

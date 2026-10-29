@@ -18,6 +18,12 @@
   <link rel="canonical" href="{{ page.url | absolute_url }}">
   {% endif %}
 
+  {% if page.url == "/" or page.url == "/index.html" %}
+  <meta property="og:url" content="{{ '/' | absolute_url }}">
+  {% else %}
+  <meta property="og:url" content="{{ page.url | absolute_url }}">
+  {% endif %}
+
   <link rel="stylesheet" href="{{ '/css/style.css' | relative_url }}">
 
   <link rel="icon" href="{{ '/favicon.ico' | relative_url }}" sizes="any">
@@ -34,7 +40,6 @@
   <meta property="og:site_name" content="京滋労働組合共済会">
   <meta property="og:title" content="{{ page.title | default: '京滋労働組合共済会' }}">
   <meta property="og:description" content="{{ page.description | default: default_site_description }}">
-  <meta property="og:url" content="{{ page.url | absolute_url }}">
   <meta property="og:image" content="{{ '/images/ogp-logo-1200x630.jpg' | absolute_url }}">
 
   <meta name="twitter:card" content="summary_large_image">
@@ -79,11 +84,7 @@
   </script>
   {% endif %}
 
-  {% if page.breadcrumb_json_ld %}
-  <script type="application/ld+json">
-  {{ page.breadcrumb_json_ld }}
-  </script>
-  {% endif %}
+  {% include breadcrumb-json-ld.html %}
 </head>
 <body class="{% if page.body_class %}{{ page.body_class }}{% endif %}">
   {{ content }}

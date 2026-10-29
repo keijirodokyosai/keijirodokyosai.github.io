@@ -3,30 +3,12 @@ layout: site-shell
 title: 自動車共済 | 京滋労働組合共済会
 description: 京滋労働組合共済会の自動車共済についてご案内します。制度概要や詳細は西日本自動車共済協同組合のサイトをご確認ください。
 permalink: /jidosha.html
-breadcrumb_json_ld: >
-  {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      {
-        "@type": "ListItem",
-        "position": 1,
-        "name": "ホーム",
-        "item": "{{ '/index.html' | absolute_url }}"
-      },
-      {
-        "@type": "ListItem",
-        "position": 2,
-        "name": "自動車共済",
-        "item": "{{ '/jidosha.html' | absolute_url }}"
-      }
-    ]
-  }
+breadcrumb_name: 自動車共済
 ---
 
 <nav class="breadcrumb" aria-label="パンくずリスト">
   <ol class="breadcrumb-list">
-    <li><a href="{{ '/index.html' | relative_url }}">ホーム</a></li>
+    <li><a href="{{ '/' | relative_url }}">ホーム</a></li>
     <li aria-current="page">自動車共済</li>
   </ol>
 </nav>

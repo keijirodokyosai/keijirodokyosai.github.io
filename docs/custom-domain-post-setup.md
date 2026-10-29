@@ -84,6 +84,7 @@ cd "C:\Users\deus_\OneDrive\GitHub\keijirodokyosai.github.io\workers\soshiki-sub
 
 1. `https://keijirodokyosai.org/` → **公開 URL をテスト** → **インデックス登録をリクエスト**（1 日 1 回程度で十分）。
 2. 「URL が Google に登録されていません」は新規プロパティでは普通。リクエスト後 **数日〜2 週間**待つ。
+3. **canonical 不一致**（トップの `og:url` と `/index.html` 等）をコードで直したあとは、同 URL で再テストし、問題行で **修正を検証**（Validate fix）が使える場合は実行する。
 
 ### 2.5 旧 `github.io`
 

@@ -3,30 +3,12 @@ layout: site-shell
 title: ニュース | 京滋労働組合共済会
 description: 京滋労働組合共済会からのお知らせや更新情報を掲載しています。
 permalink: /news.html
-breadcrumb_json_ld: >
-  {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      {
-        "@type": "ListItem",
-        "position": 1,
-        "name": "ホーム",
-        "item": "{{ '/index.html' | absolute_url }}"
-      },
-      {
-        "@type": "ListItem",
-        "position": 2,
-        "name": "ニュース",
-        "item": "{{ '/news.html' | absolute_url }}"
-      }
-    ]
-  }
+breadcrumb_name: ニュース
 ---
 
 <nav class="breadcrumb" aria-label="パンくずリスト">
   <ol class="breadcrumb-list">
-    <li><a href="{{ '/index.html' | relative_url }}">ホーム</a></li>
+    <li><a href="{{ '/' | relative_url }}">ホーム</a></li>
     <li aria-current="page">ニュース</li>
   </ol>
 </nav>
