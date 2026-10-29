@@ -17,6 +17,7 @@
 | `sitemap.xml` / `robots.txt` | 全 URL・Sitemap 行を `.org` |
 | `_layouts/base.html` | `absolute_url` による canonical・OGP・JSON-LD |
 | `_includes/breadcrumb-json-ld.html` | パンくず JSON-LD（`breadcrumb_name` 等。フロントマター直書き Liquid は不可） |
+| `_includes/index-structured-data.html` / `contact-structured-data.html` | トップ・お問い合わせの JSON-LD（同上） |
 
 GitHub **Settings → Pages**
 

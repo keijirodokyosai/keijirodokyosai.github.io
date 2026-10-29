@@ -1,0 +1,119 @@
+<script type="application/ld+json">
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "京滋労働組合共済会",
+    "alternateName": "京滋共済",
+    "url": {{ '/' | absolute_url | jsonify }}
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "京滋労働組合共済会",
+    "alternateName": [
+      "京滋労働共済",
+      "京滋共済",
+      "労働共済"
+    ],
+    "url": {{ '/' | absolute_url | jsonify }},
+    "logo": {{ '/images/logo.png' | absolute_url | jsonify }},
+    "address": {
+      "@type": "PostalAddress",
+      "postalCode": "606-8397",
+      "addressRegion": "京都府",
+      "addressLocality": "京都市左京区",
+      "streetAddress": "聖護院川原町4-13 京都教育文化センター4F",
+      "addressCountry": "JP"
+    },
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "customer support",
+      "telephone": "+81-75-771-2200",
+      "email": "info@keijirodokyosai.org",
+      "availableLanguage": "Japanese"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "共済制度一覧",
+    "url": {{ '/' | absolute_url | jsonify }},
+    "numberOfItems": 12,
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "火災共済",
+        "url": {{ '/kasai.html' | absolute_url | jsonify }}
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "自然災害特約",
+        "url": {{ '/special-contract.html' | absolute_url | jsonify }}
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "医療共済",
+        "url": {{ '/iryo.html' | absolute_url | jsonify }}
+      },
+      {
+        "@type": "ListItem",
+        "position": 4,
+        "name": "生命共済",
+        "url": {{ '/seimei.html' | absolute_url | jsonify }}
+      },
+      {
+        "@type": "ListItem",
+        "position": 5,
+        "name": "交通災害共済",
+        "url": {{ '/kotsu.html' | absolute_url | jsonify }}
+      },
+      {
+        "@type": "ListItem",
+        "position": 6,
+        "name": "高齢医療共済",
+        "url": {{ '/korei-iryo.html' | absolute_url | jsonify }}
+      },
+      {
+        "@type": "ListItem",
+        "position": 7,
+        "name": "高齢生命共済",
+        "url": {{ '/korei-seimei.html' | absolute_url | jsonify }}
+      },
+      {
+        "@type": "ListItem",
+        "position": 8,
+        "name": "ONE-CO共済",
+        "url": {{ '/one-co.html' | absolute_url | jsonify }}
+      },
+      {
+        "@type": "ListItem",
+        "position": 9,
+        "name": "緩和型医療共済",
+        "url": {{ '/kanwa-iryo.html' | absolute_url | jsonify }}
+      },
+      {
+        "@type": "ListItem",
+        "position": 10,
+        "name": "組織共済",
+        "url": {{ '/soshiki.html' | absolute_url | jsonify }}
+      },
+      {
+        "@type": "ListItem",
+        "position": 11,
+        "name": "自転車共済",
+        "url": {{ '/jitensha.html' | absolute_url | jsonify }}
+      },
+      {
+        "@type": "ListItem",
+        "position": 12,
+        "name": "自動車共済",
+        "url": {{ '/jidosha.html' | absolute_url | jsonify }}
+      }
+    ]
+  }
+]
+</script>
