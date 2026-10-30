@@ -39,14 +39,16 @@ GitHub **Settings → Pages**
 
 ---
 
-## 3. 移行期の URL
+## 3. 公開 URL（正規と GitHub ホスト名）
 
-| URL | 用途 |
+| URL / 名前 | 用途 |
 |-----|------|
 | `https://keijirodokyosai.org` | **正規**（対外・canonical・sitemap） |
-| `https://keijirodokyosai.github.io` | 当面開けることがある。検索・印刷は `.org` に寄せる |
+| `keijirodokyosai.github.io` | **DNS の CNAME 先**（GitHub Pages のホスト名。リポジトリ slug とは別） |
 
-組織共済フォームの Worker CORS は `.org` と移行用 `github.io` の両方を許可（`workers/soshiki-submit/src/index.js`）。Worker 変更後は `deploy.ps1` 必須。
+リポジトリ名を `keijirodokyosai-web` に Rename したあとも、Custom domain と `CNAME` ファイルで `.org` 公開は継続する。ルート `https://keijirodokyosai.github.io/` を本番 URL として使わない。
+
+組織共済フォームの Worker CORS は **`https://keijirodokyosai.org` のみ**（`workers/soshiki-submit/src/index.js`）。変更後は `deploy.ps1` 必須。
 
 ---
 

@@ -55,7 +55,7 @@ cd "C:\Users\deus_\OneDrive\GitHub\keijirodokyosai-web\workers\soshiki-submit"
 1. `https://keijirodokyosai.org/soshiki-form-enter.html` でテスト送信。
 2. `Origin not allowed` → デプロイ未反映。`パスワードが正しくありません` → CORS は通過。
 
-移行期間は `https://keijirodokyosai.github.io` からの送信も許可。不要になったら `github.io` をコードから外して再 deploy。
+CORS 許可は **`https://keijirodokyosai.org` のみ**（2026-10-30 以降、`github.io` Origin はコードから削除済み）。`index.js` を変えたら必ず再 deploy。
 
 ---
 
@@ -86,9 +86,10 @@ cd "C:\Users\deus_\OneDrive\GitHub\keijirodokyosai-web\workers\soshiki-submit"
 2. 「URL が Google に登録されていません」は新規プロパティでは普通。リクエスト後 **数日〜2 週間**待つ。
 3. **canonical 不一致**（トップの `og:url` と `/index.html` 等）をコードで直したあとは、同 URL で再テストし、問題行で **修正を検証**（Validate fix）が使える場合は実行する。
 
-### 2.5 旧 `github.io`
+### 2.5 旧 `github.io` プロパティ
 
 - 別プロパティ `https://keijirodokyosai.github.io` は任意。canonical は `.org`。
+- リポジトリ Rename（`keijirodokyosai-web`）後も、Search Console の正規は `.org` のまま。
 
 ### 2.6 期待
 
@@ -111,6 +112,30 @@ python scripts/generate-qr-codes.py
 
 ---
 
+## 4. リポジトリ Rename 後（`keijirodokyosai-web`）
+
+GitHub 上の Rename・Pages・`.org` 確認が済んだあと、手元と本番 Worker を揃える。
+
+### 4.1 リポジトリ内（Git）
+
+| 項目 | 内容 |
+|------|------|
+| doc | リポジトリ名・GitHub URL・ローカル `cd` 例を `keijirodokyosai-web` に更新 |
+| Worker CORS | `workers/soshiki-submit/src/index.js` は `.org` のみ → **`deploy.ps1` で本番反映**（§1） |
+
+### 4.2 各 PC（Git 管理外も含む）
+
+| 項目 | 内容 |
+|------|------|
+| フォルダ名 | `keijirodokyosai.github.io` → `keijirodokyosai-web`（任意だが推奨） |
+| `git remote` | `https://github.com/keijirodokyosai/keijirodokyosai-web.git` または SSH 同等 |
+| 別 PC 初回 | `git clone` は新 URL。旧 clone は `git remote set-url` で可 |
+| ショートカット・PowerShell プロファイル | 旧フルパスがあれば手で更新 |
+
+この PC の例: `C:\Users\kyosai\OneDrive\GitHub\keijirodokyosai-web`
+
+---
+
 ## チェックリスト（初回構築）
 
 - [x] Worker `deploy.ps1` 成功（2026-10-24）
@@ -119,3 +144,10 @@ python scripts/generate-qr-codes.py
 - [x] トップ URL ライブテスト・インデックス登録リクエスト
 - [ ] フォーム本番テスト（組合・運用ルールに従い随時）
 - [ ] パンフ・QR の URL を `.org` に差し替え（未更新分のみ）
+
+## チェックリスト（Rename `keijirodokyosai-web`）
+
+- [x] GitHub Repository name・Pages・Custom domain（2026-10-30）
+- [x] ローカル `remote`・doc 更新
+- [ ] Worker 再 deploy（CORS `.org` のみ反映後）
+- [ ] 他 PC・ショートカットのパス確認

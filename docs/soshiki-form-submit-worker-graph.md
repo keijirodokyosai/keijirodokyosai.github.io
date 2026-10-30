@@ -198,7 +198,7 @@ Web では **送 信 PDF を作らない**（html2canvas 経路は削除済み�
 
 | 項目 | 実装 |
 |------|------|
-| POST・CORS | 正規 `https://keijirodokyosai.org`、移行期は `https://keijirodokyosai.github.io` も許可。OPTIONS 対応 |
+| POST・CORS | 正規 `https://keijirodokyosai.org` のみ許可。OPTIONS 対応 |
 | Body 上限 | 2MB（JSON のみ） |
 | 保存 | `受付/{storageFolder}/json/` に **`.json` 1 件**のみ |
 | `pdfBase64` | **拒否**（旧クライアントは再読み込みを促す 400） |

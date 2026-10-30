@@ -148,8 +148,8 @@ OWA の **設定 → メール → 作成** に「既定の差出人」が無い
 
 | 名前 | 役割 |
 |------|------|
-| `https://keijirodokyosai.org` | **正規**の公開 Web（GitHub Pages・リポジトリ `CNAME` / `_config.yml` の `url`） |
-| `keijirodokyosai.github.io` | GitHub Pages のデフォルト URL（移行期は併用可。検索・canonical は `.org`） |
+| `https://keijirodokyosai.org` | **正規**の公開 Web（GitHub Pages・リポジトリ `keijirodokyosai-web`・`CNAME` / `_config.yml` の `url`） |
+| `keijirodokyosai.github.io` | GitHub Pages の **DNS 用ホスト名**（www の CNAME 先。リポジトリ slug とは別） |
 | `keijirodokyosai.org`（メール） | 事務メール `info@`（MX・SPF 等。Web 用 A/CNAME と共存） |
 
 Web 公開（2026-10-24）: 構築 [`custom-domain-setup.md`](custom-domain-setup.md)、Worker・Search Console [`custom-domain-post-setup.md`](custom-domain-post-setup.md)。

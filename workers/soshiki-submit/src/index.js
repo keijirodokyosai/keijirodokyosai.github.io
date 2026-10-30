@@ -6,10 +6,9 @@
 import { downloadDriveFile, uploadDriveFile } from "./graphDrive.js";
 import { sendReceiptMailAfterUpload } from "./receiptMail.js";
 
-/** 正規は https://keijirodokyosai.org。移行期間は github.io も許可。 */
+/** 正規 Origin: https://keijirodokyosai.org */
 const ALLOWED_ORIGINS = new Set([
   "https://keijirodokyosai.org",
-  "https://keijirodokyosai.github.io",
 ]);
 const MAX_BODY_BYTES = 2 * 1024 * 1024;
 
