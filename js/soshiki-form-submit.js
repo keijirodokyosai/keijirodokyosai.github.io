@@ -35,6 +35,218 @@ function initSoshikiFormSubmit() {
   sendButton.addEventListener("click", handleSoshikiFormSendClick);
 }
 
+/** 送信用パスワード — 半角英数字のみ（全角は NFKC で正規化） */
+function normalizeSoshikiFormSubmitPasswordString(raw) {
+  return String(raw)
+    .normalize("NFKC")
+    .replace(/[^A-Za-z0-9]/g, "");
+}
+
+function showSoshikiFormSendConfirmDialog(lines) {
+  return new Promise(function (resolve) {
+    var dialog = document.getElementById("soshiki-form-dialog-send-confirm");
+    var bodyEl = document.getElementById("soshiki-form-dialog-send-confirm-body");
+    if (!dialog || !bodyEl || typeof dialog.showModal !== "function") {
+      resolve(window.confirm(lines.join("\n")));
+      return;
+    }
+
+    bodyEl.textContent = lines.join("\n");
+    var okBtn = dialog.querySelector('[data-soshiki-dialog-action="ok"]');
+    var cancelBtn = dialog.querySelector('[data-soshiki-dialog-action="cancel"]');
+
+    function cleanup() {
+      dialog.removeEventListener("click", onBackdropClick);
+      dialog.removeEventListener("cancel", onCancelKey);
+      if (okBtn) okBtn.removeEventListener("click", onOk);
+      if (cancelBtn) cancelBtn.removeEventListener("click", onCancel);
+      if (dialog.open) dialog.close();
+    }
+
+    function onOk() {
+      cleanup();
+      resolve(true);
+    }
+
+    function onCancel() {
+      cleanup();
+      resolve(false);
+    }
+
+    function onCancelKey(event) {
+      event.preventDefault();
+      onCancel();
+    }
+
+    function onBackdropClick(event) {
+      if (event.target === dialog) onCancel();
+    }
+
+    dialog.addEventListener("click", onBackdropClick);
+    dialog.addEventListener("cancel", onCancelKey);
+    if (okBtn) okBtn.addEventListener("click", onOk);
+    if (cancelBtn) cancelBtn.addEventListener("click", onCancel);
+
+    dialog.showModal();
+    if (okBtn) okBtn.focus();
+  });
+}
+
+function showSoshikiFormSendPasswordDialog() {
+  return new Promise(function (resolve) {
+    var dialog = document.getElementById("soshiki-form-dialog-send-password");
+    var input = document.getElementById("soshiki-form-dialog-password-input");
+    var errorEl = document.getElementById("soshiki-form-dialog-password-error");
+    if (!dialog || !input || typeof dialog.showModal !== "function") {
+      var fallback = window.prompt(
+        "送信用パスワードを入力してください（半角英数字）"
+      );
+      if (fallback === null) {
+        resolve(null);
+        return;
+      }
+      var normalized = normalizeSoshikiFormSubmitPasswordString(fallback);
+      if (!normalized) {
+        window.alert(
+          String(fallback).trim()
+            ? "パスワードは半角英数字で入力してください。"
+            : "パスワードが入力されていません。"
+        );
+        resolve(null);
+        return;
+      }
+      resolve(normalized);
+      return;
+    }
+
+    input.value = "";
+    if (errorEl) {
+      errorEl.textContent = "";
+      errorEl.hidden = true;
+    }
+
+    var okBtn = dialog.querySelector('[data-soshiki-dialog-action="ok"]');
+    var cancelBtn = dialog.querySelector('[data-soshiki-dialog-action="cancel"]');
+
+    function syncPasswordInput() {
+      var normalized = normalizeSoshikiFormSubmitPasswordString(input.value);
+      if (normalized !== input.value) input.value = normalized;
+    }
+
+    function cleanup() {
+      dialog.removeEventListener("click", onBackdropClick);
+      dialog.removeEventListener("cancel", onCancelKey);
+      input.removeEventListener("input", syncPasswordInput);
+      input.removeEventListener("compositionend", syncPasswordInput);
+      input.removeEventListener("keydown", onInputKeydown);
+      if (okBtn) okBtn.removeEventListener("click", onOk);
+      if (cancelBtn) cancelBtn.removeEventListener("click", onCancel);
+      if (dialog.open) dialog.close();
+    }
+
+    function onCancel() {
+      cleanup();
+      resolve(null);
+    }
+
+    function onCancelKey(event) {
+      event.preventDefault();
+      onCancel();
+    }
+
+    function onBackdropClick(event) {
+      if (event.target === dialog) onCancel();
+    }
+
+    function onOk() {
+      syncPasswordInput();
+      var password = normalizeSoshikiFormSubmitPasswordString(input.value);
+      if (!password) {
+        if (errorEl) {
+          errorEl.textContent = input.value.trim()
+            ? "パスワードは半角英数字で入力してください。"
+            : "パスワードが入力されていません。";
+          errorEl.hidden = false;
+        }
+        input.focus();
+        return;
+      }
+      cleanup();
+      resolve(password);
+    }
+
+    function onInputKeydown(event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        onOk();
+      }
+    }
+
+    dialog.addEventListener("click", onBackdropClick);
+    dialog.addEventListener("cancel", onCancelKey);
+    input.addEventListener("input", syncPasswordInput);
+    input.addEventListener("compositionend", syncPasswordInput);
+    input.addEventListener("keydown", onInputKeydown);
+    if (okBtn) okBtn.addEventListener("click", onOk);
+    if (cancelBtn) cancelBtn.addEventListener("click", onCancel);
+
+    dialog.showModal();
+    input.focus();
+  });
+}
+
+function showSoshikiFormPdfPrintDialog() {
+  return new Promise(function (resolve) {
+    var dialog = document.getElementById("soshiki-form-dialog-pdf-print");
+    if (!dialog || typeof dialog.showModal !== "function") {
+      resolve(
+        window.confirm(
+          "印刷画面を開きます。PDF として保存する場合は、\n送信先を『PDF に保存』に変更し実行してください。"
+        )
+      );
+      return;
+    }
+
+    var okBtn = dialog.querySelector('[data-soshiki-dialog-action="ok"]');
+    var cancelBtn = dialog.querySelector('[data-soshiki-dialog-action="cancel"]');
+
+    function cleanup() {
+      dialog.removeEventListener("click", onBackdropClick);
+      dialog.removeEventListener("cancel", onCancelKey);
+      if (okBtn) okBtn.removeEventListener("click", onOk);
+      if (cancelBtn) cancelBtn.removeEventListener("click", onCancel);
+      if (dialog.open) dialog.close();
+    }
+
+    function onOk() {
+      cleanup();
+      resolve(true);
+    }
+
+    function onCancel() {
+      cleanup();
+      resolve(false);
+    }
+
+    function onCancelKey(event) {
+      event.preventDefault();
+      onCancel();
+    }
+
+    function onBackdropClick(event) {
+      if (event.target === dialog) onCancel();
+    }
+
+    dialog.addEventListener("click", onBackdropClick);
+    dialog.addEventListener("cancel", onCancelKey);
+    if (okBtn) okBtn.addEventListener("click", onOk);
+    if (cancelBtn) cancelBtn.addEventListener("click", onCancel);
+
+    dialog.showModal();
+    if (okBtn) okBtn.focus();
+  });
+}
+
 function fetchJsonSubmitConfig(url) {
   return fetch(url).then(function (response) {
     if (!response.ok) {
@@ -90,15 +302,18 @@ function handleSoshikiFormSendClick() {
     "",
     "送信後、印刷画面が開きます。PDF として保存する場合は送信先を『PDF に保存』に変更し実行してください。",
   ];
-  if (!window.confirm(confirmLines.join("\n"))) return;
+  showSoshikiFormSendConfirmDialog(confirmLines)
+    .then(function (confirmed) {
+      if (!confirmed) return null;
+      return showSoshikiFormSendPasswordDialog();
+    })
+    .then(function (password) {
+      if (!password) return;
+      submitSoshikiFormWithPassword(password, verifiedUnion);
+    });
+}
 
-  var password = window.prompt("申込用パスワードを入力してください");
-  if (password === null) return;
-  if (!String(password).trim()) {
-    window.alert("パスワードが入力されていません。");
-    return;
-  }
-
+function submitSoshikiFormWithPassword(password, verifiedUnion) {
   setSoshikiFormSendBusy(true);
   clearSoshikiFormSendResult();
 
@@ -108,7 +323,7 @@ function handleSoshikiFormSendClick() {
     applicationDate.Year + applicationDate.Month + applicationDate.Day;
 
   var payload = {
-    password: String(password),
+    password: password,
     unionName: verifiedUnion.KyosaikaiName,
     fileNameDate: fileNameDate,
     submission: submission,
@@ -449,16 +664,12 @@ function clearSoshikiFormSendResult() {
 }
 
 function promptSoshikiFormPdfSaveAfterSend(receiptId) {
-  if (
-    !window.confirm(
-      "印刷画面を開きます。PDF として保存する場合は、\n送信先を『PDF に保存』に変更し実行してください。"
-    )
-  ) {
-    return;
-  }
-  if (typeof runSoshikiFormPdfSaveAfterSend === "function") {
-    runSoshikiFormPdfSaveAfterSend(receiptId);
-  }
+  showSoshikiFormPdfPrintDialog().then(function (ok) {
+    if (!ok) return;
+    if (typeof runSoshikiFormPdfSaveAfterSend === "function") {
+      runSoshikiFormPdfSaveAfterSend(receiptId);
+    }
+  });
 }
 
 function showSoshikiFormSendSuccess(receiptId) {

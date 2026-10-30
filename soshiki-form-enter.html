@@ -373,6 +373,127 @@ breadcrumb_parent_path: /downloads.html
             id="soshiki-form-saved-unions-list"
           ></ul>
         </div>
+
+        <dialog
+          class="soshiki-form-dialog"
+          id="soshiki-form-dialog-send-confirm"
+          aria-labelledby="soshiki-form-dialog-send-confirm-title"
+        >
+          <div class="soshiki-form-dialog-panel">
+            <h2
+              class="soshiki-form-dialog-title"
+              id="soshiki-form-dialog-send-confirm-title"
+            >
+              送信の確認
+            </h2>
+            <div
+              class="soshiki-form-dialog-body soshiki-form-dialog-body--pre"
+              id="soshiki-form-dialog-send-confirm-body"
+            ></div>
+            <div class="soshiki-form-dialog-actions">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-soshiki-dialog-action="cancel"
+              >
+                キャンセル
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                data-soshiki-dialog-action="ok"
+              >
+                送信する
+              </button>
+            </div>
+          </div>
+        </dialog>
+
+        <dialog
+          class="soshiki-form-dialog"
+          id="soshiki-form-dialog-send-password"
+          aria-labelledby="soshiki-form-dialog-send-password-title"
+        >
+          <div class="soshiki-form-dialog-panel">
+            <h2
+              class="soshiki-form-dialog-title"
+              id="soshiki-form-dialog-send-password-title"
+            >
+              送信用パスワード入力
+            </h2>
+            <p class="soshiki-form-dialog-lead">
+              送信用パスワードを入力してください（半角英数字）
+            </p>
+            <input
+              type="password"
+              id="soshiki-form-dialog-password-input"
+              class="soshiki-form-field soshiki-form-dialog-password-input"
+              inputmode="latin"
+              lang="en"
+              autocomplete="off"
+              autocapitalize="off"
+              spellcheck="false"
+              maxlength="64"
+              aria-describedby="soshiki-form-dialog-password-error"
+            />
+            <p
+              class="soshiki-form-dialog-error"
+              id="soshiki-form-dialog-password-error"
+              role="alert"
+              hidden
+            ></p>
+            <div class="soshiki-form-dialog-actions">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-soshiki-dialog-action="cancel"
+              >
+                キャンセル
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                data-soshiki-dialog-action="ok"
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        </dialog>
+
+        <dialog
+          class="soshiki-form-dialog"
+          id="soshiki-form-dialog-pdf-print"
+          aria-labelledby="soshiki-form-dialog-pdf-print-title"
+        >
+          <div class="soshiki-form-dialog-panel">
+            <h2
+              class="soshiki-form-dialog-title"
+              id="soshiki-form-dialog-pdf-print-title"
+            >
+              PDF の保存
+            </h2>
+            <p class="soshiki-form-dialog-body">
+              印刷画面を開きます。PDF として保存する場合は、送信先を『PDF に保存』に変更し実行してください。
+            </p>
+            <div class="soshiki-form-dialog-actions">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-soshiki-dialog-action="cancel"
+              >
+                キャンセル
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                data-soshiki-dialog-action="ok"
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        </dialog>
       </form>
     </div>
   </section>
@@ -382,4 +503,4 @@ breadcrumb_parent_path: /downloads.html
 <script src="{{ '/js/soshiki-form-union-storage.js' | relative_url }}"></script>
 <script src="{{ '/js/soshiki-form-footer-counts.js' | relative_url }}?v=5"></script>
 <script src="{{ '/js/soshiki-form-enter.js' | relative_url }}?v=6"></script>
-<script src="{{ '/js/soshiki-form-submit.js' | relative_url }}?v=8"></script>
+<script src="{{ '/js/soshiki-form-submit.js' | relative_url }}?v=12"></script>

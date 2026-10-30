@@ -28,7 +28,7 @@ const LABELS = {
     "\uFF08OneDrive \u306B json \u306F\u4FDD\u5B58\u6E08\u307F\u3067\u3059\u3002\u4E8B\u52D9 PDF \u306F\u5225\u7D4C\u8DEF\u3067\u4F5C\u6210\u3055\u308C\u307E\u3059\u3002\uFF09",
   labelStage: "\u51E6\u7406:",
   labelUnion: "\u7D44\u5408:",
-  labelKyosaiCode: "\u5354\u540C\u30B3\u30FC\u30C9:",
+  labelKyosaiCode: "\u5171\u6E08\u4F1A\u30B3\u30FC\u30C9:",
   labelError: "\u30A8\u30E9\u30FC:",
 };
 
