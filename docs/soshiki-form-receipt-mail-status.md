@@ -81,6 +81,7 @@ JSON 形・export 手順: `docs/soshiki-form-enter.md` §5.10（union-contacts�
 | json はあるがメールなし | `wrangler tail` の `sendMail` エラー。`GRAPH_DRIVE_USER_ID` が **admin（Exchange あり）** か |
 | `No ManagerEmail for KyosaikaiCode=…` | `union-contacts.json` に該当コードの **`ManagerEmail`** |
 | `FromEmail missing` | `soshiki-form-office-settings.json` の **`FromEmail`** |
+| `Unexpected token` / `is not valid JSON`（ReceiptMail） | OneDrive の `設定/*.json` が **UTF-8 BOM** 付きで export されていることが多い。Worker は BOM 除去で読む（`graphDrive.parseDriveJsonText`）。再発時は UTF-8 **BOM なし**で保存し直す |
 | 担当に届くが差出人が `admin@` | Exchange で **太字 SMTP が `info@`**（`m365-tenant-and-mail.md` §6） |
 | 申込者にエラー表示 | 想定外 — 通常は json 失敗時のみ。メール失敗は **`AdminEmail`** アラート |
 

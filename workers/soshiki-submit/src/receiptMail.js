@@ -2,6 +2,8 @@
  * Receipt confirmation mail via Graph sendMail (parity with SoshikiFormReceiptMail.ps1).
  */
 
+import { parseDriveJsonText } from "./graphDrive.js";
+
 const SETTINGS_FOLDER = "\u8A2D\u5B9A";
 const SETTINGS_FILE = "soshiki-form-office-settings.json";
 const CONTACTS_FILE = "union-contacts.json";
@@ -55,7 +57,7 @@ export async function loadOfficeSettings(userId, token, basePath, downloadDriveF
     token,
     settingsPathSegments(basePath)
   );
-  const data = JSON.parse(raw);
+  const data = parseDriveJsonText(raw);
   const adminEmail = String(data.AdminEmail || "").trim();
   const fromEmail = String(data.FromEmail || "").trim();
   if (!fromEmail) {
@@ -86,7 +88,7 @@ export async function loadUnionContact(
     token,
     contactsPathSegments(basePath)
   );
-  const list = parseContactsList(JSON.parse(raw));
+  const list = parseContactsList(parseDriveJsonText(raw));
   const code = String(kyosaikaiCode || "").trim();
   return list.find((c) => String(c.KyosaikaiCode || "").trim() === code) || null;
 }

@@ -23,6 +23,12 @@ export async function downloadDriveFile(userId, token, pathSegments) {
   return await response.text();
 }
 
+/** Graph から取得した JSON テキスト（UTF-8 BOM 付き PowerShell export 等）をパース */
+export function parseDriveJsonText(raw) {
+  const text = String(raw).replace(/^\uFEFF/, "").trimStart();
+  return JSON.parse(text);
+}
+
 export async function uploadDriveFile(userId, token, pathSegments, body, contentType) {
   const url = driveContentUrl(userId, pathSegments);
   const response = await fetch(url, {
