@@ -13,7 +13,7 @@
 https://keijirodokyosai.org/
 ```
 
-正規 URL は上記（www なし）。ホスティングは GitHub Pages（リポジトリ名 `keijirodokyosai.github.io`）。`https://keijirodokyosai.github.io/` も当面開けることがあるが、canonical・sitemap は `.org` に統一する。
+正規 URL は上記（www なし）。ホスティングは GitHub Pages（リポジトリ名 `keijirodokyosai-web`）。`https://keijirodokyosai.github.io/` も当面開けることがあるが、canonical・sitemap は `.org` に統一する。
 
 **最終更新日：2026-10-24**
 
@@ -120,7 +120,7 @@ https://keijirodokyosai.org/
 ## ホスティング
 
 * GitHub Pages
-* リポジトリ：`keijirodokyosai.github.io`
+* リポジトリ：`keijirodokyosai-web`
 * ブランチ：`main`
 * `main` ブランチへ push 後、自動反映
 

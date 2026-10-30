@@ -44,7 +44,7 @@
 ```powershell
 $env:CLOUDFLARE_API_TOKEN = "（Cloudflare からコピーしたトークン1行のみ）"
 
-cd "C:\Users\deus_\OneDrive\GitHub\keijirodokyosai.github.io\workers\soshiki-submit"
+cd "C:\Users\deus_\OneDrive\GitHub\keijirodokyosai-web\workers\soshiki-submit"
 .\deploy.ps1
 ```
 
@@ -105,7 +105,7 @@ cd "C:\Users\deus_\OneDrive\GitHub\keijirodokyosai.github.io\workers\soshiki-sub
 `scripts/generate-qr-codes.py` は `.org` URL。差し替え時:
 
 ```powershell
-cd "C:\Users\deus_\OneDrive\GitHub\keijirodokyosai.github.io"
+cd "C:\Users\deus_\OneDrive\GitHub\keijirodokyosai-web"
 python scripts/generate-qr-codes.py
 ```
 

@@ -1,7 +1,7 @@
 # 独自ドメイン公開（`keijirodokyosai.org`）
 
 **正規 URL:** `https://keijirodokyosai.org`（www なし）  
-**ホスティング:** GitHub Pages（リポジトリ `keijirodokyosai.github.io`）  
+**ホスティング:** GitHub Pages（リポジトリ `keijirodokyosai-web`）  
 **初回構築完了:** 2026-10-24
 
 **関連:** メール DNS 共存は [`m365-tenant-and-mail.md`](m365-tenant-and-mail.md) §3・§7。公開後の Worker・Search Console は [`custom-domain-post-setup.md`](custom-domain-post-setup.md)。

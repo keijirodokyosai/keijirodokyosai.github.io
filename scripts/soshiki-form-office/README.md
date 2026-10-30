@@ -49,10 +49,10 @@ cd scripts\soshiki-form-office
 チャットの `...` や `cd "...\scripts"` は**そのまま実行しない**（パスが壊れて空行＋`>>` になる）。次のどちらかだけ使う。
 
 ```powershell
-& "C:\Users\deus_\OneDrive\GitHub\keijirodokyosai.github.io\scripts\soshiki-form-office\Export-SoshikiFormPdfFromInboxJson.ps1"
+& "C:\Users\deus_\OneDrive\GitHub\keijirodokyosai-web\scripts\soshiki-form-office\Export-SoshikiFormPdfFromInboxJson.ps1"
 ```
 
-（`cd` 不要。リポの場所が違うときは上の1行のパスだけ自分の `keijirodokyosai.github.io` に直す。）
+（`cd` 不要。リポの場所が違うときは上の1行のパスだけ自分の `keijirodokyosai-web` に直す。）
 
 エクスプローラー: `scripts\soshiki-form-office\Export-SoshikiFormPdfFromInboxJson.cmd` をダブルクリック。
 
@@ -69,7 +69,7 @@ inbox 内をすべて: 上と同じスクリプトに `-All`
 PowerShell で1行だけ（コピー後メモ帳で**1行か確認**してから貼る）:
 
 ```powershell
-& "C:\Users\deus_\OneDrive\GitHub\keijirodokyosai.github.io\scripts\soshiki-form-office\Process-SoshikiFormJsonInbox.ps1"
+& "C:\Users\deus_\OneDrive\GitHub\keijirodokyosai-web\scripts\soshiki-form-office\Process-SoshikiFormJsonInbox.ps1"
 ```
 
 ログ付き: 上の末尾に `-LogToWebRoot` を付ける。すでに `scripts\soshiki-form-office` にいるときだけ `.\Process-SoshikiFormJsonInbox.ps1`。
